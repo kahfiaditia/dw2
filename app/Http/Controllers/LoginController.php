@@ -65,7 +65,8 @@ class LoginController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email:dns|unique:users',
-            'password' => 'required|min:5|max:255'
+            'password' => 'required|min:5|max:255',
+            'roles' => 'required'
         ]);
         DB::beginTransaction();
         try {
@@ -73,6 +74,7 @@ class LoginController extends Controller
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
+            $user->roles = $request->roles;
             $user->pin_verified = $pin_verified;
             $user->pin_verified_at = Carbon::now();
             $user->password = bcrypt($request->password);
@@ -86,14 +88,14 @@ class LoginController extends Controller
             Mail::to($request->email)->send(new KirimEmail($details));
 
             DB::commit();
-            return redirect('login/success');
+            return redirect('notifikasi');
         } catch (\Exception $e) {
             dd($e);
             DB::back()->with('registerError', 'Login Gagal!');
         }
     }
 
-    public function success(Request $request)
+    public function notifikasi(Request $request)
     {
         $data = [
             'title' => $this->title,
@@ -101,7 +103,7 @@ class LoginController extends Controller
             'header' => 'Success',
             'body' => 'Terimakasih sudah mendaftar',
         ];
-        return view('email.success')->with($data);
+        return view('notifikasi.notifikasi')->with($data);
     }
 
     public function verifikasi($id)
@@ -127,7 +129,7 @@ class LoginController extends Controller
                 'header' => 'Expired',
                 'body' => 'Please re-verify',
             ];
-            return view('email.success')->with($data);
+            return view('notifikasi.notifikasi')->with($data);
         }
     }
 
@@ -160,7 +162,7 @@ class LoginController extends Controller
             Mail::to($request->email)->send(new KirimEmail($details));
 
             DB::commit();
-            return redirect('login/success');
+            return redirect('notifikasi');
         } catch (\Exception $e) {
             dd($e);
             DB::back()->with('registerError', 'Login Gagal!');

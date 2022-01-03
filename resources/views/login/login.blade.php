@@ -77,7 +77,7 @@
                                                 <input type="password" name="password" minlength="5" class="form-control" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon" required>
                                                 <button class="btn btn-light" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                                 <div class="invalid-feedback">
-                                                    Please Enter Password
+                                                    Please Enter Password and It should have 6 characters or more.
                                                 </div>
                                             </div>
                                         </div>

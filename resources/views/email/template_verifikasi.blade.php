@@ -344,7 +344,6 @@
                     <tr>
                       <td>
                         <h1>{{ $details['subject'] }}</h1>
-                        <p>Verifikasi Email</p>
                         <hr>
                         <p>Terima kasih telah melakukan pendaftaran akun {{$details['email']}} di DHARMA WIDYA.</p>
                         <p>Silakan gunakan kode verifikasi berikut untuk mengkonfirmasi email Anda.</p>

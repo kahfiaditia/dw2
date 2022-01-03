@@ -44,11 +44,11 @@
                                     {{ implode('', $errors->all('<div>:message</div>')) }}
                                 @endif
                                 <div class="p-2">
-                                    <form class="needs-validation custom" action="{{ route("login.store") }}" method="POST" novalidate>
+                                    <form class="needs-validation" action="{{ route("login.store") }}" method="POST" novalidate>
                                         @csrf
                                         <div class="mb-3">
                                             <label for="useremail" class="form-label">Email</label>
-                                            <input type="email" name="email" maxlength="255" class="form-control" id="email" placeholder="Enter email" required>  
+                                            <input type="email" name="email" maxlength="255" class="form-control" id="email" placeholder="Enter email" required autofocus>  
                                             <div class="invalid-feedback">
                                                 Please Enter Email
                                             </div>      
@@ -65,6 +65,17 @@
                                             <input type="password" name="password" minlength="5" maxlength="255" class="form-control" id="userpassword" placeholder="Enter password" required>
                                             <div class="invalid-feedback">
                                                 Please Enter Password and It should have 6 characters or more.
+                                            </div>       
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Roles</label>
+                                            <select class="form-control select select2" name="roles" required>
+                                                <option value="">--Pilih Roles--</option>
+                                                <option value="Alumni">Alumni</option>
+                                                <option value="Ortu">Orang Tua</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Please Enter Roles
                                             </div>       
                                         </div>
                                         <div class="mt-4 d-grid">
@@ -92,5 +103,7 @@
         <script src="{{asset('assets/libs/node-waves/waves.min.js')}}"></script>
         <script src="{{asset('assets/js/app.js')}}"></script>
         <script src="{{asset('assets/js/pages/form-validation.init.js')}}"></script>
+
+        <script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
     </body>
 </html>

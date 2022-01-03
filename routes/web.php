@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
+Route::get('/notifikasi', [LoginController::class, 'notifikasi'])->name('notifikasi');
 
 Route::group(
     [
@@ -25,7 +26,7 @@ Route::group(
         Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
         Route::get('/register', [LoginController::class, 'register'])->name('login.register');
         Route::post('/store', [LoginController::class, 'store'])->name('login.store');
-        Route::get('/success', [LoginController::class, 'success'])->name('login.success');
+        // Route::get('/success', [LoginController::class, 'success'])->name('login.success');
         Route::get('/verifikasi/{id}', [LoginController::class, 'verifikasi'])->name('login.verifikasi');
         Route::post('/confirmasi', [LoginController::class, 'confirmasi'])->name('login.confirmasi');
         Route::get('/recovery', [LoginController::class, 'recovery'])->name('login.recovery');
