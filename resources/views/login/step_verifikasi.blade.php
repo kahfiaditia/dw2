@@ -43,8 +43,16 @@
                                             Please Enter Kode
                                         </div> 
                                         @endif
+                                        @if (session()->has('Error'))
+                                            <div class="p-2">
+                                                <div class="alert alert-danger" role="alert">
+                                                    Verifikasi Fail!
+                                                </div>
+                                            </div>
+                                        @endif
                                         <form class="needs-validation custom" action="{{ route("login.confirmasi") }}" method="POST" novalidate>
                                             @csrf
+                                            <input type="hidden" name="email" value="{{$email}}">
                                             <div class="row">
                                                 <div class="col-3">
                                                     <div class="mb-3">
@@ -94,9 +102,7 @@
                     </div>
                     <div class="mt-5 text-center">
                         <p>Already have an account ? <a href="{{ route('login') }}" class="fw-medium text-primary"> Login</a> </p>
-                        <p>©
-                            <script>document.write(new Date().getFullYear())</script> Skote. Crafted with <i
-                                class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                        <p>© <script>document.write(new Date().getFullYear())</script>. Crafted with {{strtoupper($title)}}</p>
                     </div>
                 </div>
             </div>

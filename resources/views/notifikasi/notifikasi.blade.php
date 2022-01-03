@@ -38,7 +38,7 @@
                                             <h4>{{$header}} !</h4>
                                             <p class="text-muted">{{$body}}</p>
                                             <div class="mt-4">
-                                                <a href="{{ route('login') }}" class="btn btn-success">Back to Home</a>
+                                                <a href="{{ route('login') }}" class="btn btn-success">Back to Login</a>
                                             </div>
                                         </div>
                                     </div>
@@ -46,10 +46,9 @@
                             </div>
                         </div>
                         <div class="mt-5 text-center">
-                            <p>Remember It ? <a href="auth-login.html" class="fw-medium text-primary"> Sign In here</a> </p>
-                            <p>© <script>document.write(new Date().getFullYear())</script> Skote. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                            <p>Verification't Accepted ? <a href="{{ route('recovery') }}" class="fw-medium text-primary">Resend Verifikasi</a> </p>
+                            <p>© <script>document.write(new Date().getFullYear())</script>. Crafted with {{strtoupper($title)}}</p>
                         </div>
-
                     </div>
                 </div>
             </div>

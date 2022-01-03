@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Recover Password | Skote - Admin & Dashboard Template</title>
+        <title>{{ucfirst($submenu).' | '.strtoupper($title)}}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
@@ -22,11 +22,11 @@
                                     <div class="col-7">
                                         <div class="text-primary p-4">
                                             <h5 class="text-primary"> Reset Password</h5>
-                                            <p>Re-Password with Skote.</p>
+                                            <p>Re-Password with DHARMAWIDYA</p>
                                         </div>
                                     </div>
                                     <div class="col-5 align-self-end">
-                                        <img src="assets/images/profile-img.png" alt="" class="img-fluid">
+                                        <img src="{{ URL::asset('assets/images/profile-img.png') }}" alt="" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                                     <a href="index.html">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
-                                                <img src="assets/images/logo.svg" alt="" class="rounded-circle" height="34">
+                                                <img src="{{ URL::asset('assets/images/logo.svg') }}" alt="" class="rounded-circle" height="34">
                                             </span>
                                         </div>
                                     </a>
@@ -45,8 +45,8 @@
                                     <div class="alert alert-success text-center mb-4" role="alert">
                                         Enter your Email and instructions will be sent to you!
                                     </div>
-                                    <form class="form-horizontal" action="index.html">
-            
+                                    <form class="needs-validation" action="{{ route("login.proses") }}" method="POST" novalidate>
+                                        @csrf
                                         <div class="mb-3">
                                             <label for="useremail" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="useremail" placeholder="Enter email">
@@ -62,8 +62,8 @@
                             </div>
                         </div>
                         <div class="mt-5 text-center">
-                            <p>Remember It ? <a href="auth-login.html" class="fw-medium text-primary"> Sign In here</a> </p>
-                            <p>© <script>document.write(new Date().getFullYear())</script> Skote. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                            <p>Already have an account ? <a href="{{ route('login') }}" class="fw-medium text-primary"> Login</a> </p>
+                            <p>© <script>document.write(new Date().getFullYear())</script>. Crafted with {{strtoupper($title)}}</p>
                         </div>
 
                     </div>

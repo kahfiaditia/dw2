@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
+Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::get('/notifikasi', [LoginController::class, 'notifikasi'])->name('notifikasi');
+Route::get('/verifikasi/{id}', [LoginController::class, 'verifikasi'])->name('verifikasi');
+Route::get('/recovery', [LoginController::class, 'recovery'])->name('recovery');
+Route::get('/verify', [LoginController::class, 'verify'])->name('verify');
 
 Route::group(
     [
@@ -24,11 +28,7 @@ Route::group(
     function () {
         Route::post('/login', [LoginController::class, 'authenticate'])->name('login.proses');
         Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
-        Route::get('/register', [LoginController::class, 'register'])->name('login.register');
         Route::post('/store', [LoginController::class, 'store'])->name('login.store');
-        // Route::get('/success', [LoginController::class, 'success'])->name('login.success');
-        Route::get('/verifikasi/{id}', [LoginController::class, 'verifikasi'])->name('login.verifikasi');
         Route::post('/confirmasi', [LoginController::class, 'confirmasi'])->name('login.confirmasi');
-        Route::get('/recovery', [LoginController::class, 'recovery'])->name('login.recovery');
     }
 );

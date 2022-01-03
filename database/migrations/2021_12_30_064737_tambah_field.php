@@ -16,7 +16,7 @@ class TambahField extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('pin_verified', 4)->nullable()->after('email');
             $table->timestamp('pin_verified_at')->nullable()->after('pin_verified');
-            $table->string('roles', 15)->nullable(false)->after('password');
+            $table->string('roles', 15)->nullable()->after('password');
         });
     }
 

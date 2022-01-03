@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 
 class LoginController extends Controller
 {
-    protected $title = 'dharma widya';
+    protected $title = 'dharmawidya';
     protected $menu = 'login';
 
     public function index()
@@ -91,7 +92,7 @@ class LoginController extends Controller
             return redirect('notifikasi');
         } catch (\Exception $e) {
             dd($e);
-            DB::back()->with('registerError', 'Login Gagal!');
+            DB::back()->with('registerError', 'Login Fail!');
         }
     }
 
@@ -135,37 +136,26 @@ class LoginController extends Controller
 
     public function confirmasi(Request $request)
     {
-
         $request->validate([
             'satu' => 'required',
             'dua' => 'required',
             'tiga' => 'required',
             'empat' => 'required',
         ]);
-        dd($request);
-        DB::beginTransaction();
-        try {
-            $pin_verified = sprintf("%04d", rand(0, 9999));
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->pin_verified = $pin_verified;
-            $user->pin_verified_at = Carbon::now();
-            $user->password = bcrypt($request->password);
-            $user->save();
-
-            $details = [
-                'subject' => 'Verifikasi Email',
-                'email' => $request->email,
-                'pin_verified' => $pin_verified,
-            ];
-            Mail::to($request->email)->send(new KirimEmail($details));
-
-            DB::commit();
-            return redirect('notifikasi');
-        } catch (\Exception $e) {
-            dd($e);
-            DB::back()->with('registerError', 'Login Gagal!');
+        $code = $request->satu . $request->dua . $request->tiga . $request->empat;
+        $hasil = User::where(['email' => $request->email, 'pin_verified' => $code])->count();
+        if ($hasil > 0) {
+            DB::beginTransaction();
+            try {
+                User::where(['email' => $request->email, 'pin_verified' => $code])->update(['email_verified_at' => Carbon::now()]);
+                DB::commit();
+                return redirect('notifikasi');
+            } catch (\Exception $e) {
+                dd($e);
+                DB::back()->with('Error', 'Verifikasi Fail!');
+            }
+        } else {
+            return back()->with('Error', 'Verifikasi Fail!');
         }
     }
 
@@ -174,8 +164,8 @@ class LoginController extends Controller
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'login',
-            'label' => 'login',
+            'submenu' => 'recovery',
+            'type' => 'recovery',
         ];
         return view('login.recovery')->with($data);
     }

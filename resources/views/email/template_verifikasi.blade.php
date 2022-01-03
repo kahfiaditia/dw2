@@ -358,7 +358,7 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td><a href="{{ route("login.verifikasi", $encrypted) }}" target="_blank">Verifikasi Akun</a></td>
+                                      <td><a href="{{ route("verifikasi", $encrypted) }}" target="_blank">Verifikasi Akun</a></td>
                                     </tr>
                                   </tbody>
                                 </table>
