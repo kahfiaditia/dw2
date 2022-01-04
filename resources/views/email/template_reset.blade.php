@@ -345,11 +345,9 @@
                       <td>
                         <h1>{{ $details['subject'] }}</h1>
                         <hr>
-                        <p>Terima kasih telah melakukan pendaftaran akun {{$details['email']}} di DHARMA WIDYA.</p>
-                        <p>Silakan gunakan kode verifikasi berikut untuk mengkonfirmasi email Anda.</p>
-                        <p>Kode verifikasi anda adalah: <span style="color:red;">{{$details['pin_verified']}}</span></p>
+                        <p>Kami ingin memberi tahu Anda bahwa password {{$details['email']}} akan diatur ulang di DHARMA WIDYA.</p>
                         <?php 
-                        $encrypted = Crypt::encryptString($details['email'].'|'.$details['pin_verified']);
+                        $encrypted = Crypt::encryptString($details['email']);
                         ?>
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
@@ -358,7 +356,7 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td><a href="{{ route("verifikasi", $encrypted) }}" target="_blank">Verifikasi Akun</a></td>
+                                      <td><a href="{{ route("reset", $encrypted) }}" target="_blank">Reset Password</a></td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -366,6 +364,7 @@
                             </tr>
                           </tbody>
                         </table>
+                        <p>Jika Anda tidak melakukan tindakan ini, Anda dapat mengabaikan Email ini.</p>
                       </td>
                     </tr>
                   </table>

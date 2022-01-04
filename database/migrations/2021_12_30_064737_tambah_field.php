@@ -17,6 +17,7 @@ class TambahField extends Migration
             $table->string('pin_verified', 4)->nullable()->after('email');
             $table->timestamp('pin_verified_at')->nullable()->after('pin_verified');
             $table->string('roles', 15)->nullable()->after('password');
+            $table->timestamp('password_reset_at')->nullable()->after('password');
         });
     }
 
@@ -31,6 +32,7 @@ class TambahField extends Migration
             $table->dropColumn('pin_verified');
             $table->dropColumn('pin_verified_at');
             $table->dropColumn('roles');
+            $table->dropColumn('password_reset_at');
         });
     }
 }

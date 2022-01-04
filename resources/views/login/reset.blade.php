@@ -21,8 +21,8 @@
                                 <div class="row">
                                     <div class="col-7">
                                         <div class="text-primary p-4">
-                                            <h5 class="text-primary">Free Register</h5>
-                                            <p>Get your free DHARMAWIDYA account now.</p>
+                                            <h5 class="text-primary">{{$subject}}</h5>
+                                            <p>{{$p}}</p>
                                         </div>
                                     </div>
                                     <div class="col-5 align-self-end">
@@ -40,56 +40,34 @@
                                         </div>
                                     </a>
                                 </div>
-                                @if($errors->any())
-                                    {!! $errors->first('email', '<div class="p-2"><div class="alert alert-danger" role="alert">:message</div></div>') !!}
+                                @if (session()->has('Error'))
+                                    <div class="p-2">
+                                        <div class="alert alert-danger" role="alert">
+                                            Email Not Found!
+                                        </div>
+                                    </div>
                                 @endif
                                 <div class="p-2">
-                                    <form class="needs-validation" action="{{ route("login.store") }}" method="POST" novalidate>
+                                    <form class="needs-validation" action="{{ route("login.newpassword") }}" method="POST" novalidate>
                                         @csrf
+                                        <input type="text" name="email" value="{{$email}}">
                                         <div class="mb-3">
-                                            <label for="useremail" class="form-label">Email</label>
-                                            <input type="email" name="email" maxlength="255" class="form-control" id="email" placeholder="Enter email" required autofocus>  
-                                            <div class="invalid-feedback">
-                                                Please Enter Email
-                                            </div>      
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="username" class="form-label">Username</label>
-                                            <input type="text" name="name" maxlength="255" class="form-control" id="name" placeholder="Enter username" required>
-                                            <div class="invalid-feedback">
-                                                Please Enter Username
-                                            </div>  
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="userpassword" class="form-label">Password</label>
+                                            <label for="userpassword" class="form-label">New Password</label>
                                             <input type="password" name="password" minlength="5" maxlength="255" class="form-control" id="userpassword" placeholder="Enter password" required>
                                             <div class="invalid-feedback">
                                                 Please Enter Password and It should have 5 characters or more.
                                             </div>       
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Roles</label>
-                                            <select class="form-control select select2" name="roles" required>
-                                                <option value="">--Pilih Roles--</option>
-                                                <option value="Alumni">Alumni</option>
-                                                <option value="Ortu">Orang Tua</option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                Please Enter Roles
-                                            </div>       
-                                        </div>
-                                        <div class="mt-4 d-grid">
-                                            <button class="btn btn-primary waves-effect waves-light" type="submit">Register</button>
+                                        <div class="text-end">
+                                            <button class="btn btn-primary w-md waves-effect waves-light" type="submit">Reset</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-2 text-center">
-                            <div>
-                                <p>Already have an account ? <a href="{{ route('login') }}" class="fw-medium text-primary"> Login</a> </p>
-                                <p>© <script>document.write(new Date().getFullYear())</script>. Crafted with {{strtoupper($title)}}</p>
-                            </div>
+                        <div class="mt-5 text-center">
+                            <p>Already have an account ? <a href="{{ route('login') }}" class="fw-medium text-primary"> Login</a> </p>
+                            <p>© <script>document.write(new Date().getFullYear())</script>. Crafted with {{strtoupper($title)}}</p>
                         </div>
                     </div>
                 </div>
@@ -103,7 +81,5 @@
         <script src="{{asset('assets/libs/node-waves/waves.min.js')}}"></script>
         <script src="{{asset('assets/js/app.js')}}"></script>
         <script src="{{asset('assets/js/pages/form-validation.init.js')}}"></script>
-
-        <script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
     </body>
 </html>

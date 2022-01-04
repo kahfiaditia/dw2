@@ -46,7 +46,6 @@
                             </div>
                         </div>
                         <div class="mt-5 text-center">
-                            <p>Verification't Accepted ? <a href="{{ route('recovery') }}" class="fw-medium text-primary">Resend Verifikasi</a> </p>
                             <p>© <script>document.write(new Date().getFullYear())</script>. Crafted with {{strtoupper($title)}}</p>
                         </div>
                     </div>

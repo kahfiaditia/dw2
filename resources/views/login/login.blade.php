@@ -85,7 +85,11 @@
                                             <button class="btn btn-primary waves-effect waves-light" type="submit">Log In</button>
                                         </div>
                                         <div class="mt-4 text-center">
-                                            <a href="#" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
+                                            <a href="{{ route('recovery') }}" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
+                                            &nbsp;
+                                            &nbsp;
+                                            &nbsp;
+                                            <a href="{{ route('reverify') }}" class="text-muted"><i class="mdi mdi-email-alert-outline me-1"></i> Reverify?</a>
                                         </div>
                                     </form>
                                 </div>

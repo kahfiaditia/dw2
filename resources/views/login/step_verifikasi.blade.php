@@ -53,6 +53,7 @@
                                         <form class="needs-validation custom" action="{{ route("login.confirmasi") }}" method="POST" novalidate>
                                             @csrf
                                             <input type="hidden" name="email" value="{{$email}}">
+                                            <input type="hidden" name="type" value="verify">
                                             <div class="row">
                                                 <div class="col-3">
                                                     <div class="mb-3">

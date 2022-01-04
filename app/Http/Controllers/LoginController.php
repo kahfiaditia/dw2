@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\KirimEmail;
+use App\Mail\ResetPassword as MailResetPassword;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
 
 class LoginController extends Controller
 {
@@ -98,11 +98,22 @@ class LoginController extends Controller
 
     public function notifikasi(Request $request)
     {
+        if (session()->get('type') === 'reset') {
+            $body = 'Thanks For Reset Akun';
+            $type = 'recovery';
+        } else if (session()->get('type') === 'verify') {
+            $body = 'Thanks For Verify Akun';
+            $type = 'verify';
+        } else {
+            $body = 'Thanks For Register Akun';
+            $type = 'else';
+        }
         $data = [
             'title' => $this->title,
             'icon' => 'bx bx-mail-send',
             'header' => 'Success',
-            'body' => 'Terimakasih sudah mendaftar',
+            'body' => $body,
+            'type' => $type,
         ];
         return view('notifikasi.notifikasi')->with($data);
     }
@@ -129,6 +140,7 @@ class LoginController extends Controller
                 'icon' => 'bx bxs-hourglass-bottom',
                 'header' => 'Expired',
                 'body' => 'Please re-verify',
+                'type' => 'verify',
             ];
             return view('notifikasi.notifikasi')->with($data);
         }
@@ -149,13 +161,56 @@ class LoginController extends Controller
             try {
                 User::where(['email' => $request->email, 'pin_verified' => $code])->update(['email_verified_at' => Carbon::now()]);
                 DB::commit();
-                return redirect('notifikasi');
+                return redirect('notifikasi')->with(['type' => 'verify']);
             } catch (\Exception $e) {
                 dd($e);
                 DB::back()->with('Error', 'Verifikasi Fail!');
             }
         } else {
             return back()->with('Error', 'Verifikasi Fail!');
+        }
+    }
+
+    public function reverify(Request $request)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'reverify',
+            'type' => 'reverify',
+            'subject' => 'Reverify Email',
+            'p' => 'DHARMAWIDYA',
+            'submit' => 'Reverify',
+        ];
+        return view('login.recovery')->with($data);
+    }
+
+    public function reverifycode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email:dns',
+            'type' => 'required',
+        ]);
+        DB::beginTransaction();
+        try {
+            $pin_verified = sprintf("%04d", rand(0, 9999));
+            User::where(['email' => $request->email])->update([
+                'pin_verified' => $pin_verified,
+                'pin_verified_at' => Carbon::now(),
+                'email_verified_at' => NULL
+            ]);
+            $details = [
+                'subject' => 'Verifikasi Email',
+                'email' => $request->email,
+                'pin_verified' => $pin_verified,
+            ];
+            Mail::to($request->email)->send(new KirimEmail($details));
+
+            DB::commit();
+            return redirect('notifikasi');
+        } catch (\Exception $e) {
+            dd($e);
+            DB::back()->with('registerError', 'Reverify Email Fail!');
         }
     }
 
@@ -166,7 +221,81 @@ class LoginController extends Controller
             'menu' => $this->menu,
             'submenu' => 'recovery',
             'type' => 'recovery',
+            'subject' => 'Reset Password',
+            'p' => 'DHARMAWIDYA',
+            'submit' => 'Reset',
         ];
         return view('login.recovery')->with($data);
+    }
+
+    public function resetcode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email:dns',
+            'type' => 'required',
+        ]);
+        $cek = User::where('email', $request->email)->whereNotNull('pin_verified_at')->count();
+        if ($cek > 0) {
+            DB::beginTransaction();
+            try {
+                $details = [
+                    'subject' => 'Reset Password',
+                    'email' => $request->email,
+                ];
+                Mail::to($request->email)->send(new MailResetPassword($details));
+                User::where(['email' => $request->email])->update(['password_reset_at' => Carbon::now()]);
+                DB::commit();
+                return redirect('notifikasi')->with(['type' => 'reset']);
+            } catch (\Exception $e) {
+                dd($e);
+                DB::back()->with('Error', 'Reset Email Fail!');
+            }
+        } else {
+            return back()->with('Error', 'Reset Fail, Please Verifikasi Email!');
+        }
+    }
+
+    public function reset($id)
+    {
+        $email = Crypt::decryptString($id);
+        $user = User::where('email', $email)->get();
+        $date_val = Carbon::parse($user[0]->password_reset_at)->addMinutes(30);
+        if ($date_val >= Carbon::now()) {
+            $data = [
+                'title' => $this->title,
+                'submenu' => 'Step Verifikasi',
+                'subject' => 'Reset Password',
+                'p' => 'Reset Password',
+                'email' => $user[0]->email,
+            ];
+            return view('login.reset')->with($data);
+        } else {
+            $data = [
+                'title' => $this->title,
+                'icon' => 'bx bxs-hourglass-bottom',
+                'header' => 'Expired',
+                'body' => 'Please re-verify',
+                'type' => 'verify',
+            ];
+            return view('notifikasi.notifikasi')->with($data);
+        }
+    }
+
+    public function newpassword(Request $request)
+    {
+        $cek = User::where('email', $request->email)->count();
+        if ($cek > 0) {
+            DB::beginTransaction();
+            try {
+                User::where(['email' => $request->email])->update(['password' => bcrypt($request->password)]);
+                DB::commit();
+                return redirect('notifikasi')->with(['type' => 'reset']);
+            } catch (\Exception $e) {
+                dd($e);
+                DB::back()->with('Error', 'Reset Email Fail!');
+            }
+        } else {
+            return back()->with('Error', 'Reset Fail!');
+        }
     }
 }
