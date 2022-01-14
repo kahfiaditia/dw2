@@ -65,9 +65,9 @@
                                                 Please Enter Email
                                             </div>      
                                         </div>
-                                        @if (Request::segment(1) === 'recovery')
+                                        {{-- @if (Request::segment(1) === 'recovery')
                                             <p>Verification't Accepted ? <a href="{{ route('reverify') }}" class="fw-medium text-primary">Resend Verifikasi</a> </p>
-                                        @endif
+                                        @endif --}}
                                         <div class="text-end">
                                             <button class="btn btn-primary w-md waves-effect waves-light" type="submit" value="{{$submit}}">{{$submit}}</button>
                                         </div>
