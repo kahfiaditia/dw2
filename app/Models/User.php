@@ -24,6 +24,7 @@ class User extends Authenticatable
         'pin_verified',
         'email_verified_at',
         'password_reset_at',
+        'aktif',
     ];
 
     /**

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,12 +29,31 @@ Route::group(
         'prefix'     => 'login'
     ],
     function () {
-        Route::post('/login', [LoginController::class, 'authenticate'])->name('login.proses');
+        Route::post('/proses', [LoginController::class, 'authenticate'])->name('login.proses');
         Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
         Route::post('/store', [LoginController::class, 'store'])->name('login.store');
         Route::post('/confirmasi', [LoginController::class, 'confirmasi'])->name('login.confirmasi');
         Route::post('/reverifycode', [LoginController::class, 'reverifycode'])->name('login.reverifycode');
         Route::post('/resetcode', [LoginController::class, 'resetcode'])->name('login.resetcode');
         Route::post('/newpassword', [LoginController::class, 'newpassword'])->name('login.newpassword');
+        Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
     }
 );
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
+
+Route::group(
+    [
+        'prefix' => 'employee'
+    ],
+    function () {
+        Route::get('/', [EmployeeController::class, 'index'])->name('employee');
+        Route::get('/create', [EmployeeController::class, 'create'])->name('employee.create');
+        Route::post('/store', [EmployeeController::class, 'store'])->name('employee.store');
+        Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+        Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
+        Route::post('/update', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::delete('/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+    }
+);
+

@@ -16,8 +16,9 @@ class TambahField extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('pin_verified', 4)->nullable()->after('email');
             $table->timestamp('pin_verified_at')->nullable()->after('pin_verified');
-            $table->string('roles', 15)->nullable()->after('password');
             $table->timestamp('password_reset_at')->nullable()->after('password');
+            $table->string('roles', 15)->nullable()->after('password_reset_at');
+            $table->boolean('aktif')->nullable()->after('roles');
         });
     }
 
@@ -33,6 +34,7 @@ class TambahField extends Migration
             $table->dropColumn('pin_verified_at');
             $table->dropColumn('roles');
             $table->dropColumn('password_reset_at');
+            $table->dropColumn('aktif');
         });
     }
 }

@@ -33,11 +33,11 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email:dns',
             'password' => 'required',
-            'status' => 'A',
+            'aktif' => '0',
         ]);
         // login password harus bcrpt baru bisa masuk auth::attempt
         if (Auth::attempt($credentials)) {
-            if (Auth::user()->status === 'A') {
+            if (Auth::user()->aktif === 1) {
                 $request->session()->regenerate();
                 return redirect()->intended('dashboard');
             } else {
@@ -297,5 +297,13 @@ class LoginController extends Controller
         } else {
             return back()->with('Error', 'Reset Fail!');
         }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }

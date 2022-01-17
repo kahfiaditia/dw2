@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>{{strtoupper($title)}}</title>
+        <title>{{ucfirst($submenu).' | '.strtoupper($title)}}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
@@ -22,7 +22,7 @@
                                     <div class="col-7">
                                         <div class="text-primary p-4">
                                             <h5 class="text-primary">Welcome Back !</h5>
-                                            <p>Sign in to continue to Skote.</p>
+                                            <p>Sign in to Dharmawidya.</p>
                                         </div>
                                     </div>
                                     <div class="col-5 align-self-end">
@@ -62,7 +62,7 @@
                                     </div>
                                 @endif
                                 <div class="p-2">
-                                    <form class="needs-validation" action="{{ route("login.proses") }}" method="POST" novalidate>
+                                    <form class="needs-validation" action="{{ route('login.proses') }}" method="POST" novalidate>
                                         @csrf
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Email</label>
