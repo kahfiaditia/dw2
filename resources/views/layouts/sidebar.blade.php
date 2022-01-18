@@ -20,7 +20,7 @@
         </li>
         <li class="menu-title" key="t-setting">Setting</li>
         <li>
-            <a href="#" class="waves-effect">
+            <a href="{{ route('agama') }}" class="waves-effect">
                 <i class="bx bx-list-ul"></i>
                 <span key="t-calendar">Agama</span>
             </a>

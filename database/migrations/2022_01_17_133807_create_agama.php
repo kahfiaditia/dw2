@@ -18,6 +18,7 @@ class CreateAgama extends Migration
             $table->string('agama',64);
             $table->boolean('aktif');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

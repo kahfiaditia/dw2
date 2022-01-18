@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
@@ -44,7 +45,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('aut
 
 Route::group(
     [
-        'prefix' => 'employee'
+        'prefix' => 'employee',
+        'middleware' => 'auth',
     ],
     function () {
         Route::get('/', [EmployeeController::class, 'index'])->name('employee');
@@ -57,3 +59,17 @@ Route::group(
     }
 );
 
+Route::group(
+    [
+        'prefix'     => 'agama',
+        'middleware' => 'auth',
+    ], function () {
+        Route::get('/', [AgamaController::class, 'index'])->name('agama');
+        Route::get('/create', [AgamaController::class, 'create'])->name('agama.create');
+        Route::post('/store', [AgamaController::class, 'store'])->name('agama.store');
+        Route::get('/edit/{id}', [AgamaController::class, 'edit'])->name('agama.edit');
+        Route::post('/update', [AgamaController::class, 'update'])->name('agama.update');
+        Route::delete('/destroy', [AgamaController::class, 'destroy'])->name('agama.destroy');
+        Route::post('/dropdown', [AgamaController::class, 'dropdown'])->name('agama.dropdown');
+    }
+);

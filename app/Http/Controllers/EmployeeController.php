@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\AlertHelper;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
@@ -34,6 +35,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
+        AlertHelper::addAlert(true);
         $data = [
             'title' => $this->title,
             'menu' => 'data',

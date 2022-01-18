@@ -19,8 +19,10 @@
         <link href="{{ URL::asset('assets/libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ URL::asset('assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="{{ URL::asset('assets/libs/@chenfengyuan/datepicker/datepicker.min.css') }}">
+        <link href="{{ URL::asset('assets/form.css') }}" rel="stylesheet" type="text/css" />
     </head>
     <body data-sidebar="dark">
+        @include('sweetalert::alert')
         <div id="layout-wrapper">
             <header id="page-topbar">
                 @include('layouts.header')
