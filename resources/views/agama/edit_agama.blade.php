@@ -26,10 +26,11 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Agama</label>
-                                        <input type="text" class="form-control" id="Agama" name="Agama" value="{{ $agama->Agama }}" required placeholder="Agama" autofocus>
+                                        <input type="text" class="form-control" id="agama" name="agama" value="{{ $agama->agama }}" required placeholder="Agama" autofocus>
                                         <div class="invalid-feedback">
                                             Data wajib diisi.
                                         </div>
+                                        {!! $errors->first('agama', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
                                 </div>
                             </div>
@@ -38,7 +39,7 @@
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Status Aktif</label>
                                         <div>
-                                            <input type="checkbox" id="switch1" switch="none" name="Status" {{ $agama->Status === 'A' ? 'checked' : '' }} />
+                                            <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $agama->aktif === 1 ? 'checked' : '' }} />
                                             <label for="switch1" data-on-label="On" data-off-label="Off"></label>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.

@@ -4,6 +4,7 @@ use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\KodeposController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,6 +57,24 @@ Route::group(
         Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::post('/update', [EmployeeController::class, 'update'])->name('employee.update');
         Route::delete('/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+    }
+);
+
+Route::group([
+        'prefix'     => 'kodepos',
+        'middleware' => 'auth',
+    ], function () {
+        Route::get('/', [KodeposController::class, 'index'])->name('kodepos');
+        Route::get('/create', [KodeposController::class, 'create'])->name('kodepos.create');
+        Route::post('/store', [KodeposController::class, 'store'])->name('kodepos.store');
+        Route::get('/edit/{id}', [KodeposController::class, 'edit'])->name('kodepos.edit');
+        Route::post('/update', [KodeposController::class, 'update'])->name('kodepos.update');
+        Route::get('/destroy', [KodeposController::class, 'destroy'])->name('kodepos.destroy');
+        Route::post('/dropdown', [KodeposController::class, 'dropdown'])->name('kodepos.dropdown');
+        Route::post('/kota', [KodeposController::class, 'kota'])->name('kodepos.dropdown.kota');
+        Route::post('/kecamatan', [KodeposController::class, 'kecamatan'])->name('kodepos.dropdown.kecamatan');
+        Route::post('/kelurahan', [KodeposController::class, 'kelurahan'])->name('kodepos.dropdown.kelurahan');
+        Route::get('/data_ajax', [KodeposController::class, 'data_ajax'])->name('kodepos.data_ajax');
     }
 );
 

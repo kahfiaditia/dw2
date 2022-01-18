@@ -113,11 +113,14 @@ class AgamaController extends Controller
      */
     public function update(Request $request, Agama $agama)
     {
+        $request->validate([
+            'agama' => 'required|max:64|unique:agama,agama,'.$request->id,
+        ]);
         DB::beginTransaction();
         try {
             $agama = Agama::findorfail($request->id);
-            $agama->Agama = $request->Agama;
-            $agama->Status = isset($request->Status) ? 'A' : '';
+            $agama->agama = $request->agama;
+            $agama->aktif = isset($request->aktif) ? 1 : 0;
             $agama->save();
 
             DB::commit();
