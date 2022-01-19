@@ -31,5 +31,11 @@
                 <span key="t-calendar">Kodepos</span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('siswa.index') }}" class="wavex-effect">
+                <i class="bx bx-list-ul"></i>
+                <span key="t-calendar">Siswa</span>
+            </a>
+        </li>
     </ul>
 </div>
