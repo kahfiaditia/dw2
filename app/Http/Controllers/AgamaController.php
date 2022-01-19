@@ -159,7 +159,7 @@ class AgamaController extends Controller
 
     public function dropdown()
     {
-        $agama = Agama::select('id','agama')->get();
+        $agama = Agama::select('id','agama')->where('aktif','1')->get();
         return $agama;
     }
 }

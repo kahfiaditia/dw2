@@ -48,9 +48,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="mb-3">
+                            <div class="row mt-4">
+                                <div class="col-sm-3">
+                                    <a href="{{ route('agama') }}" class="btn btn-secondary waves-effect">Cancel</a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="text-sm-end mt-2 mt-sm-0">
                                         <button class="btn btn-primary" type="submit" id="submit">Simpan</button>
                                     </div>
                                 </div>

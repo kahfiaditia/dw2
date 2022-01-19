@@ -28,8 +28,8 @@ class Softdelete extends Migration
     {
         Schema::table('kodepos', function (Blueprint $table) {
             $table->dropSoftDeletes();
-            $table->dropColumn('update_at');
-            $table->dropColumn('create_at');
+            $table->dropColumn('updated_at');
+            $table->dropColumn('created_at');
         });
     }
 }

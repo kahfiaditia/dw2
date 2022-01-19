@@ -67,6 +67,5 @@
         <script src="{{ asset('assets/libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
         <script src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
         <script src="{{ asset('assets/libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
-        {{-- <script src="{{ asset('assets/js/pages/form-wizard.init.js') }}"></script> --}}
     </body>
 </html>

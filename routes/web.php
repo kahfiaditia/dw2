@@ -71,6 +71,7 @@ Route::group([
         Route::post('/update', [KodeposController::class, 'update'])->name('kodepos.update');
         Route::get('/destroy', [KodeposController::class, 'destroy'])->name('kodepos.destroy');
         Route::post('/dropdown', [KodeposController::class, 'dropdown'])->name('kodepos.dropdown');
+        Route::post('/provinsi', [KodeposController::class, 'provinsi'])->name('kodepos.dropdown.provinsi');
         Route::post('/kota', [KodeposController::class, 'kota'])->name('kodepos.dropdown.kota');
         Route::post('/kecamatan', [KodeposController::class, 'kecamatan'])->name('kodepos.dropdown.kecamatan');
         Route::post('/kelurahan', [KodeposController::class, 'kelurahan'])->name('kodepos.dropdown.kelurahan');

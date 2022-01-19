@@ -28,17 +28,23 @@ class KodeposController extends Controller
             'submenu' => 'kodepos',
             'label' => 'data kodepos',
         ];
-        return view('kodepos.ListKodepos')->with($data);
+        return view('kodepos.list_kodepos')->with($data);
     }
 
     public function data_ajax()
     {
-        return Datatables::of(Kodepos::query())
-        ->addColumn('action', function($model){
-            return '<a href="'. route('kodepos.edit',['id' => Crypt::encryptString($model->id)]) .'" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>
-                    <a href="'. route('kodepos.destroy',['id' => Crypt::encryptString($model->id),'method'=>'DELETE']) .'" class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>';
+        $kodepos = Kodepos::select(['*']);
+        return Datatables::of($kodepos)
+        ->addColumn('status', function($model) {
+            $model->status === "1" ? $flag = 'success' : $flag = 'danger';
+            $model->status === "1" ? $status = 'Aktif' : $status = 'Non Aktif';
+            return '<span  class="badge badge-pill badge-soft-'.$flag.' font-size-12">'.$status.'</span>';
         })
-        // ->rawColumns(['action'])
+        ->addColumn('action','kodepos.button')
+        ->rawColumns(['status','action'])
+        ->order(function ($query) {
+            $query->orderBy('provinsi', 'asc');
+        })
         ->make(true);
     }
 
@@ -55,7 +61,7 @@ class KodeposController extends Controller
             'submenu' => 'kodepos',
             'label' => 'tambah kodepos',
         ];
-        return view('kodepos.AddKodepos')->with($data);
+        return view('kodepos.add_kodepos')->with($data);
     }
 
     /**
@@ -66,6 +72,13 @@ class KodeposController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'provinsi' => 'required|max:100',
+            'kabupaten' => 'required|max:100',
+            'kecamatan' => 'required|max:100',
+            'kelurahan' => 'required|max:100',
+            'kodepos' => 'required|max:5',
+        ]);
         DB::beginTransaction();
         try {
             $kodepos = new Kodepos();
@@ -74,7 +87,7 @@ class KodeposController extends Controller
             $kodepos->kecamatan = $request->kecamatan;
             $kodepos->kelurahan = $request->kelurahan;
             $kodepos->kodepos = $request->kodepos;
-            $kodepos->status = 'A';
+            $kodepos->status = '1';
             $kodepos->save();
 
             DB::commit();
@@ -114,7 +127,7 @@ class KodeposController extends Controller
             'label' => 'ubah kodepos',
             'kodepos' => Kodepos::findorfail($id_decrypted)
         ];
-        return view('kodepos.EditKodepos')->with($data);
+        return view('kodepos.edit_kodepos')->with($data);
     }
 
     /**
@@ -134,7 +147,7 @@ class KodeposController extends Controller
             $kodepos->kecamatan = $request->kecamatan;
             $kodepos->kelurahan = $request->kelurahan;
             $kodepos->kodepos = $request->kodepos;
-            $kodepos->status = isset($request->Status) ? 'A' : '';
+            $kodepos->status = isset($request->Status) ? '1' : '0';
             $kodepos->save();
 
             DB::commit();
@@ -177,14 +190,22 @@ class KodeposController extends Controller
 
     public function dropdown()
     {
-        $kota = Kodepos::select('kabupaten')->where('provinsi','=','Banten')->groupBy('kabupaten')->get();
-        return $kota;
+        $provinsi = Kodepos::select('provinsi')->groupBy('provinsi')->get();
+        return $provinsi;
+    }
+
+    public function provinsi(Request $request)
+    {
+        $provinsi = Kodepos::select('kabupaten')
+                    ->where('provinsi','=',$request->Provinsi)
+                    ->groupBy('kabupaten')->get();
+        return $provinsi;
     }
 
     public function kota(Request $request)
     {
         $kecamatan = Kodepos::select('kecamatan')
-                    ->where('provinsi','=','Banten')
+                    ->where('provinsi','=',$request->Provinsi)
                     ->where('kabupaten','=',$request->Kota)
                     ->groupBy('kecamatan')->get();
         return $kecamatan;
@@ -193,9 +214,9 @@ class KodeposController extends Controller
     public function kecamatan(Request $request)
     {
         $kelurahan = Kodepos::select('kelurahan')
-                    ->where('provinsi','=','Banten')
-                    ->where('kabupaten','=',$request->KotaA)
-                    ->where('kecamatan','=',$request->KecamatanA)
+                    ->where('provinsi','=',$request->Provinsi)
+                    ->where('kabupaten','=',$request->Kota)
+                    ->where('kecamatan','=',$request->Kecamatan)
                     ->groupBy('kelurahan')->get();
         return $kelurahan;
     }
@@ -203,10 +224,10 @@ class KodeposController extends Controller
     public function kelurahan(Request $request)
     {
         $kodepos = Kodepos::select('kodepos')
-                    ->where('provinsi','=','Banten')
-                    ->where('kabupaten','=',$request->KotaA)
-                    ->where('kecamatan','=',$request->KecamatanA)
-                    ->where('kelurahan','=',$request->KelurahanA)
+                    ->where('provinsi','=',$request->Provinsi)
+                    ->where('kabupaten','=',$request->Kota)
+                    ->where('kecamatan','=',$request->Kecamatan)
+                    ->where('kelurahan','=',$request->Kelurahan)
                     ->groupBy('kodepos')->get();
         return $kodepos;
     }
