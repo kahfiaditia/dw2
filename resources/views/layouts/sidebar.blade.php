@@ -26,7 +26,7 @@
             </a>
         </li>
         <li>
-            <a href="#" class="waves-effect">
+            <a href="{{ route('kodepos') }}" class="waves-effect">
                 <i class="bx bx-list-ul"></i>
                 <span key="t-calendar">Kodepos</span>
             </a>
