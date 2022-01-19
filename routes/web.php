@@ -4,6 +4,7 @@ use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,10 +61,12 @@ Route::group(
     }
 );
 
-Route::group([
+Route::group(
+    [
         'prefix'     => 'kodepos',
         'middleware' => 'auth',
-    ], function () {
+    ],
+    function () {
         Route::get('/', [KodeposController::class, 'index'])->name('kodepos');
         Route::get('/create', [KodeposController::class, 'create'])->name('kodepos.create');
         Route::post('/store', [KodeposController::class, 'store'])->name('kodepos.store');
@@ -83,7 +86,8 @@ Route::group(
     [
         'prefix'     => 'agama',
         'middleware' => 'auth',
-    ], function () {
+    ],
+    function () {
         Route::get('/', [AgamaController::class, 'index'])->name('agama');
         Route::get('/create', [AgamaController::class, 'create'])->name('agama.create');
         Route::post('/store', [AgamaController::class, 'store'])->name('agama.store');
@@ -91,5 +95,12 @@ Route::group(
         Route::post('/update', [AgamaController::class, 'update'])->name('agama.update');
         Route::delete('/destroy', [AgamaController::class, 'destroy'])->name('agama.destroy');
         Route::post('/dropdown', [AgamaController::class, 'dropdown'])->name('agama.dropdown');
+    }
+);
+
+Route::group(
+    ['middleware' => 'auth'],
+    function () {
+        Route::resource('/siswa', SiswaController::class);
     }
 );
