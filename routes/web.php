@@ -55,8 +55,11 @@ Route::group(
         Route::get('/create', [EmployeeController::class, 'create'])->name('employee.create');
         Route::post('/store', [EmployeeController::class, 'store'])->name('employee.store');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
-        Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::post('/update', [EmployeeController::class, 'update'])->name('employee.update');
+
+        Route::get('/ijazah/{id}', [EmployeeController::class, 'ijazah'])->name('employee.ijazah');
+
+        Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::delete('/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
     }
 );

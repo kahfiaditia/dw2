@@ -48,7 +48,7 @@
                                         <td>{{ $list->jabatan }}</td>
                                         <td>
                                             <span class="badge badge-pill badge-soft-<?php if($list->aktif === 1){ echo 'success'; }else{ echo 'danger'; }?> font-size-12">
-                                                @if ($list->aktif === '1')
+                                                @if ($list->aktif === 1)
                                                     Aktif
                                                 @else
                                                     Non Aktif
@@ -56,6 +56,8 @@
                                             </span>
                                         </td>
                                         <td>
+                                            <?php $path = Storage::url('karyawan/kk/'.$list->dok_nik); ?>
+                                            <img src="{{ $path }}">
                                             <?php $id = Crypt::encryptString($list->id); ?>
                                             <form class="delete-form" action="{{ route('employee.destroy', ['id' => $id]) }}" method="POST">
                                                 @csrf
@@ -71,7 +73,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
