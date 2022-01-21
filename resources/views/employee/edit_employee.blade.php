@@ -51,10 +51,6 @@
                                 <p class="fw-bold mb-4">Jumlah Anak</p>
                             </a>
                             <a class="nav-link">
-                                <i class= "bx bxs-school d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Sekolah di Dharma Widya</p>
-                            </a>
-                            <a class="nav-link">
                                 <i class= "bx bx-plus-medical d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Riwayat Penyakit</p>
                             </a>
@@ -130,12 +126,17 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <input type="text" name="dok_nik_old" value="{{ $item->dok_nik }}">
+                                                    <input type="hidden" name="dok_nik_old" value="{{ $item->dok_nik }}">
                                                     <label for="formFile" class="form-label">Doc NIK atau SIM</label>
                                                     <input class="form-control dok_nik" type="file" name="dok_nik" id="dok_nik" >
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
+                                                    @if ($item->dok_nik)
+                                                        <a href="javascript:void(0)" data-id="{{ $item->dok_nik.'|nik|karyawan' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
+                                                            <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -152,12 +153,17 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <input type="text" name="dok_npwp_old" value="{{ $item->dok_npwp }}">
+                                                    <input type="hidden" name="dok_npwp_old" value="{{ $item->dok_npwp }}">
                                                     <label for="formFile" class="form-label">Doc NPWP</label>
                                                     <input class="form-control" type="file" name="dok_npwp" id="dok_npwp" >
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
+                                                    @if ($item->dok_npwp)
+                                                        <a href="javascript:void(0)" data-id="{{ $item->dok_npwp.'|npwp|karyawan' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
+                                                            <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -175,12 +181,17 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <input type="text" name="dok_kk_old" value="{{ $item->dok_kk }}">
+                                                    <input type="hidden" name="dok_kk_old" value="{{ $item->dok_kk }}">
                                                     <label for="formFile" class="form-label">Doc KK</label>
                                                     <input class="form-control" type="file" name="dok_kk" id="dok_kk" >
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
+                                                    @if ($item->dok_kk)
+                                                        <a href="javascript:void(0)" data-id="{{ $item->dok_kk.'|kk|karyawan' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
+                                                            <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -476,7 +487,7 @@
                                         </div>
                                         <div class="row mt-4">
                                             <div class="col-sm-6">
-                                                <a href="{{ route('employee') }}" class="btn btn-secondary waves-effect">Cancel</a>
+                                                <a href="{{ route('employee') }}" class="btn btn-secondary waves-effect">Back</a>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="text-sm-end mt-2 mt-sm-0">
@@ -494,10 +505,50 @@
         </div>
     </div>
 </div>
+<!-- modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Dokumen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="dynamic-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/alert.js') }}"></script>
 <script>
     $(document).ready(function(){
+        $(document).on('click', '#get_data', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id'); // it will get id of clicked row
+            $('#dynamic-content').html(''); // leave it blank before ajax call
+            $('#modal-loader').show(); // load ajax loader
+            var url = "{{ route('employee.dokumen') }}"
+            $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id
+                    }
+                })
+                .done(function(url) {
+                    $('#dynamic-content').html(url); // load response
+                    $('#modal-loader').hide(); // hide ajax loader
+                })
+                .fail(function(err) {
+                    $('#dynamic-content').html(
+                        '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
+                    );
+                    $('#modal-loader').hide();
+                });
+        });
+
         // valdasi extension
         $('#dok_nik').bind('change', function() {
             var file = document.querySelector("#dok_nik");
@@ -813,21 +864,5 @@
             }
         }
     }
-    $('.delete_confirm').on('click', function(event) {
-        event.preventDefault();
-        Swal.fire({
-            title: 'Hapus Data',
-            text: 'Ingin menghapus data?',
-            icon: 'question',
-            showCloseButton: true,
-            showCancelButton: true,
-            cancelButtonText: "Batal",
-            focusConfirm: false,
-        }).then((value) => {
-            if (value.isConfirmed) {
-                $(this).closest("form").submit()
-            }
-        });
-    });
 </script>
 @endsection

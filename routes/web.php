@@ -56,11 +56,16 @@ Route::group(
         Route::post('/store', [EmployeeController::class, 'store'])->name('employee.store');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
         Route::post('/update', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::post('/dokumen', [EmployeeController::class, 'dokumen'])->name('employee.dokumen');
 
         Route::get('/ijazah/{id}', [EmployeeController::class, 'ijazah'])->name('employee.ijazah');
+        Route::get('/sk/{id}', [EmployeeController::class, 'sk'])->name('employee.sk');
+        Route::post('/store_sk', [EmployeeController::class, 'store_sk'])->name('employee.store_sk');
+        Route::get('/child/{id}', [EmployeeController::class, 'child'])->name('employee.child');
 
         Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::delete('/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+        Route::delete('/destroy_sk', [EmployeeController::class, 'destroy_sk'])->name('employee.destroy_sk');
     }
 );
 

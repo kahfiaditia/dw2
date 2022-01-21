@@ -49,10 +49,6 @@
                                 <p class="fw-bold mb-4">Jumlah Anak</p>
                             </a>
                             <a class="nav-link">
-                                <i class= "bx bxs-school d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Sekolah di Dharma Widya</p>
-                            </a>
-                            <a class="nav-link">
                                 <i class= "bx bx-plus-medical d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Riwayat Penyakit</p>
                             </a>

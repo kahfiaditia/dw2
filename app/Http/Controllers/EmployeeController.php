@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Employee;
+use App\Models\Sk_karyawan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -268,8 +269,7 @@ class EmployeeController extends Controller
 
             DB::commit();
             AlertHelper::addAlert(true);
-            return back();
-            // return redirect('employee/ijazah');
+            return redirect('employee/ijazah/'.$request->id);
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();
@@ -288,9 +288,107 @@ class EmployeeController extends Controller
         //
     }
 
-    public function ijazah(Request $request)
+    public function ijazah($id)
     {
-        dd($request);
-        # code...
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan baru',
+            'item' => Employee::findorfail(Crypt::decryptString($id)),
+        ];
+        return view('employee.ijazah_employee')->with($data);
+    }
+
+    public function sk($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan baru',
+            'item' => Employee::findorfail(Crypt::decryptString($id)),
+            'child' => Sk_karyawan::where('karyawan_id',Crypt::decryptString($id))->get(),
+        ];
+        return view('employee.sk_employee')->with($data);
+    }
+
+    public function child($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan baru',
+            'item' => Employee::findorfail(Crypt::decryptString($id)),
+            'child' => Sk_karyawan::where('karyawan_id',Crypt::decryptString($id))->get(),
+        ];
+        return view('employee.child_employee')->with($data);
+    }
+
+    public function dokumen(Request $request)
+    {
+        $doc = explode("|", $request->id);
+        $eks = explode(".", $doc[0]);
+        $data = [
+            'file' => $doc[0],
+            'eks' => $eks[1],
+            'type' => $doc[1],
+            'modul' => $doc[2],
+        ];
+        return view('dokumen')->with($data);
+    }
+
+    public function store_sk(Request $request)
+    {
+        $request->validate([
+            'no_sk' => 'required|max:64',
+            'tgl_sk' => 'required',
+            'jabatan' => 'required|max:64',
+            'dok_sk' => 'mimes:png,jpeg,jpg|max:2048',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $id = Crypt::decryptString($request->id);
+            $employee = new Sk_karyawan();
+            $employee->no_sk = $request->no_sk;
+            $employee->tgl_sk = $request->tgl_sk;
+            $employee->jabatan = $request->jabatan;
+            $employee->karyawan_id = $id;
+            // dokumen sk
+            if ($request->dok_sk) {
+                $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_sk->extension();
+                $employee->dok_sk = $fileName;
+                $request->file('dok_sk')->storeAs('public/sk/', $fileName);
+            }
+            $employee->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return redirect('employee/sk/'.$request->id);
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            // something went wrong
+        }
+    }
+
+    public function destroy_sk(Request $request)
+    {
+        $id_decrypted = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $agama = Sk_karyawan::findorfail($id_decrypted);
+            $agama->delete();
+
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
     }
 }

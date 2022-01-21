@@ -56,8 +56,8 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <?php $path = Storage::url('karyawan/nik/'.$list->dok_nik); ?>
-                                            <img src="{{ $path }}">
+                                            {{-- <?php $path = Storage::url('karyawan/nik/'.$list->dok_nik); ?>
+                                            <img src="{{ $path }}"> --}}
                                             <?php $id = Crypt::encryptString($list->id); ?>
                                             <form class="delete-form" action="{{ route('employee.destroy', ['id' => $id]) }}" method="POST">
                                                 @csrf
