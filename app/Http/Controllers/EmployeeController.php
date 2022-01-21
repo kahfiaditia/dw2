@@ -206,7 +206,7 @@ class EmployeeController extends Controller
             $employee->tempat_lahir = $request->tempat_lahir;
             $employee->tgl_lahir = $request->tgl_lahir;
             // dokumen nik
-            dd($request);
+            // dd($request);
             $employee->nik = $request->nik;
             if($request->dok_nik) {
                 $fileName = Carbon::now()->format('ymdhis').'_'.str::random(25).'.'.$request->dok_nik->extension();
