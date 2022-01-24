@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
+use App\Models\Anak_karyawan;
+use App\Models\Anak_karyawan_sekolah_dw;
 use App\Models\Employee;
 use App\Models\Sk_karyawan;
 use Carbon\Carbon;
@@ -321,9 +323,45 @@ class EmployeeController extends Controller
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
-            'child' => Sk_karyawan::where('karyawan_id',Crypt::decryptString($id))->get(),
+            'child' => Anak_karyawan::where('karyawan_id',Crypt::decryptString($id))->get(),
+            'school' => Anak_karyawan_sekolah_dw::all(),
         ];
         return view('employee.child_employee')->with($data);
+    }
+
+    public function store_child(Request $request)
+    {
+        $id = Crypt::decryptString($request->karyawan_id);
+        $request->validate([
+            'anak_ke' => 'required|max:2',
+            'nama' => 'required|max:64',
+            'usia' => 'required|max:2',
+        ]);
+        $cek = Anak_karyawan::where(['karyawan_id' => $id, 'anak_ke' => $request->anak_ke ])->get()->count();
+        if($cek > 0){
+            AlertHelper::addAlert(false);
+            return back();
+        }else{
+            DB::beginTransaction();
+            try {
+                $anak = new Anak_karyawan();
+                $anak->anak_ke = $request->anak_ke;
+                $anak->nama = $request->nama;
+                $anak->usia = $request->usia;
+                $anak->karyawan_id = $id;
+                $anak->save();
+
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return back();
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollback();
+                // something went wrong
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        }
     }
 
     public function dokumen(Request $request)
@@ -351,18 +389,18 @@ class EmployeeController extends Controller
         DB::beginTransaction();
         try {
             $id = Crypt::decryptString($request->id);
-            $employee = new Sk_karyawan();
-            $employee->no_sk = $request->no_sk;
-            $employee->tgl_sk = $request->tgl_sk;
-            $employee->jabatan = $request->jabatan;
-            $employee->karyawan_id = $id;
+            $sk = new Sk_karyawan();
+            $sk->no_sk = $request->no_sk;
+            $sk->tgl_sk = $request->tgl_sk;
+            $sk->jabatan = $request->jabatan;
+            $sk->karyawan_id = $id;
             // dokumen sk
             if ($request->dok_sk) {
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_sk->extension();
-                $employee->dok_sk = $fileName;
+                $sk->dok_sk = $fileName;
                 $request->file('dok_sk')->storeAs('public/sk/', $fileName);
             }
-            $employee->save();
+            $sk->save();
 
             DB::commit();
             AlertHelper::addAlert(true);
@@ -388,6 +426,44 @@ class EmployeeController extends Controller
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_sk(Request $request)
+    {
+        $data = [
+            'id' => $request->id,
+            'item' => Sk_karyawan::findorfail(Crypt::decryptString($request->id)),
+        ];
+        return view('employee.sk_employee_edit')->with($data);
+    }
+
+    public function update_sk(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $id = Crypt::decryptString($request->id);
+            $sk = Sk_karyawan::findorfail($id);
+            $sk->no_sk = $request->edit_no_sk;
+            $sk->tgl_sk = $request->edit_tgl_sk;
+            $sk->jabatan = $request->edit_jabatan;
+            // dokumen sk
+            if ($request->edit_dok_sk) {
+                $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->edit_dok_sk->extension();
+                $sk->dok_sk = $fileName;
+                $request->file('edit_dok_sk')->storeAs('public/sk/', $fileName);
+                Storage::delete('public/sk/' . $request->dok_sk_old);
+            }
+            $sk->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
             return back();
         }
     }

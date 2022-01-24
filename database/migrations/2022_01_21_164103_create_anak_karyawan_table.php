@@ -20,6 +20,7 @@ class CreateAnakKaryawanTable extends Migration
             $table->integer('usia');
             $table->unsignedBigInteger('karyawan_id');
             $table->foreign('karyawan_id')->references('id')->on('karyawan');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

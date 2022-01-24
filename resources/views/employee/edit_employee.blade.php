@@ -64,7 +64,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Nama Lengkap</label>
+                                                    <label for="validationCustom02" class="form-label">Nama Lengkap <code>*</code></label>
                                                     <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="{{ $item->nama_lengkap }}" required autofocus
                                                         placeholder="Nama Lengkap">
                                                     <div class="invalid-feedback">
@@ -87,7 +87,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Tempat Lahir</label>
+                                                    <label for="validationCustom02" class="form-label">Tempat Lahir <code>*</code></label>
                                                     <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" value="{{ $item->tempat_lahir }}" required
                                                         placeholder="Tempat Lahir">
                                                     <div class="invalid-feedback">
@@ -98,7 +98,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-4">
-                                                    <label>Tanggal Lahir</label>
+                                                    <label>Tanggal Lahir <code>*</code></label>
                                                     <div class="input-group" id="datepicker2">
                                                         <input type="text" class="form-control" placeholder="yyyy-mm-dd" name="tgl_lahir" value="{{ $item->tgl_lahir }}"
                                                             data-date-format="yyyy-mm-dd" data-date-container='#datepicker2' data-provide="datepicker" required
@@ -115,7 +115,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">NIK atau SIM</label>
+                                                    <label for="validationCustom02" class="form-label">NIK atau SIM <code>*</code></label>
                                                     <input type="number" min="0" class="form-control" id="nik" name="nik" value="{{ $item->nik }}" required
                                                         placeholder="NIK atau SIM">
                                                     <div class="invalid-feedback">
@@ -127,13 +127,41 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <input type="hidden" name="dok_nik_old" value="{{ $item->dok_nik }}">
-                                                    <label for="formFile" class="form-label">Doc NIK atau SIM</label>
+                                                    <label for="formFile" class="form-label">Doc NIK atau SIM <code>*</code></label>
                                                     <input class="form-control dok_nik" type="file" name="dok_nik" id="dok_nik" >
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
                                                     @if ($item->dok_nik)
                                                         <a href="javascript:void(0)" data-id="{{ $item->dok_nik.'|nik|karyawan' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
+                                                            <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">KK <code>*</code></label>
+                                                    <input type="number" min="0" class="form-control" id="kk" name="kk" value="{{ $item->kk }}" required
+                                                        placeholder="KK">
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    {!! $errors->first('kk', '<div class="invalid-validasi">:message</div>') !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <input type="hidden" name="dok_kk_old" value="{{ $item->dok_kk }}">
+                                                    <label for="formFile" class="form-label">Doc KK <code>*</code></label>
+                                                    <input class="form-control" type="file" name="dok_kk" id="dok_kk" >
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    @if ($item->dok_kk)
+                                                        <a href="javascript:void(0)" data-id="{{ $item->dok_kk.'|kk|karyawan' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
                                                             <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
                                                         </a>
                                                     @endif
@@ -170,34 +198,6 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">KK</label>
-                                                    <input type="number" min="0" class="form-control" id="kk" name="kk" value="{{ $item->kk }}" required
-                                                        placeholder="KK">
-                                                    <div class="invalid-feedback">
-                                                        Data wajib diisi.
-                                                    </div>
-                                                    {!! $errors->first('kk', '<div class="invalid-validasi">:message</div>') !!}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <input type="hidden" name="dok_kk_old" value="{{ $item->dok_kk }}">
-                                                    <label for="formFile" class="form-label">Doc KK</label>
-                                                    <input class="form-control" type="file" name="dok_kk" id="dok_kk" >
-                                                    <div class="invalid-feedback">
-                                                        Data wajib diisi.
-                                                    </div>
-                                                    @if ($item->dok_kk)
-                                                        <a href="javascript:void(0)" data-id="{{ $item->dok_kk.'|kk|karyawan' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
-                                                            <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
                                                     <label for="validationCustom02" class="form-label">No BPJS Kesehatan</label>
                                                     <input type="number" min="0" class="form-control" id="bpjs_kesehatan" name="bpjs_kesehatan" value="{{ $item->bpjs_kesehatan }}"
                                                         placeholder="No BPJS Kesehatan">
@@ -221,13 +221,14 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <input type="hidden" id="agama_old" value="{{ $item->agama_id }}">
-                                                    <label for="validationCustom02" class="form-label">Agama</label>
+                                                    <label for="validationCustom02" class="form-label">Agama <code>*</code></label>
                                                     <select class="form-control select select2 Agama" name="agama" required>
                                                         <option value="">--Pilih Agama--</option>
                                                     </select>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
+                                                    {!! $errors->first('agama', '<div class="invalid-validasi">:message</div>') !!}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -271,7 +272,7 @@
                                         <div class="row">
                                             <div class="col-xl-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Alamat Asal</label>
+                                                    <label class="form-label">Alamat Asal <code>*</code></label>
                                                     <div>
                                                         <textarea required class="form-control" name="alamat_asal" placeholder="Alamat Asal" rows="3">{{ $item->alamat_asal }}</textarea>
                                                         <div class="invalid-feedback">
@@ -282,7 +283,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">RT</label>
+                                                            <label for="validationCustom02" class="form-label">RT <code>*</code></label>
                                                             <input type="text" class="form-control" id="validationCustom02" name="rt_asal" value="{{ $item->rt_asal }}"
                                                                 placeholder="RT" required>
                                                             <div class="invalid-feedback">
@@ -292,7 +293,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">RW</label>
+                                                            <label for="validationCustom02" class="form-label">RW <code>*</code></label>
                                                             <input type="text" class="form-control" id="validationCustom02" name="rw_asal" value="{{ $item->rw_asal }}"
                                                                 placeholder="RW" required>
                                                             <div class="invalid-feedback">
@@ -304,7 +305,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Dusun</label>
+                                                            <label for="validationCustom02" class="form-label">Dusun <code>*</code></label>
                                                             <input type="text" class="form-control" id="validationCustom02" name="dusun_asal" value="{{ $item->dusun_asal }}"
                                                                 placeholder="Dusun" required>
                                                             <div class="invalid-feedback">
@@ -315,7 +316,7 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <input type="hidden" id="provinsi_asal_old" value="{{ $item->provinsi_asal }}">
-                                                            <label for="validationCustom02" class="form-label">Provinsi</label>
+                                                            <label for="validationCustom02" class="form-label">Provinsi <code>*</code></label>
                                                             <select class="form-control select select2 ProvinsiA" name="provinsi_asal" id="ProvinsiA" required>
                                                             </select>
                                                             <div class="invalid-feedback">
@@ -327,7 +328,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Kota</label>
+                                                            <label for="validationCustom02" class="form-label">Kota <code>*</code></label>
                                                             <select class="form-control select select2 KotaA" name="kota_asal" id="KotaA" required>
                                                                 <option value="{{ $item->kota_asal }}">{{ $item->kota_asal }}</option>
                                                             </select>
@@ -338,7 +339,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Kecamatan</label>
+                                                            <label for="validationCustom02" class="form-label">Kecamatan <code>*</code></label>
                                                             <select class="form-control select select2 KecamatanA" name="kecamatan_asal" id="KecamatanA" required>
                                                                 <option value="{{ $item->kecamatan_asal }}">{{ $item->kecamatan_asal }}</option>
                                                             </select>
@@ -351,7 +352,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Kelurahan</label>
+                                                            <label for="validationCustom02" class="form-label">Kelurahan <code>*</code></label>
                                                             <select class="form-control select select2 KelurahanA" name="kelurahan_asal" id="KelurahanA" required>
                                                                 <option value="{{ $item->kecamatan_asal }}">{{ $item->kecamatan_asal }}</option>
                                                             </select>
@@ -362,7 +363,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Kode Pos</label>
+                                                            <label for="validationCustom02" class="form-label">Kode Pos <code>*</code></label>
                                                             <select class="form-control select select2 KodeposA" name="kodepos_asal" required>
                                                                 <option value="{{ $item->kodepos_asal }}">{{ $item->kodepos_asal }}</option>
                                                             </select>
@@ -376,8 +377,7 @@
                                             </div>
                                             <div class="col-xl-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Alamat di Tangerang
-                                                    </label>
+                                                    <label class="form-label">Alamat di Tangerang <code>*</code></label>
                                                     <label class="form-check-label" style="float:right" for="container">Alamat sama dengan asal</label>
                                                     <label class="form-check-label" style="float:right" for="container">&nbsp;</label>
                                                     <input class="form-check-input" style="float:right" id="AlamatSama" type="checkbox" name="AlamatSama" onclick="Myalamat()">
@@ -391,7 +391,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">RT</label>
+                                                            <label for="validationCustom02" class="form-label">RT <code>*</code></label>
                                                             <input type="text" class="form-control alamat-sama" id="validationCustom02" name="rt" value="{{ $item->rt }}"
                                                                 placeholder="RT" required>
                                                             <div class="invalid-feedback">
@@ -401,7 +401,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">RW</label>
+                                                            <label for="validationCustom02" class="form-label">RW <code>*</code></label>
                                                             <input type="text" class="form-control alamat-sama" id="validationCustom02" name="rw" value="{{ $item->rw }}"
                                                                 placeholder="RW" required>
                                                             <div class="invalid-feedback">
@@ -413,7 +413,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Dusun</label>
+                                                            <label for="validationCustom02" class="form-label">Dusun <code>*</code></label>
                                                             <input type="text" class="form-control alamat-sama" id="validationCustom02" name="dusun" value="{{ $item->dusun }}"
                                                                 placeholder="Dusun" required>
                                                             <div class="invalid-feedback">
@@ -424,7 +424,7 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <input type="hidden" id="provinsi_old" value="{{ $item->provinsi }}">
-                                                            <label for="validationCustom02" class="form-label">Provinsi</label>
+                                                            <label for="validationCustom02" class="form-label">Provinsi <code>*</code></label>
                                                             <select class="form-control select select2 alamat-sama ProvinsiT" name="provinsi" id="ProvinsiT" required>
                                                                 <option value="{{ $item->provinsi }}">{{ $item->provinsi }}</option>
                                                             </select>
@@ -437,7 +437,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Kota</label>
+                                                            <label for="validationCustom02" class="form-label">Kota <code>*</code></label>
                                                             <select class="form-control select select2 alamat-sama KotaT" name="kota" id="KotaT" required>
                                                                 <option value="{{ $item->kota }}">{{ $item->kota }}</option>
                                                             </select>
@@ -448,7 +448,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Kecamatan</label>
+                                                            <label for="validationCustom02" class="form-label">Kecamatan <code>*</code></label>
                                                             <select class="form-control select select2 alamat-sama KecamatanT" name="kecamatan" id="KecamatanT" required>
                                                                 <option value="{{ $item->kecamatan }}">{{ $item->kecamatan }}</option>
                                                             </select>
@@ -461,7 +461,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Kelurahan</label>
+                                                            <label for="validationCustom02" class="form-label">Kelurahan <code>*</code></label>
                                                             <select class="form-control select select2 alamat-sama KelurahanT" name="kelurahan" id="KelurahanT" required>
                                                                 <option value="{{ $item->kelurahan }}">{{ $item->kelurahan }}</option>
                                                             </select>
@@ -472,7 +472,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Kode Pos</label>
+                                                            <label for="validationCustom02" class="form-label">Kode Pos <code>*</code></label>
                                                             <select class="form-control select select2 alamat-sama KodeposT" name="kodepos" id="KodeposT" required>
                                                                 <option value="{{ $item->kodepos }}">{{ $item->kodepos }}</option>
                                                             </select>
