@@ -51,8 +51,9 @@
                                 <p class="fw-bold mb-4">Jumlah Anak</p>
                             </a>
                             <a class="nav-link">
-                                <i class= "bx bx-plus-medical d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Riwayat Penyakit</p>
+                                <i class= "bx bx-plus-medical check-nav-icon mt-2"></i>
+                                <i class= "bx bx-phone check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Riwayat Penyakit & Kontak</p>
                             </a>
                         </div>
                     </div>

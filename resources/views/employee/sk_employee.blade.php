@@ -47,8 +47,9 @@
                                 <p class="fw-bold mb-4">Jumlah Anak</p>
                             </a>
                             <a class="nav-link">
-                                <i class= "bx bx-plus-medical d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Riwayat Penyakit</p>
+                                <i class= "bx bx-plus-medical check-nav-icon mt-2"></i>
+                                <i class= "bx bx-phone check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Riwayat Penyakit & Kontak</p>
                             </a>
                         </div>
                     </div>
@@ -57,8 +58,8 @@
                             <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab">
                                 <div class="card shadow-none border mb-0">
                                     <div class="card-body">
-                                        <h4 class="card-title mb-4">SK Pengangkatan</h4>
                                         <div class="row">
+                                            <h4 class="card-title mb-4">SK Pengangkatan</h4>
                                             <form class="needs-validation" action="{{ route("employee.store_sk") }}" enctype="multipart/form-data" method="POST" novalidate>
                                                 @csrf
                                                 <?php $id = Crypt::encryptString($item->id); ?>
@@ -66,8 +67,8 @@
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">No SK</label>
-                                                            <input type="text" class="form-control" id="no_sk" name="no_sk" value="{{ old('no_sk') }}"
+                                                            <label for="validationCustom02" class="form-label">No SK <code>*</code></label>
+                                                            <input type="text" class="form-control" id="no_sk" name="no_sk" value="{{ old('no_sk') }}" required
                                                                 placeholder="No SK">
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
@@ -77,7 +78,7 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="mb-3">
-                                                            <label>Tanggal SK</label>
+                                                            <label>Tanggal SK <code>*</code></label>
                                                             <div class="input-group" id="datepicker2">
                                                                 <input type="text" class="form-control" placeholder="yyyy-mm-dd" name="tgl_sk" value="{{ old('tgl_sk') }}"
                                                                     data-date-format="yyyy-mm-dd" data-date-container='#datepicker2' data-provide="datepicker" required
@@ -92,7 +93,7 @@
                                                     </div>
                                                     <div class="col-md-2">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Jabatan</label>
+                                                            <label for="validationCustom02" class="form-label">Jabatan <code>*</code></label>
                                                             <input type="text" class="form-control" id="jabatan" name="jabatan" value="{{ old('jabatan') }}" required
                                                                 placeholder="Jabatan">
                                                             <div class="invalid-feedback">
@@ -103,7 +104,7 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="mb-3">
-                                                            <label for="formFile" class="form-label">Dokumen SK</label>
+                                                            <label for="formFile" class="form-label">Dokumen SK <code>*</code></label>
                                                             <input class="form-control dok_sk" type="file" name="dok_sk" id="dok_sk" required>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
@@ -278,7 +279,6 @@
         $(document).on('click', '#get_data_edit', function(e) {
             e.preventDefault();
             var id = $(this).data('id'); // it will get id of clicked row
-            console.log(id)
             $('#dynamic-content-edit').html(''); // leave it blank before ajax call
             $('#modal-loader').show(); // load ajax loader
             var url = "{{ route('employee.edit_sk') }}"

@@ -51,8 +51,9 @@
                                 <p class="fw-bold mb-4">Jumlah Anak</p>
                             </a>
                             <a class="nav-link">
-                                <i class= "bx bx-plus-medical d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Riwayat Penyakit</p>
+                                <i class= "bx bx-plus-medical check-nav-icon mt-2"></i>
+                                <i class= "bx bx-phone check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Riwayat Penyakit & Kontak</p>
                             </a>
                         </div>
                     </div>
@@ -480,6 +481,48 @@
                                                                 Data wajib diisi.
                                                             </div>
                                                             {!! $errors->first('kodepos', '<div class="invalid-validasi">:message</div>') !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Jabatan <code>*</code></label>
+                                                    <input type="text" class="form-control" id="jabatan" name="jabatan" value="{{ $item->jabatan }}" required
+                                                        placeholder="Jabatan">
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    {!! $errors->first('jabatan', '<div class="invalid-validasi">:message</div>') !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-4">
+                                                    <label>Tanggal Masuk Kerja <code>*</code></label>
+                                                    <div class="input-group" id="datepicker2">
+                                                        <input type="text" class="form-control" placeholder="yyyy-mm-dd" name="masuk_kerja" value="{{ $item->masuk_kerja }}"
+                                                            data-date-format="yyyy-mm-dd" data-date-container='#datepicker2' data-provide="datepicker" required
+                                                            data-date-autoclose="true" >
+                                                        <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                    </div>
+                                                    {!! $errors->first('masuk_kerja', '<div class="invalid-validasi">:message</div>') !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Status Aktif</label>
+                                                    <div>
+                                                        <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $item ->aktif === 1 ? 'checked' : '' }} />
+                                                        <label for="switch1" data-on-label="On" data-off-label="Off"></label>
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
                                                         </div>
                                                     </div>
                                                 </div>

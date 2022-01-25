@@ -6,6 +6,8 @@ use App\Helper\AlertHelper;
 use App\Models\Anak_karyawan;
 use App\Models\Anak_karyawan_sekolah_dw;
 use App\Models\Employee;
+use App\Models\Kontak_darurat;
+use App\Models\Riwayat_karyawan;
 use App\Models\Sk_karyawan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -65,6 +67,8 @@ class EmployeeController extends Controller
             'tempat_lahir' => 'required|max:64',
             'tgl_lahir' => 'required',
             'agama' => 'required',
+            'jabatan' => 'required',
+            'masuk_kerja' => 'required',
             'nik' => 'required|max:20',
             'kk' => 'required|max:20',
             'dok_nik' => 'mimes:png,jpeg,jpg|max:2048',
@@ -136,6 +140,8 @@ class EmployeeController extends Controller
                 $employee->kelurahan = $request->kelurahan_asal;
                 $employee->kodepos = $request->kodepos_asal;
             }
+            $employee->jabatan = $request->jabatan;
+            $employee->masuk_kerja = $request->masuk_kerja;
             $employee->aktif = '1';
             $employee->save();
             $last_id = $employee->id;
@@ -146,7 +152,8 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();
-            // something went wrong
+            AlertHelper::addAlert(false);
+            return back();
         }
     }
 
@@ -173,7 +180,7 @@ class EmployeeController extends Controller
             'title' => $this->title,
             'menu' => 'data',
             'submenu' => $this->menu,
-            'label' => 'karyawan baru',
+            'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
         ];
         return view('employee.edit_employee')->with($data);
@@ -192,6 +199,8 @@ class EmployeeController extends Controller
             'nama_lengkap' => 'required|max:128',
             'tempat_lahir' => 'required|max:64',
             'tgl_lahir' => 'required',
+            'jabatan' => 'required',
+            'masuk_kerja' => 'required',
             'agama' => 'required',
             'nik' => 'required|max:20',
             'kk' => 'required|max:20',
@@ -266,16 +275,19 @@ class EmployeeController extends Controller
                 $employee->kelurahan = $request->kelurahan_asal;
                 $employee->kodepos = $request->kodepos_asal;
             }
-            $employee->aktif = '1';
+            $employee->jabatan = $request->jabatan;
+            $employee->masuk_kerja = $request->masuk_kerja;
+            $employee->aktif = isset($request->aktif) ? 1 : 0;
             $employee->save();
 
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('employee/ijazah/'.$request->id);
+            return redirect('employee/ijazah/' . $request->id);
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();
-            // something went wrong
+            AlertHelper::addAlert(false);
+            return back();
         }
     }
 
@@ -296,7 +308,7 @@ class EmployeeController extends Controller
             'title' => $this->title,
             'menu' => 'data',
             'submenu' => $this->menu,
-            'label' => 'karyawan baru',
+            'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
         ];
         return view('employee.ijazah_employee')->with($data);
@@ -308,9 +320,9 @@ class EmployeeController extends Controller
             'title' => $this->title,
             'menu' => 'data',
             'submenu' => $this->menu,
-            'label' => 'karyawan baru',
+            'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
-            'child' => Sk_karyawan::where('karyawan_id',Crypt::decryptString($id))->get(),
+            'child' => Sk_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
         ];
         return view('employee.sk_employee')->with($data);
     }
@@ -321,27 +333,30 @@ class EmployeeController extends Controller
             'title' => $this->title,
             'menu' => 'data',
             'submenu' => $this->menu,
-            'label' => 'karyawan baru',
+            'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
-            'child' => Anak_karyawan::where('karyawan_id',Crypt::decryptString($id))->get(),
-            'school' => Anak_karyawan_sekolah_dw::all(),
+            'child' => Anak_karyawan::where('karyawan_id', Crypt::decryptString($id))->orderBy('anak_ke', 'asc')->get(),
+            'school' => Anak_karyawan_sekolah_dw::where('karyawan_id', Crypt::decryptString($id))
+                ->orderBy('jenjang')
+                ->orderByRaw("FIELD('KB', 'TK', 'SD', 'SMP', 'SMK')")
+                ->get(),
         ];
         return view('employee.child_employee')->with($data);
     }
 
     public function store_child(Request $request)
     {
-        $id = Crypt::decryptString($request->karyawan_id);
         $request->validate([
             'anak_ke' => 'required|max:2',
             'nama' => 'required|max:64',
             'usia' => 'required|max:2',
         ]);
-        $cek = Anak_karyawan::where(['karyawan_id' => $id, 'anak_ke' => $request->anak_ke ])->get()->count();
-        if($cek > 0){
+        $id = Crypt::decryptString($request->karyawan_id);
+        $cek = Anak_karyawan::where(['karyawan_id' => $id, 'anak_ke' => $request->anak_ke])->get()->count();
+        if ($cek > 0) {
             AlertHelper::addAlert(false);
             return back();
-        }else{
+        } else {
             DB::beginTransaction();
             try {
                 $anak = new Anak_karyawan();
@@ -357,10 +372,37 @@ class EmployeeController extends Controller
             } catch (\Exception $e) {
                 dd($e);
                 DB::rollback();
-                // something went wrong
                 AlertHelper::addAlert(false);
                 return back();
             }
+        }
+    }
+
+    public function store_child_dw(Request $request)
+    {
+        $request->validate([
+            'anak_karyawan' => 'required|unique:anak_kar_sklh_dw,anak_id,' . $request->anak_karyawan,
+            'jenjang' => 'required',
+            'karyawan_id' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $id = Crypt::decryptString($request->karyawan_id);
+            $dw = new Anak_karyawan_sekolah_dw();
+            $dw->anak_id = $request->anak_karyawan;
+            $dw->jenjang = $request->jenjang;
+            $dw->karyawan_id = $id;
+            $dw->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
+            return back();
         }
     }
 
@@ -380,7 +422,7 @@ class EmployeeController extends Controller
     public function store_sk(Request $request)
     {
         $request->validate([
-            'no_sk' => 'required|max:64',
+            'no_sk' => 'required|max:64|unique:sk_karyawan,no_sk',
             'tgl_sk' => 'required',
             'jabatan' => 'required|max:64',
             'dok_sk' => 'mimes:png,jpeg,jpg|max:2048',
@@ -404,11 +446,12 @@ class EmployeeController extends Controller
 
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('employee/sk/'.$request->id);
+            return redirect('employee/sk/' . $request->id);
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();
-            // something went wrong
+            AlertHelper::addAlert(false);
+            return back();
         }
     }
 
@@ -464,6 +507,260 @@ class EmployeeController extends Controller
             dd($e);
             DB::rollback();
             AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_anak(Request $request)
+    {
+        $id_decrypted = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $agama = Anak_karyawan::findorfail($id_decrypted);
+            $agama->delete();
+
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_dw(Request $request)
+    {
+        $id_decrypted = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $agama = Anak_karyawan_sekolah_dw::findorfail($id_decrypted);
+            $agama->delete();
+
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_anak(Request $request)
+    {
+        $request = explode("|", $request->id);
+        $id = $request[0];
+        $type = $request[1];
+        $karyawan_id = $request[2];
+        if ($type === 'anak') {
+            $data = [
+                'id' => $id,
+                'item' => Anak_karyawan::findorfail(Crypt::decryptString($id)),
+            ];
+            return view('employee.anak_edit')->with($data);
+        } elseif ($type === 'dw') {
+            $data = [
+                'id' => $id,
+                'item' => Anak_karyawan_sekolah_dw::findorfail(Crypt::decryptString($id)),
+                'child' => Anak_karyawan::where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
+            ];
+            return view('employee.anak_dw_edit')->with($data);
+        }
+    }
+
+    public function update_anak(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $id = Crypt::decryptString($request->id);
+            $anak = Anak_karyawan::findorfail($id);
+            $anak->anak_ke = $request->edit_anak_ke;
+            $anak->nama = $request->edit_nama;
+            $anak->usia = $request->edit_usia;
+            $anak->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function update_anak_dw(Request $request)
+    {
+        $id = Crypt::decryptString($request->id);
+        $cek = Anak_karyawan_sekolah_dw::where('id', '!=', $id)->where('anak_id', '=', $request->edit_anak_id)->get()->count();
+        if ($cek > 0) {
+            AlertHelper::addAlert(false);
+            return back();
+        } else {
+            DB::beginTransaction();
+            try {
+                $dw = Anak_karyawan_sekolah_dw::findorfail($id);
+                $dw->anak_id  = $request->edit_anak_id;
+                $dw->jenjang = $request->edit_jenjang;
+                $dw->save();
+
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return back();
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollback();
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        }
+    }
+
+    public function riwayat($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan',
+            'item' => Employee::findorfail(Crypt::decryptString($id)),
+            'riwayat' => Riwayat_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
+            'kontak' => Kontak_darurat::where('karyawan_id', Crypt::decryptString($id))->get(),
+        ];
+        return view('employee.riwayat_employee')->with($data);
+    }
+
+    public function store_riwayat(Request $request)
+    {
+        $request->validate([
+            'penyakit' => 'required|max:64',
+            'keterangan' => 'required|max:128',
+        ]);
+        DB::beginTransaction();
+        try {
+            $id = Crypt::decryptString($request->id);
+            $riwayat = new Riwayat_karyawan();
+            $riwayat->penyakit = $request->penyakit;
+            $riwayat->keterangan = $request->keterangan;
+            $riwayat->karyawan_id = $id;
+            $riwayat->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_riwayat(Request $request)
+    {
+        $id_decrypted = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $agama = Riwayat_karyawan::findorfail($id_decrypted);
+            $agama->delete();
+
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_riwayat(Request $request)
+    {
+        $request = explode("|", $request->id);
+        $id = $request[0];
+        $type = $request[1];
+        $karyawan_id = $request[2];
+        if ($type === 'riwayat') {
+            $data = [
+                'id' => $id,
+                'item' => Riwayat_karyawan::findorfail(Crypt::decryptString($id)),
+            ];
+            return view('employee.riwayat_employee_edit')->with($data);
+        } elseif ($type === 'kontak') {
+            // $data = [
+            //     'id' => $id,
+            //     'item' => Anak_karyawan_sekolah_dw::findorfail(Crypt::decryptString($id)),
+            //     'child' => Anak_karyawan::where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
+            // ];
+            // return view('employee.anak_dw_edit')->with($data);
+        }
+    }
+
+    public function update_riwayat(Request $request)
+    {
+        $id = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $riwayat = Riwayat_karyawan::findorfail($id);
+            $riwayat->penyakit  = $request->edit_penyakit;
+            $riwayat->keterangan = $request->edit_keterangan;
+            $riwayat->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function store_kontak(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|max:64',
+            'no_hp' => 'required|max:20',
+            'keterangan_kontak' => 'required|max:128',
+        ]);
+        DB::beginTransaction();
+        try {
+            $id = Crypt::decryptString($request->id);
+            $riwayat = new Kontak_darurat();
+            $riwayat->nama = $request->nama;
+            $riwayat->no_hp = $request->no_hp;
+            $riwayat->keterangan = $request->keterangan_kontak;
+            $riwayat->karyawan_id = $id;
+            $riwayat->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_kontak(Request $request)
+    {
+        $id_decrypted = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $agama = Kontak_darurat::findorfail($id_decrypted);
+            $agama->delete();
+
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
             return back();
         }
     }

@@ -56,19 +56,33 @@ Route::group(
         Route::post('/store', [EmployeeController::class, 'store'])->name('employee.store');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
         Route::post('/update', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::delete('/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+        Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::post('/dokumen', [EmployeeController::class, 'dokumen'])->name('employee.dokumen');
 
         Route::get('/ijazah/{id}', [EmployeeController::class, 'ijazah'])->name('employee.ijazah');
+
         Route::get('/sk/{id}', [EmployeeController::class, 'sk'])->name('employee.sk');
+        Route::post('/store_sk', [EmployeeController::class, 'store_sk'])->name('employee.store_sk');
         Route::post('/edit_sk', [EmployeeController::class, 'edit_sk'])->name('employee.edit_sk');
         Route::post('/update_sk', [EmployeeController::class, 'update_sk'])->name('employee.update_sk');
-        Route::post('/store_sk', [EmployeeController::class, 'store_sk'])->name('employee.store_sk');
+        Route::delete('/destroy_sk', [EmployeeController::class, 'destroy_sk'])->name('employee.destroy_sk');
         Route::get('/child/{id}', [EmployeeController::class, 'child'])->name('employee.child');
         Route::post('/store_child', [EmployeeController::class, 'store_child'])->name('employee.store_child');
+        Route::post('/edit_anak', [EmployeeController::class, 'edit_anak'])->name('employee.edit_anak');
+        Route::post('/update_anak', [EmployeeController::class, 'update_anak'])->name('employee.update_anak');
+        Route::delete('/destroy_anak', [EmployeeController::class, 'destroy_anak'])->name('employee.destroy_anak');
+        Route::post('/store_child_dw', [EmployeeController::class, 'store_child_dw'])->name('employee.store_child_dw');
+        Route::post('/update_anak_dw', [EmployeeController::class, 'update_anak_dw'])->name('employee.update_anak_dw');
+        Route::delete('/destroy_dw', [EmployeeController::class, 'destroy_dw'])->name('employee.destroy_dw');
 
-        Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
-        Route::delete('/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
-        Route::delete('/destroy_sk', [EmployeeController::class, 'destroy_sk'])->name('employee.destroy_sk');
+        Route::get('/riwayat/{id}', [EmployeeController::class, 'riwayat'])->name('employee.riwayat');
+        Route::post('/store_riwayat', [EmployeeController::class, 'store_riwayat'])->name('employee.store_riwayat');
+        Route::post('/edit_riwayat', [EmployeeController::class, 'edit_riwayat'])->name('employee.edit_riwayat');
+        Route::post('/update_riwayat', [EmployeeController::class, 'update_riwayat'])->name('employee.update_riwayat');
+        Route::delete('/destroy_riwayat', [EmployeeController::class, 'destroy_riwayat'])->name('employee.destroy_riwayat');
+        Route::post('/store_kontak', [EmployeeController::class, 'store_kontak'])->name('employee.store_kontak');
+        Route::delete('/destroy_kontak', [EmployeeController::class, 'destroy_kontak'])->name('employee.destroy_kontak');
     }
 );
 
