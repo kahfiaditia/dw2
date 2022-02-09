@@ -12,16 +12,19 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="validationCustom02" class="form-label">Keterangan <code>*</code></label>
-                <textarea required class="form-control" id="edit_keterangan" name="edit_keterangan" placeholder="Keterangan" rows="1">{{ $item->keterangan }}</textarea>
+                <textarea class="form-control" id="edit_keterangan" name="edit_keterangan" placeholder="Keterangan" rows="1">{{ $item->keterangan }}</textarea>
             </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-sm-6">
-        </div>
-        <div class="col-sm-6">
-            <div class="text-sm-end mt-2 mt-sm-0">
-                <button class="btn btn-primary" type="submit" id="save">Simpan</button>
+    <div class="row modal-footer">
+        <div class="row">
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end mt-2 mt-sm-0">
+                    <button class="btn btn-primary" type="submit" id="save">Simpan</button>
+                </div>
             </div>
         </div>
     </div>

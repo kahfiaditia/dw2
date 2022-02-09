@@ -6,6 +6,7 @@ use App\Helper\AlertHelper;
 use App\Models\Anak_karyawan;
 use App\Models\Anak_karyawan_sekolah_dw;
 use App\Models\Employee;
+use App\Models\Ijazah;
 use App\Models\Kontak_darurat;
 use App\Models\Riwayat_karyawan;
 use App\Models\Sk_karyawan;
@@ -310,6 +311,7 @@ class EmployeeController extends Controller
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
+            'lists' => Ijazah::where('karyawan_id', Crypt::decryptString($id))->get(),
         ];
         return view('employee.ijazah_employee')->with($data);
     }
@@ -689,12 +691,11 @@ class EmployeeController extends Controller
             ];
             return view('employee.riwayat_employee_edit')->with($data);
         } elseif ($type === 'kontak') {
-            // $data = [
-            //     'id' => $id,
-            //     'item' => Anak_karyawan_sekolah_dw::findorfail(Crypt::decryptString($id)),
-            //     'child' => Anak_karyawan::where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
-            // ];
-            // return view('employee.anak_dw_edit')->with($data);
+            $data = [
+                'id' => $id,
+                'item' => Kontak_darurat::findorfail(Crypt::decryptString($id)),
+            ];
+            return view('employee.kontak_edit')->with($data);
         }
     }
 
@@ -761,6 +762,150 @@ class EmployeeController extends Controller
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function update_kontak(Request $request)
+    {
+        $id = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $kontak = Kontak_darurat::findorfail($id);
+            $kontak->nama  = $request->edit_nama_kontak;
+            $kontak->no_hp  = $request->edit_no_hp_kontak;
+            $kontak->keterangan = $request->edit_keterangan_kontak;
+            $kontak->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function create_ijazah($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan baru',
+            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'id' => $id,
+        ];
+        return view('employee.create_ijazah')->with($data);
+    }
+
+    public function store_ijazah(Request $request)
+    {
+        $request->validate([
+            'instansi' => 'required|max:128',
+            'gelar_ijazah' => 'required|max:64',
+            'jurusan' => 'required',
+            'tahun_masuk' => 'required',
+            'tahun_lulus' => 'required',
+            'gelar_akademik_panjang' => 'required',
+            'gelar_akademik_pendek' => 'required|max:5',
+        ]);
+        DB::beginTransaction();
+        try {
+            $employee = new Ijazah();
+            $employee->instansi = $request->instansi;
+            $employee->gelar_ijazah = $request->gelar_ijazah;
+            $employee->jurusan = $request->jurusan;
+            $employee->tahun_masuk = $request->tahun_masuk;
+            $employee->tahun_lulus = $request->tahun_lulus;
+            $employee->gelar_akademik_panjang = $request->gelar_akademik_panjang;
+            $employee->gelar_akademik_pendek = $request->gelar_akademik_pendek;
+            $employee->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
+            $employee->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            $employee->karyawan_id = Crypt::decryptString($request->id);
+            $employee->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return redirect('employee/ijazah/' . $request->id);
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_ijazah(Request $request)
+    {
+        $id_decrypted = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $ijazah = Ijazah::findorfail($id_decrypted);
+            $ijazah->delete();
+
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_ijazah($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan baru',
+            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'item' => Ijazah::findorfail(Crypt::decryptString($id)),
+        ];
+        return view('employee.edit_ijazah')->with($data);
+    }
+
+    public function show_ijazah(Request $request)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan baru',
+            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'item' => Ijazah::findorfail(Crypt::decryptString($request->id)),
+        ];
+        return view('employee.lihat_ijazah')->with($data);
+    }
+
+    public function update_ijazah(Request $request)
+    {
+        $id = Crypt::decryptString($request->id);
+        DB::beginTransaction();
+        try {
+            $riwayat = Ijazah::findorfail($id);
+            $riwayat->instansi  = $request->instansi;
+            $riwayat->jurusan = $request->jurusan;
+            $riwayat->tahun_masuk = $request->tahun_masuk;
+            $riwayat->tahun_lulus = $request->tahun_lulus;
+            $riwayat->gelar_ijazah = $request->gelar_ijazah;
+            $riwayat->gelar_akademik_panjang = $request->gelar_akademik_panjang;
+            $riwayat->gelar_akademik_pendek = $request->gelar_akademik_pendek;
+            $riwayat->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
+            $riwayat->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            $riwayat->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return redirect('employee/ijazah/' . $request->karyawan_id);
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::addAlert(false);
             return back();
         }
     }

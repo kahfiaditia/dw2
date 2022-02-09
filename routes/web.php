@@ -61,6 +61,12 @@ Route::group(
         Route::post('/dokumen', [EmployeeController::class, 'dokumen'])->name('employee.dokumen');
 
         Route::get('/ijazah/{id}', [EmployeeController::class, 'ijazah'])->name('employee.ijazah');
+        Route::get('/create_ijazah/{id}', [EmployeeController::class, 'create_ijazah'])->name('employee.create_ijazah');
+        Route::post('/store_ijazah', [EmployeeController::class, 'store_ijazah'])->name('employee.store_ijazah');
+        Route::get('/edit_ijazah/{id}', [EmployeeController::class, 'edit_ijazah'])->name('employee.edit_ijazah');
+        Route::post('/update_ijazah', [EmployeeController::class, 'update_ijazah'])->name('employee.update_ijazah');
+        Route::post('/show_ijazah', [EmployeeController::class, 'show_ijazah'])->name('employee.show_ijazah');
+        Route::delete('/destroy_ijazah', [EmployeeController::class, 'destroy_ijazah'])->name('employee.destroy_ijazah');
 
         Route::get('/sk/{id}', [EmployeeController::class, 'sk'])->name('employee.sk');
         Route::post('/store_sk', [EmployeeController::class, 'store_sk'])->name('employee.store_sk');
@@ -75,13 +81,13 @@ Route::group(
         Route::post('/store_child_dw', [EmployeeController::class, 'store_child_dw'])->name('employee.store_child_dw');
         Route::post('/update_anak_dw', [EmployeeController::class, 'update_anak_dw'])->name('employee.update_anak_dw');
         Route::delete('/destroy_dw', [EmployeeController::class, 'destroy_dw'])->name('employee.destroy_dw');
-
         Route::get('/riwayat/{id}', [EmployeeController::class, 'riwayat'])->name('employee.riwayat');
         Route::post('/store_riwayat', [EmployeeController::class, 'store_riwayat'])->name('employee.store_riwayat');
         Route::post('/edit_riwayat', [EmployeeController::class, 'edit_riwayat'])->name('employee.edit_riwayat');
         Route::post('/update_riwayat', [EmployeeController::class, 'update_riwayat'])->name('employee.update_riwayat');
         Route::delete('/destroy_riwayat', [EmployeeController::class, 'destroy_riwayat'])->name('employee.destroy_riwayat');
         Route::post('/store_kontak', [EmployeeController::class, 'store_kontak'])->name('employee.store_kontak');
+        Route::post('/update_kontak', [EmployeeController::class, 'update_kontak'])->name('employee.update_kontak');
         Route::delete('/destroy_kontak', [EmployeeController::class, 'destroy_kontak'])->name('employee.destroy_kontak');
     }
 );

@@ -459,12 +459,14 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="validationCustom02" class="form-label">Jabatan <code>*</code></label>
-                                                    <input type="text" class="form-control" id="jabatan" name="jabatan" value="{{ old('jabatan') }}" required
-                                                        placeholder="Jabatan">
+                                                    <select class="form-control select select2" name="jabatan">
+                                                        <option value="">--Pilih Golongan Darah--</option>
+                                                        <option value="Guru">Guru</option>
+                                                        <option value="Karyawan">Karyawan</option>
+                                                    </select>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
-                                                    {!! $errors->first('jabatan', '<div class="invalid-validasi">:message</div>') !!}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">

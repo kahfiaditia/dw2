@@ -25,12 +25,15 @@
             </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-sm-6">
-        </div>
-        <div class="col-sm-6">
-            <div class="text-sm-end mt-2 mt-sm-0">
-                <button class="btn btn-primary" type="submit" id="save">Simpan</button>
+    <div class="row modal-footer">
+        <div class="row">
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end mt-2 mt-sm-0">
+                    <button class="btn btn-primary" type="submit" id="save">Simpan</button>
+                </div>
             </div>
         </div>
     </div>

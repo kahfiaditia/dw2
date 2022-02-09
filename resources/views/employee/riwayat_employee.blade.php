@@ -252,7 +252,7 @@
                                                                                                     @csrf
                                                                                                     @method('DELETE')
                                                                                                     <div class="d-flex gap-3">
-                                                                                                        <a href="javascript:void(0)" data-id="{{ $id.'|kontak|'.$list->karyawan_id }}" class="text-success" id="get_data_edit" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg-edit">
+                                                                                                        <a href="javascript:void(0)" data-id="{{ $id.'|kontak|'.$list->id }}" class="text-success" id="get_data_edit" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg-edit">
                                                                                                             <i class="mdi mdi-pencil font-size-18"></i>
                                                                                                         </a>
                                                                                                         <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
