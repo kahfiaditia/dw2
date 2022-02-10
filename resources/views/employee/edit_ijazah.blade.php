@@ -67,20 +67,20 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Nama Instansi <code>*</code></label>
-                                                    <input type="text" class="form-control" id="instansi" name="instansi" value="{{ $item->instansi }}" required autofocus
-                                                        placeholder="Nama Instansi">
+                                                    <label for="validationCustom02" class="form-label">Nama Sekolah/Universitas <code>*</code></label>
+                                                    <input type="text" class="form-control" id="nama_pendidikan" name="nama_pendidikan" value="{{ $item->nama_pendidikan }}" required autofocus
+                                                        placeholder="Nama Sekolah/Universitas">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
-                                                    {!! $errors->first('instansi', '<div class="invalid-validasi">:message</div>') !!}
+                                                    {!! $errors->first('nama_pendidikan', '<div class="invalid-validasi">:message</div>') !!}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Ijazah</label>
+                                                    <label for="validationCustom02" class="form-label">Gelar <code>*</code></label>
                                                     <select class="form-control select select2" name="gelar_ijazah" id="gelar_ijazah" required>
-                                                        <option value="">--Pilih Ijazah--</option>
+                                                        <option value="">--Pilih Gelar--</option>
                                                         @foreach ($jurusan as $jurusan)
                                                             <option value="{{ $jurusan }}" {{ $item->gelar_ijazah === $jurusan ? 'selected' : '' }}>{{ $jurusan }}</option>
                                                         @endforeach
@@ -106,10 +106,10 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label>Tahun Pendidikan</label>
+                                                    <label>Tahun Pendidikan <code>*</code></label>
                                                     <div class="input-daterange input-group">
-                                                        <input type="text" class="form-control datepicker" name="tahun_masuk" value="{{ $item->tahun_masuk }}" placeholder="Tahun Masuk" id="tahun_masuk" required>
-                                                        <input type="text" class="form-control datepicker" name="tahun_lulus" value="{{ $item->tahun_lulus }}" placeholder="Tahun Lulus" id="tahun_lulus" required>
+                                                        <input type="text" class="form-control datepicker" name="tahun_masuk" value="{{ $item->tahun_masuk }}" maxlength="4" placeholder="Tahun Masuk" id="tahun_masuk" required>
+                                                        <input type="text" class="form-control datepicker" name="tahun_lulus" value="{{ $item->tahun_lulus }}" maxlength="4" placeholder="Tahun Lulus" id="tahun_lulus" required>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -121,8 +121,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Gelar Akademik Panjang<code>*</code></label>
-                                                    <input type="text" class="form-control" id="gelar_akademik_panjang" name="gelar_akademik_panjang" value="{{ $item->gelar_akademik_panjang }}" required
+                                                    <label for="validationCustom02" class="form-label">Gelar Akademik Panjang</label>
+                                                    <input type="text" class="form-control" id="gelar_akademik_panjang" name="gelar_akademik_panjang" value="{{ $item->gelar_akademik_panjang }}"
                                                         placeholder="Gelar Akademik Panjang">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -132,8 +132,8 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Gelar Akademik Pendek <code>*</code></label>
-                                                    <input type="text" class="form-control" id="gelar_akademik_pendek" name="gelar_akademik_pendek" value="{{ $item->gelar_akademik_pendek }}" required
+                                                    <label for="validationCustom02" class="form-label">Gelar Akademik Pendek</label>
+                                                    <input type="text" class="form-control" id="gelar_akademik_pendek" name="gelar_akademik_pendek" value="{{ $item->gelar_akademik_pendek }}"
                                                         placeholder="Gelar Akademik Pendek">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -166,6 +166,33 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Nama Instansi/Lembaga Penerbit Sertifikat</label>
+                                                    <input type="text" class="form-control" id="instansi" name="instansi" value="{{ $item->instansi }}"
+                                                        placeholder="Nama Instansi/Lembaga Penerbit Sertifikat">
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    {!! $errors->first('instansi', '<div class="invalid-validasi">:message</div>') !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="formFile" class="form-label">Dokumen SK</label>
+                                                    <input class="form-control dok_ijazah" type="file" name="dok_ijazah" id="dok_ijazah">
+                                                    @if ($item->dok_ijazah)
+                                                        <a href="javascript:void(0)" data-id="{{ $item->dok_ijazah.'|ijazah|ijazah' }}" id="get_data_dok" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg-dok">
+                                                            <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
+                                                        </a>
+                                                    @endif
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row mt-4">
                                             <div class="col-sm-6">
                                                 <a href="{{ route('employee.ijazah',['id' => $karyawan_id]) }}" class="btn btn-secondary waves-effect">Cancel</a>
@@ -186,12 +213,51 @@
         </div>
     </div>
 </div>
+<div class="modal fade bs-example-modal-lg-dok" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Dokumen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="dynamic-content-dok"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/alert.js') }}"></script>
 <script>
     $(document).ready(function(){
+        // valdasi extension
+        $('#dok_ijazah').bind('change', function() {
+            var file = document.querySelector("#dok_ijazah");
+            if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                Swal.fire(
+                    'Gagal',
+                    'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                    'error'
+                ).then(function() {})
+                document.getElementById('dok_ijazah').value = null;
+            } else {
+                var size = this.files[0].size / 1000;
+                if (size > 2000) {
+                    Swal.fire(
+                        'Gagal',
+                        'Maksimal ukuran 2 MB',
+                        'error'
+                    ).then(function() {})
+                    document.getElementById('dok_ijazah').value = null;
+                }
+            }
+        });
+
         $(".datepicker").datepicker( {
-            format: " yyyy",
+            format: "yyyy",
             viewMode: "years", 
             minViewMode: "years",
         });
@@ -205,11 +271,39 @@
                     'Tahun masuk tidak boleh lebih besar dari tahun lulus',
                     'error'
                 ).then(function() {
-                    $('.datepicker').val("")
+                    document.getElementById("submit").disabled = true;
                 })
+            }else{
+                document.getElementById("submit").disabled = false;
             }
         });
         
+        $(document).on('click', '#get_data_dok', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id'); // it will get id of clicked row
+            $('#dynamic-content-dok').html(''); // leave it blank before ajax call
+            $('#modal-loader').show(); // load ajax loader
+            var url = "{{ route('employee.dokumen') }}"
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id
+                }
+            })
+            .done(function(url) {
+                $('#dynamic-content-dok').html(url); // load response
+                $('#modal-loader').hide(); // hide ajax loader
+            })
+            .fail(function(err) {
+                $('#dynamic-content').html(
+                    '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
+                );
+                $('#modal-loader').hide();
+            });
+        });
+
         $('#gelar_ijazah').bind('change', function() {
             let gelar_ijazah = document.getElementById("gelar_ijazah").value;
             if(gelar_ijazah === 'SD' || gelar_ijazah === 'SMP' || gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK'){
@@ -220,6 +314,15 @@
                 document.getElementById("gelar_akademik_pendek").required = true;
             }
         });
+
+        gelar_ijazah = document.getElementById("gelar_ijazah").value;
+        if(gelar_ijazah === 'SD' || gelar_ijazah === 'SMP' || gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK'){
+            document.getElementById("gelar_akademik_panjang").required = false;
+            document.getElementById("gelar_akademik_pendek").required = false;
+        }else{
+            document.getElementById("gelar_akademik_panjang").required = true;
+            document.getElementById("gelar_akademik_pendek").required = true;
+        }
     });
 </script>
 @endsection

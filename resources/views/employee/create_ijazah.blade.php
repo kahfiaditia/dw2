@@ -64,20 +64,20 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Nama Instansi <code>*</code></label>
-                                                    <input type="text" class="form-control" id="instansi" name="instansi" value="{{old('instansi')}}" required autofocus
-                                                        placeholder="Nama Instansi">
+                                                    <label for="validationCustom02" class="form-label">Nama Sekolah/Universitas <code>*</code></label>
+                                                    <input type="text" class="form-control" id="nama_pendidikan" name="nama_pendidikan" value="{{old('nama_pendidikan')}}" required autofocus
+                                                        placeholder="Nama Sekolah/Universitas">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
-                                                    {!! $errors->first('instansi', '<div class="invalid-validasi">:message</div>') !!}
+                                                    {!! $errors->first('nama_pendidikan', '<div class="invalid-validasi">:message</div>') !!}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Ijazah</label>
+                                                    <label for="validationCustom02" class="form-label">Gelar <code>*</code></label>
                                                     <select class="form-control select select2" name="gelar_ijazah" id="gelar_ijazah" required>
-                                                        <option value="">--Pilih Ijazah--</option>
+                                                        <option value="">--Pilih Gelar--</option>
                                                         @foreach ($jurusan as $jurusan)
                                                             <option value="{{ $jurusan }}">{{ $jurusan }}</option>
                                                         @endforeach
@@ -103,10 +103,10 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label>Tahun Pendidikan</label>
+                                                    <label>Tahun Pendidikan <code>*</code></label>
                                                     <div class="input-daterange input-group">
-                                                        <input type="text" class="form-control datepicker" name="tahun_masuk" placeholder="Tahun Masuk" id="tahun_masuk" required>
-                                                        <input type="text" class="form-control datepicker" name="tahun_lulus" placeholder="Tahun Lulus" id="tahun_lulus" required>
+                                                        <input type="text" class="form-control datepicker" name="tahun_masuk" maxlength="4" placeholder="Tahun Masuk" id="tahun_masuk" required>
+                                                        <input type="text" class="form-control datepicker" name="tahun_lulus" maxlength="4" placeholder="Tahun Lulus" id="tahun_lulus" required>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -118,8 +118,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Gelar Akademik Panjang<code>*</code></label>
-                                                    <input type="text" class="form-control" id="gelar_akademik_panjang" name="gelar_akademik_panjang" value="{{old('gelar_akademik_panjang')}}" required
+                                                    <label for="validationCustom02" class="form-label">Gelar Akademik Panjang</label>
+                                                    <input type="text" class="form-control" id="gelar_akademik_panjang" name="gelar_akademik_panjang" value="{{old('gelar_akademik_panjang')}}"
                                                         placeholder="Gelar Akademik Panjang">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -129,8 +129,8 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Gelar Akademik Pendek <code>*</code></label>
-                                                    <input type="text" class="form-control" id="gelar_akademik_pendek" name="gelar_akademik_pendek" value="{{ old('gelar_akademik_pendek') }}" required
+                                                    <label for="validationCustom02" class="form-label">Gelar Akademik Pendek</label>
+                                                    <input type="text" class="form-control" id="gelar_akademik_pendek" name="gelar_akademik_pendek" value="{{ old('gelar_akademik_pendek') }}"
                                                         placeholder="Gelar Akademik Pendek">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -163,6 +163,29 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Nama Instansi/Lembaga Penerbit Sertifikat</label>
+                                                    <input type="text" class="form-control" id="instansi" name="instansi" value="{{old('instansi')}}"
+                                                        placeholder="Nama Instansi/Lembaga Penerbit Sertifikat">
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    {!! $errors->first('instansi', '<div class="invalid-validasi">:message</div>') !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="formFile" class="form-label">Dokumen SK</label>
+                                                    <input class="form-control dok_ijazah" type="file" name="dok_ijazah" id="dok_ijazah">
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    {!! $errors->first('instansi', '<div class="invalid-validasi">:message</div>') !!}
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row mt-4">
                                             <div class="col-sm-6">
                                                 <a href="{{ route('employee.ijazah',['id' => $id]) }}" class="btn btn-secondary waves-effect">Cancel</a>
@@ -187,8 +210,31 @@
 <script src="{{ asset('assets/alert.js') }}"></script>
 <script>
     $(document).ready(function(){
+        // valdasi extension
+        $('#dok_ijazah').bind('change', function() {
+            var file = document.querySelector("#dok_ijazah");
+            if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                Swal.fire(
+                    'Gagal',
+                    'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                    'error'
+                ).then(function() {})
+                document.getElementById('dok_ijazah').value = null;
+            } else {
+                var size = this.files[0].size / 1000;
+                if (size > 2000) {
+                    Swal.fire(
+                        'Gagal',
+                        'Maksimal ukuran 2 MB',
+                        'error'
+                    ).then(function() {})
+                    document.getElementById('dok_ijazah').value = null;
+                }
+            }
+        });
+
         $(".datepicker").datepicker( {
-            format: " yyyy",
+            format: "yyyy",
             viewMode: "years", 
             minViewMode: "years",
         });
@@ -202,8 +248,10 @@
                     'Tahun masuk tidak boleh lebih besar dari tahun lulus',
                     'error'
                 ).then(function() {
-                    $('.datepicker').val("")
+                    document.getElementById("submit").disabled = true;
                 })
+            }else{
+                document.getElementById("submit").disabled = false;
             }
         });
         

@@ -7,6 +7,8 @@
         $path = 'karyawan/kk/'.$file;
     }elseif($type === 'sk'){
         $path = 'sk/'.$file;
+    }elseif($type === 'ijazah'){
+        $path = 'ijazah/'.$file;
     }else{
         $path = '';
     }

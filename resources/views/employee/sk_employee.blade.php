@@ -154,9 +154,11 @@
                                                                 <td>{{ $list->tgl_sk }}</td>
                                                                 <td>{{ $list->jabatan }}</td>
                                                                 <td>
-                                                                    <a href="javascript:void(0)" data-id="{{ $list->dok_sk.'|sk|sk' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
-                                                                        <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
-                                                                    </a>
+                                                                    @if ($list->dok_sk)
+                                                                        <a href="javascript:void(0)" data-id="{{ $list->dok_sk.'|sk|sk' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
+                                                                            <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
+                                                                        </a>
+                                                                    @endif
                                                                 </td>
                                                                 <td>
                                                                     <?php $id = Crypt::encryptString($list->id); ?>
@@ -261,23 +263,23 @@
             $('#modal-loader').show(); // load ajax loader
             var url = "{{ route('employee.dokumen') }}"
             $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id
-                    }
-                })
-                .done(function(url) {
-                    $('#dynamic-content').html(url); // load response
-                    $('#modal-loader').hide(); // hide ajax loader
-                })
-                .fail(function(err) {
-                    $('#dynamic-content').html(
-                        '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
-                    );
-                    $('#modal-loader').hide();
-                });
+                url: url,
+                type: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id
+                }
+            })
+            .done(function(url) {
+                $('#dynamic-content').html(url); // load response
+                $('#modal-loader').hide(); // hide ajax loader
+            })
+            .fail(function(err) {
+                $('#dynamic-content').html(
+                    '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
+                );
+                $('#modal-loader').hide();
+            });
         });
         $(document).on('click', '#get_data_edit', function(e) {
             e.preventDefault();

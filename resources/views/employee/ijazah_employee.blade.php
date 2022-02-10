@@ -78,11 +78,12 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Instansi</th>
+                                                        <th>Nama Sekolah/Universitas</th>
                                                         <th>Ijazah</th>
                                                         <th>Jurusan</th>
                                                         <th>Tahun Pendidikan</th>
                                                         <th>Akademik</th>
+                                                        <th>Dokumen Ijazah</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -90,11 +91,18 @@
                                                     @foreach ($lists as $list)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
-                                                            <td>{{ $list->instansi }}</td>
+                                                            <td>{{ $list->nama_pendidikan }}</td>
                                                             <td>{{ $list->gelar_ijazah }}</td>
                                                             <td>{{ $list->jurusan }}</td>
                                                             <td>{{ $list->tahun_masuk.' s/d '.$list->tahun_lulus }}</td>
                                                             <td>{{ $list->gelar_akademik_pendek }}</td>
+                                                            <td>
+                                                                @if ($list->dok_ijazah)
+                                                                    <a href="javascript:void(0)" data-id="{{ $list->dok_ijazah.'|ijazah|ijazah' }}" id="get_data_dok" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg-dok">
+                                                                        <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
+                                                                    </a>
+                                                                @endif
+                                                            </td>
                                                             <td>
                                                                 <?php $id = Crypt::encryptString($list->id); ?>
                                                                 <form class="delete-form" action="{{ route('employee.destroy_ijazah', ['id' => $id]) }}" method="POST">
@@ -151,10 +159,51 @@
         </div>
     </div>
 </div>
+<div class="modal fade bs-example-modal-lg-dok" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Dokumen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="dynamic-content-dok"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/alert.js') }}"></script>
 <script>
     $(document).ready(function() {
+        $(document).on('click', '#get_data_dok', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id'); // it will get id of clicked row
+            $('#dynamic-content-dok').html(''); // leave it blank before ajax call
+            $('#modal-loader').show(); // load ajax loader
+            var url = "{{ route('employee.dokumen') }}"
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id
+                }
+            })
+            .done(function(url) {
+                $('#dynamic-content-dok').html(url); // load response
+                $('#modal-loader').hide(); // hide ajax loader
+            })
+            .fail(function(err) {
+                $('#dynamic-content').html(
+                    '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
+                );
+                $('#modal-loader').hide();
+            });
+        });
         $(document).on('click', '#get_data', function(e) {
             e.preventDefault();
             var id = $(this).data('id'); // it will get id of clicked row
@@ -162,23 +211,23 @@
             $('#modal-loader').show(); // load ajax loader
             var url = "{{ route('employee.show_ijazah') }}"
             $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id
-                    }
-                })
-                .done(function(url) {
-                    $('#dynamic-content').html(url); // load response
-                    $('#modal-loader').hide(); // hide ajax loader
-                })
-                .fail(function(err) {
-                    $('#dynamic-content').html(
-                        '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
-                    );
-                    $('#modal-loader').hide();
-                });
+                url: url,
+                type: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id
+                }
+            })
+            .done(function(url) {
+                $('#dynamic-content').html(url); // load response
+                $('#modal-loader').hide(); // hide ajax loader
+            })
+            .fail(function(err) {
+                $('#dynamic-content').html(
+                    '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
+                );
+                $('#modal-loader').hide();
+            });
         });
     });
 
