@@ -917,6 +917,7 @@ class EmployeeController extends Controller
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_ijazah->extension();
                 $ijazah->dok_ijazah = $fileName;
                 $request->file('dok_ijazah')->storeAs('public/ijazah/', $fileName);
+                Storage::delete('public/ijazah/' . $request->dok_ijazah_old);
             }
             $ijazah->save();
 

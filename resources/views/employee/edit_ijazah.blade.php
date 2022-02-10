@@ -180,12 +180,13 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="formFile" class="form-label">Dokumen SK</label>
+                                                    <label for="formFile" class="form-label">Dokumen Ijazah</label>
                                                     <input class="form-control dok_ijazah" type="file" name="dok_ijazah" id="dok_ijazah">
                                                     @if ($item->dok_ijazah)
                                                         <a href="javascript:void(0)" data-id="{{ $item->dok_ijazah.'|ijazah|ijazah' }}" id="get_data_dok" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg-dok">
                                                             <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
                                                         </a>
+                                                        <input type="hidden" name="dok_ijazah_old" value="{{ $item->dok_ijazah }}">
                                                     @endif
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
