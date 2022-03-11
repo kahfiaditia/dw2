@@ -13,7 +13,14 @@ class Softdelete extends Migration
      */
     public function up()
     {
-        Schema::table('kodepos', function (Blueprint $table) {
+        Schema::create('kodepos', function (Blueprint $table) {
+            $table->id();
+            $table->string('kelurahan', 100);
+            $table->string('kecamatan', 100);
+            $table->string('kabupaten', 100);
+            $table->string('provinsi', 100);
+            $table->string('kodepos', 5);
+            $table->string('status', 15)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -26,10 +33,6 @@ class Softdelete extends Migration
      */
     public function down()
     {
-        Schema::table('kodepos', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-            $table->dropColumn('updated_at');
-            $table->dropColumn('created_at');
-        });
+        Schema::dropIfExists('karyawan');
     }
 }

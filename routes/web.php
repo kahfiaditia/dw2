@@ -59,7 +59,6 @@ Route::group(
         Route::delete('/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
         Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::post('/dokumen', [EmployeeController::class, 'dokumen'])->name('employee.dokumen');
-
         Route::get('/ijazah/{id}', [EmployeeController::class, 'ijazah'])->name('employee.ijazah');
         Route::get('/create_ijazah/{id}', [EmployeeController::class, 'create_ijazah'])->name('employee.create_ijazah');
         Route::post('/store_ijazah', [EmployeeController::class, 'store_ijazah'])->name('employee.store_ijazah');
@@ -67,7 +66,6 @@ Route::group(
         Route::post('/update_ijazah', [EmployeeController::class, 'update_ijazah'])->name('employee.update_ijazah');
         Route::post('/show_ijazah', [EmployeeController::class, 'show_ijazah'])->name('employee.show_ijazah');
         Route::delete('/destroy_ijazah', [EmployeeController::class, 'destroy_ijazah'])->name('employee.destroy_ijazah');
-
         Route::get('/sk/{id}', [EmployeeController::class, 'sk'])->name('employee.sk');
         Route::post('/store_sk', [EmployeeController::class, 'store_sk'])->name('employee.store_sk');
         Route::post('/edit_sk', [EmployeeController::class, 'edit_sk'])->name('employee.edit_sk');
