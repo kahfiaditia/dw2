@@ -12,9 +12,9 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label>Tanggal SK <code>*</code></label>
-                <div class="input-group" id="datepicker2">
+                <div class="input-group" id="datepickerModal">
                     <input type="text" class="form-control" placeholder="yyyy-mm-dd" id="edit_tgl_sk" name="edit_tgl_sk" value="{{ $item->tgl_sk }}"
-                        data-date-format="yyyy-mm-dd" data-date-container='#datepicker2' data-provide="datepicker"
+                        data-date-format="yyyy-mm-dd" data-date-container='#datepickerModal' data-provide="datepicker"
                         data-date-autoclose="true" >
                     <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                 </div>
@@ -32,7 +32,7 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <input type="hidden" name="dok_sk_old" id="dok_sk_old" value="{{ $item->dok_sk }}">
-                <label for="formFile" class="form-label">Dokumen SK</label>
+                <label for="formFile" class="form-label">Dokumen SK <code>*</code></label>
                 <input class="form-control edit_dok_sk" type="file" name="edit_dok_sk" id="edit_dok_sk" >
             </div>
         </div>

@@ -64,7 +64,7 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="validationCustom02" class="form-label">Gelar Non Akademik Pendek</label>
-                <input type="text" class="form-control" id="gelar_non_akademik_pendek" name="gelar_non_akademik_pendek" value="{{ old('gelar_non_akademik_pendek') }}" disabled
+                <input type="text" class="form-control" id="gelar_non_akademik_pendek" name="gelar_non_akademik_pendek" value="{{ $item->gelar_non_akademik_pendek }}" disabled
                     placeholder="Gelar Non Akademik Pendek">
             </div>
         </div>
@@ -72,7 +72,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="mb-3">
-                <label for="validationCustom02" class="form-label">Nama Instansi/Lembaga Penerbit Sertifikat</label>
+                <label for="validationCustom02" class="form-label">Nama Instansi/Lembaga Penerbit Sertifikat <code>*</code></label>
                 <input type="text" class="form-control" id="instansi" name="instansi" value="{{ $item->instansi }}" disabled autofocus
                     placeholder="Nama Instansi/Lembaga Penerbit Sertifikat">
             </div>

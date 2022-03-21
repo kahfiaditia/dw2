@@ -122,7 +122,7 @@
                                                                         </form>
                                                                         <hr class="mt-2">
                                                                         <div class="col-12">
-                                                                            <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                                                                            <table id="" class="table table-bordered dt-responsive nowrap w-100">
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>No</th>
@@ -229,7 +229,7 @@
                                                                         </form>
                                                                         <hr class="mt-2">
                                                                         <div class="col-12">
-                                                                            <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                                                                            <table id="" class="table table-bordered dt-responsive  nowrap w-100">
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>No</th>

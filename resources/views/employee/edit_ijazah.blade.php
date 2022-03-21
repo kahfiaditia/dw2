@@ -169,8 +169,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">Nama Instansi/Lembaga Penerbit Sertifikat</label>
-                                                    <input type="text" class="form-control" id="instansi" name="instansi" value="{{ $item->instansi }}"
+                                                    <label for="validationCustom02" class="form-label">Nama Instansi/Lembaga Penerbit Sertifikat <code>*</code></label>
+                                                    <input type="text" class="form-control" id="instansi" name="instansi" value="{{ $item->instansi }}" required
                                                         placeholder="Nama Instansi/Lembaga Penerbit Sertifikat">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -180,7 +180,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="formFile" class="form-label">Dokumen Ijazah</label>
+                                                    <label for="formFile" class="form-label">Dokumen Ijazah <code>*</code></label>
                                                     <input class="form-control dok_ijazah" type="file" name="dok_ijazah" id="dok_ijazah">
                                                     @if ($item->dok_ijazah)
                                                         <a href="javascript:void(0)" data-id="{{ $item->dok_ijazah.'|ijazah|ijazah' }}" id="get_data_dok" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg-dok">

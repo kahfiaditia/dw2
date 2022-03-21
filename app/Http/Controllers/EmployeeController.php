@@ -149,7 +149,7 @@ class EmployeeController extends Controller
 
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('employee/edit/' . Crypt::encryptString($last_id));
+            return redirect('employee/ijazah/' . Crypt::encryptString($last_id));
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();
@@ -809,7 +809,8 @@ class EmployeeController extends Controller
             'jurusan' => 'required',
             'tahun_masuk' => 'required',
             'tahun_lulus' => 'required',
-            'dok_ijazah' => 'mimes:png,jpeg,jpg|max:2048',
+            'instansi' => 'required',
+            'dok_ijazah' => 'required|mimes:png,jpeg,jpg|max:2048',
         ]);
         DB::beginTransaction();
         try {
@@ -896,6 +897,7 @@ class EmployeeController extends Controller
             'jurusan' => 'required',
             'tahun_masuk' => 'required',
             'tahun_lulus' => 'required',
+            'instansi' => 'required',
             'dok_ijazah' => 'mimes:png,jpeg,jpg|max:2048',
         ]);
 
