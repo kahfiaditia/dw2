@@ -9,6 +9,12 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('akun.index') }}" class="waves-effect">
+                <i class="bx bx-user"></i>
+                <span>Akun</span>
+            </a>
+        </li>
+        <li>
             <a href="javascript: void(0);" class="has-arrow waves-effect">
                 <i class="bx bx-group"></i>
                 <span key="t-tables">Data</span>

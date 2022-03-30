@@ -71,6 +71,7 @@
                                             <label for="validationCustom02" class="form-label">Roles</label>
                                             <select class="form-control select select2" name="roles" required>
                                                 <option value="">--Pilih Roles--</option>
+                                                <option value="Karyawan">Karyawan</option>
                                                 <option value="Alumni">Alumni</option>
                                                 <option value="Ortu">Orang Tua</option>
                                             </select>

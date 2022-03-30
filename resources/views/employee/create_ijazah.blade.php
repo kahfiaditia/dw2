@@ -177,7 +177,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="formFile" class="form-label">Dokumen SK <code>*</code></label>
+                                                    <label for="formFile" class="form-label">Dokumen Sertifikat/Ijazah <code>*</code></label>
                                                     <input class="form-control dok_ijazah" type="file" name="dok_ijazah" id="dok_ijazah" required>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.

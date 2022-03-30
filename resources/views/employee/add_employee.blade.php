@@ -63,8 +63,23 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Email</label>
+                                                    <input type="hidden" class="form-control" name="user_id" value="{{ Auth::user()->id }}" readonly>
+                                                    <input type="text" class="form-control" value="{{ Auth::user()->email }}" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Roles</label>
+                                                    <input type="text" class="form-control" value="{{ Auth::user()->roles }}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
                                                     <label for="validationCustom02" class="form-label">Nama Lengkap <code>*</code></label>
-                                                    <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="{{old('nama_lengkap')}}" required autofocus
+                                                    <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required autofocus
                                                         placeholder="Nama Lengkap">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -231,9 +246,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="validationCustom02" class="form-label">No Pasangan</label>
+                                                    <label for="validationCustom02" class="form-label">No Kontak Pasangan</label>
                                                     <input type="number" min="0" class="form-control" id="no_pasangan" name="no_pasangan" value="{{ old('no_pasangan') }}"
-                                                        placeholder="No Pasangan">
+                                                        placeholder="No Kontak Pasangan">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -243,9 +258,9 @@
                                         <div class="row">
                                             <div class="col-xl-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Alamat Asal <code>*</code></label>
+                                                    <label class="form-label">Alamat KTP <code>*</code></label>
                                                     <div>
-                                                        <textarea required class="form-control" name="alamat_asal" placeholder="Alamat Asal" rows="3">{{ old('alamat_asal') }}</textarea>
+                                                        <textarea required class="form-control" name="alamat_asal" placeholder="Alamat KTP" rows="3">{{ old('alamat_asal') }}</textarea>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -255,7 +270,7 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <label for="validationCustom02" class="form-label">RT <code>*</code></label>
-                                                            <input type="text" class="form-control" id="validationCustom02" name="rt_asal" value="{{ old('rt_asal') }}"
+                                                            <input type="number" class="form-control" id="validationCustom02" name="rt_asal" value="{{ old('rt_asal') }}"
                                                                 placeholder="RT" required>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
@@ -265,7 +280,7 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <label for="validationCustom02" class="form-label">RW <code>*</code></label>
-                                                            <input type="text" class="form-control" id="validationCustom02" name="rw_asal" value="{{ old('rw_asal') }}"
+                                                            <input type="number" class="form-control" id="validationCustom02" name="rw_asal" value="{{ old('rw_asal') }}"
                                                                 placeholder="RW" required>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
@@ -349,7 +364,7 @@
                                             <div class="col-xl-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Alamat di Tangerang <code>*</code></label>
-                                                    <label class="form-check-label" style="float:right" for="container">Alamat sama dengan asal</label>
+                                                    <label class="form-check-label" style="float:right" for="container">Alamat sama dengan KTP</label>
                                                     <label class="form-check-label" style="float:right" for="container">&nbsp;</label>
                                                     <input class="form-check-input" style="float:right" id="AlamatSama" type="checkbox" name="AlamatSama" onclick="Myalamat()">
                                                     <div>
@@ -363,7 +378,7 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <label for="validationCustom02" class="form-label">RT <code>*</code></label>
-                                                            <input type="text" class="form-control alamat-sama" id="validationCustom02" name="rt" value="{{ old('rt') }}"
+                                                            <input type="number" class="form-control alamat-sama" id="validationCustom02" name="rt" value="{{ old('rt') }}"
                                                                 placeholder="RT" required>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
@@ -373,7 +388,7 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <label for="validationCustom02" class="form-label">RW <code>*</code></label>
-                                                            <input type="text" class="form-control alamat-sama" id="validationCustom02" name="rw" value="{{ old('rw') }}"
+                                                            <input type="number" class="form-control alamat-sama" id="validationCustom02" name="rw" value="{{ old('rw') }}"
                                                                 placeholder="RW" required>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
@@ -459,7 +474,7 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="validationCustom02" class="form-label">Jabatan <code>*</code></label>
-                                                    <select class="form-control select select2" name="jabatan">
+                                                    <select class="form-control select select2" name="jabatan" required>
                                                         <option value="">--Pilih Golongan Darah--</option>
                                                         <option value="Guru">Guru</option>
                                                         <option value="Karyawan">Karyawan</option>

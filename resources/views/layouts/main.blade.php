@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>{{ucfirst($submenu).' | '.strtoupper($title)}}</title>
+        <title>{{ strtoupper($title) }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="DHARMAWIDYA" name="description" />
         <meta content="DHARMAWIDYA" name="author" />

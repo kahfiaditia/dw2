@@ -144,6 +144,7 @@ class EmployeeController extends Controller
             $employee->jabatan = $request->jabatan;
             $employee->masuk_kerja = $request->masuk_kerja;
             $employee->aktif = '1';
+            $employee->user_id = $request->user_id;
             $employee->save();
             $last_id = $employee->id;
 

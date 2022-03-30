@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgamaController;
+use App\Http\Controllers\AkunController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
@@ -131,5 +132,13 @@ Route::group(
     ['middleware' => 'auth'],
     function () {
         Route::resource('/siswa', SiswaController::class);
+    }
+);
+
+Route::group(
+    ['middleware' => 'auth'],
+    function () {
+        Route::resource('/akun', AkunController::class);
+        Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
     }
 );

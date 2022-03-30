@@ -12,4 +12,9 @@ class Employee extends Model
     use SoftDeletes;
 
     protected $table = 'karyawan';
+
+    public function user()
+    {
+        return $this->belongsTo(user::class, 'user_id');
+    }
 }
