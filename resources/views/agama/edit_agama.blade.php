@@ -23,7 +23,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Agama</label>
                                         <input type="text" class="form-control" id="agama" name="agama" value="{{ $agama->agama }}" required placeholder="Agama" autofocus>
@@ -33,8 +33,6 @@
                                         {!! $errors->first('agama', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Status Aktif</label>
@@ -49,10 +47,10 @@
                                 </div>
                             </div>
                             <div class="row mt-4">
-                                <div class="col-sm-3">
+                                <div class="col-sm-6">
                                     <a href="{{ route('agama') }}" class="btn btn-secondary waves-effect">Cancel</a>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-6">
                                     <div class="text-sm-end mt-2 mt-sm-0">
                                         <button class="btn btn-primary" type="submit" id="submit">Simpan</button>
                                     </div>

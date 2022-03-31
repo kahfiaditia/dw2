@@ -31,21 +31,42 @@ class KodeposController extends Controller
         return view('kodepos.list_kodepos')->with($data);
     }
 
-    public function data_ajax()
+    public function data_ajax(Request $request)
     {
         $kodepos = Kodepos::select(['*']);
         return Datatables::of($kodepos)
-        ->addColumn('status', function($model) {
-            $model->status === "1" ? $flag = 'success' : $flag = 'danger';
-            $model->status === "1" ? $status = 'Aktif' : $status = 'Non Aktif';
-            return '<span  class="badge badge-pill badge-soft-'.$flag.' font-size-12">'.$status.'</span>';
-        })
-        ->addColumn('action','kodepos.button')
-        ->rawColumns(['status','action'])
-        ->order(function ($query) {
-            $query->orderBy('provinsi', 'asc');
-        })
-        ->make(true);
+            ->addColumn('status', function ($model) {
+                $model->status === "1" ? $flag = 'success' : $flag = 'danger';
+                $model->status === "1" ? $status = 'Aktif' : $status = 'Non Aktif';
+                return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
+            })
+            ->addColumn('action', 'kodepos.button')
+            ->rawColumns(['status', 'action'])
+            ->filter(function ($instance) use ($request) {
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = strtolower($request->get('search'));
+                        if ($search === 'aktif') {
+                            $w->Wherenotnull('status');
+                        } elseif ($search === 'non' or $search === 'non aktif') {
+                            $w->Wherenull('status')
+                                ->orWhere('provinsi', 'LIKE', "%$search%")
+                                ->orWhere('kabupaten', 'LIKE', "%$search%")
+                                ->orWhere('kecamatan', 'LIKE', "%$search%")
+                                ->orWhere('kelurahan', 'LIKE', "%$search%");
+                        } else {
+                            $w->orWhere('provinsi', 'LIKE', "%$search%")
+                                ->orWhere('kabupaten', 'LIKE', "%$search%")
+                                ->orWhere('kecamatan', 'LIKE', "%$search%")
+                                ->orWhere('kelurahan', 'LIKE', "%$search%");
+                        }
+                    });
+                }
+            })
+            ->order(function ($query) {
+                $query->orderBy('provinsi', 'asc');
+            })
+            ->make(true);
     }
 
     /**
@@ -197,38 +218,38 @@ class KodeposController extends Controller
     public function provinsi(Request $request)
     {
         $provinsi = Kodepos::select('kabupaten')
-                    ->where('provinsi','=',$request->Provinsi)
-                    ->groupBy('kabupaten')->get();
+            ->where('provinsi', '=', $request->Provinsi)
+            ->groupBy('kabupaten')->get();
         return $provinsi;
     }
 
     public function kota(Request $request)
     {
         $kecamatan = Kodepos::select('kecamatan')
-                    ->where('provinsi','=',$request->Provinsi)
-                    ->where('kabupaten','=',$request->Kota)
-                    ->groupBy('kecamatan')->get();
+            ->where('provinsi', '=', $request->Provinsi)
+            ->where('kabupaten', '=', $request->Kota)
+            ->groupBy('kecamatan')->get();
         return $kecamatan;
     }
 
     public function kecamatan(Request $request)
     {
         $kelurahan = Kodepos::select('kelurahan')
-                    ->where('provinsi','=',$request->Provinsi)
-                    ->where('kabupaten','=',$request->Kota)
-                    ->where('kecamatan','=',$request->Kecamatan)
-                    ->groupBy('kelurahan')->get();
+            ->where('provinsi', '=', $request->Provinsi)
+            ->where('kabupaten', '=', $request->Kota)
+            ->where('kecamatan', '=', $request->Kecamatan)
+            ->groupBy('kelurahan')->get();
         return $kelurahan;
     }
 
     public function kelurahan(Request $request)
     {
         $kodepos = Kodepos::select('kodepos')
-                    ->where('provinsi','=',$request->Provinsi)
-                    ->where('kabupaten','=',$request->Kota)
-                    ->where('kecamatan','=',$request->Kecamatan)
-                    ->where('kelurahan','=',$request->Kelurahan)
-                    ->groupBy('kodepos')->get();
+            ->where('provinsi', '=', $request->Provinsi)
+            ->where('kabupaten', '=', $request->Kota)
+            ->where('kecamatan', '=', $request->Kecamatan)
+            ->where('kelurahan', '=', $request->Kelurahan)
+            ->groupBy('kodepos')->get();
         return $kodepos;
     }
 }

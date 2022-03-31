@@ -50,12 +50,12 @@
                                 <div class="p-2">
                                     <form class="needs-validation" action="{{ route("login.newpassword") }}" method="POST" novalidate>
                                         @csrf
-                                        <input type="text" name="email" value="{{$email}}">
+                                        <input type="hidden" name="email" value="{{$email}}">
                                         <div class="mb-3">
-                                            <label for="userpassword" class="form-label">New Password</label>
+                                            <label for="userpassword" class="form-label">Password Baru</label>
                                             <input type="password" name="password" minlength="5" maxlength="255" class="form-control" id="userpassword" placeholder="Enter password" required>
                                             <div class="invalid-feedback">
-                                                Please Enter Password and It should have 5 characters or more.
+                                                Silakan Masukkan Kata Sandi dan harus memiliki 5 karakter atau lebih.
                                             </div>       
                                         </div>
                                         <div class="text-end">

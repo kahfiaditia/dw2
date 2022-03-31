@@ -38,6 +38,7 @@
                                         <label for="validationCustom02" class="form-label">Roles <code>*</code></label>
                                         <select class="form-control select select2" name="roles" required>
                                             <option value="">--Pilih Roles--</option>
+                                            <option value="Admin" {{ $akun->roles === 'Admin' ? 'selected' : '' }}>Admin</option>
                                             <option value="Karyawan" {{ $akun->roles === 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
                                             <option value="Alumni" {{ $akun->roles === 'Alumni' ? 'selected' : '' }}>Alumni</option>
                                             <option value="Ortu" {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>Orang Tua</option>
@@ -60,12 +61,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">Password <code>*</code></label>
-                                        <input type="hidden" class="form-control" name="password_old" value="{{ $akun->password }}">
+                                        <label for="validationCustom02" class="form-label">Password</label>
                                         <input type="password" class="form-control" id="password" name="password" value="{{ $akun->password }}" required placeholder="Password">
                                         <div class="invalid-feedback">
                                             Data wajib diisi.
                                         </div>
+                                        {!! $errors->first('password', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +75,7 @@
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Status Aktif <code>*</code></label>
                                         <div>
-                                            <input type="checkbox" id="switch1" switch="none" name="Status" {{ $akun->aktif === 1 ? 'checked' : '' }} required />
+                                            <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $akun->aktif === 1 ? 'checked' : '' }} />
                                             <label for="switch1" data-on-label="On" data-off-label="Off"></label>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.

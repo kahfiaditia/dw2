@@ -56,7 +56,12 @@ $(document).ready(function(){
         processing: true,
         serverSide: true,
         responsive: true,
-        ajax: "{{ route('kodepos.data_ajax') }}",
+        ajax: {
+          url: "{{ route('kodepos.data_ajax') }}",
+          data: function (d) {
+                d.search = $('input[type="search"]').val()
+            }
+        },
         columns: [
             {
                 data: null,sortable: false, searchable: false ,

@@ -1,12 +1,26 @@
 <?php $id = Crypt::encryptString($model->id); ?>
-<form class="delete-form" action="{{ route('kodepos.destroy', ['id' => $id]) }}" method="POST">
-    @csrf
-    @method('DELETE')
-    <div class="d-flex gap-3">
-        <a href="{{ route('akun.edit',$id) }}" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>
-        <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
-    </div>
-</form>
+@if ($model->email_verified_at)
+    <form class="delete-form" action="{{ route('akun.destroy', $id) }}" method="POST">
+        @csrf
+        @method('DELETE')
+        <div class="d-flex gap-3">
+            <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
+            @if (empty($model->aktif))
+                <a href="{{ route('akun.confirmasi',$id) }}" class="text-info"><i class="mdi mdi-account-check font-size-18"></i></a>
+            @else
+                <a href="{{ route('akun.edit',$id) }}" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>
+            @endif
+        </div>
+    </form>
+@else
+    <form class="delete-form" action="{{ route('akun.destroy', $id) }}" method="POST">
+        @csrf
+        @method('DELETE')
+        <div class="d-flex gap-3">
+            <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
+        </div>
+    </form>
+@endif
 <script>
     $('.delete_confirm').on('click', function(event) {
         event.preventDefault();

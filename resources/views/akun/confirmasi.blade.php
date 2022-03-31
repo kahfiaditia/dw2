@@ -15,8 +15,10 @@
                 </div>
             </div>
         </div>
-        <form class="needs-validation" action="{{ route("akun.store") }}" method="POST" novalidate>
+        <form class="needs-validation" action="{{ route("akun.save_confirmasi",$akun->id) }}" method="POST" novalidate>
             @csrf
+            @method('PATCH')
+            <input type="hidden" class="Id" id="Id" name="id" value="{{ $akun->id }}">
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card">
@@ -24,23 +26,21 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username" value="{{ old('username') }}" required placeholder="Username" autofocus>
+                                        <label for="validationCustom02" class="form-label">Username <code>*</code></label>
+                                        <input type="text" class="form-control" id="username" name="username" value="{{ $akun->name }}" disabled placeholder="Username" autofocus>
                                         <div class="invalid-feedback">
                                             Data wajib diisi.
                                         </div>
-                                        {!! $errors->first('username', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Roles <code>*</code></label>
-                                        <select class="form-control select select2" name="roles" required>
+                                        <select class="form-control select select2" name="roles" disabled>
                                             <option value="">--Pilih Roles--</option>
-                                            <option value="Admin">Admin</option>
-                                            <option value="Karyawan">Karyawan</option>
-                                            <option value="Alumni">Alumni</option>
-                                            <option value="Ortu">Orang Tua</option>
+                                            <option value="Karyawan" {{ $akun->roles === 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
+                                            <option value="Alumni" {{ $akun->roles === 'Alumni' ? 'selected' : '' }}>Alumni</option>
+                                            <option value="Ortu" {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>Orang Tua</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             Data wajib diisi.
@@ -51,22 +51,23 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}" required placeholder="Email">
+                                        <label for="validationCustom02" class="form-label">Email <code>*</code></label>
+                                        <input type="text" class="form-control" id="email" name="email" value="{{ $akun->email }}" disabled placeholder="Email">
                                         <div class="invalid-feedback">
                                             Data wajib diisi.
                                         </div>
-                                        {!! $errors->first('email', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" value="{{ old('password') }}" required placeholder="Password">
-                                        <div class="invalid-feedback">
-                                            Data wajib diisi.
+                                        <label for="validationCustom02" class="form-label">Confirmasi Akun <code>*</code></label>
+                                        <div>
+                                            <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $akun->aktif === 1 ? 'checked' : '' }} />
+                                            <label for="switch1" data-on-label="On" data-off-label="Off"></label>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
                                         </div>
-                                        {!! $errors->first('password', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +83,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
         </form>
     </div> <!-- container-fluid -->

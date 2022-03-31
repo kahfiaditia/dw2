@@ -14,13 +14,13 @@
                             @endif
                         </ol>
                     </div>
-                    {{-- <div class="page-title-right">
+                    <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <a href="{{ route("kodepos.create") }}" type="button" class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                <i class="mdi mdi-plus me-1"></i> Tambah Kodepos
+                            <a href="{{ route("akun.create") }}" type="button" class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
+                                <i class="mdi mdi-plus me-1"></i> Tambah Akun
                             </a>
                         </ol>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,6 +35,7 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Roles</th>
+                                    <th>Verifikasi Email</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -56,10 +57,15 @@ $(document).ready(function(){
         processing: true,
         serverSide: true,
         responsive: true,
-        ajax: "{{ route('akun.data_ajax') }}",
+        ajax: {
+          url: "{{ route('akun.data_ajax') }}",
+          data: function (d) {
+                d.search = $('input[type="search"]').val()
+            }
+        },
         columns: [
             {
-                data: null,sortable: false, searchable: false ,
+                data: null,sortable: false, searchable: false , className: 'text-center',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -67,7 +73,8 @@ $(document).ready(function(){
             { data: 'name', name: 'name' },
             { data: 'email', name: 'email' },
             { data: 'roles', name: 'roles' },
-            { data: 'status', name: 'status' },
+            { data: 'verifikasi', name: 'verifikasi', className: 'text-center' },
+            { data: 'status', name: 'status', className: 'text-center' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     });
