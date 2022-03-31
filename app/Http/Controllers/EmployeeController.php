@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
+use App\Models\Agama;
 use App\Models\Anak_karyawan;
 use App\Models\Anak_karyawan_sekolah_dw;
 use App\Models\Employee;
@@ -12,38 +13,57 @@ use App\Models\Riwayat_karyawan;
 use App\Models\Sk_karyawan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Yajra\DataTables\DataTables;
 
 class EmployeeController extends Controller
 {
     protected $title = 'dharmawidya';
     protected $menu = 'karyawan';
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
         $data = [
             'title' => $this->title,
             'menu' => 'data',
             'submenu' => 'karyawan',
             'label' => 'list karyawan',
-            'lists' => Employee::all()->sortBy("nama_lengkap")
         ];
-        return view('employee.list_employee')->with($data);
+
+        if (Auth::user()->roles !== 'admin') {
+            $employee = Employee::where('user_id', Auth::user()->id)->orderBy("nama_lengkap", 'ASC')->get();
+        } else {
+            $employee = Employee::all()->sortBy("nama_lengkap");
+        }
+
+        if ($request->ajax()) {
+            return DataTables::of($employee)
+                ->addIndexColumn()
+                ->addColumn('Opsi', function (Employee $employee) {
+                    return \view('employee._form', compact('employee'));
+                })
+                ->addColumn('status', function ($employee) {
+                    if ($employee->aktif == 1) {
+                        return 'Aktif';
+                    } else {
+                        return 'Tidak Aktif';
+                    }
+                })
+                ->editColumn('created_at', function ($employee) {
+                    $formatedDate = Carbon::createFromFormat('Y-m-d H:i:s', $employee->created_at)->format('d-m-Y');
+                    return $formatedDate;
+                })
+                ->rawColumns(['Opsi'])
+                ->make(true);
+        } else {
+            return view('employee.list_employee')->with($data);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $data = [
@@ -55,12 +75,6 @@ class EmployeeController extends Controller
         return view('employee.add_employee')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -159,42 +173,25 @@ class EmployeeController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Employee  $Employee
-     * @return \Illuminate\Http\Response
-     */
     public function show(Employee $Employee)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Employee  $Employee
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        $result = Crypt::decrypt($id);
+        $employee = Employee::findOrFail($result);
         $data = [
             'title' => $this->title,
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan',
-            'item' => Employee::findorfail(Crypt::decryptString($id)),
+            'item' => $employee,
         ];
         return view('employee.edit_employee')->with($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Employee  $Employee
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
         $request->validate([
@@ -293,15 +290,13 @@ class EmployeeController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Employee  $Employee
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Employee $Employee)
+    public function destroy(Employee $employee, $id)
     {
-        //
+        $employee_id = Crypt::decrypt($id);
+        $employee = Employee::findOrFail($employee_id);
+        $employee->delete();
+        AlertHelper::deleteAlert(true);
+        return back();
     }
 
     public function ijazah($id)
@@ -507,7 +502,6 @@ class EmployeeController extends Controller
             AlertHelper::addAlert(true);
             return back();
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             AlertHelper::addAlert(false);
             return back();
@@ -587,7 +581,6 @@ class EmployeeController extends Controller
             AlertHelper::addAlert(true);
             return back();
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             AlertHelper::addAlert(false);
             return back();

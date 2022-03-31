@@ -52,12 +52,13 @@ Route::group(
         'middleware' => 'auth',
     ],
     function () {
+        // Route::resource('', EmployeeController::class);
         Route::get('/', [EmployeeController::class, 'index'])->name('employee');
         Route::get('/create', [EmployeeController::class, 'create'])->name('employee.create');
         Route::post('/store', [EmployeeController::class, 'store'])->name('employee.store');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
         Route::post('/update', [EmployeeController::class, 'update'])->name('employee.update');
-        Route::delete('/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+        Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
         Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::post('/dokumen', [EmployeeController::class, 'dokumen'])->name('employee.dokumen');
         Route::get('/ijazah/{id}', [EmployeeController::class, 'ijazah'])->name('employee.ijazah');
