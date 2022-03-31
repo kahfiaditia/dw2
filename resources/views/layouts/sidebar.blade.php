@@ -4,14 +4,7 @@
         <li>
             <a href="{{ route('dashboard') }}" class="waves-effect">
                 <i class="bx bxs-dashboard"></i>
-                {{-- <span class="badge rounded-pill bg-info float-end">04</span> --}}
                 <span key="t-dashboards">Dashboards</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('akun.index') }}" class="waves-effect">
-                <i class="bx bx-user"></i>
-                <span>Akun</span>
             </a>
         </li>
         <li>
@@ -21,27 +14,35 @@
             </a>
             <ul class="sub-menu" aria-expanded="false">
                 <li><a href="{{ route('employee') }}" key="t-basic-tables">Karyawan</a></li>
-                <li><a href="#" key="t-data-tables">Siswa</a></li>
+                <li><a href="#" key="t-data-tables">Absensi</a></li>
             </ul>
         </li>
-        <li class="menu-title" key="t-setting">Setting</li>
-        <li>
-            <a href="{{ route('agama') }}" class="waves-effect">
-                <i class="bx bx-list-ul"></i>
-                <span key="t-calendar">Agama</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('kodepos') }}" class="waves-effect">
-                <i class="bx bx-list-ul"></i>
-                <span key="t-calendar">Kodepos</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('siswa.index') }}" class="wavex-effect">
-                <i class="bx bx-list-ul"></i>
-                <span key="t-calendar">Siswa</span>
-            </a>
-        </li>
+        @if (Auth::user()->roles === 'Admin')
+            <li class="menu-title" key="t-setting">Setting</li>
+            <li>
+                <a href="{{ route('akun.index') }}" class="waves-effect">
+                    <i class="bx bx-user"></i>
+                    <span>Akun</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('agama') }}" class="waves-effect">
+                    <i class="bx bx-list-ul"></i>
+                    <span key="t-calendar">Agama</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('kodepos') }}" class="waves-effect">
+                    <i class="bx bx-list-ul"></i>
+                    <span key="t-calendar">Kodepos</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('siswa.index') }}" class="wavex-effect">
+                    <i class="bx bx-list-ul"></i>
+                    <span key="t-calendar">Siswa</span>
+                </a>
+            </li>
+        @endif
     </ul>
 </div>

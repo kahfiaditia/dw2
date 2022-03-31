@@ -140,5 +140,7 @@ Route::group(
     function () {
         Route::resource('/akun', AkunController::class);
         Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
+        Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
+        Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
     }
 );

@@ -99,19 +99,26 @@ class LoginController extends Controller
     public function notifikasi(Request $request)
     {
         if (session()->get('type') === 'reset') {
-            $body = 'Thanks For Reset Akun';
+            $body = 'Terima kasih telah mengatur ulang password';
             $type = 'recovery';
+            $header = 'Cek Email untuk atur ulang password';
+        } else if (session()->get('type') === 'notif_reset') {
+            $body = 'Terima kasih telah mengatur ulang password';
+            $type = 'recovery';
+            $header = 'Berhasil';
         } else if (session()->get('type') === 'verify') {
-            $body = 'Thanks For Verify Akun';
+            $body = 'Terima kasih untuk verifikasi akun';
             $type = 'verify';
+            $header = 'Verifikasi berhasil';
         } else {
-            $body = 'Thanks For Register Akun';
+            $body = 'Terima kasih telah mendaftarkan akun';
             $type = 'else';
+            $header = 'Cek Email untuk Verifikasi akun';
         }
         $data = [
             'title' => $this->title,
             'icon' => 'bx bx-mail-send',
-            'header' => 'Success',
+            'header' => $header,
             'body' => $body,
             'type' => $type,
         ];
@@ -289,7 +296,7 @@ class LoginController extends Controller
             try {
                 User::where(['email' => $request->email])->update(['password' => bcrypt($request->password)]);
                 DB::commit();
-                return redirect('notifikasi')->with(['type' => 'reset']);
+                return redirect('notifikasi')->with(['type' => 'notif_reset']);
             } catch (\Exception $e) {
                 dd($e);
                 DB::back()->with('Error', 'Reset Email Fail!');

@@ -55,8 +55,8 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <div class="d-flex gap-3">
-                                                    <a href="{{ route('agama.edit',['id' => $id]) }}" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>
                                                     <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
+                                                    <a href="{{ route('agama.edit',['id' => $id]) }}" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>
                                                 </div>
                                             </form>
                                         </td>

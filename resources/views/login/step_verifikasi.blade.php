@@ -35,8 +35,8 @@
                                         </div>
                                     </div>
                                     <div class="p-2 mt-4">
-                                        <h4>Verify your email</h4>
-                                        <p class="mb-5">Please enter the 4 digit code sent to <span class="fw-semibold">{{$email}}</span></p>
+                                        <h4>Verifikasi email Anda</h4>
+                                        <p class="mb-5">Masukkan kode 4 digit yang dikirim ke <span class="fw-semibold">{{$email}}</span></p>
                                         <?php $something = $errors->all(); ?>
                                         @if (!empty($something))
                                         <div class = "alert alert-danger">                      
