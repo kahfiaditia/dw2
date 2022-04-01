@@ -123,7 +123,7 @@
                                             </table>
                                             <div class="row mt-4">
                                                 <div class="col-sm-6">
-                                                    <?php $id = Crypt::encryptString($item->id); ?>
+                                                    <?php $id = Crypt::encrypt($item->id); ?>
                                                     <a href="{{ url('employee/edit',$id) }}" class="btn btn-secondary waves-effect">Back</a>
                                                 </div>
                                                 <div class="col-sm-6">

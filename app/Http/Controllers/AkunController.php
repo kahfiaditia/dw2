@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -58,7 +59,8 @@ class AkunController extends Controller
                         } elseif ($search === 'belum' or $search === 'belum verifikasi') {
                             $w->Wherenull('email_verified_at');
                         } elseif ($search === 'non' or $search === 'non aktif') {
-                            $w->Wherenull('aktif')
+                            $w->orWhere('aktif', '=', null)
+                                ->orWhere('aktif', '=', '0')
                                 ->orWhere('name', 'LIKE', "%$search%")
                                 ->orWhere('email', 'LIKE', "%$search%")
                                 ->orWhere('roles', 'LIKE', "%$search%");
@@ -183,7 +185,11 @@ class AkunController extends Controller
 
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('akun');
+            if (Auth::user()->roles === 'Admin') {
+                return redirect('akun');
+            } else {
+                return back();
+            }
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();

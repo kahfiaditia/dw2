@@ -11,6 +11,7 @@ use App\Models\Ijazah;
 use App\Models\Kontak_darurat;
 use App\Models\Riwayat_karyawan;
 use App\Models\Sk_karyawan;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,9 +33,10 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => 'karyawan',
             'label' => 'list karyawan',
+            'employee' => Employee::where('user_id', Auth::user()->id)->orderBy("nama_lengkap", 'ASC')->get(),
         ];
 
-        if (Auth::user()->roles !== 'admin') {
+        if (Auth::user()->roles !== 'Admin') {
             $employee = Employee::where('user_id', Auth::user()->id)->orderBy("nama_lengkap", 'ASC')->get();
         } else {
             $employee = Employee::all()->sortBy("nama_lengkap");
@@ -43,21 +45,22 @@ class EmployeeController extends Controller
         if ($request->ajax()) {
             return DataTables::of($employee)
                 ->addIndexColumn()
+                ->addColumn('email', function ($employee) {
+                    return $employee->user->email;
+                })
                 ->addColumn('Opsi', function (Employee $employee) {
                     return \view('employee._form', compact('employee'));
                 })
                 ->addColumn('status', function ($employee) {
-                    if ($employee->aktif == 1) {
-                        return 'Aktif';
-                    } else {
-                        return 'Tidak Aktif';
-                    }
+                    $employee->aktif === 1 ? $flag = 'success' : $flag = 'danger';
+                    $employee->aktif === 1 ? $status = 'Aktif' : $status = 'Non Aktif';
+                    return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
                 })
                 ->editColumn('created_at', function ($employee) {
                     $formatedDate = Carbon::createFromFormat('Y-m-d H:i:s', $employee->created_at)->format('d-m-Y');
                     return $formatedDate;
                 })
-                ->rawColumns(['Opsi'])
+                ->rawColumns(['Opsi', 'status'])
                 ->make(true);
         } else {
             return view('employee.list_employee')->with($data);
@@ -89,6 +92,7 @@ class EmployeeController extends Controller
             'dok_nik' => 'mimes:png,jpeg,jpg|max:2048',
             'dok_npwp' => 'mimes:png,jpeg,jpg|max:2048',
             'dok_kk' => 'mimes:png,jpeg,jpg|max:2048',
+            'foto' => 'mimes:png,jpeg,jpg|max:2048',
         ]);
         DB::beginTransaction();
         try {
@@ -117,6 +121,13 @@ class EmployeeController extends Controller
                 $fileNameKK = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_kk->extension();
                 $employee->dok_kk = $fileNameKK;
                 $request->file('dok_kk')->storeAs('public/karyawan/kk', $fileNameKK);
+            }
+            // dokumen foto karyawan
+            $employee->foto = $request->foto;
+            if ($request->foto) {
+                $fileNameFoto = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->foto->extension();
+                $employee->foto = $fileNameFoto;
+                $request->file('foto')->storeAs('public/karyawan/foto', $fileNameFoto);
             }
             $employee->bpjs_kesehatan = $request->bpjs_kesehatan;
             $employee->bpjs_ketenagakerjaan = $request->bpjs_ketenagakerjaan;
@@ -204,7 +215,6 @@ class EmployeeController extends Controller
             'nik' => 'required|max:20',
             'kk' => 'required|max:20',
         ]);
-
         DB::beginTransaction();
         try {
             $id = Crypt::decryptString($request->id);
@@ -236,6 +246,13 @@ class EmployeeController extends Controller
                 $employee->dok_kk = $fileNameKK;
                 $request->file('dok_kk')->storeAs('public/karyawan/kk', $fileNameKK);
                 Storage::delete('public/karyawan/kk/' . $request->dok_kk_old);
+            }
+            // dokumen foto
+            if ($request->foto) {
+                $fileNameFoto = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->foto->extension();
+                $employee->foto = $fileNameFoto;
+                $request->file('foto')->storeAs('public/karyawan/foto', $fileNameFoto);
+                Storage::delete('public/karyawan/foto/' . $request->foto_old);
             }
             $employee->bpjs_kesehatan = $request->bpjs_kesehatan;
             $employee->bpjs_ketenagakerjaan = $request->bpjs_ketenagakerjaan;
@@ -276,6 +293,7 @@ class EmployeeController extends Controller
             }
             $employee->jabatan = $request->jabatan;
             $employee->masuk_kerja = $request->masuk_kerja;
+            $employee->user_id = $request->user_id;
             $employee->aktif = isset($request->aktif) ? 1 : 0;
             $employee->save();
 
@@ -319,7 +337,7 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan',
-            'item' => Employee::findorfail(Crypt::decryptString($id)),
+            'item' => Employee::findorfail(Crypt::decrypt($id)),
             'child' => Sk_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
         ];
         return view('employee.sk_employee')->with($data);
@@ -621,7 +639,7 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan',
-            'item' => Employee::findorfail(Crypt::decryptString($id)),
+            'item' => Employee::findorfail(Crypt::decrypt($id)),
             'riwayat' => Riwayat_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
             'kontak' => Kontak_darurat::where('karyawan_id', Crypt::decryptString($id))->get(),
         ];
@@ -925,6 +943,38 @@ class EmployeeController extends Controller
             DB::rollback();
             AlertHelper::addAlert(false);
             return back();
+        }
+    }
+
+    public function dropdown_email_create()
+    {
+        $email = User::select('users.*')->where('aktif', '=', '1')->whereNotIn('id', function ($query) {
+            $query->select('user_id')->from('karyawan')->wherenotnull('user_id');
+        })->get();
+        return $email;
+    }
+
+    public function dropdown_email()
+    {
+        $email = User::select('*')->where('aktif', '=', '1')->get();
+        return $email;
+    }
+
+    public function get_email(Request $request)
+    {
+        $data = Employee::where('user_id', $request->user_id)->where('user_id', '!=', $request->user_id_old)->get();
+        if (count($data) > 0) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'User sudah dipilih',
+            ]);
+        } else {
+            $user = User::findorfail($request->user_id);
+            return response()->json([
+                'code' => 200,
+                'user' => $user->roles,
+                'message' => 'berhasil',
+            ]);
         }
     }
 }

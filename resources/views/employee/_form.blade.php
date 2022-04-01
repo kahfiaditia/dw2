@@ -1,19 +1,11 @@
 <form action="{{ route('employee.destroy', \Crypt::encrypt($employee->id)) }}" method="POST">
     @csrf
     @method('DELETE')
-    <div class="row">
-        <div class="col-md-3">
-            <a href="{{ route('employee.edit', \Crypt::encrypt($employee->id)) }}"
-                class="btn btn-sm btn-info rounded">Edit</a>
-        </div>
-        <div class="col-md-3">
-            <button class="delete-employee btn btn-danger btn-sm rounded">
-                Hapus
-            </button>
-        </div>
+    <div class="d-flex gap-3">
+        <a href class="text-danger delete-employee"><i class="mdi mdi-delete font-size-18"></i></a>
+        <a href="{{ route('employee.edit', \Crypt::encrypt($employee->id)) }}" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>
     </div>
 </form>
-
 <script>
     $('.delete-employee').on('click', function(event) {
         event.preventDefault();

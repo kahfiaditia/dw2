@@ -62,9 +62,33 @@
                             <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab">
                                 <div class="card shadow-none border mb-0">
                                     <div class="card-body">
+                                        @if (Auth::user()->roles === 'Admin')
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
+                                                    <input type="hidden" id="user_id_old" value="{{ $item->user ? $item->user->id : '' }}">
+                                                    <label for="validationCustom02" class="form-label">Email. <code>*</code></label>
+                                                    <select class="form-control select select2 Email_admin" name="user_id" required>
+                                                        <option value="">--Pilih Email--</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    {!! $errors->first('email', '<div class="invalid-validasi">:message</div>') !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Roles</label>
+                                                    <input type="text" class="form-control Roles_admin" value="{{ $item->user ? $item->user->roles  : ''}}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @else
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <input type="hidden" id="user_id_old" name="user_id" value="{{ $item->user ? $item->user->id : '' }}">
                                                     <label for="validationCustom02" class="form-label">Email</label>
                                                     <input type="text" class="form-control" value="{{ $item->user->email }}" readonly>
                                                 </div>
@@ -76,6 +100,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
@@ -533,6 +558,21 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
+                                                    <input type="hidden" name="foto_old" value="{{ $item->foto }}">
+                                                    <label for="formFile" class="form-label">Foto Karyawan <code>*</code></label>
+                                                    <input class="form-control foto" type="file" name="foto" id="foto" {{ $item->foto === null ? 'required' : '' }}>
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    @if ($item->foto)
+                                                        <a href="javascript:void(0)" data-id="{{ $item->foto.'|foto|karyawan' }}" id="get_data" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
+                                                            <i class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat Dokumen
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" {{ Auth::user()->roles === 'Admin' ? '' : 'hidden' }}>
+                                                <div class="mb-3">
                                                     <label for="validationCustom02" class="form-label">Status Aktif</label>
                                                     <div>
                                                         <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $item ->aktif === 1 ? 'checked' : '' }} />
@@ -607,6 +647,59 @@
                     $('#modal-loader').hide();
                 });
         });
+        
+        // user data - admin
+        let user_id_old = document.getElementById("user_id_old").value;
+        $.ajax({
+            type: "POST",
+            url: '{{ route('employee.dropdown_email') }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+            },
+            success: response => {
+                $.each(response, function(i, item) {
+                    if( user_id_old == item.id ){
+                        $('.Email_admin').append(
+                            `<option value="${item.id}" selected>${item.email}</option>`
+                        )
+                    }else{
+                        $('.Email_admin').append(
+                            `<option value="${item.id}">${item.email}</option>`
+                        )
+                    }
+                })
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+        $(".Email_admin").change(function(){
+            let user_id = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '{{ route('employee.get_email') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",user_id,user_id_old
+                },
+                success: response => {
+                    if(response.code === 404){
+                        Swal.fire(
+                            'Gagal',
+                            `${response.message}`,
+                            'error'
+                        ).then(function() {})
+                        $(".Roles_admin").val('');
+                        document.getElementById("submit").disabled = true;
+                    }else{
+                        $(".Roles_admin").val(response.user);
+                        document.getElementById("submit").disabled = false;
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        });
 
         // valdasi extension
         $('#dok_nik').bind('change', function() {
@@ -669,6 +762,27 @@
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_kk').value = null;
+                }
+            }
+        });
+        $('#foto').bind('change', function() {
+            var file = document.querySelector("#foto");
+            if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                Swal.fire(
+                    'Gagal',
+                    'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                    'error'
+                ).then(function() {})
+                document.getElementById('foto').value = null;
+            } else {
+                var size = this.files[0].size / 1000;
+                if (size > 2000) {
+                    Swal.fire(
+                        'Gagal',
+                        'Maksimal ukuran 2 MB',
+                        'error'
+                    ).then(function() {})
+                    document.getElementById('foto').value = null;
                 }
             }
         });
