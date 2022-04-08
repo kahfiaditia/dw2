@@ -1,9 +1,9 @@
-<form action="{{ route('employee.destroy', \Crypt::encrypt($employee->id)) }}" method="POST">
+<form action="{{ route('employee.destroy', \Crypt::encryptString($employee->id)) }}" method="POST">
     @csrf
     @method('DELETE')
     <div class="row">
         <div class="col-md-3">
-            <a href="{{ route('employee.edit', \Crypt::encrypt($employee->id)) }}"
+            <a href="{{ route('employee.edit', \Crypt::encryptString($employee->id)) }}"
                 class="btn btn-sm btn-info rounded">Edit</a>
         </div>
         <div class="col-md-3">

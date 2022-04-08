@@ -180,7 +180,7 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
-        $result = Crypt::decrypt($id);
+        $result = Crypt::decryptString($id);
         $employee = Employee::findOrFail($result);
         $data = [
             'title' => $this->title,
@@ -333,12 +333,13 @@ class EmployeeController extends Controller
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
-            'child' => Anak_karyawan::where('karyawan_id', Crypt::decryptString($id))->orderBy('anak_ke', 'asc')->get(),
+            'child' => Anak_karyawan::doesntHave('anak_karyawan_sekolah_dw')->where('karyawan_id', Crypt::decryptString($id))->orderBy('anak_ke', 'asc')->get(),
             'school' => Anak_karyawan_sekolah_dw::where('karyawan_id', Crypt::decryptString($id))
                 ->orderBy('jenjang')
                 ->orderByRaw("FIELD('KB', 'TK', 'SD', 'SMP', 'SMK')")
                 ->get(),
         ];
+
         return view('employee.child_employee')->with($data);
     }
 
@@ -560,7 +561,7 @@ class EmployeeController extends Controller
             $data = [
                 'id' => $id,
                 'item' => Anak_karyawan_sekolah_dw::findorfail(Crypt::decryptString($id)),
-                'child' => Anak_karyawan::where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
+                'child' => Anak_karyawan::doesntHave('anak_karyawan_sekolah_dw')->where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
             ];
             return view('employee.anak_dw_edit')->with($data);
         }
@@ -899,6 +900,7 @@ class EmployeeController extends Controller
         DB::beginTransaction();
         try {
             $ijazah = Ijazah::findorfail($id);
+            $ijazah->nama_pendidikan = $request->nama_pendidikan;
             $ijazah->instansi  = $request->instansi;
             $ijazah->jurusan = $request->jurusan;
             $ijazah->tahun_masuk = $request->tahun_masuk;

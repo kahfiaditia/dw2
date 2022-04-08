@@ -52,7 +52,6 @@
     <script src="{{ asset('assets/alert.js') }}"></script>
 
     <script>
-        console.log('here')
         $(function() {
             $('#mydata').DataTable({
                 destroy: true,
