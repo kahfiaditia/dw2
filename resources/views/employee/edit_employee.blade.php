@@ -575,7 +575,7 @@
                                                 <div class="mb-3">
                                                     <label for="validationCustom02" class="form-label">Status Aktif</label>
                                                     <div>
-                                                        <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $item ->aktif === 1 ? 'checked' : '' }} />
+                                                        <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $item ->aktif === '1' ? 'checked' : '' }} />
                                                         <label for="switch1" data-on-label="On" data-off-label="Off"></label>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.

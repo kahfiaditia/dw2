@@ -37,8 +37,8 @@ class AkunController extends Controller
         $user = User::select(['*']);
         return DataTables::of($user)
             ->addColumn('status', function ($model) {
-                $model->aktif === 1 ? $flag = 'success' : $flag = 'danger';
-                $model->aktif === 1 ? $status = 'Aktif' : $status = 'Non Aktif';
+                $model->aktif === '1' ? $flag = 'success' : $flag = 'danger';
+                $model->aktif === '1' ? $status = 'Aktif' : $status = 'Non Aktif';
                 return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
             })
             ->addColumn('verifikasi', function ($model) {
@@ -178,7 +178,7 @@ class AkunController extends Controller
             $user->roles = $request->roles;
             $user->email = $request->email;
             if ($request->password_old != $request->password) {
-                $user->password = $request->password;
+                $user->password = bcrypt($request->password);
             }
             $user->aktif = isset($request->aktif) ? 1 : 0;
             $user->save();

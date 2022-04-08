@@ -37,7 +37,7 @@ class LoginController extends Controller
         ]);
         // login password harus bcrpt baru bisa masuk auth::attempt
         if (Auth::attempt($credentials)) {
-            if (Auth::user()->aktif === 1) {
+            if (Auth::user()->aktif === '1') {
                 $request->session()->regenerate();
                 return redirect()->intended('dashboard');
             } else {
@@ -76,6 +76,16 @@ class LoginController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->roles = $request->roles;
+            // set user akses
+            if ($request->roles === 'Karyawan') {
+                $user->akses_menu = '1,2';
+                $user->akses_submenu = '1,2,6';
+            } elseif ($request->roles === 'Admin') {
+                $user->akses_menu = '1,2,3,4,5,6';
+                $user->akses_submenu = '1,2,3,4,5,6,7,8,9,10';
+            } elseif ($request->roles === 'Alumni') {
+            } elseif ($request->roles === 'Ortu') {
+            }
             $user->pin_verified = $pin_verified;
             $user->pin_verified_at = Carbon::now();
             $user->password = bcrypt($request->password);

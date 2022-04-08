@@ -52,8 +52,8 @@ class EmployeeController extends Controller
                     return \view('employee._form', compact('employee'));
                 })
                 ->addColumn('status', function ($employee) {
-                    $employee->aktif === 1 ? $flag = 'success' : $flag = 'danger';
-                    $employee->aktif === 1 ? $status = 'Aktif' : $status = 'Non Aktif';
+                    $employee->aktif === '1' ? $flag = 'success' : $flag = 'danger';
+                    $employee->aktif === '1' ? $status = 'Aktif' : $status = 'Non Aktif';
                     return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
                 })
                 ->editColumn('created_at', function ($employee) {
