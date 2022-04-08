@@ -337,7 +337,7 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan',
-            'item' => Employee::findorfail(Crypt::decrypt($id)),
+            'item' => Employee::findorfail(Crypt::decryptString($id)),
             'child' => Sk_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
         ];
         return view('employee.sk_employee')->with($data);
@@ -639,7 +639,7 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan',
-            'item' => Employee::findorfail(Crypt::decrypt($id)),
+            'item' => Employee::findorfail(Crypt::decryptString($id)),
             'riwayat' => Riwayat_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
             'kontak' => Kontak_darurat::where('karyawan_id', Crypt::decryptString($id))->get(),
         ];
