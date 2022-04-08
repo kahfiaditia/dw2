@@ -60,6 +60,28 @@
                             <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab">
                                 <div class="card shadow-none border mb-0">
                                     <div class="card-body">
+                                        @if (Auth::user()->roles === 'Admin')
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Email. <code>*</code></label>
+                                                    <select class="form-control select select2 Email_admin" name="user_id" required>
+                                                        <option value="">--Pilih Email--</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    {!! $errors->first('email', '<div class="invalid-validasi">:message</div>') !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">Roles</label>
+                                                    <input type="text" class="form-control Roles_admin" value="" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @else
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
@@ -75,6 +97,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
@@ -500,6 +523,17 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="formFile" class="form-label">Foto Karyawan <code>*</code></label>
+                                                    <input class="form-control foto" type="file" name="foto" id="foto" required>
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row mt-4">
                                             <div class="col-sm-6">
                                                 <a href="{{ route('employee') }}" class="btn btn-secondary waves-effect">Cancel</a>
@@ -524,7 +558,75 @@
 <script src="{{ asset('assets/alert.js') }}"></script>
 <script>
     $(document).ready(function(){
+        // user data - admin
+        $.ajax({
+            type: "POST",
+            url: '{{ route('employee.dropdown_email_create') }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+            },
+            success: response => {
+                console.log(response)
+                $.each(response, function(i, item) {
+                    $('.Email_admin').append(
+                        `<option value="${item.id}">${item.email}</option>`
+                    )
+                })
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+        $(".Email_admin").change(function(){
+            let user_id = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '{{ route('employee.get_email') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",user_id
+                },
+                success: response => {
+                    if(response.code === 404){
+                        Swal.fire(
+                            'Gagal',
+                            `${response.message}`,
+                            'error'
+                        ).then(function() {})
+                        $(".Roles_admin").val('');
+                        document.getElementById("submit").disabled = true;
+                    }else{
+                        $(".Roles_admin").val(response.user);
+                        document.getElementById("submit").disabled = false;
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        });
+
         // valdasi extension
+        $('#foto').bind('change', function() {
+            var file = document.querySelector("#foto");
+            if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                Swal.fire(
+                    'Gagal',
+                    'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                    'error'
+                ).then(function() {})
+                document.getElementById('foto').value = null;
+            } else {
+                var size = this.files[0].size / 1000;
+                if (size > 2000) {
+                    Swal.fire(
+                        'Gagal',
+                        'Maksimal ukuran 2 MB',
+                        'error'
+                    ).then(function() {})
+                    document.getElementById('foto').value = null;
+                }
+            }
+        });
         $('#dok_nik').bind('change', function() {
             var file = document.querySelector("#dok_nik");
             if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {

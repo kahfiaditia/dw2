@@ -5,6 +5,8 @@
         $path = 'karyawan/npwp/'.$file;
     }elseif($type === 'kk'){
         $path = 'karyawan/kk/'.$file;
+    }elseif($type === 'foto'){
+        $path = 'karyawan/foto/'.$file;
     }elseif($type === 'sk'){
         $path = 'sk/'.$file;
     }elseif($type === 'ijazah'){

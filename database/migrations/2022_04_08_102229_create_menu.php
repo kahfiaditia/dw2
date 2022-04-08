@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAgama extends Migration
+class CreateMenu extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateAgama extends Migration
      */
     public function up()
     {
-        Schema::create('agama', function (Blueprint $table) {
+        Schema::create('menu', function (Blueprint $table) {
             $table->id();
-            $table->string('agama', 64);
-            $table->string('aktif', 1);
+            $table->string('menu', 128);
+            $table->string('icon', 128)->nullable();
+            $table->string('sub_menu', 1)->nullable();
+            $table->string('route_menu', 128)->nullable();
+            $table->integer('order_menu')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +32,6 @@ class CreateAgama extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('agama');
+        Schema::dropIfExists('menu');
     }
 }

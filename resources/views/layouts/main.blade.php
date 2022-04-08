@@ -20,8 +20,11 @@
         <link href="{{ URL::asset('assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="{{ URL::asset('assets/libs/@chenfengyuan/datepicker/datepicker.min.css') }}">
         <link href="{{ URL::asset('assets/form.css') }}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('assets/loading.css') }}">
     </head>
     <body data-sidebar="dark">
+        {{-- loading --}}
+        <div id="loader" ></div>
         @include('sweetalert::alert')
         <div id="layout-wrapper">
             <header id="page-topbar">
@@ -67,5 +70,16 @@
         <script src="{{ asset('assets/libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
         <script src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
         <script src="{{ asset('assets/libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
+        {{-- loading --}}
+        <script type="text/javascript">
+            var $loading = $('#loader').hide();
+            $(document)
+            .ajaxStart(function () {
+                $loading.show();
+            })
+            .ajaxStop(function () {
+                $loading.hide();
+            });
+        </script>
     </body>
 </html>

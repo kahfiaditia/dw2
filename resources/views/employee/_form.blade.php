@@ -13,7 +13,6 @@
         </div>
     </div>
 </form>
-
 <script>
     $('.delete-employee').on('click', function(event) {
         event.preventDefault();

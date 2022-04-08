@@ -37,11 +37,15 @@
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Roles <code>*</code></label>
                                         <select class="form-control select select2" name="roles" required>
-                                            <option value="">--Pilih Roles--</option>
-                                            <option value="Admin" {{ $akun->roles === 'Admin' ? 'selected' : '' }}>Admin</option>
-                                            <option value="Karyawan" {{ $akun->roles === 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
-                                            <option value="Alumni" {{ $akun->roles === 'Alumni' ? 'selected' : '' }}>Alumni</option>
-                                            <option value="Ortu" {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>Orang Tua</option>
+                                            @if ($akun->roles === 'Admin')
+                                                <option value="">--Pilih Roles--</option>
+                                                <option value="Admin" {{ $akun->roles === 'Admin' ? 'selected' : '' }}>Admin</option>
+                                                <option value="Karyawan" {{ $akun->roles === 'Karyawan' ? 'selected' : '' }}>Karyawan</option>
+                                                <option value="Alumni" {{ $akun->roles === 'Alumni' ? 'selected' : '' }}>Alumni</option>
+                                                <option value="Ortu" {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>Orang Tua</option>
+                                            @else
+                                                <option value="{{ $akun->roles }}" selected>{{ $akun->roles }}</option>
+                                            @endif
                                         </select>
                                         <div class="invalid-feedback">
                                             Data wajib diisi.
@@ -62,6 +66,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Password</label>
+                                        <input type="hidden" class="form-control" id="password_old" name="password_old" value="{{ $akun->password }}" required placeholder="Password">
                                         <input type="password" class="form-control" id="password" name="password" value="{{ $akun->password }}" required placeholder="Password">
                                         <div class="invalid-feedback">
                                             Data wajib diisi.
@@ -70,12 +75,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" {{ Auth::user()->roles === 'Admin' ? '' : 'hidden' }}>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Status Aktif <code>*</code></label>
                                         <div>
-                                            <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $akun->aktif === 1 ? 'checked' : '' }} />
+                                            <input type="checkbox" id="switch1" switch="none" name="aktif" {{ $akun->aktif === '1' ? 'checked' : '' }} />
                                             <label for="switch1" data-on-label="On" data-off-label="Off"></label>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
@@ -86,7 +91,11 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-sm-6">
-                                    <a href="{{ route('akun.index') }}" class="btn btn-secondary waves-effect">Cancel</a>
+                                    @if (Auth::user()->roles === 'Admin')
+                                        <a href="{{ route('akun.index') }}" class="btn btn-secondary waves-effect">Cancel</a>
+                                    @else
+                                        <a href="{{ URL::previous() }}" class="btn btn-secondary waves-effect">Cancel</a>
+                                    @endif
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="text-sm-end mt-2 mt-sm-0">
@@ -99,7 +108,7 @@
                 </div> 
             </div>
         </form>
-    </div> <!-- container-fluid -->
+    </div>
 </div>
 <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
 @endsection

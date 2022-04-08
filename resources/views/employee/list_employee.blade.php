@@ -14,9 +14,15 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
+                                @if (Auth::user()->roles === 'Admin')
                                 <a href="{{ route('employee.create') }}" type="button"
                                     class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
                                         class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
+                                @elseif (count($employee) === 0 AND Auth::user()->roles != 'Admin')
+                                <a href="{{ route('employee.create') }}" type="button"
+                                    class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
+                                        class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
+                                @endif
                             </ol>
                         </div>
                     </div>
@@ -31,6 +37,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama</th>
+                                        <th>Email</th>
                                         <th>NIK</th>
                                         <th>NPWP</th>
                                         <th>Kontak</th>
@@ -50,7 +57,6 @@
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
-
     <script>
         $(function() {
             $('#mydata').DataTable({
@@ -70,6 +76,9 @@
                     },
                     {
                         data: 'nama_lengkap'
+                    },
+                    {
+                        data: 'email'
                     },
                     {
                         data: 'nik'
