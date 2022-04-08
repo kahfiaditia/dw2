@@ -247,9 +247,9 @@
                                                                                             class="form-control select select2"
                                                                                             name="anak_karyawan"
                                                                                             id="anak_karyawan">
-                                                                                            <option value="">--Pilih Anak
-                                                                                                Karyawan--</option>
-                                                                                            @foreach ($child as $anak)
+                                                                                            <option value="">--Pilih Anak--
+                                                                                            </option>
+                                                                                            @foreach ($dropdown_child as $anak)
                                                                                                 <option
                                                                                                     value="{{ $anak->id }}">
                                                                                                     {{ $anak->nama }}
@@ -369,7 +369,7 @@
                                             </div>
                                             <div class="row mt-4">
                                                 <div class="col-sm-6">
-                                                    <?php $id = Crypt::encrypt($item->id); ?>
+                                                    <?php $id = Crypt::encryptString($item->id); ?>
                                                     <a href="{{ url('employee/sk', $id) }}"
                                                         class="btn btn-secondary waves-effect">Back</a>
                                                 </div>

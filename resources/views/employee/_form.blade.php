@@ -1,9 +1,14 @@
-<form action="{{ route('employee.destroy', \Crypt::encrypt($employee->id)) }}" method="POST">
+<form action="{{ route('employee.destroy', \Crypt::encryptString($employee->id)) }}" method="POST">
     @csrf
     @method('DELETE')
-    <div class="d-flex gap-3">
-        <a href class="text-danger delete-employee"><i class="mdi mdi-delete font-size-18"></i></a>
-        <a href="{{ route('employee.edit', \Crypt::encrypt($employee->id)) }}" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{{ route('employee.edit', \Crypt::encryptString($employee->id)) }}" class="text-success"><i
+                    class="mdi mdi-pencil font-size-18"></i></a>
+        </div>
+        <div class="col-md-3">
+            <a href class="text-danger delete-employee"><i class="mdi mdi-delete font-size-18"></i></a>
+        </div>
     </div>
 </form>
 <script>
