@@ -5,9 +5,11 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="validationCustom01" class="form-label">Anak Karyawan <code>*</code></label>
-                <select class="form-control select select2" name="edit_anak_id" id="edit_anak_id" >
+                <select class="form-control select select2" name="edit_anak_id" id="edit_anak_id">
+                    <option value="">-- Pilih Anak Karyawan --</option>
                     @foreach ($child as $anak)
-                    <option value="{{ $anak->id }}" {{ $anak->id === $item->anak_id ? 'selected' : '' }}>{{ $anak->nama }}</option>
+                        <option value="{{ $anak->id }}" {{ $anak->id === $item->anak_id ? 'selected' : '' }}>
+                            {{ $anak->nama }}</option>
                     @endforeach
                 </select>
             </div>
@@ -15,7 +17,7 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="validationCustom01" class="form-label">Jenjang <code>*</code></label>
-                <select class="form-control select select2" name="edit_jenjang" id="edit_jenjang" >
+                <select class="form-control select select2" name="edit_jenjang" id="edit_jenjang">
                     <option value="KB" {{ $item->jenjang === 'KB' ? 'selected' : '' }}>KB</option>
                     <option value="TK" {{ $item->jenjang === 'TK' ? 'selected' : '' }}>TK</option>
                     <option value="SD" {{ $item->jenjang === 'SD' ? 'selected' : '' }}>SD</option>
