@@ -347,7 +347,7 @@ class EmployeeController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => 'data.',
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
