@@ -21,7 +21,7 @@
                                 <div class="row">
                                     <div class="col-7">
                                         <div class="text-primary p-4">
-                                            <h5 class="text-primary">Welcome Back !</h5>
+                                            <h5 class="text-primary">Welcome Back !xxx</h5>
                                             <p>Sign in to Dharmawidya.</p>
                                         </div>
                                     </div>
