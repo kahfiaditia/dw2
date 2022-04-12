@@ -147,16 +147,12 @@
                                                     </tbody>
                                                 </table>
                                                 <div class="row mt-4">
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-12">
                                                         <?php $id = Crypt::encryptString($item->id); ?>
                                                         <a href="{{ url('employee/edit', $id) }}"
-                                                            class="btn btn-secondary waves-effect">Back</a>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <div class="text-sm-end mt-2 mt-sm-0">
-                                                            <a href="{{ url('employee/sk', $id) }}"
-                                                                class="btn btn-primary">Next</a>
-                                                        </div>
+                                                            class="btn btn-secondary waves-effect">Kembali</a>
+                                                        <a href="{{ url('employee/sk', $id) }}" style="float: right"
+                                                            class="btn btn-primary">Selanjutnya</a>
                                                     </div>
                                                 </div>
                                             </div>
