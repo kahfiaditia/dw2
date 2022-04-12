@@ -398,7 +398,7 @@ class EmployeeController extends Controller
     public function store_child_dw(Request $request)
     {
         $request->validate([
-            'anak_karyawan' => 'required|unique:anak_kar_sklh_dw,anak_id,' . $request->anak_karyawan,
+            'anak_karyawan' => 'required|unique:anak_kar_sklh_dw,anak_id,' . $request->anak_karyawan . ',id,deleted_at,NULL',
             'jenjang' => 'required',
             'karyawan_id' => 'required',
         ]);
