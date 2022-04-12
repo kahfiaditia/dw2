@@ -13,7 +13,7 @@ use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 class KodeposController extends Controller
 {
     protected $title = 'dharmawidya';
-    protected $menu = 'karyawan';
+    protected $menu = 'setting';
 
     /**
      * Display a listing of the resource.

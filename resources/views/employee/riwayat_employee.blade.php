@@ -366,17 +366,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row mt-4">
-                                                <div class="col-sm-6">
-                                                    <?php $id = Crypt::encryptString($item->id); ?>
-                                                    <a href="{{ url('employee/child', $id) }}"
-                                                        class="btn btn-secondary waves-effect">Back</a>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="text-sm-end mt-2 mt-sm-0">
-                                                        <a href="{{ url('employee') }}" class="btn btn-primary">Next</a>
-                                                    </div>
-                                                </div>
+                                            <div class="col-sm-12 mt-4">
+                                                <?php $id = Crypt::encryptString($item->id); ?>
+                                                <a href="{{ url('employee/child', $id) }}"
+                                                    class="btn btn-secondary waves-effect">Kembali</a>
+                                                <a href="{{ url('employee') }}" style="float: right"
+                                                    class="btn btn-primary">Selesai</a>
                                             </div>
                                         </div>
                                     </div>
