@@ -229,7 +229,7 @@ class EmployeeController extends Controller
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_nik->extension();
                 $employee->dok_nik = $fileName;
                 $request->file('dok_nik')->storeAs('public/karyawan/nik', $fileName);
-                Storage::delete('public/karyawan/nik/' . $request->dok_nik_old);
+                // Storage::delete('public/karyawan/nik/' . $request->dok_nik_old);
             }
             // dokumen npwp
             $employee->npwp = $request->npwp;
@@ -237,7 +237,7 @@ class EmployeeController extends Controller
                 $fileNameNpwp = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_npwp->extension();
                 $employee->dok_npwp = $fileNameNpwp;
                 $request->file('dok_npwp')->storeAs('public/karyawan/npwp', $fileNameNpwp);
-                Storage::delete('public/karyawan/npwp/' . $request->dok_npwp_old);
+                // Storage::delete('public/karyawan/npwp/' . $request->dok_npwp_old);
             }
             // dokumen kartu keluarga
             $employee->kk = $request->kk;
@@ -245,14 +245,14 @@ class EmployeeController extends Controller
                 $fileNameKK = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_kk->extension();
                 $employee->dok_kk = $fileNameKK;
                 $request->file('dok_kk')->storeAs('public/karyawan/kk', $fileNameKK);
-                Storage::delete('public/karyawan/kk/' . $request->dok_kk_old);
+                // Storage::delete('public/karyawan/kk/' . $request->dok_kk_old);
             }
             // dokumen foto
             if ($request->foto) {
                 $fileNameFoto = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->foto->extension();
                 $employee->foto = $fileNameFoto;
                 $request->file('foto')->storeAs('public/karyawan/foto', $fileNameFoto);
-                Storage::delete('public/karyawan/foto/' . $request->foto_old);
+                // Storage::delete('public/karyawan/foto/' . $request->foto_old);
             }
             $employee->bpjs_kesehatan = $request->bpjs_kesehatan;
             $employee->bpjs_ketenagakerjaan = $request->bpjs_ketenagakerjaan;
@@ -519,7 +519,7 @@ class EmployeeController extends Controller
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->edit_dok_sk->extension();
                 $sk->dok_sk = $fileName;
                 $request->file('edit_dok_sk')->storeAs('public/sk/', $fileName);
-                Storage::delete('public/sk/' . $request->dok_sk_old);
+                // Storage::delete('public/sk/' . $request->dok_sk_old);
             }
             $sk->save();
 
@@ -955,7 +955,7 @@ class EmployeeController extends Controller
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_ijazah->extension();
                 $ijazah->dok_ijazah = $fileName;
                 $request->file('dok_ijazah')->storeAs('public/ijazah/', $fileName);
-                Storage::delete('public/ijazah/' . $request->dok_ijazah_old);
+                // Storage::delete('public/ijazah/' . $request->dok_ijazah_old);
             }
             $ijazah->save();
 
@@ -1005,13 +1005,14 @@ class EmployeeController extends Controller
     public function cek_ijazah(Request $request)
     {
         $message = [];
+        // ijazah
         if ($request->jabatan === 'Karyawan') {
             $count = Ijazah::where('karyawan_id', $request->karyawan_id)
                 ->where(function ($query) {
                     $query->where('gelar_ijazah', '!=', 'Kursus')
                         ->orWhere('gelar_ijazah', '!=', 'Seminar');
                 })->count();
-            if ($count === 1) {
+            if ($count >= 1) {
                 $code = 200;
             } else {
                 $code = 404;
@@ -1027,7 +1028,8 @@ class EmployeeController extends Controller
                     DB::raw("count(CASE WHEN gelar_ijazah like '%S1%' THEN id ELSE NULL END) AS s1"),
                 )
                 ->where('karyawan_id', $request->karyawan_id)
-                ->groupBy('gelar_ijazah')
+                ->wherenull('deleted_at')
+                ->groupBy('karyawan_id')
                 ->get();
             $count = ($ijazah[0]->sd + $ijazah[0]->smp + $ijazah[0]->sma + $ijazah[0]->smk + $ijazah[0]->s1);
             if ($count >= 4) {
@@ -1056,8 +1058,39 @@ class EmployeeController extends Controller
         } else {
             $code = 200;
         }
+
+        // kontak
+        $kontak = DB::table('kontak_darurat')
+            ->select(
+                DB::raw("count(CASE WHEN tipe like '%Kontak Kerabat Sekampung%' THEN id ELSE NULL END) AS sekampung"),
+                DB::raw("count(CASE WHEN tipe like '%Kontak Kerabat Serumah%' THEN id ELSE NULL END) AS serumah"),
+                DB::raw("count(CASE WHEN tipe like '%Kontak Kerabat Beda Rumah%' THEN id ELSE NULL END) AS bedarumah"),
+            )
+            ->where('karyawan_id', $request->karyawan_id)
+            ->wherenull('deleted_at')
+            ->groupBy('karyawan_id')
+            ->get();
+        $count_kontak = ($kontak[0]->sekampung + $kontak[0]->serumah + $kontak[0]->bedarumah);
+        if ($count_kontak >= 3) {
+            $code_kontak = 200;
+        } else {
+            $code_kontak = 404;
+            $data = '';
+            if ($kontak[0]->sekampung === 0) {
+                $data .= 'Kontak Kerabat Sekampung, ';
+            }
+            if ($kontak[0]->serumah === 0) {
+                $data .= 'Kontak Kerabat Serumah, ';
+            }
+            if ($kontak[0]->bedarumah === 0) {
+                $data .= 'Kontak Kerabat Beda Rumah, ';
+            }
+            array_push($message, $data);
+        }
+
         return response()->json([
             'code' => $code,
+            'code_kontak' => $code_kontak,
             'message' => $message,
         ]);
     }

@@ -55,7 +55,7 @@
                                                 <h5 class="mb-1">{{ Auth::user()->name }}</h5>
                                                 <p class="mb-0">
                                                     {{ Auth::user()->roles }}
-                                                    @if ($avatar[0]->jabatan === 'Guru')
+                                                    @if (count($avatar) > 0 and $avatar[0]->jabatan === 'Guru')
                                                         - {{ $avatar[0]->jabatan }}
                                                     @endif
                                                 </p>
@@ -318,7 +318,7 @@
                         <div class="row justify-content-center">
                             <div class="col-xl-10">
                                 <h4 class="text-primary">Lengkapi Data !</h4>
-                                <div class="text-muted message_alert" id="message_alert">
+                                <div class="text-danger message_alert" id="message_alert">
                                     {{-- <p class="mb-1"><i
                                             class="mdi mdi-circle-medium align-middle text-primary me-1"></i> If several
                                         languages coalesce</p>
@@ -351,9 +351,9 @@
                     karyawan_id
                 },
                 success: response => {
-                    if (response.code === 404) {
+                    if (response.code === 404 || response.code_kontak === 404) {
                         $('#subscribeModal').modal('show');
-                        $("#message_alert").html(response.message[0]);
+                        $("#message_alert").html(response.message);
                     }
                     console.log(response)
                 },

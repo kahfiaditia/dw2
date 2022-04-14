@@ -4,7 +4,6 @@
         @csrf
         @method('DELETE')
         <div class="d-flex gap-3">
-            <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
             @if (isset($model->aktif))
                 <a href="{{ route('akun.edit', $id) }}" class="text-success"><i
                         class="mdi mdi-pencil font-size-18"></i></a>
@@ -12,6 +11,7 @@
                 <a href="{{ route('akun.confirmasi', $id) }}" class="text-info"><i
                         class="mdi mdi-account-check font-size-18"></i></a>
             @endif
+            <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
         </div>
     </form>
 @else
