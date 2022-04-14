@@ -298,30 +298,11 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-lg-3 align-self-center">
-                                                                                    <div class="d-grid">
-                                                                                        <?php
-                                                                                        if (count($kontak) >= 3) {
-                                                                                            $style = 'disabled';
-                                                                                        } else {
-                                                                                            $style = '';
-                                                                                        }
-                                                                                        ?>
-                                                                                    </div>
                                                                                     <button
                                                                                         class="btn btn-success btn-sm rounded"
-                                                                                        {{ $style }} type="submit"
+                                                                                        type="submit"
                                                                                         id="submit">Simpan</button>
                                                                                 </div>
-                                                                                @if (count($kontak) >= 3)
-                                                                                    <div class="col-md-12 mt-3">
-                                                                                        <div class="alert alert-danger alert-dismissible fade show"
-                                                                                            role="alert">
-                                                                                            <i
-                                                                                                class="mdi mdi-block-helper me-2"></i>
-                                                                                            Kontak maksimal 3
-                                                                                        </div>
-                                                                                    </div>
-                                                                                @endif
                                                                             </div>
                                                                         </form>
                                                                         <hr class="mt-2">

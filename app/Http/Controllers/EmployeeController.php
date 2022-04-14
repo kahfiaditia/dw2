@@ -642,10 +642,6 @@ class EmployeeController extends Controller
     public function riwayat($id)
     {
         $contacts = Kontak_darurat::where('karyawan_id', Crypt::decryptString($id))->get();
-        $contact_types = [];
-        foreach ($contacts as $contact) {
-            array_push($contact_types, $contact->tipe);
-        }
 
         $types =
             [
@@ -654,8 +650,6 @@ class EmployeeController extends Controller
                 2 => 'Kontak Kerabat Sekampung'
             ];
 
-        // to delete contact type already existing in db
-        $results = array_diff($types, $contact_types);
         $data = [
             'title' => $this->title,
             'menu' => 'data',
@@ -664,7 +658,7 @@ class EmployeeController extends Controller
             'item' => Employee::findorfail(Crypt::decryptString($id)),
             'riwayat' => Riwayat_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
             'kontak' => $contacts,
-            'types' => $results
+            'types' => $types
         ];
         return view('employee.riwayat_employee')->with($data);
     }
@@ -718,6 +712,14 @@ class EmployeeController extends Controller
         $request = explode("|", $request->id);
         $id = $request[0];
         $type = $request[1];
+
+        $types =
+            [
+                0 => 'Kontak Kerabat Serumah',
+                1 => 'Kontak Kerabat Beda Rumah',
+                2 => 'Kontak Kerabat Sekampung'
+            ];
+
         if ($type === 'riwayat') {
             $data = [
                 'id' => $id,
@@ -728,6 +730,7 @@ class EmployeeController extends Controller
             $data = [
                 'id' => $id,
                 'item' => Kontak_darurat::findorfail(Crypt::decryptString($id)),
+                'results' => $types
             ];
             return view('employee.kontak_edit')->with($data);
         }
@@ -810,6 +813,7 @@ class EmployeeController extends Controller
             $kontak->nama  = $request->edit_nama_kontak;
             $kontak->no_hp  = $request->edit_no_hp_kontak;
             $kontak->keterangan = $request->edit_keterangan_kontak;
+            $kontak->tipe = $request->tipe;
             $kontak->save();
 
             DB::commit();
