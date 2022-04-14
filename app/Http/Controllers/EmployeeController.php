@@ -294,7 +294,13 @@ class EmployeeController extends Controller
             $employee->jabatan = $request->jabatan;
             $employee->masuk_kerja = $request->masuk_kerja;
             $employee->user_id = $request->user_id;
-            $employee->aktif = isset($request->aktif) ? 1 : 0;
+            $aktif = isset($request->aktif) ? 1 : 0;
+            if ($request->aktif_old != $aktif) {
+                $user = User::findorfail($employee->user_id);
+                $user->aktif = $aktif;
+                $user->save();
+            }
+            $employee->aktif = $aktif;
             $employee->save();
 
             DB::commit();
@@ -442,7 +448,7 @@ class EmployeeController extends Controller
             'no_sk' => 'required|max:64|unique:sk_karyawan,no_sk',
             'tgl_sk' => 'required',
             'jabatan' => 'required|max:64',
-            'dok_sk' => 'mimes:png,jpeg,jpg|max:2048',
+            'dok_sk' => 'mimes:png,jpeg,jpg,pdf|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -808,7 +814,7 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
-            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'Kursus', 'Seminar', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
             'id' => $id,
         ];
         return view('employee.create_ijazah')->with($data);
@@ -823,7 +829,7 @@ class EmployeeController extends Controller
             'tahun_masuk' => 'required',
             'tahun_lulus' => 'required',
             'instansi' => 'required',
-            'dok_ijazah' => 'required|mimes:png,jpeg,jpg|max:2048',
+            'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
         ]);
         DB::beginTransaction();
         try {
@@ -911,7 +917,7 @@ class EmployeeController extends Controller
             'tahun_masuk' => 'required',
             'tahun_lulus' => 'required',
             'instansi' => 'required',
-            'dok_ijazah' => 'mimes:png,jpeg,jpg|max:2048',
+            'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
         ]);
 
         $id = Crypt::decryptString($request->id);
@@ -958,7 +964,7 @@ class EmployeeController extends Controller
 
     public function dropdown_email()
     {
-        $email = User::select('*')->where('aktif', '=', '1')->get();
+        $email = User::select('*')->get();
         return $email;
     }
 
@@ -978,5 +984,65 @@ class EmployeeController extends Controller
                 'message' => 'berhasil',
             ]);
         }
+    }
+
+    public function cek_ijazah(Request $request)
+    {
+        $message = [];
+        if ($request->jabatan === 'Karyawan') {
+            $count = Ijazah::where('karyawan_id', $request->karyawan_id)
+                ->where(function ($query) {
+                    $query->where('gelar_ijazah', '!=', 'Kursus')
+                        ->orWhere('gelar_ijazah', '!=', 'Seminar');
+                })->count();
+            if ($count === 1) {
+                $code = 200;
+            } else {
+                $code = 404;
+                array_push($message, "Ijazah");
+            }
+        } elseif ($request->jabatan === 'Guru') {
+            $ijazah = DB::table('ijazah_karyawan')
+                ->select(
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%SD%' THEN id ELSE NULL END) AS sd"),
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%SMP%' THEN id ELSE NULL END) AS smp"),
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%SMA%' THEN id ELSE NULL END) AS sma"),
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%SMK%' THEN id ELSE NULL END) AS smk"),
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%S1%' THEN id ELSE NULL END) AS s1"),
+                )
+                ->where('karyawan_id', $request->karyawan_id)
+                ->groupBy('gelar_ijazah')
+                ->get();
+            $count = ($ijazah[0]->sd + $ijazah[0]->smp + $ijazah[0]->sma + $ijazah[0]->smk + $ijazah[0]->s1);
+            if ($count >= 4) {
+                $code = 200;
+            } else {
+                $code = 404;
+                $data = 'Ijazah ';
+                if ($ijazah[0]->sd === 0) {
+                    $data .= 'SD, ';
+                }
+                if ($ijazah[0]->smp === 0) {
+                    $data .= 'SMP, ';
+                }
+                if ($ijazah[0]->sma === 0 or $ijazah[0]->smk === 0) {
+                    if ($ijazah[0]->sma === 0) {
+                        $data .= 'SMA, ';
+                    } else {
+                        $data .= 'SMK, ';
+                    }
+                }
+                if ($ijazah[0]->s1 === 0) {
+                    $data .= 'S1, ';
+                }
+                array_push($message, $data);
+            }
+        } else {
+            $code = 200;
+        }
+        return response()->json([
+            'code' => $code,
+            'message' => $message,
+        ]);
     }
 }

@@ -38,7 +38,7 @@
                             </a>
                             <a class="nav-link">
                                 <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Ijazah</p>
+                                <p class="fw-bold mb-4">Ijazah + Sertifikat</p>
                             </a>
                             <a class="nav-link">
                                 <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>

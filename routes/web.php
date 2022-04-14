@@ -91,6 +91,7 @@ Route::group(
         Route::post('/dropdown_email_create', [EmployeeController::class, 'dropdown_email_create'])->name('employee.dropdown_email_create');
         Route::post('/dropdown_email', [EmployeeController::class, 'dropdown_email'])->name('employee.dropdown_email');
         Route::post('/get_email', [EmployeeController::class, 'get_email'])->name('employee.get_email');
+        Route::post('/cek_ijazah', [EmployeeController::class, 'cek_ijazah'])->name('employee.cek_ijazah');
     }
 );
 

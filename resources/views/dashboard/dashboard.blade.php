@@ -25,26 +25,40 @@
                                 <div class="col-lg-4">
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
-
                                             <?php
                                             $avatar = DB::table('karyawan')
-                                                ->select('foto')
+                                                ->select('id', 'jabatan', 'foto')
                                                 ->where('user_id', Auth::user()->id)
                                                 ->get();
                                             ?>
                                             @if (count($avatar) > 0 and $avatar[0]->foto != null)
+                                                <?php
+                                                $jabatan = $avatar[0]->jabatan;
+                                                $karyawan_id = $avatar[0]->id;
+                                                ?>
                                                 <img src="{{ Storage::url('karyawan/foto/' . $avatar[0]->foto) }}" alt=""
                                                     class="avatar-md rounded-circle img-thumbnail">
                                             @else
+                                                <?php
+                                                $jabatan = null;
+                                                $karyawan_id = null;
+                                                ?>
                                                 <img src="{{ URL::asset('assets/images/users/avatar.png') }}" alt=""
                                                     class="avatar-md rounded-circle img-thumbnail">
                                             @endif
+                                            <input type="hidden" id="jabatan" value="{{ $jabatan }}">
+                                            <input type="hidden" id="karyawan_id" value="{{ $karyawan_id }}">
                                         </div>
                                         <div class="flex-grow-1 align-self-center">
                                             <div class="text-muted">
                                                 <p class="mb-2">Welcome to Dashboard</p>
                                                 <h5 class="mb-1">{{ Auth::user()->name }}</h5>
-                                                <p class="mb-0">{{ Auth::user()->roles }}</p>
+                                                <p class="mb-0">
+                                                    {{ Auth::user()->roles }}
+                                                    @if ($avatar[0]->jabatan === 'Guru')
+                                                        - {{ $avatar[0]->jabatan }}
+                                                    @endif
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -287,4 +301,66 @@
             </div> --}}
         </div>
     </div>
+    <!-- subscribeModal -->
+    <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-light rounded-circle text-primary h1">
+                                <i class="mdi mdi-progress-alert"></i>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-10">
+                                <h4 class="text-primary">Lengkapi Data !</h4>
+                                <div class="text-muted message_alert" id="message_alert">
+                                    {{-- <p class="mb-1"><i
+                                            class="mdi mdi-circle-medium align-middle text-primary me-1"></i> If several
+                                        languages coalesce</p>
+                                    <p class="mb-1"><i
+                                            class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Sed ut
+                                        perspiciatis unde</p>
+                                    <p class="mb-0"><i
+                                            class="mdi mdi-circle-medium align-middle text-primary me-1"></i> It would be
+                                        necessary</p> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal -->
+    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            let jabatan = document.getElementById("jabatan").value;
+            let karyawan_id = document.getElementById("karyawan_id").value;
+            $.ajax({
+                type: "POST",
+                url: '{{ route('employee.cek_ijazah') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    jabatan,
+                    karyawan_id
+                },
+                success: response => {
+                    if (response.code === 404) {
+                        $('#subscribeModal').modal('show');
+                        $("#message_alert").html(response.message[0]);
+                    }
+                    console.log(response)
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        });
+    </script>
 @endsection

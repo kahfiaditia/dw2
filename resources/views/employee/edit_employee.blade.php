@@ -44,7 +44,7 @@
                                 </a>
                                 <a class="nav-link">
                                     <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Ijazah</p>
+                                    <p class="fw-bold mb-4">Ijazah + Sertifikat</p>
                                 </a>
                                 <a class="nav-link">
                                     <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>
@@ -181,11 +181,11 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">NIK atau SIM
+                                                        <label for="validationCustom02" class="form-label">No KTP
                                                             <code>*</code></label>
                                                         <input type="number" min="0" class="form-control" id="nik"
                                                             name="nik" value="{{ $item->nik }}" required
-                                                            placeholder="NIK atau SIM">
+                                                            placeholder="No KTP">
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -196,7 +196,7 @@
                                                     <div class="mb-3">
                                                         <input type="hidden" name="dok_nik_old"
                                                             value="{{ $item->dok_nik }}">
-                                                        <label for="formFile" class="form-label">Doc NIK atau SIM
+                                                        <label for="formFile" class="form-label">Doc KTP (Max 2 Mb)
                                                             <code>*</code></label>
                                                         <input class="form-control dok_nik" type="file" name="dok_nik"
                                                             id="dok_nik">
@@ -234,7 +234,7 @@
                                                     <div class="mb-3">
                                                         <input type="hidden" name="dok_kk_old"
                                                             value="{{ $item->dok_kk }}">
-                                                        <label for="formFile" class="form-label">Doc KK
+                                                        <label for="formFile" class="form-label">Doc KK (Max 2 Mb)
                                                             <code>*</code></label>
                                                         <input class="form-control" type="file" name="dok_kk"
                                                             id="dok_kk">
@@ -269,7 +269,8 @@
                                                     <div class="mb-3">
                                                         <input type="hidden" name="dok_npwp_old"
                                                             value="{{ $item->dok_npwp }}">
-                                                        <label for="formFile" class="form-label">Doc NPWP</label>
+                                                        <label for="formFile" class="form-label">Doc NPWP (Max 2
+                                                            Mb)</label>
                                                         <input class="form-control" type="file" name="dok_npwp"
                                                             id="dok_npwp">
                                                         <div class="invalid-feedback">
@@ -703,7 +704,8 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <input type="hidden" name="foto_old" value="{{ $item->foto }}">
-                                                        <label for="formFile" class="form-label">Foto Karyawan
+                                                        <label for="formFile" class="form-label">Foto Karyawan (Max 2
+                                                            Mb)
                                                             <code>*</code></label>
                                                         <input class="form-control foto" type="file" name="foto" id="foto"
                                                             {{ $item->foto === null ? 'required' : '' }}>
@@ -728,6 +730,8 @@
                                                         <label for="validationCustom02" class="form-label">Status
                                                             Aktif</label>
                                                         <div>
+                                                            <input type="hidden" name="aktif_old"
+                                                                value="{{ $item->aktif }}">
                                                             <input type="checkbox" id="switch1" switch="none" name="aktif"
                                                                 {{ $item->aktif === '1' ? 'checked' : '' }} />
                                                             <label for="switch1" data-on-label="On"
@@ -860,10 +864,10 @@
             // valdasi extension
             $('#dok_nik').bind('change', function() {
                 var file = document.querySelector("#dok_nik");
-                if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                if (/\.(jpe?g|png|jpg|pdf)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg, pdf',
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_nik').value = null;
@@ -881,10 +885,10 @@
             });
             $('#dok_npwp').bind('change', function() {
                 var file = document.querySelector("#dok_npwp");
-                if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                if (/\.(jpe?g|png|jpg|pdf)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg, pdf',
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_npwp').value = null;
@@ -902,10 +906,10 @@
             });
             $('#dok_kk').bind('change', function() {
                 var file = document.querySelector("#dok_kk");
-                if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                if (/\.(jpe?g|png|jpg|pdf)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg, pdf',
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_kk').value = null;
@@ -926,7 +930,7 @@
                 if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg',
                         'error'
                     ).then(function() {})
                     document.getElementById('foto').value = null;

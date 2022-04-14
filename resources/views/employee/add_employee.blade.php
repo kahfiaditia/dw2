@@ -173,11 +173,11 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">NIK atau SIM
+                                                        <label for="validationCustom02" class="form-label">No KTP
                                                             <code>*</code></label>
                                                         <input type="number" min="0" class="form-control" id="nik"
                                                             name="nik" value="{{ old('nik') }}" required
-                                                            placeholder="NIK atau SIM">
+                                                            placeholder="No KTP">
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -186,7 +186,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="formFile" class="form-label">Doc NIK atau SIM
+                                                        <label for="formFile" class="form-label">Doc KTP (Max 2 Mb)
                                                             <code>*</code></label>
                                                         <input class="form-control dok_nik" type="file" name="dok_nik"
                                                             id="dok_nik" required>
@@ -212,7 +212,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="formFile" class="form-label">Doc KK
+                                                        <label for="formFile" class="form-label">Doc KK (Max 2 Mb)
                                                             <code>*</code></label>
                                                         <input class="form-control" type="file" name="dok_kk" id="dok_kk"
                                                             required>
@@ -232,7 +232,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="formFile" class="form-label">Doc NPWP</label>
+                                                        <label for="formFile" class="form-label">Doc NPWP (Max 2
+                                                            Mb)</label>
                                                         <input class="form-control" type="file" name="dok_npwp"
                                                             id="dok_npwp">
                                                     </div>
@@ -626,7 +627,8 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="formFile" class="form-label">Foto Karyawan
+                                                        <label for="formFile" class="form-label">Foto Karyawan (Max 2
+                                                            Mb)
                                                             <code>*</code></label>
                                                         <input class="form-control foto" type="file" name="foto" id="foto"
                                                             required>
@@ -712,7 +714,7 @@
                 if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg',
                         'error'
                     ).then(function() {})
                     document.getElementById('foto').value = null;
@@ -730,10 +732,10 @@
             });
             $('#dok_nik').bind('change', function() {
                 var file = document.querySelector("#dok_nik");
-                if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                if (/\.(jpe?g|png|jpg|pdf)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg, pdf',
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_nik').value = null;
@@ -751,10 +753,10 @@
             });
             $('#dok_npwp').bind('change', function() {
                 var file = document.querySelector("#dok_npwp");
-                if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                if (/\.(jpe?g|png|jpg|pdf)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg, pdf',
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_npwp').value = null;
@@ -772,10 +774,10 @@
             });
             $('#dok_kk').bind('change', function() {
                 var file = document.querySelector("#dok_kk");
-                if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                if (/\.(jpe?g|png|jpg|pdf)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg, pdf',
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_kk').value = null;
@@ -848,7 +850,7 @@
                         $.each(response, function(i, item) {
                             $('.KotaA').append(
                                 `<option value="${item.kabupaten}">${item.kabupaten}</option>`
-                                )
+                            )
                         })
                     },
                     error: (err) => {
@@ -875,7 +877,7 @@
                         $.each(response, function(i, item) {
                             $('.KecamatanA').append(
                                 `<option value="${item.kecamatan}">${item.kecamatan}</option>`
-                                )
+                            )
                         })
                     },
                     error: (err) => {
@@ -904,7 +906,7 @@
                         $.each(response, function(i, item) {
                             $('.KelurahanA').append(
                                 `<option value="${item.kelurahan}">${item.kelurahan}</option>`
-                                )
+                            )
                         })
                     },
                     error: (err) => {
@@ -934,7 +936,7 @@
                         $.each(response, function(i, item) {
                             $('.KodeposA').append(
                                 `<option value="${item.kodepos}">${item.kodepos}</option>`
-                                )
+                            )
                         })
                     },
                     error: (err) => {
@@ -958,7 +960,7 @@
                         $.each(response, function(i, item) {
                             $('.KotaT').append(
                                 `<option value="${item.kabupaten}">${item.kabupaten}</option>`
-                                )
+                            )
                         })
                     },
                     error: (err) => {
@@ -985,7 +987,7 @@
                         $.each(response, function(i, item) {
                             $('.KecamatanT').append(
                                 `<option value="${item.kecamatan}">${item.kecamatan}</option>`
-                                )
+                            )
                         })
                     },
                     error: (err) => {
@@ -1014,7 +1016,7 @@
                         $.each(response, function(i, item) {
                             $('.KelurahanT').append(
                                 `<option value="${item.kelurahan}">${item.kelurahan}</option>`
-                                )
+                            )
                         })
                     },
                     error: (err) => {
@@ -1044,7 +1046,7 @@
                         $.each(response, function(i, item) {
                             $('.KodeposT').append(
                                 `<option value="${item.kodepos}">${item.kodepos}</option>`
-                                )
+                            )
                         })
                     },
                     error: (err) => {
