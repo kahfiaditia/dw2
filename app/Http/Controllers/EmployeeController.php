@@ -1043,6 +1043,23 @@ class EmployeeController extends Controller
                 } else {
                     $code = 404;
                     $data = 'Ijazah ';
+                    if (intval($ijazah[0]->sd) === 0) {
+                        $data .= 'SD, ';
+                    }
+                    if (intval($ijazah[0]->smp) === 0) {
+                        $data .= 'SMP, ';
+                    }
+                    if (intval($ijazah[0]->sma) === 0 or intval($ijazah[0]->smk) === 0) {
+                        if ($ijazah[0]->sma === 0) {
+                            $data .= 'SMA, ';
+                        } else {
+                            $data .= 'SMK, ';
+                        }
+                    }
+                    if (intval($ijazah[0]->s1) === 0) {
+                        $data .= 'S1, ';
+                    }
+                    array_push($message, $data);
                 }
             } else {
                 $code = 404;
