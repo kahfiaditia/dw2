@@ -6,7 +6,6 @@
             <div class="mb-3">
                 <label for="validationCustom01" class="form-label">Anak Karyawan <code>*</code></label>
                 <select class="form-control select select2" name="edit_anak_id" id="edit_anak_id" style="100%">
-                    <option value="">-- Pilih Anak Karyawan --</option>
                     @foreach ($child as $anak)
                         <option value="{{ $anak->id }}" {{ $anak->id === $item->anak_id ? 'selected' : '' }}>
                             {{ $anak->nama }}</option>

@@ -585,7 +585,7 @@ class EmployeeController extends Controller
             $data = [
                 'id' => $id,
                 'item' => Anak_karyawan_sekolah_dw::findorfail(Crypt::decryptString($id)),
-                'child' => Anak_karyawan::doesntHave('anak_karyawan_sekolah_dw')->where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
+                'child' => Anak_karyawan::where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
             ];
             return view('employee.anak_dw_edit')->with($data);
         }
@@ -1087,20 +1087,20 @@ class EmployeeController extends Controller
             } else {
                 $code_kontak = 404;
                 $data = '';
-                if ($kontak[0]->sekampung === 0) {
-                    $data .= 'Kontak Kerabat Sekampung, ';
-                }
                 if ($kontak[0]->serumah === 0) {
                     $data .= 'Kontak Kerabat Serumah, ';
                 }
                 if ($kontak[0]->bedarumah === 0) {
                     $data .= 'Kontak Kerabat Beda Rumah, ';
                 }
+                if ($kontak[0]->sekampung === 0) {
+                    $data .= 'Kontak Kerabat Sekampung, ';
+                }
                 array_push($message, $data);
             }
         } else {
             $code_kontak = 404;
-            $data = 'Kontak Kerabat Sekampung, Kontak Kerabat Serumah, Kontak Kerabat Beda Rumah, ';
+            $data = 'Kontak Kerabat Serumah, Kontak Kerabat Beda Rumah, Kontak Kerabat Sekampung, ';
             array_push($message, $data);
         }
 
