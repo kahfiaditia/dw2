@@ -39,7 +39,7 @@
                             </a>
                             <a class="nav-link active">
                                 <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Ijazah</p>
+                                <p class="fw-bold mb-4">Ijazah + Sertifikat</p>
                             </a>
                             <a class="nav-link">
                                 <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>
@@ -82,7 +82,7 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <table id="datatable"
-                                                    class="table table-bordered dt-responsive  nowrap w-100">
+                                                    class="table table-striped dt-responsive nowrap w-100">
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>

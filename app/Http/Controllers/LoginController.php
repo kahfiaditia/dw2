@@ -84,6 +84,9 @@ class LoginController extends Controller
                 $user->akses_menu = '1,2,3,4,5,6';
                 $user->akses_submenu = '1,2,3,4,5,6,7,8,9,10';
             } elseif ($request->roles === 'Alumni') {
+                $user->tahun_lulus = $request->tahun_lulus;
+                $user->akses_menu = '1';
+                $user->akses_submenu = '1';
             } elseif ($request->roles === 'Ortu') {
             }
             $user->pin_verified = $pin_verified;

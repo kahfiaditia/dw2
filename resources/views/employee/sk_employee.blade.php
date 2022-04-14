@@ -38,7 +38,7 @@
                             </a>
                             <a class="nav-link">
                                 <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Ijazah</p>
+                                <p class="fw-bold mb-4">Ijazah + Sertifikat</p>
                             </a>
                             <a class="nav-link active">
                                 <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>
@@ -117,7 +117,8 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="mb-3">
-                                                            <label for="formFile" class="form-label">Dokumen SK
+                                                            <label for="formFile" class="form-label">Dokumen SK (Max 2
+                                                                Mb)
                                                                 <code>*</code></label>
                                                             <input class="form-control dok_sk" type="file" name="dok_sk"
                                                                 id="dok_sk" required>
@@ -154,7 +155,7 @@
                                             <hr class="mt-2">
                                             <div class="col-12">
                                                 <table id="datatable"
-                                                    class="table table-bordered dt-responsive  nowrap w-100">
+                                                    class="table table-striped dt-responsive nowrap w-100">
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
@@ -268,10 +269,10 @@
             // valdasi extension
             $('#dok_sk').bind('change', function() {
                 var file = document.querySelector("#dok_sk");
-                if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                if (/\.(jpe?g|png|jpg|pdf)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg, pdf',
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_sk').value = null;

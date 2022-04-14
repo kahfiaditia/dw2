@@ -43,7 +43,7 @@
                                 </a>
                                 <a class="nav-link active">
                                     <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Ijazah</p>
+                                    <p class="fw-bold mb-4">Ijazah + Sertifikat</p>
                                 </a>
                                 <a class="nav-link">
                                     <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>
@@ -209,7 +209,7 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label for="formFile" class="form-label">Dokumen
-                                                            Sertifikat/Ijazah <code>*</code></label>
+                                                            Sertifikat/Ijazah (Max 2 Mb) <code>*</code></label>
                                                         <input class="form-control dok_ijazah" type="file" name="dok_ijazah"
                                                             id="dok_ijazah" required>
                                                         <div class="invalid-feedback">
@@ -244,10 +244,10 @@
             // valdasi extension
             $('#dok_ijazah').bind('change', function() {
                 var file = document.querySelector("#dok_ijazah");
-                if (/\.(jpe?g|png|jpg)$/i.test(file.files[0].name) === false) {
+                if (/\.(jpe?g|png|jpg|pdf)$/i.test(file.files[0].name) === false) {
                     Swal.fire(
                         'Gagal',
-                        'Tipe dokumen yang diperbolehkan jpeg, png ,jpg',
+                        'Tipe dokumen yang diperbolehkan jpeg, png, jpg, pdf',
                         'error'
                     ).then(function() {})
                     document.getElementById('dok_ijazah').value = null;
@@ -289,7 +289,7 @@
             $('#gelar_ijazah').bind('change', function() {
                 let gelar_ijazah = document.getElementById("gelar_ijazah").value;
                 if (gelar_ijazah === 'SD' || gelar_ijazah === 'SMP' || gelar_ijazah === 'SMA' ||
-                    gelar_ijazah === 'SMK') {
+                    gelar_ijazah === 'SMK' || gelar_ijazah === 'Kursus' || gelar_ijazah === 'Seminar') {
                     document.getElementById("gelar_akademik_panjang").required = false;
                     document.getElementById("gelar_akademik_pendek").required = false;
                 } else {

@@ -15,13 +15,13 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 @if (Auth::user()->roles === 'Admin')
-                                <a href="{{ route('employee.create') }}" type="button"
-                                    class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
-                                        class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
-                                @elseif (count($employee) === 0 AND Auth::user()->roles != 'Admin')
-                                <a href="{{ route('employee.create') }}" type="button"
-                                    class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
-                                        class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
+                                    <a href="{{ route('employee.create') }}" type="button"
+                                        class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
+                                            class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
+                                @elseif (count($employee) === 0 and Auth::user()->roles != 'Admin')
+                                    <a href="{{ route('employee.create') }}" type="button"
+                                        class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
+                                            class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
                                 @endif
                             </ol>
                         </div>
@@ -32,7 +32,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="mydata" class="table table-bordered dt-responsive  nowrap w-100">
+                            <table id="mydata" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th>No</th>

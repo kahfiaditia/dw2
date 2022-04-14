@@ -30,7 +30,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                            <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -64,14 +64,14 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <div class="d-flex gap-3">
-                                                        @if (in_array('14', $session_menu))
-                                                            <a href class="text-danger delete_confirm"><i
-                                                                    class="mdi mdi-delete font-size-18"></i></a>
-                                                        @endif
                                                         @if (in_array('13', $session_menu))
                                                             <a href="{{ route('agama.edit', ['id' => $id]) }}"
                                                                 class="text-success"><i
                                                                     class="mdi mdi-pencil font-size-18"></i></a>
+                                                        @endif
+                                                        @if (in_array('14', $session_menu))
+                                                            <a href class="text-danger delete_confirm"><i
+                                                                    class="mdi mdi-delete font-size-18"></i></a>
                                                         @endif
                                                     </div>
                                                 </form>

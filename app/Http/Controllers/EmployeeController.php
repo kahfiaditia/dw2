@@ -229,7 +229,7 @@ class EmployeeController extends Controller
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_nik->extension();
                 $employee->dok_nik = $fileName;
                 $request->file('dok_nik')->storeAs('public/karyawan/nik', $fileName);
-                Storage::delete('public/karyawan/nik/' . $request->dok_nik_old);
+                // Storage::delete('public/karyawan/nik/' . $request->dok_nik_old);
             }
             // dokumen npwp
             $employee->npwp = $request->npwp;
@@ -237,7 +237,7 @@ class EmployeeController extends Controller
                 $fileNameNpwp = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_npwp->extension();
                 $employee->dok_npwp = $fileNameNpwp;
                 $request->file('dok_npwp')->storeAs('public/karyawan/npwp', $fileNameNpwp);
-                Storage::delete('public/karyawan/npwp/' . $request->dok_npwp_old);
+                // Storage::delete('public/karyawan/npwp/' . $request->dok_npwp_old);
             }
             // dokumen kartu keluarga
             $employee->kk = $request->kk;
@@ -245,14 +245,14 @@ class EmployeeController extends Controller
                 $fileNameKK = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_kk->extension();
                 $employee->dok_kk = $fileNameKK;
                 $request->file('dok_kk')->storeAs('public/karyawan/kk', $fileNameKK);
-                Storage::delete('public/karyawan/kk/' . $request->dok_kk_old);
+                // Storage::delete('public/karyawan/kk/' . $request->dok_kk_old);
             }
             // dokumen foto
             if ($request->foto) {
                 $fileNameFoto = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->foto->extension();
                 $employee->foto = $fileNameFoto;
                 $request->file('foto')->storeAs('public/karyawan/foto', $fileNameFoto);
-                Storage::delete('public/karyawan/foto/' . $request->foto_old);
+                // Storage::delete('public/karyawan/foto/' . $request->foto_old);
             }
             $employee->bpjs_kesehatan = $request->bpjs_kesehatan;
             $employee->bpjs_ketenagakerjaan = $request->bpjs_ketenagakerjaan;
@@ -294,7 +294,13 @@ class EmployeeController extends Controller
             $employee->jabatan = $request->jabatan;
             $employee->masuk_kerja = $request->masuk_kerja;
             $employee->user_id = $request->user_id;
-            $employee->aktif = isset($request->aktif) ? 1 : 0;
+            $aktif = isset($request->aktif) ? 1 : 0;
+            if ($request->aktif_old != $aktif) {
+                $user = User::findorfail($employee->user_id);
+                $user->aktif = $aktif;
+                $user->save();
+            }
+            $employee->aktif = $aktif;
             $employee->save();
 
             DB::commit();
@@ -442,7 +448,7 @@ class EmployeeController extends Controller
             'no_sk' => 'required|max:64|unique:sk_karyawan,no_sk',
             'tgl_sk' => 'required',
             'jabatan' => 'required|max:64',
-            'dok_sk' => 'mimes:png,jpeg,jpg|max:2048',
+            'dok_sk' => 'mimes:png,jpeg,jpg,pdf|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -513,7 +519,7 @@ class EmployeeController extends Controller
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->edit_dok_sk->extension();
                 $sk->dok_sk = $fileName;
                 $request->file('edit_dok_sk')->storeAs('public/sk/', $fileName);
-                Storage::delete('public/sk/' . $request->dok_sk_old);
+                // Storage::delete('public/sk/' . $request->dok_sk_old);
             }
             $sk->save();
 
@@ -579,7 +585,7 @@ class EmployeeController extends Controller
             $data = [
                 'id' => $id,
                 'item' => Anak_karyawan_sekolah_dw::findorfail(Crypt::decryptString($id)),
-                'child' => Anak_karyawan::doesntHave('anak_karyawan_sekolah_dw')->where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
+                'child' => Anak_karyawan::where('karyawan_id', $karyawan_id)->orderBy('anak_ke', 'asc')->get(),
             ];
             return view('employee.anak_dw_edit')->with($data);
         }
@@ -635,6 +641,15 @@ class EmployeeController extends Controller
 
     public function riwayat($id)
     {
+        $contacts = Kontak_darurat::where('karyawan_id', Crypt::decryptString($id))->get();
+
+        $types =
+            [
+                0 => 'Kontak Kerabat Serumah',
+                1 => 'Kontak Kerabat Beda Rumah',
+                2 => 'Kontak Kerabat Sekampung'
+            ];
+
         $data = [
             'title' => $this->title,
             'menu' => 'data',
@@ -642,7 +657,8 @@ class EmployeeController extends Controller
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
             'riwayat' => Riwayat_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
-            'kontak' => Kontak_darurat::where('karyawan_id', Crypt::decryptString($id))->get(),
+            'kontak' => $contacts,
+            'types' => $types
         ];
         return view('employee.riwayat_employee')->with($data);
     }
@@ -696,7 +712,14 @@ class EmployeeController extends Controller
         $request = explode("|", $request->id);
         $id = $request[0];
         $type = $request[1];
-        $karyawan_id = $request[2];
+
+        $types =
+            [
+                0 => 'Kontak Kerabat Serumah',
+                1 => 'Kontak Kerabat Beda Rumah',
+                2 => 'Kontak Kerabat Sekampung'
+            ];
+
         if ($type === 'riwayat') {
             $data = [
                 'id' => $id,
@@ -707,6 +730,7 @@ class EmployeeController extends Controller
             $data = [
                 'id' => $id,
                 'item' => Kontak_darurat::findorfail(Crypt::decryptString($id)),
+                'results' => $types
             ];
             return view('employee.kontak_edit')->with($data);
         }
@@ -748,6 +772,7 @@ class EmployeeController extends Controller
             $riwayat->no_hp = $request->no_hp;
             $riwayat->keterangan = $request->keterangan_kontak;
             $riwayat->karyawan_id = $id;
+            $riwayat->tipe = $request->tipe;
             $riwayat->save();
 
             DB::commit();
@@ -788,6 +813,7 @@ class EmployeeController extends Controller
             $kontak->nama  = $request->edit_nama_kontak;
             $kontak->no_hp  = $request->edit_no_hp_kontak;
             $kontak->keterangan = $request->edit_keterangan_kontak;
+            $kontak->tipe = $request->tipe;
             $kontak->save();
 
             DB::commit();
@@ -808,7 +834,7 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
-            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'Kursus', 'Seminar', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
             'id' => $id,
         ];
         return view('employee.create_ijazah')->with($data);
@@ -823,7 +849,7 @@ class EmployeeController extends Controller
             'tahun_masuk' => 'required',
             'tahun_lulus' => 'required',
             'instansi' => 'required',
-            'dok_ijazah' => 'required|mimes:png,jpeg,jpg|max:2048',
+            'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
         ]);
         DB::beginTransaction();
         try {
@@ -911,7 +937,7 @@ class EmployeeController extends Controller
             'tahun_masuk' => 'required',
             'tahun_lulus' => 'required',
             'instansi' => 'required',
-            'dok_ijazah' => 'mimes:png,jpeg,jpg|max:2048',
+            'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
         ]);
 
         $id = Crypt::decryptString($request->id);
@@ -933,7 +959,7 @@ class EmployeeController extends Controller
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_ijazah->extension();
                 $ijazah->dok_ijazah = $fileName;
                 $request->file('dok_ijazah')->storeAs('public/ijazah/', $fileName);
-                Storage::delete('public/ijazah/' . $request->dok_ijazah_old);
+                // Storage::delete('public/ijazah/' . $request->dok_ijazah_old);
             }
             $ijazah->save();
 
@@ -958,7 +984,7 @@ class EmployeeController extends Controller
 
     public function dropdown_email()
     {
-        $email = User::select('*')->where('aktif', '=', '1')->get();
+        $email = User::select('*')->get();
         return $email;
     }
 
@@ -978,5 +1004,104 @@ class EmployeeController extends Controller
                 'message' => 'berhasil',
             ]);
         }
+    }
+
+    public function cek_ijazah(Request $request)
+    {
+        $message = [];
+        // ijazah
+        if ($request->jabatan === 'Karyawan') {
+            $count = Ijazah::where('karyawan_id', $request->karyawan_id)
+                ->where(function ($query) {
+                    $query->where('gelar_ijazah', '!=', 'Kursus')
+                        ->orWhere('gelar_ijazah', '!=', 'Seminar');
+                })->count();
+            if ($count >= 1) {
+                $code = 200;
+            } else {
+                $code = 404;
+                array_push($message, "Ijazah, ");
+            }
+        } elseif ($request->jabatan === 'Guru') {
+            $ijazah = DB::table('ijazah_karyawan')
+                ->select(
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%SD%' THEN id ELSE NULL END) AS sd"),
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%SMP%' THEN id ELSE NULL END) AS smp"),
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%SMA%' THEN id ELSE NULL END) AS sma"),
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%SMK%' THEN id ELSE NULL END) AS smk"),
+                    DB::raw("count(CASE WHEN gelar_ijazah like '%S1%' THEN id ELSE NULL END) AS s1"),
+                )
+                ->where('karyawan_id', $request->karyawan_id)
+                ->wherenull('deleted_at')
+                ->groupBy('karyawan_id')
+                ->get();
+            if (count($ijazah) > 0) {
+                if (intval($ijazah[0]->sd) >= 1 and intval($ijazah[0]->smp) >= 1 and (intval($ijazah[0]->sma) + intval($ijazah[0]->smk)) >= 1 and intval($ijazah[0]->s1) >= 1) {
+                    $code = 200;
+                } else {
+                    $code = 404;
+                    $data = 'Ijazah ';
+                    if (intval($ijazah[0]->sd) === 0) {
+                        $data .= 'SD, ';
+                    }
+                    if (intval($ijazah[0]->smp) === 0) {
+                        $data .= 'SMP, ';
+                    }
+                    if (intval($ijazah[0]->sma) === 0 and intval($ijazah[0]->smk) === 0) {
+                        $data .= 'SMA/SMK, ';
+                    }
+                    if (intval($ijazah[0]->s1) === 0) {
+                        $data .= 'S1, ';
+                    }
+                    array_push($message, $data);
+                }
+            } else {
+                $code = 404;
+                $data = 'Ijazah SD, SMP, SMA/SMK, S1, ';
+                array_push($message, $data);
+            }
+        } else {
+            $code = 200;
+        }
+
+        // kontak
+        $kontak = DB::table('kontak_darurat')
+            ->select(
+                DB::raw("count(CASE WHEN tipe like '%Kontak Kerabat Sekampung%' THEN id ELSE NULL END) AS sekampung"),
+                DB::raw("count(CASE WHEN tipe like '%Kontak Kerabat Serumah%' THEN id ELSE NULL END) AS serumah"),
+                DB::raw("count(CASE WHEN tipe like '%Kontak Kerabat Beda Rumah%' THEN id ELSE NULL END) AS bedarumah"),
+            )
+            ->where('karyawan_id', $request->karyawan_id)
+            ->wherenull('deleted_at')
+            ->groupBy('karyawan_id')
+            ->get();
+        if (count($kontak) > 0) {
+            if ($kontak[0]->sekampung >= 1 and $kontak[0]->serumah >= 1 and $kontak[0]->bedarumah >= 1) {
+                $code_kontak = 200;
+            } else {
+                $code_kontak = 404;
+                $data = '';
+                if (intval($kontak[0]->serumah) === 0) {
+                    $data .= 'Kontak Kerabat Serumah, ';
+                }
+                if (intval($kontak[0]->bedarumah) === 0) {
+                    $data .= 'Kontak Kerabat Beda Rumah, ';
+                }
+                if (intval($kontak[0]->sekampung) === 0) {
+                    $data .= 'Kontak Kerabat Sekampung, ';
+                }
+                array_push($message, $data);
+            }
+        } else {
+            $code_kontak = 404;
+            $data = 'Kontak Kerabat Serumah, Kontak Kerabat Beda Rumah, Kontak Kerabat Sekampung, ';
+            array_push($message, $data);
+        }
+
+        return response()->json([
+            'code' => $code,
+            'code_kontak' => $code_kontak,
+            'message' => $message,
+        ]);
     }
 }

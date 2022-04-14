@@ -38,7 +38,7 @@
                             </a>
                             <a class="nav-link">
                                 <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Ijazah</p>
+                                <p class="fw-bold mb-4">Ijazah + Sertifikat</p>
                             </a>
                             <a class="nav-link">
                                 <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>
@@ -259,11 +259,13 @@
                                                                                         {!! $errors->first('no_hp', '<div class="invalid-validasi">:message</div>') !!}
                                                                                     </div>
                                                                                 </div>
+
                                                                                 <div class="col-md-3">
                                                                                     <div class="mb-3">
                                                                                         <label for="validationCustom02"
                                                                                             class="form-label">Keterangan
-                                                                                            <code>*</code></label>
+                                                                                            <cod e>*</cod>
+                                                                                        </label>
                                                                                         <textarea required class="form-control" name="keterangan_kontak" placeholder="Keterangan"
                                                                                             rows="1">{{ old('keterangan_kontak') }}</textarea>
                                                                                         <div class="invalid-feedback">
@@ -272,32 +274,35 @@
                                                                                         {!! $errors->first('keterangan_kontak', '<div class="invalid-validasi">:message</div>') !!}
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-lg-3 align-self-center">
-                                                                                    <div class="d-grid">
-                                                                                        <?php
-                                                                                        if (count($kontak) >= 2) {
-                                                                                            $style = 'disabled';
-                                                                                        } else {
-                                                                                            $style = '';
-                                                                                        }
-                                                                                        ?>
-                                                                                        <button class="btn btn-success"
-                                                                                            style="margin-top: 10px;"
-                                                                                            {{ $style }}
-                                                                                            type="submit"
-                                                                                            id="submit">Simpan</button>
+                                                                                <div class="col-md-3">
+                                                                                    <div class="mb-3">
+                                                                                        <label for="validationCustom02"
+                                                                                            class="form-label">Tipe
+                                                                                            <code>*</code></label>
+                                                                                        <select name="tipe" id="tipe"
+                                                                                            class="form-control select select2"
+                                                                                            required>
+                                                                                            <option value="">-- Pilih Tipe
+                                                                                                --</option>
+                                                                                            @foreach ($types as $type)
+                                                                                                <option
+                                                                                                    value="{{ $type }}">
+                                                                                                    {{ $type }}
+                                                                                                </option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                        <div class="invalid-feedback">
+                                                                                            Data wajib diisi.
+                                                                                        </div>
+                                                                                        {!! $errors->first('tipe', '<div class="invalid-validasi">:message</div>') !!}
                                                                                     </div>
                                                                                 </div>
-                                                                                @if (count($kontak) >= 2)
-                                                                                    <div class="col-md-12">
-                                                                                        <div class="alert alert-danger alert-dismissible fade show"
-                                                                                            role="alert">
-                                                                                            <i
-                                                                                                class="mdi mdi-block-helper me-2"></i>
-                                                                                            Kontak maksimal 2
-                                                                                        </div>
-                                                                                    </div>
-                                                                                @endif
+                                                                                <div class="col-lg-3 align-self-center">
+                                                                                    <button
+                                                                                        class="btn btn-success btn-sm rounded"
+                                                                                        type="submit"
+                                                                                        id="submit">Simpan</button>
+                                                                                </div>
                                                                             </div>
                                                                         </form>
                                                                         <hr class="mt-2">
@@ -313,6 +318,7 @@
                                                                                                 <th>Nama</th>
                                                                                                 <th>No HP</th>
                                                                                                 <th>Keterangan</th>
+                                                                                                <th>Tipe</th>
                                                                                                 <th>Action</th>
                                                                                             </tr>
                                                                                         </thead>
@@ -326,6 +332,8 @@
                                                                                                     <td>{{ $list->no_hp }}
                                                                                                     </td>
                                                                                                     <td>{{ $list->keterangan }}
+                                                                                                    </td>
+                                                                                                    <td>{{ $list->tipe }}
                                                                                                     </td>
                                                                                                     <td>
                                                                                                         <?php $id = Crypt::encryptString($list->id); ?>
