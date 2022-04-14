@@ -1102,6 +1102,7 @@ class EmployeeController extends Controller
             $data = 'Kontak Kerabat Serumah, Kontak Kerabat Beda Rumah, Kontak Kerabat Sekampung, ';
             array_push($message, $data);
         }
+
         return response()->json([
             'code' => $code,
             'code_kontak' => $code_kontak,
