@@ -318,17 +318,7 @@
                         <div class="row justify-content-center">
                             <div class="col-xl-10">
                                 <h4 class="text-primary">Lengkapi Data !</h4>
-                                <div class="text-danger message_alert" id="message_alert">
-                                    {{-- <p class="mb-1"><i
-                                            class="mdi mdi-circle-medium align-middle text-primary me-1"></i> If several
-                                        languages coalesce</p>
-                                    <p class="mb-1"><i
-                                            class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Sed ut
-                                        perspiciatis unde</p>
-                                    <p class="mb-0"><i
-                                            class="mdi mdi-circle-medium align-middle text-primary me-1"></i> It would be
-                                        necessary</p> --}}
-                                </div>
+                                <div class="text-danger message_alert" id="message_alert"></div>
                             </div>
                         </div>
                     </div>
@@ -355,7 +345,6 @@
                         $('#subscribeModal').modal('show');
                         $("#message_alert").html(response.message);
                     }
-                    console.log(response)
                 },
                 error: (err) => {
                     console.log(err);

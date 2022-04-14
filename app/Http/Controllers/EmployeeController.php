@@ -1020,7 +1020,7 @@ class EmployeeController extends Controller
                 $code = 200;
             } else {
                 $code = 404;
-                array_push($message, "Ijazah");
+                array_push($message, "Ijazah, ");
             }
         } elseif ($request->jabatan === 'Guru') {
             $ijazah = DB::table('ijazah_karyawan')
@@ -1035,28 +1035,34 @@ class EmployeeController extends Controller
                 ->wherenull('deleted_at')
                 ->groupBy('karyawan_id')
                 ->get();
-            $count = ($ijazah[0]->sd + $ijazah[0]->smp + $ijazah[0]->sma + $ijazah[0]->smk + $ijazah[0]->s1);
-            if ($count >= 4) {
-                $code = 200;
+            if (count($ijazah) > 0) {
+                $count = ($ijazah[0]->sd + $ijazah[0]->smp + $ijazah[0]->sma + $ijazah[0]->smk + $ijazah[0]->s1);
+                if ($count >= 4) {
+                    $code = 200;
+                } else {
+                    $code = 404;
+                    $data = 'Ijazah ';
+                    if ($ijazah[0]->sd === 0) {
+                        $data .= 'SD, ';
+                    }
+                    if ($ijazah[0]->smp === 0) {
+                        $data .= 'SMP, ';
+                    }
+                    if ($ijazah[0]->sma === 0 or $ijazah[0]->smk === 0) {
+                        if ($ijazah[0]->sma === 0) {
+                            $data .= 'SMA, ';
+                        } else {
+                            $data .= 'SMK, ';
+                        }
+                    }
+                    if ($ijazah[0]->s1 === 0) {
+                        $data .= 'S1, ';
+                    }
+                    array_push($message, $data);
+                }
             } else {
                 $code = 404;
-                $data = 'Ijazah ';
-                if ($ijazah[0]->sd === 0) {
-                    $data .= 'SD, ';
-                }
-                if ($ijazah[0]->smp === 0) {
-                    $data .= 'SMP, ';
-                }
-                if ($ijazah[0]->sma === 0 or $ijazah[0]->smk === 0) {
-                    if ($ijazah[0]->sma === 0) {
-                        $data .= 'SMA, ';
-                    } else {
-                        $data .= 'SMK, ';
-                    }
-                }
-                if ($ijazah[0]->s1 === 0) {
-                    $data .= 'S1, ';
-                }
+                $data = 'Ijazah SD, SMP, SMA/SMK, S1, ';
                 array_push($message, $data);
             }
         } else {
@@ -1074,21 +1080,27 @@ class EmployeeController extends Controller
             ->wherenull('deleted_at')
             ->groupBy('karyawan_id')
             ->get();
-        $count_kontak = ($kontak[0]->sekampung + $kontak[0]->serumah + $kontak[0]->bedarumah);
-        if ($count_kontak >= 3) {
-            $code_kontak = 200;
+        if (count($kontak) > 0) {
+            $count_kontak = ($kontak[0]->sekampung + $kontak[0]->serumah + $kontak[0]->bedarumah);
+            if ($count_kontak >= 3) {
+                $code_kontak = 200;
+            } else {
+                $code_kontak = 404;
+                $data = '';
+                if ($kontak[0]->sekampung === 0) {
+                    $data .= 'Kontak Kerabat Sekampung, ';
+                }
+                if ($kontak[0]->serumah === 0) {
+                    $data .= 'Kontak Kerabat Serumah, ';
+                }
+                if ($kontak[0]->bedarumah === 0) {
+                    $data .= 'Kontak Kerabat Beda Rumah, ';
+                }
+                array_push($message, $data);
+            }
         } else {
             $code_kontak = 404;
-            $data = '';
-            if ($kontak[0]->sekampung === 0) {
-                $data .= 'Kontak Kerabat Sekampung, ';
-            }
-            if ($kontak[0]->serumah === 0) {
-                $data .= 'Kontak Kerabat Serumah, ';
-            }
-            if ($kontak[0]->bedarumah === 0) {
-                $data .= 'Kontak Kerabat Beda Rumah, ';
-            }
+            $data = 'Kontak Kerabat Sekampung, Kontak Kerabat Serumah, Kontak Kerabat Beda Rumah, ';
             array_push($message, $data);
         }
 
