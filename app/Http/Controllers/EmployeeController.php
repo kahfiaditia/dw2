@@ -1036,9 +1036,7 @@ class EmployeeController extends Controller
                 ->groupBy('karyawan_id')
                 ->get();
             if (count($ijazah) > 0) {
-                // $count = ($ijazah[0]->sd + $ijazah[0]->smp + $ijazah[0]->sma + $ijazah[0]->smk + $ijazah[0]->s1);
-                // if ($count >= 4) {
-                if ($ijazah[0]->sd >= 1 and $ijazah[0]->smp >= 1 and ($ijazah[0]->sma + $ijazah[0]->smk) >= 1 and $ijazah[0]->s1 >= 1) {
+                if (intval($ijazah[0]->sd) >= 1 and intval($ijazah[0]->smp) >= 1 and (intval($ijazah[0]->sma) + intval($ijazah[0]->smk)) >= 1 and intval($ijazah[0]->s1) >= 1) {
                     $code = 200;
                 } else {
                     $code = 404;
@@ -1050,9 +1048,9 @@ class EmployeeController extends Controller
                         $data .= 'SMP, ';
                     }
                     if (intval($ijazah[0]->sma) === 0 or intval($ijazah[0]->smk) === 0) {
-                        if ($ijazah[0]->sma === 0) {
+                        if (intval($ijazah[0]->sma) === 0) {
                             $data .= 'SMA, ';
-                        } else {
+                        } elseif (intval($ijazah[0]->smk) === 0) {
                             $data .= 'SMK, ';
                         }
                     }
