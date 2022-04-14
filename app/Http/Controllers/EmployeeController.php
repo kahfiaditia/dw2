@@ -1047,12 +1047,8 @@ class EmployeeController extends Controller
                     if (intval($ijazah[0]->smp) === 0) {
                         $data .= 'SMP, ';
                     }
-                    if (intval($ijazah[0]->sma) === 0 or intval($ijazah[0]->smk) === 0) {
-                        if (intval($ijazah[0]->sma) === 0) {
-                            $data .= 'SMA, ';
-                        } elseif (intval($ijazah[0]->smk) === 0) {
-                            $data .= 'SMK, ';
-                        }
+                    if (intval($ijazah[0]->sma) === 0 and intval($ijazah[0]->smk) === 0) {
+                        $data .= 'SMA/SMK, ';
                     }
                     if (intval($ijazah[0]->s1) === 0) {
                         $data .= 'S1, ';
