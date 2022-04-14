@@ -1081,8 +1081,7 @@ class EmployeeController extends Controller
             ->groupBy('karyawan_id')
             ->get();
         if (count($kontak) > 0) {
-            $count_kontak = ($kontak[0]->sekampung + $kontak[0]->serumah + $kontak[0]->bedarumah);
-            if ($count_kontak >= 3) {
+            if ($kontak[0]->sekampung >= 1 and $kontak[0]->serumah >= 1 and $kontak[0]->bedarumah >= 1) {
                 $code_kontak = 200;
             } else {
                 $code_kontak = 404;
