@@ -46,6 +46,7 @@
                                                 <img src="{{ URL::asset('assets/images/users/avatar.png') }}" alt=""
                                                     class="avatar-md rounded-circle img-thumbnail">
                                             @endif
+                                            <input type="hidden" id="roles" value="{{ Auth::user()->roles }}">
                                             <input type="hidden" id="jabatan" value="{{ $jabatan }}">
                                             <input type="hidden" id="karyawan_id" value="{{ $karyawan_id }}">
                                         </div>
@@ -332,24 +333,28 @@
         $(document).ready(function() {
             let jabatan = document.getElementById("jabatan").value;
             let karyawan_id = document.getElementById("karyawan_id").value;
-            $.ajax({
-                type: "POST",
-                url: '{{ route('employee.cek_ijazah') }}',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    jabatan,
-                    karyawan_id
-                },
-                success: response => {
-                    if (response.code === 404 || response.code_kontak === 404) {
-                        $('#subscribeModal').modal('show');
-                        $("#message_alert").html(response.message);
-                    }
-                },
-                error: (err) => {
-                    console.log(err);
-                },
-            });
+            let roles = document.getElementById("roles").value;
+            if (roles != 'Administrator'
+                or roles != 'Admin') {
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('employee.cek_ijazah') }}',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        jabatan,
+                        karyawan_id
+                    },
+                    success: response => {
+                        if (response.code === 404 || response.code_kontak === 404) {
+                            $('#subscribeModal').modal('show');
+                            $("#message_alert").html(response.message);
+                        }
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            }
         });
     </script>
 @endsection
