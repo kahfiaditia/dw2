@@ -1084,27 +1084,15 @@ class EmployeeController extends Controller
             if ($kontak[0]->sekampung >= 1 and $kontak[0]->serumah >= 1 and $kontak[0]->bedarumah >= 1) {
                 $code_kontak = 200;
             } else {
-                // $code_kontak = 404;
-                // $data = '';
-                // if (intval($kontak[0]->serumah) === 0) {
-                //     $data .= 'Kontak Kerabat Serumah, ';
-                // }
-                // if (intval($kontak[0]->bedarumah) === 0) {
-                //     $data .= 'Kontak Kerabat Beda Rumah, ';
-                // }
-                // if (intval($kontak[0]->sekampung) === 0) {
-                //     $data .= 'Kontak Kerabat Sekampung, ';
-                // }
-                // array_push($message, $data);
                 $code_kontak = 404;
                 $data = '';
-                if ($kontak[0]->serumah === 0) {
+                if (intval($kontak[0]->serumah) === 0) {
                     $data .= 'Kontak Kerabat Serumah, ';
                 }
-                if ($kontak[0]->bedarumah === 0) {
+                if (intval($kontak[0]->bedarumah) === 0) {
                     $data .= 'Kontak Kerabat Beda Rumah, ';
                 }
-                if ($kontak[0]->sekampung === 0) {
+                if (intval($kontak[0]->sekampung) === 0) {
                     $data .= 'Kontak Kerabat Sekampung, ';
                 }
                 array_push($message, $data);
