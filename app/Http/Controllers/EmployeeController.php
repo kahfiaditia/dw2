@@ -1042,20 +1042,20 @@ class EmployeeController extends Controller
                 } else {
                     $code = 404;
                     $data = 'Ijazah ';
-                    if ($ijazah[0]->sd === 0) {
+                    if (intval($ijazah[0]->sd) === 0) {
                         $data .= 'SD, ';
                     }
-                    if ($ijazah[0]->smp === 0) {
+                    if (intval($ijazah[0]->smp) === 0) {
                         $data .= 'SMP, ';
                     }
-                    if ($ijazah[0]->sma === 0 or $ijazah[0]->smk === 0) {
+                    if (intval($ijazah[0]->sma) === 0 or intval($ijazah[0]->smk) === 0) {
                         if ($ijazah[0]->sma === 0) {
                             $data .= 'SMA, ';
                         } else {
                             $data .= 'SMK, ';
                         }
                     }
-                    if ($ijazah[0]->s1 === 0) {
+                    if (intval($ijazah[0]->s1) === 0) {
                         $data .= 'S1, ';
                     }
                     array_push($message, $data);
@@ -1087,13 +1087,13 @@ class EmployeeController extends Controller
             } else {
                 $code_kontak = 404;
                 $data = '';
-                if ($kontak[0]->serumah === 0) {
+                if (intval($kontak[0]->serumah) === 0) {
                     $data .= 'Kontak Kerabat Serumah, ';
                 }
-                if ($kontak[0]->bedarumah === 0) {
+                if (intval($kontak[0]->bedarumah) === 0) {
                     $data .= 'Kontak Kerabat Beda Rumah, ';
                 }
-                if ($kontak[0]->sekampung === 0) {
+                if (intval($kontak[0]->sekampung) === 0) {
                     $data .= 'Kontak Kerabat Sekampung, ';
                 }
                 array_push($message, $data);
