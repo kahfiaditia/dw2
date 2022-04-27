@@ -842,28 +842,40 @@ class EmployeeController extends Controller
 
     public function store_ijazah(Request $request)
     {
-        $request->validate([
-            'nama_pendidikan' => 'required|max:128',
-            'gelar_ijazah' => 'required|max:64',
-            'jurusan' => 'required',
-            'tahun_masuk' => 'required',
-            'tahun_lulus' => 'required',
-            'instansi' => 'required',
-            'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
-        ]);
+        if ($request->type === 'Akademik') {
+            $request->validate([
+                'nama_pendidikan' => 'required|max:128',
+                'gelar_ijazah' => 'required|max:64',
+                'jurusan' => 'required',
+                'tahun_masuk' => 'required',
+                'tahun_lulus' => 'required',
+                'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
+            ]);
+        } else {
+            $request->validate([
+                'instansi' => 'required',
+                'gelar_non_akademik_panjang' => 'required',
+                'gelar_non_akademik_pendek' => 'required',
+                'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
+            ]);
+        }
         DB::beginTransaction();
         try {
             $ijazah = new Ijazah();
-            $ijazah->nama_pendidikan = $request->nama_pendidikan;
-            $ijazah->instansi = $request->instansi;
-            $ijazah->gelar_ijazah = $request->gelar_ijazah;
-            $ijazah->jurusan = $request->jurusan;
-            $ijazah->tahun_masuk = $request->tahun_masuk;
-            $ijazah->tahun_lulus = $request->tahun_lulus;
-            $ijazah->gelar_akademik_panjang = $request->gelar_akademik_panjang;
-            $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
-            $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
-            $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            $ijazah->type = $request->type;
+            if ($request->type === 'Akademik') {
+                $ijazah->nama_pendidikan = $request->nama_pendidikan;
+                $ijazah->gelar_ijazah = $request->gelar_ijazah;
+                $ijazah->jurusan = $request->jurusan;
+                $ijazah->tahun_masuk = $request->tahun_masuk;
+                $ijazah->tahun_lulus = $request->tahun_lulus;
+                $ijazah->gelar_akademik_panjang = $request->gelar_akademik_panjang;
+                $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
+            } else {
+                $ijazah->instansi = $request->instansi;
+                $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
+                $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            }
             // dokumen sk
             if ($request->dok_ijazah) {
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_ijazah->extension();
@@ -930,30 +942,55 @@ class EmployeeController extends Controller
 
     public function update_ijazah(Request $request)
     {
-        $request->validate([
-            'nama_pendidikan' => 'required|max:128',
-            'gelar_ijazah' => 'required|max:64',
-            'jurusan' => 'required',
-            'tahun_masuk' => 'required',
-            'tahun_lulus' => 'required',
-            'instansi' => 'required',
-            'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
-        ]);
-
+        if ($request->type === 'Akademik') {
+            $request->validate([
+                'nama_pendidikan' => 'required|max:128',
+                'gelar_ijazah' => 'required|max:64',
+                'jurusan' => 'required',
+                'tahun_masuk' => 'required',
+                'tahun_lulus' => 'required',
+                'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+            ]);
+        } else {
+            $request->validate([
+                'instansi' => 'required',
+                'gelar_non_akademik_panjang' => 'required',
+                'gelar_non_akademik_pendek' => 'required',
+                'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+            ]);
+        }
         $id = Crypt::decryptString($request->id);
         DB::beginTransaction();
         try {
             $ijazah = Ijazah::findorfail($id);
-            $ijazah->nama_pendidikan = $request->nama_pendidikan;
-            $ijazah->instansi  = $request->instansi;
-            $ijazah->jurusan = $request->jurusan;
-            $ijazah->tahun_masuk = $request->tahun_masuk;
-            $ijazah->tahun_lulus = $request->tahun_lulus;
-            $ijazah->gelar_ijazah = $request->gelar_ijazah;
-            $ijazah->gelar_akademik_panjang = $request->gelar_akademik_panjang;
-            $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
-            $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
-            $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            $ijazah->type = $request->type;
+            if ($request->type === 'Akademik') {
+                // input
+                $ijazah->nama_pendidikan = $request->nama_pendidikan;
+                $ijazah->gelar_ijazah = $request->gelar_ijazah;
+                $ijazah->jurusan = $request->jurusan;
+                $ijazah->tahun_masuk = $request->tahun_masuk;
+                $ijazah->tahun_lulus = $request->tahun_lulus;
+                $ijazah->gelar_akademik_panjang = $request->gelar_akademik_panjang;
+                $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
+                // null
+                $ijazah->instansi = null;
+                $ijazah->gelar_non_akademik_panjang = null;
+                $ijazah->gelar_non_akademik_pendek = null;
+            } else {
+                // null
+                $ijazah->nama_pendidikan = null;
+                $ijazah->gelar_ijazah = null;
+                $ijazah->jurusan = null;
+                $ijazah->tahun_masuk = null;
+                $ijazah->tahun_lulus = null;
+                $ijazah->gelar_akademik_panjang = null;
+                $ijazah->gelar_akademik_pendek = null;
+                // input
+                $ijazah->instansi = $request->instansi;
+                $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
+                $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            }
             // dokumen sk
             if ($request->dok_ijazah) {
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_ijazah->extension();

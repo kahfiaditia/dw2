@@ -72,144 +72,22 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">Nama
-                                                            Sekolah/Universitas <code>*</code></label>
-                                                        <input type="text" class="form-control" id="nama_pendidikan"
-                                                            name="nama_pendidikan" value="{{ $item->nama_pendidikan }}"
-                                                            required autofocus placeholder="Nama Sekolah/Universitas">
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        {!! $errors->first('nama_pendidikan', '<div class="invalid-validasi">:message</div>') !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">Gelar
+                                                        <label for="validationCustom02" class="form-label">Jenis
                                                             <code>*</code></label>
-                                                        <select class="form-control select select2" name="gelar_ijazah"
-                                                            id="gelar_ijazah" required>
-                                                            <option value="">--Pilih Gelar--</option>
-                                                            @foreach ($jurusan as $jurusan)
-                                                                <option value="{{ $jurusan }}"
-                                                                    {{ $item->gelar_ijazah === $jurusan ? 'selected' : '' }}>
-                                                                    {{ $jurusan }}</option>
-                                                            @endforeach
+                                                        <select class="form-control select select2" name="type" id="type"
+                                                            required>
+                                                            <option value="">--Pilih Jenis--</option>
+                                                            <option value="Akademik"
+                                                                {{ $item->type === 'Akademik' ? 'selected' : '' }}>
+                                                                Akademik</option>
+                                                            <option value="Non Akademik"
+                                                                {{ $item->type === 'Non Akademik' ? 'selected' : '' }}>Non
+                                                                Akademik</option>
                                                         </select>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
-                                                        {!! $errors->first('gelar_ijazah', '<div class="invalid-validasi">:message</div>') !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">Jurusan
-                                                            <code>*</code></label>
-                                                        <input type="text" class="form-control" id="jurusan"
-                                                            name="jurusan" value="{{ $item->jurusan }}" required
-                                                            placeholder="Jurusan">
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        {!! $errors->first('jurusan', '<div class="invalid-validasi">:message</div>') !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label>Tahun Pendidikan <code>*</code></label>
-                                                        <div class="input-daterange input-group">
-                                                            <input type="text" class="form-control datepicker"
-                                                                name="tahun_masuk" value="{{ $item->tahun_masuk }}"
-                                                                maxlength="4" placeholder="Tahun Masuk" id="tahun_masuk"
-                                                                required>
-                                                            <input type="text" class="form-control datepicker"
-                                                                name="tahun_lulus" value="{{ $item->tahun_lulus }}"
-                                                                maxlength="4" placeholder="Tahun Lulus" id="tahun_lulus"
-                                                                required>
-                                                            <div class="invalid-feedback">
-                                                                Data wajib diisi.
-                                                            </div>
-                                                            {!! $errors->first('tahun_lulus', '<div class="invalid-validasi">:message</div>') !!}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">Gelar
-                                                            Akademik Panjang</label>
-                                                        <input type="text" class="form-control"
-                                                            id="gelar_akademik_panjang" name="gelar_akademik_panjang"
-                                                            value="{{ $item->gelar_akademik_panjang }}"
-                                                            placeholder="Gelar Akademik Panjang">
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        {!! $errors->first('gelar_akademik_panjang', '<div class="invalid-validasi">:message</div>') !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">Gelar
-                                                            Akademik Pendek</label>
-                                                        <input type="text" class="form-control" id="gelar_akademik_pendek"
-                                                            name="gelar_akademik_pendek"
-                                                            value="{{ $item->gelar_akademik_pendek }}"
-                                                            placeholder="Gelar Akademik Pendek">
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        {!! $errors->first('gelar_akademik_pendek', '<div class="invalid-validasi">:message</div>') !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">Gelar Non
-                                                            Akademik Panjang</label>
-                                                        <input type="text" class="form-control"
-                                                            id="gelar_non_akademik_panjang"
-                                                            name="gelar_non_akademik_panjang"
-                                                            value="{{ $item->gelar_non_akademik_panjang }}"
-                                                            placeholder="Gelar Non Akademik Panjang">
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        {!! $errors->first('gelar_non_akademik_panjang', '<div class="invalid-validasi">:message</div>') !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">Gelar Non
-                                                            Akademik Pendek</label>
-                                                        <input type="text" class="form-control"
-                                                            id="gelar_non_akademik_pendek" name="gelar_non_akademik_pendek"
-                                                            value="{{ $item->gelar_non_akademik_pendek }}"
-                                                            placeholder="Gelar Non Akademik Pendek">
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        {!! $errors->first('gelar_non_akademik_pendek', '<div class="invalid-validasi">:message</div>') !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="validationCustom02" class="form-label">Nama
-                                                            Instansi/Lembaga Penerbit Sertifikat <code>*</code></label>
-                                                        <input type="text" class="form-control" id="instansi"
-                                                            name="instansi" value="{{ $item->instansi }}" required
-                                                            placeholder="Nama Instansi/Lembaga Penerbit Sertifikat">
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        {!! $errors->first('instansi', '<div class="invalid-validasi">:message</div>') !!}
+                                                        {!! $errors->first('type', '<div class="invalid-validasi">:message</div>') !!}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -232,6 +110,207 @@
                                                         @endif
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingOne">
+                                                        <button class="accordion-button fw-medium headAkademik"
+                                                            type="button" data-bs-toggle="collapse"
+                                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                                            aria-controls="collapseOne">
+                                                            Akademik
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseOne" class="accordion-collapse collapse akademik show"
+                                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <div class="text-muted">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Nama
+                                                                                Sekolah/Universitas <code>*</code></label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="nama_pendidikan" name="nama_pendidikan"
+                                                                                value="{{ $item->nama_pendidikan }}"
+                                                                                required autofocus
+                                                                                placeholder="Nama Sekolah/Universitas">
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('nama_pendidikan', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Gelar
+                                                                                <code>*</code></label>
+                                                                            <select class="form-control select select2"
+                                                                                name="gelar_ijazah" id="gelar_ijazah"
+                                                                                required>
+                                                                                <option value="">--Pilih Gelar--</option>
+                                                                                @foreach ($jurusan as $jurusan)
+                                                                                    <option value="{{ $jurusan }}"
+                                                                                        {{ $item->gelar_ijazah === $jurusan ? 'selected' : '' }}>
+                                                                                        {{ $jurusan }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('gelar_ijazah', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Jurusan
+                                                                                <code>*</code></label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="jurusan" name="jurusan"
+                                                                                value="{{ $item->jurusan }}" required
+                                                                                placeholder="Jurusan">
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('jurusan', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label>Tahun Pendidikan <code>*</code></label>
+                                                                            <div class="input-daterange input-group">
+                                                                                <input type="text"
+                                                                                    class="form-control datepicker"
+                                                                                    name="tahun_masuk"
+                                                                                    value="{{ $item->tahun_masuk }}"
+                                                                                    maxlength="4" placeholder="Tahun Masuk"
+                                                                                    id="tahun_masuk" required>
+                                                                                <input type="text"
+                                                                                    class="form-control datepicker"
+                                                                                    name="tahun_lulus"
+                                                                                    value="{{ $item->tahun_lulus }}"
+                                                                                    maxlength="4" placeholder="Tahun Lulus"
+                                                                                    id="tahun_lulus" required>
+                                                                                <div class="invalid-feedback">
+                                                                                    Data wajib diisi.
+                                                                                </div>
+                                                                                {!! $errors->first('tahun_lulus', '<div class="invalid-validasi">:message</div>') !!}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Gelar
+                                                                                Akademik Panjang</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="gelar_akademik_panjang"
+                                                                                name="gelar_akademik_panjang"
+                                                                                value="{{ $item->gelar_akademik_panjang }}"
+                                                                                placeholder="Gelar Akademik Panjang">
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('gelar_akademik_panjang', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Gelar
+                                                                                Akademik Pendek</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="gelar_akademik_pendek"
+                                                                                name="gelar_akademik_pendek"
+                                                                                value="{{ $item->gelar_akademik_pendek }}"
+                                                                                placeholder="Gelar Akademik Pendek">
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('gelar_akademik_pendek', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingTwo">
+                                                        <button class="accordion-button fw-medium headNonAkademik "
+                                                            type="button" data-bs-toggle="collapse"
+                                                            data-bs-target="#collapseTwo" aria-expanded="false"
+                                                            aria-controls="collapseTwo">
+                                                            Non Akademik
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseTwo" class="accordion-collapse collapse non show"
+                                                        aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <div class="text-muted">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Nama
+                                                                                Instansi/Lembaga Penerbit Sertifikat
+                                                                                <code>*</code></label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="instansi" name="instansi"
+                                                                                value="{{ $item->instansi }}" required
+                                                                                placeholder="Nama Instansi/Lembaga Penerbit Sertifikat">
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('instansi', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Gelar Non
+                                                                                Akademik Panjang</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="gelar_non_akademik_panjang"
+                                                                                name="gelar_non_akademik_panjang"
+                                                                                value="{{ $item->gelar_non_akademik_panjang }}"
+                                                                                placeholder="Gelar Non Akademik Panjang">
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('gelar_non_akademik_panjang', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Gelar Non
+                                                                                Akademik Pendek</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="gelar_non_akademik_pendek"
+                                                                                name="gelar_non_akademik_pendek"
+                                                                                value="{{ $item->gelar_non_akademik_pendek }}"
+                                                                                placeholder="Gelar Non Akademik Pendek">
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('gelar_non_akademik_pendek', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -314,6 +393,7 @@
                         'error'
                     ).then(function() {
                         document.getElementById("submit").disabled = true;
+                        document.getElementById("tahun_lulus").value = null;
                     })
                 } else {
                     document.getElementById("submit").disabled = false;
@@ -348,25 +428,110 @@
 
             $('#gelar_ijazah').bind('change', function() {
                 let gelar_ijazah = document.getElementById("gelar_ijazah").value;
-                if (gelar_ijazah === 'SD' || gelar_ijazah === 'SMP' || gelar_ijazah === 'SMA' ||
-                    gelar_ijazah === 'SMK') {
+                if (gelar_ijazah === 'SD' || gelar_ijazah === 'SMP') {
                     document.getElementById("gelar_akademik_panjang").required = false;
                     document.getElementById("gelar_akademik_pendek").required = false;
+                    document.getElementById("jurusan").required = false;
+                } else if (gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK' || gelar_ijazah === 'Kursus' ||
+                    gelar_ijazah === 'Seminar') {
+                    document.getElementById("gelar_akademik_panjang").required = false;
+                    document.getElementById("gelar_akademik_pendek").required = false;
+                    document.getElementById("jurusan").required = true;
                 } else {
                     document.getElementById("gelar_akademik_panjang").required = true;
                     document.getElementById("gelar_akademik_pendek").required = true;
+                    document.getElementById("jurusan").required = true;
                 }
             });
 
-            gelar_ijazah = document.getElementById("gelar_ijazah").value;
-            if (gelar_ijazah === 'SD' || gelar_ijazah === 'SMP' || gelar_ijazah === 'SMA' ||
-                gelar_ijazah === 'SMK' || gelar_ijazah === 'Kursus' || gelar_ijazah === 'Seminar') {
+            $('#type').bind('change', function() {
+                let type = document.getElementById("type").value;
+                if (type === 'Akademik') {
+                    $('.akademik').addClass('show');
+                    $('.non').removeClass('show');
+                    $('.headNonAkademik').addClass('collapsed');
+                    // non required
+                    document.getElementById("gelar_non_akademik_panjang").required = false;
+                    document.getElementById("gelar_non_akademik_pendek").required = false;
+                    document.getElementById("instansi").required = false;
+                    // required
+                    document.getElementById("nama_pendidikan").required = true;
+                    document.getElementById("gelar_ijazah").required = true;
+                    document.getElementById("jurusan").required = true;
+                    document.getElementById("tahun_masuk").required = true;
+                    document.getElementById("tahun_lulus").required = true;
+                    document.getElementById("gelar_akademik_panjang").required = true;
+                    document.getElementById("gelar_akademik_pendek").required = true;
+                } else if (type === 'Non Akademik') {
+                    $('.akademik').removeClass('show');
+                    $('.non').addClass('show');
+                    $('.headAkademik').addClass('collapsed');
+                    // required
+                    document.getElementById("gelar_non_akademik_panjang").required = true;
+                    document.getElementById("gelar_non_akademik_pendek").required = true;
+                    document.getElementById("instansi").required = true;
+                    // non required
+                    document.getElementById("nama_pendidikan").required = false;
+                    document.getElementById("gelar_ijazah").required = false;
+                    document.getElementById("jurusan").required = false;
+                    document.getElementById("tahun_masuk").required = false;
+                    document.getElementById("tahun_lulus").required = false;
+                    document.getElementById("gelar_akademik_panjang").required = false;
+                    document.getElementById("gelar_akademik_pendek").required = false;
+                }
+            });
+
+            // start onload
+            let type = document.getElementById("type").value;
+            if (type === 'Akademik') {
+                $('.akademik').addClass('show');
+                $('.non').removeClass('show');
+                $('.headNonAkademik').addClass('collapsed');
+                // non required
+                document.getElementById("gelar_non_akademik_panjang").required = false;
+                document.getElementById("gelar_non_akademik_pendek").required = false;
+                document.getElementById("instansi").required = false;
+                // required
+                document.getElementById("nama_pendidikan").required = true;
+                document.getElementById("gelar_ijazah").required = true;
+                document.getElementById("jurusan").required = true;
+                document.getElementById("tahun_masuk").required = true;
+                document.getElementById("tahun_lulus").required = true;
+                document.getElementById("gelar_akademik_panjang").required = true;
+                document.getElementById("gelar_akademik_pendek").required = true;
+            } else if (type === 'Non Akademik') {
+                $('.akademik').removeClass('show');
+                $('.non').addClass('show');
+                $('.headAkademik').addClass('collapsed');
+                // required
+                document.getElementById("gelar_non_akademik_panjang").required = true;
+                document.getElementById("gelar_non_akademik_pendek").required = true;
+                document.getElementById("instansi").required = true;
+                // non required
+                document.getElementById("nama_pendidikan").required = false;
+                document.getElementById("gelar_ijazah").required = false;
+                document.getElementById("jurusan").required = false;
+                document.getElementById("tahun_masuk").required = false;
+                document.getElementById("tahun_lulus").required = false;
                 document.getElementById("gelar_akademik_panjang").required = false;
                 document.getElementById("gelar_akademik_pendek").required = false;
+            }
+            gelar_ijazah = document.getElementById("gelar_ijazah").value;
+            if (gelar_ijazah === 'SD' || gelar_ijazah === 'SMP') {
+                document.getElementById("gelar_akademik_panjang").required = false;
+                document.getElementById("gelar_akademik_pendek").required = false;
+                document.getElementById("jurusan").required = false;
+            } else if (gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK' || gelar_ijazah === 'Kursus' ||
+                gelar_ijazah === 'Seminar') {
+                document.getElementById("gelar_akademik_panjang").required = false;
+                document.getElementById("gelar_akademik_pendek").required = false;
+                document.getElementById("jurusan").required = true;
             } else {
                 document.getElementById("gelar_akademik_panjang").required = true;
                 document.getElementById("gelar_akademik_pendek").required = true;
+                document.getElementById("jurusan").required = true;
             }
+            // end onload
         });
     </script>
 @endsection
