@@ -846,7 +846,6 @@ class EmployeeController extends Controller
             $request->validate([
                 'nama_pendidikan' => 'required|max:128',
                 'gelar_ijazah' => 'required|max:64',
-                'jurusan' => 'required',
                 'tahun_masuk' => 'required',
                 'tahun_lulus' => 'required',
                 'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
@@ -946,7 +945,6 @@ class EmployeeController extends Controller
             $request->validate([
                 'nama_pendidikan' => 'required|max:128',
                 'gelar_ijazah' => 'required|max:64',
-                'jurusan' => 'required',
                 'tahun_masuk' => 'required',
                 'tahun_lulus' => 'required',
                 'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
