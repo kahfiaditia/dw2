@@ -259,6 +259,29 @@
                                                                         <div class="mb-3">
                                                                             <label for="validationCustom02"
                                                                                 class="form-label">Gelar
+                                                                                <code>*</code></label>
+                                                                            <select class="form-control select select2"
+                                                                                name="gelar_ijazah_non"
+                                                                                id="gelar_ijazah_non" required>
+                                                                                <option value="">--Pilih Gelar--</option>
+                                                                                @foreach ($jurusan_non as $jurusan)
+                                                                                    <option value="{{ $jurusan }}">
+                                                                                        {{ $jurusan }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('gelar_ijazah', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
+                                                                                class="form-label">Gelar
                                                                                 Non
                                                                                 Akademik Panjang</label>
                                                                             <input type="text" class="form-control"
@@ -272,8 +295,6 @@
                                                                             {!! $errors->first('gelar_non_akademik_panjang', '<div class="invalid-validasi">:message</div>') !!}
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="row">
                                                                     <div class="col-md-6">
                                                                         <div class="mb-3">
                                                                             <label for="validationCustom02"

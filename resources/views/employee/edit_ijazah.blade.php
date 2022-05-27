@@ -278,6 +278,29 @@
                                                                     <div class="col-md-6">
                                                                         <div class="mb-3">
                                                                             <label for="validationCustom02"
+                                                                                class="form-label">Gelar
+                                                                                <code>*</code></label>
+                                                                            <select class="form-control select select2"
+                                                                                name="gelar_ijazah_non"
+                                                                                id="gelar_ijazah_non" required>
+                                                                                <option value="">--Pilih Gelar--</option>
+                                                                                @foreach ($jurusan_non as $jurusan)
+                                                                                    <option value="{{ $jurusan }}"
+                                                                                        {{ $item->gelar_ijazah === $jurusan ? 'selected' : '' }}>
+                                                                                        {{ $jurusan }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                            <div class="invalid-feedback">
+                                                                                Data wajib diisi.
+                                                                            </div>
+                                                                            {!! $errors->first('gelar_ijazah_non', '<div class="invalid-validasi">:message</div>') !!}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="mb-3">
+                                                                            <label for="validationCustom02"
                                                                                 class="form-label">Gelar Non
                                                                                 Akademik Panjang</label>
                                                                             <input type="text" class="form-control"
@@ -291,8 +314,6 @@
                                                                             {!! $errors->first('gelar_non_akademik_panjang', '<div class="invalid-validasi">:message</div>') !!}
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="row">
                                                                     <div class="col-md-6">
                                                                         <div class="mb-3">
                                                                             <label for="validationCustom02"
@@ -432,8 +453,7 @@
                     document.getElementById("gelar_akademik_panjang").required = false;
                     document.getElementById("gelar_akademik_pendek").required = false;
                     document.getElementById("jurusan").required = false;
-                } else if (gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK' || gelar_ijazah === 'Kursus' ||
-                    gelar_ijazah === 'Seminar') {
+                } else if (gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK') {
                     document.getElementById("gelar_akademik_panjang").required = false;
                     document.getElementById("gelar_akademik_pendek").required = false;
                     document.getElementById("jurusan").required = true;
@@ -441,6 +461,15 @@
                     document.getElementById("gelar_akademik_panjang").required = true;
                     document.getElementById("gelar_akademik_pendek").required = true;
                     document.getElementById("jurusan").required = true;
+                }
+            });
+
+            $('#gelar_ijazah_non').bind('change', function() {
+                let gelar_ijazah_non = document.getElementById("gelar_ijazah_non").value;
+                if (gelar_ijazah_non === 'Kursus' || gelar_ijazah_non === 'Seminar') {
+                    document.getElementById("gelar_akademik_panjang").required = false;
+                    document.getElementById("gelar_akademik_pendek").required = false;
+                    document.getElementById("jurusan").required = false;
                 }
             });
 
@@ -491,14 +520,27 @@
                 document.getElementById("gelar_non_akademik_panjang").required = false;
                 document.getElementById("gelar_non_akademik_pendek").required = false;
                 document.getElementById("instansi").required = false;
+                document.getElementById("gelar_ijazah_non").required = false;
                 // required
                 document.getElementById("nama_pendidikan").required = true;
                 document.getElementById("gelar_ijazah").required = true;
-                document.getElementById("jurusan").required = true;
                 document.getElementById("tahun_masuk").required = true;
                 document.getElementById("tahun_lulus").required = true;
-                document.getElementById("gelar_akademik_panjang").required = true;
-                document.getElementById("gelar_akademik_pendek").required = true;
+
+                let gelar_ijazah = document.getElementById("gelar_ijazah").value;
+                if (gelar_ijazah === 'SD' || gelar_ijazah === 'SMP') {
+                    document.getElementById("gelar_akademik_panjang").required = false;
+                    document.getElementById("gelar_akademik_pendek").required = false;
+                    document.getElementById("jurusan").required = false;
+                } else if (gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK') {
+                    document.getElementById("gelar_akademik_panjang").required = false;
+                    document.getElementById("gelar_akademik_pendek").required = false;
+                    document.getElementById("jurusan").required = true;
+                } else {
+                    document.getElementById("gelar_akademik_panjang").required = true;
+                    document.getElementById("gelar_akademik_pendek").required = true;
+                    document.getElementById("jurusan").required = true;
+                }
             } else if (type === 'Non Akademik') {
                 $('.akademik').removeClass('show');
                 $('.non').addClass('show');
@@ -515,21 +557,7 @@
                 document.getElementById("tahun_lulus").required = false;
                 document.getElementById("gelar_akademik_panjang").required = false;
                 document.getElementById("gelar_akademik_pendek").required = false;
-            }
-            gelar_ijazah = document.getElementById("gelar_ijazah").value;
-            if (gelar_ijazah === 'SD' || gelar_ijazah === 'SMP') {
-                document.getElementById("gelar_akademik_panjang").required = false;
-                document.getElementById("gelar_akademik_pendek").required = false;
-                document.getElementById("jurusan").required = false;
-            } else if (gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK' || gelar_ijazah === 'Kursus' ||
-                gelar_ijazah === 'Seminar') {
-                document.getElementById("gelar_akademik_panjang").required = false;
-                document.getElementById("gelar_akademik_pendek").required = false;
-                document.getElementById("jurusan").required = true;
-            } else {
-                document.getElementById("gelar_akademik_panjang").required = true;
-                document.getElementById("gelar_akademik_pendek").required = true;
-                document.getElementById("jurusan").required = true;
+                console.log(type)
             }
             // end onload
         });

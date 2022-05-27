@@ -850,7 +850,8 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
-            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'Kursus', 'Seminar', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'jurusan_non' => ['Kursus', 'Seminar'],
             'id' => $id,
         ];
         return view('employee.create_ijazah')->with($data);
@@ -869,6 +870,7 @@ class EmployeeController extends Controller
         } else {
             $request->validate([
                 'instansi' => 'required',
+                'gelar_ijazah_non' => 'required|max:64',
                 'gelar_non_akademik_panjang' => 'required',
                 'gelar_non_akademik_pendek' => 'required',
                 'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
@@ -888,6 +890,7 @@ class EmployeeController extends Controller
                 $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
             } else {
                 $ijazah->instansi = $request->instansi;
+                $ijazah->gelar_ijazah = $request->gelar_ijazah_non;
                 $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
                 $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
             }
@@ -937,6 +940,7 @@ class EmployeeController extends Controller
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
             'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'jurusan_non' => ['Kursus', 'Seminar'],
             'item' => Ijazah::findorfail(Crypt::decryptString($id)),
         ];
         return view('employee.edit_ijazah')->with($data);
@@ -968,6 +972,7 @@ class EmployeeController extends Controller
         } else {
             $request->validate([
                 'instansi' => 'required',
+                'gelar_ijazah_non' => 'required|max:64',
                 'gelar_non_akademik_panjang' => 'required',
                 'gelar_non_akademik_pendek' => 'required',
                 'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
@@ -994,7 +999,6 @@ class EmployeeController extends Controller
             } else {
                 // null
                 $ijazah->nama_pendidikan = null;
-                $ijazah->gelar_ijazah = null;
                 $ijazah->jurusan = null;
                 $ijazah->tahun_masuk = null;
                 $ijazah->tahun_lulus = null;
@@ -1002,6 +1006,7 @@ class EmployeeController extends Controller
                 $ijazah->gelar_akademik_pendek = null;
                 // input
                 $ijazah->instansi = $request->instansi;
+                $ijazah->gelar_ijazah = $request->gelar_ijazah_non;
                 $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
                 $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
             }
