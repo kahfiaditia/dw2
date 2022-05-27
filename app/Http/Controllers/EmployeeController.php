@@ -184,9 +184,27 @@ class EmployeeController extends Controller
         }
     }
 
-    public function show(Employee $Employee)
+    public function show($id)
     {
-        //
+        $id_karyawan = Crypt::decryptString($id);
+        $employee = Employee::findOrFail($id_karyawan);
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan',
+            'item' => $employee,
+            'child' => Anak_karyawan::where('karyawan_id', $id_karyawan)->orderBy('anak_ke', 'asc')->get(),
+            'school' => Anak_karyawan_sekolah_dw::where('karyawan_id', $id_karyawan)
+                ->orderBy('jenjang')
+                ->orderByRaw("FIELD('KB', 'TK', 'SD', 'SMP', 'SMK')")
+                ->get(),
+            'ijazah' => Ijazah::select('gelar_ijazah', 'type', 'karyawan_id')->where('karyawan_id', $id_karyawan)->groupby('gelar_ijazah')->get(),
+            'sk' => Sk_karyawan::where('karyawan_id', $id_karyawan)->get(),
+            'riwayat' => Riwayat_karyawan::where('karyawan_id', $id_karyawan)->get(),
+            'kontak' => Kontak_darurat::where('karyawan_id', $id_karyawan)->get(),
+        ];
+        return view('employee.show_employee')->with($data);
     }
 
     public function edit($id)
@@ -344,7 +362,7 @@ class EmployeeController extends Controller
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
-            'child' => Sk_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
+            'sk' => Sk_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
         ];
         return view('employee.sk_employee')->with($data);
     }
@@ -642,14 +660,12 @@ class EmployeeController extends Controller
     public function riwayat($id)
     {
         $contacts = Kontak_darurat::where('karyawan_id', Crypt::decryptString($id))->get();
-
         $types =
             [
                 0 => 'Kontak Kerabat Serumah',
                 1 => 'Kontak Kerabat Beda Rumah',
                 2 => 'Kontak Kerabat Sekampung'
             ];
-
         $data = [
             'title' => $this->title,
             'menu' => 'data',

@@ -58,7 +58,7 @@ Route::group(
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
         Route::post('/update', [EmployeeController::class, 'update'])->name('employee.update');
         Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
-        Route::get('/show', [EmployeeController::class, 'show'])->name('employee.show');
+        Route::get('/show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
         Route::post('/dokumen', [EmployeeController::class, 'dokumen'])->name('employee.dokumen');
         Route::get('/ijazah/{id}', [EmployeeController::class, 'ijazah'])->name('employee.ijazah');
         Route::get('/create_ijazah/{id}', [EmployeeController::class, 'create_ijazah'])->name('employee.create_ijazah');

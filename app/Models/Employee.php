@@ -15,6 +15,11 @@ class Employee extends Model
 
     public function user()
     {
-        return $this->belongsTo(user::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class, 'agama_id');
     }
 }

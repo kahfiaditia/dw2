@@ -33,7 +33,7 @@
                     <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link">
-                                <i class="bx bxs-user d-block check-nav-icon mt-2"></i>
+                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Data Karyawan</p>
                             </a>
                             <a class="nav-link">
@@ -130,7 +130,7 @@
                                                     <div class="col-lg-2 align-self-center">
                                                         <div class="d-grid">
                                                             <?php
-                                                            if (count($child) >= 10) {
+                                                            if (count($sk) >= 10) {
                                                                 $style = 'disabled';
                                                             } else {
                                                                 $style = '';
@@ -141,7 +141,7 @@
                                                                 id="submit">Simpan</button>
                                                         </div>
                                                     </div>
-                                                    @if (count($child) >= 10)
+                                                    @if (count($sk) >= 10)
                                                         <div class="col-md-12">
                                                             <div class="alert alert-danger alert-dismissible fade show"
                                                                 role="alert">
@@ -167,7 +167,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($child as $list)
+                                                        @foreach ($sk as $list)
                                                             <tr>
                                                                 <td>{{ $loop->iteration }}</td>
                                                                 <td>{{ $list->no_sk }}</td>

@@ -41,7 +41,7 @@
                             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                                 aria-orientation="vertical">
                                 <a class="nav-link">
-                                    <i class="bx bxs-user d-block check-nav-icon mt-2"></i>
+                                    <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                     <p class="fw-bold mb-4">Data Karyawan</p>
                                 </a>
                                 <a class="nav-link active">
