@@ -429,15 +429,18 @@
                     document.getElementById("gelar_akademik_panjang").required = false;
                     document.getElementById("gelar_akademik_pendek").required = false;
                     document.getElementById("jurusan").required = false;
+                    document.getElementById("gelar_ijazah_non").required = false;
                 } else if (gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK' || gelar_ijazah === 'Kursus' ||
                     gelar_ijazah === 'Seminar') {
                     document.getElementById("gelar_akademik_panjang").required = false;
                     document.getElementById("gelar_akademik_pendek").required = false;
                     document.getElementById("jurusan").required = true;
+                    document.getElementById("gelar_ijazah_non").required = false;
                 } else {
                     document.getElementById("gelar_akademik_panjang").required = true;
                     document.getElementById("gelar_akademik_pendek").required = true;
                     document.getElementById("jurusan").required = true;
+                    document.getElementById("gelar_ijazah_non").required = false;
                 }
             });
         });
