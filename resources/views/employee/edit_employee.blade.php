@@ -39,7 +39,7 @@
                             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                                 aria-orientation="vertical">
                                 <a class="nav-link active">
-                                    <i class="bx bxs-user d-block check-nav-icon mt-2"></i>
+                                    <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                     <p class="fw-bold mb-4">Data Karyawan</p>
                                 </a>
                                 <a class="nav-link">
@@ -259,7 +259,7 @@
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">NPWP</label>
                                                         <input type="number" min="0" class="form-control" id="npwp"
-                                                            name="npwp" value="{{ $item->mpwp }}" placeholder="NPWP">
+                                                            name="npwp" value="{{ $item->npwp }}" placeholder="NPWP">
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -492,8 +492,8 @@
                                                                     class="form-label">Kelurahan <code>*</code></label>
                                                                 <select class="form-control select select2 KelurahanA"
                                                                     name="kelurahan_asal" id="KelurahanA" required>
-                                                                    <option value="{{ $item->kecamatan_asal }}">
-                                                                        {{ $item->kecamatan_asal }}</option>
+                                                                    <option value="{{ $item->kelurahan_asal }}">
+                                                                        {{ $item->kelurahan_asal }}</option>
                                                                 </select>
                                                                 <div class="invalid-feedback">
                                                                     Data wajib diisi.

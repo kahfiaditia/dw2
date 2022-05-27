@@ -34,7 +34,7 @@
                     <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link">
-                                <i class="bx bxs-user d-block check-nav-icon mt-2"></i>
+                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Data Karyawan</p>
                             </a>
                             <a class="nav-link active">
@@ -86,10 +86,10 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
-                                                            <th>Nama Sekolah/Universitas</th>
+                                                            <th>Nama Sekolah/<br> Universitas/<br> Instansi</th>
                                                             <th>Ijazah</th>
-                                                            <th>Jurusan</th>
                                                             <th>Tahun Pendidikan</th>
+                                                            <th>Jenis</th>
                                                             <th>Akademik</th>
                                                             <th>Dokumen Ijazah</th>
                                                             <th>Action</th>
@@ -99,12 +99,14 @@
                                                         @foreach ($lists as $list)
                                                             <tr>
                                                                 <td>{{ $loop->iteration }}</td>
-                                                                <td>{{ $list->nama_pendidikan }}</td>
-                                                                <td>{{ $list->gelar_ijazah }}</td>
-                                                                <td>{{ $list->jurusan }}</td>
-                                                                <td>{{ $list->tahun_masuk . ' s/d ' . $list->tahun_lulus }}
+                                                                <td>{{ $list->type === 'Akademik' ? $list->nama_pendidikan : $list->instansi }}
                                                                 </td>
-                                                                <td>{{ $list->gelar_akademik_pendek }}</td>
+                                                                <td>{{ $list->gelar_ijazah }}</td>
+                                                                <td>{{ $list->tahun_masuk ? $list->tahun_masuk . ' s/d ' . $list->tahun_lulus : '' }}
+                                                                </td>
+                                                                <td>{{ $list->type }}</td>
+                                                                <td>{{ $list->type === 'Akademik' ? $list->gelar_akademik_pendek : $list->gelar_non_akademik_pendek }}
+                                                                </td>
                                                                 <td>
                                                                     @if ($list->dok_ijazah)
                                                                         <a href="javascript:void(0)"

@@ -184,9 +184,27 @@ class EmployeeController extends Controller
         }
     }
 
-    public function show(Employee $Employee)
+    public function show($id)
     {
-        //
+        $id_karyawan = Crypt::decryptString($id);
+        $employee = Employee::findOrFail($id_karyawan);
+        $data = [
+            'title' => $this->title,
+            'menu' => 'data',
+            'submenu' => $this->menu,
+            'label' => 'karyawan',
+            'item' => $employee,
+            'child' => Anak_karyawan::where('karyawan_id', $id_karyawan)->orderBy('anak_ke', 'asc')->get(),
+            'school' => Anak_karyawan_sekolah_dw::where('karyawan_id', $id_karyawan)
+                ->orderBy('jenjang')
+                ->orderByRaw("FIELD('KB', 'TK', 'SD', 'SMP', 'SMK')")
+                ->get(),
+            'ijazah' => Ijazah::select('gelar_ijazah', 'type', 'karyawan_id')->where('karyawan_id', $id_karyawan)->groupby('gelar_ijazah')->get(),
+            'sk' => Sk_karyawan::where('karyawan_id', $id_karyawan)->get(),
+            'riwayat' => Riwayat_karyawan::where('karyawan_id', $id_karyawan)->get(),
+            'kontak' => Kontak_darurat::where('karyawan_id', $id_karyawan)->get(),
+        ];
+        return view('employee.show_employee')->with($data);
     }
 
     public function edit($id)
@@ -344,7 +362,7 @@ class EmployeeController extends Controller
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
-            'child' => Sk_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
+            'sk' => Sk_karyawan::where('karyawan_id', Crypt::decryptString($id))->get(),
         ];
         return view('employee.sk_employee')->with($data);
     }
@@ -642,14 +660,12 @@ class EmployeeController extends Controller
     public function riwayat($id)
     {
         $contacts = Kontak_darurat::where('karyawan_id', Crypt::decryptString($id))->get();
-
         $types =
             [
                 0 => 'Kontak Kerabat Serumah',
                 1 => 'Kontak Kerabat Beda Rumah',
                 2 => 'Kontak Kerabat Sekampung'
             ];
-
         $data = [
             'title' => $this->title,
             'menu' => 'data',
@@ -834,7 +850,8 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
-            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'Kursus', 'Seminar', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'jurusan_non' => ['Kursus', 'Seminar'],
             'id' => $id,
         ];
         return view('employee.create_ijazah')->with($data);
@@ -842,28 +859,41 @@ class EmployeeController extends Controller
 
     public function store_ijazah(Request $request)
     {
-        $request->validate([
-            'nama_pendidikan' => 'required|max:128',
-            'gelar_ijazah' => 'required|max:64',
-            'jurusan' => 'required',
-            'tahun_masuk' => 'required',
-            'tahun_lulus' => 'required',
-            'instansi' => 'required',
-            'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
-        ]);
+        if ($request->type === 'Akademik') {
+            $request->validate([
+                'nama_pendidikan' => 'required|max:128',
+                'gelar_ijazah' => 'required|max:64',
+                'tahun_masuk' => 'required',
+                'tahun_lulus' => 'required',
+                'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
+            ]);
+        } else {
+            $request->validate([
+                'instansi' => 'required',
+                'gelar_ijazah_non' => 'required|max:64',
+                'gelar_non_akademik_panjang' => 'required',
+                'gelar_non_akademik_pendek' => 'required',
+                'dok_ijazah' => 'required|mimes:png,jpeg,jpg,pdf|max:2048',
+            ]);
+        }
         DB::beginTransaction();
         try {
             $ijazah = new Ijazah();
-            $ijazah->nama_pendidikan = $request->nama_pendidikan;
-            $ijazah->instansi = $request->instansi;
-            $ijazah->gelar_ijazah = $request->gelar_ijazah;
-            $ijazah->jurusan = $request->jurusan;
-            $ijazah->tahun_masuk = $request->tahun_masuk;
-            $ijazah->tahun_lulus = $request->tahun_lulus;
-            $ijazah->gelar_akademik_panjang = $request->gelar_akademik_panjang;
-            $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
-            $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
-            $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            $ijazah->type = $request->type;
+            if ($request->type === 'Akademik') {
+                $ijazah->nama_pendidikan = $request->nama_pendidikan;
+                $ijazah->gelar_ijazah = $request->gelar_ijazah;
+                $ijazah->jurusan = $request->jurusan;
+                $ijazah->tahun_masuk = $request->tahun_masuk;
+                $ijazah->tahun_lulus = $request->tahun_lulus;
+                $ijazah->gelar_akademik_panjang = $request->gelar_akademik_panjang;
+                $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
+            } else {
+                $ijazah->instansi = $request->instansi;
+                $ijazah->gelar_ijazah = $request->gelar_ijazah_non;
+                $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
+                $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            }
             // dokumen sk
             if ($request->dok_ijazah) {
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_ijazah->extension();
@@ -910,6 +940,7 @@ class EmployeeController extends Controller
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
             'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
+            'jurusan_non' => ['Kursus', 'Seminar'],
             'item' => Ijazah::findorfail(Crypt::decryptString($id)),
         ];
         return view('employee.edit_ijazah')->with($data);
@@ -930,30 +961,55 @@ class EmployeeController extends Controller
 
     public function update_ijazah(Request $request)
     {
-        $request->validate([
-            'nama_pendidikan' => 'required|max:128',
-            'gelar_ijazah' => 'required|max:64',
-            'jurusan' => 'required',
-            'tahun_masuk' => 'required',
-            'tahun_lulus' => 'required',
-            'instansi' => 'required',
-            'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
-        ]);
-
+        if ($request->type === 'Akademik') {
+            $request->validate([
+                'nama_pendidikan' => 'required|max:128',
+                'gelar_ijazah' => 'required|max:64',
+                'tahun_masuk' => 'required',
+                'tahun_lulus' => 'required',
+                'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+            ]);
+        } else {
+            $request->validate([
+                'instansi' => 'required',
+                'gelar_ijazah_non' => 'required|max:64',
+                'gelar_non_akademik_panjang' => 'required',
+                'gelar_non_akademik_pendek' => 'required',
+                'dok_ijazah' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+            ]);
+        }
         $id = Crypt::decryptString($request->id);
         DB::beginTransaction();
         try {
             $ijazah = Ijazah::findorfail($id);
-            $ijazah->nama_pendidikan = $request->nama_pendidikan;
-            $ijazah->instansi  = $request->instansi;
-            $ijazah->jurusan = $request->jurusan;
-            $ijazah->tahun_masuk = $request->tahun_masuk;
-            $ijazah->tahun_lulus = $request->tahun_lulus;
-            $ijazah->gelar_ijazah = $request->gelar_ijazah;
-            $ijazah->gelar_akademik_panjang = $request->gelar_akademik_panjang;
-            $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
-            $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
-            $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            $ijazah->type = $request->type;
+            if ($request->type === 'Akademik') {
+                // input
+                $ijazah->nama_pendidikan = $request->nama_pendidikan;
+                $ijazah->gelar_ijazah = $request->gelar_ijazah;
+                $ijazah->jurusan = $request->jurusan;
+                $ijazah->tahun_masuk = $request->tahun_masuk;
+                $ijazah->tahun_lulus = $request->tahun_lulus;
+                $ijazah->gelar_akademik_panjang = $request->gelar_akademik_panjang;
+                $ijazah->gelar_akademik_pendek = $request->gelar_akademik_pendek;
+                // null
+                $ijazah->instansi = null;
+                $ijazah->gelar_non_akademik_panjang = null;
+                $ijazah->gelar_non_akademik_pendek = null;
+            } else {
+                // null
+                $ijazah->nama_pendidikan = null;
+                $ijazah->jurusan = null;
+                $ijazah->tahun_masuk = null;
+                $ijazah->tahun_lulus = null;
+                $ijazah->gelar_akademik_panjang = null;
+                $ijazah->gelar_akademik_pendek = null;
+                // input
+                $ijazah->instansi = $request->instansi;
+                $ijazah->gelar_ijazah = $request->gelar_ijazah_non;
+                $ijazah->gelar_non_akademik_panjang = $request->gelar_non_akademik_panjang;
+                $ijazah->gelar_non_akademik_pendek = $request->gelar_non_akademik_pendek;
+            }
             // dokumen sk
             if ($request->dok_ijazah) {
                 $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_ijazah->extension();

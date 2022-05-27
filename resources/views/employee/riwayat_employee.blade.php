@@ -33,7 +33,7 @@
                     <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link">
-                                <i class="bx bxs-user d-block check-nav-icon mt-2"></i>
+                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Data Karyawan</p>
                             </a>
                             <a class="nav-link">
@@ -155,7 +155,8 @@
                                                                                         <thead>
                                                                                             <tr>
                                                                                                 <th>No</th>
-                                                                                                <th>Penyakit</th>
+                                                                                                <th width="30%">Penyakit
+                                                                                                </th>
                                                                                                 <th>Keterangan</th>
                                                                                                 <th>Action</th>
                                                                                             </tr>
@@ -165,9 +166,29 @@
                                                                                                 <tr>
                                                                                                     <td>{{ $loop->iteration }}
                                                                                                     </td>
-                                                                                                    <td>{{ $list->penyakit }}
+                                                                                                    <td>
+                                                                                                        <label
+                                                                                                            data-bs-toggle="tooltip"
+                                                                                                            data-bs-placement="top"
+                                                                                                            title="{{ $list->penyakit }}">
+                                                                                                            @if (strlen($list->penyakit) > 25)
+                                                                                                                {{ substr($list->penyakit, 0, 25) . '..' }}
+                                                                                                            @else
+                                                                                                                {{ $list->penyakit }}
+                                                                                                            @endif
+                                                                                                        </label>
                                                                                                     </td>
-                                                                                                    <td>{{ $list->keterangan }}
+                                                                                                    <td>
+                                                                                                        <label
+                                                                                                            data-bs-toggle="tooltip"
+                                                                                                            data-bs-placement="top"
+                                                                                                            title="{{ $list->keterangan }}">
+                                                                                                            @if (strlen($list->keterangan) > 40)
+                                                                                                                {{ substr($list->keterangan, 0, 45) . '..' }}
+                                                                                                            @else
+                                                                                                                {{ $list->keterangan }}
+                                                                                                            @endif
+                                                                                                        </label>
                                                                                                     </td>
                                                                                                     <td>
                                                                                                         <?php $id = Crypt::encryptString($list->id); ?>
@@ -331,7 +352,17 @@
                                                                                                     </td>
                                                                                                     <td>{{ $list->no_hp }}
                                                                                                     </td>
-                                                                                                    <td>{{ $list->keterangan }}
+                                                                                                    <td>
+                                                                                                        <label
+                                                                                                            data-bs-toggle="tooltip"
+                                                                                                            data-bs-placement="top"
+                                                                                                            title="{{ $list->keterangan }}">
+                                                                                                            @if (strlen($list->keterangan) > 25)
+                                                                                                                {{ substr($list->keterangan, 0, 25) . '..' }}
+                                                                                                            @else
+                                                                                                                {{ $list->keterangan }}
+                                                                                                            @endif
+                                                                                                        </label>
                                                                                                     </td>
                                                                                                     <td>{{ $list->tipe }}
                                                                                                     </td>
