@@ -263,10 +263,7 @@
                                                             data-bs-target="#collapseOneIjazah<?php echo $no; ?>"
                                                             aria-expanded="true"
                                                             aria-controls="collapseOneIjazah<?php echo $no; ?>">
-                                                            {{ $item->type }}
-                                                            @if ($item->type == 'Akademik')
-                                                                {{ ' - ' . $item->gelar_ijazah }}
-                                                            @endif
+                                                            {{ $item->type . ' - ' . $item->gelar_ijazah }}
                                                         </button>
                                                     </h2>
                                                     <div id="collapseOneIjazah<?php echo $no; ?>"
@@ -287,9 +284,13 @@
                                                                         <thead>
                                                                             <tr>
                                                                                 <th>No</th>
-                                                                                <th>Nama Sekolah/<br> Universitas/<br>
-                                                                                    Instansi
-                                                                                </th>
+                                                                                @if ($item->type == 'Akademik')
+                                                                                    <th>Nama Sekolah/<br> Universitas
+                                                                                    </th>
+                                                                                @else
+                                                                                    <th>Nama Instansi/<br> Lembaga Penerbit
+                                                                                        Sertifikat</th>
+                                                                                @endif
                                                                                 <th>Tahun Pendidikan</th>
                                                                                 <th>Jenis</th>
                                                                                 <th>Akademik</th>
