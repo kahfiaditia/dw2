@@ -482,15 +482,28 @@
                     // non required
                     document.getElementById("gelar_non_akademik_panjang").required = false;
                     document.getElementById("gelar_non_akademik_pendek").required = false;
+                    document.getElementById("gelar_ijazah_non").required = false;
                     document.getElementById("instansi").required = false;
                     // required
                     document.getElementById("nama_pendidikan").required = true;
                     document.getElementById("gelar_ijazah").required = true;
-                    document.getElementById("jurusan").required = true;
                     document.getElementById("tahun_masuk").required = true;
                     document.getElementById("tahun_lulus").required = true;
-                    document.getElementById("gelar_akademik_panjang").required = true;
-                    document.getElementById("gelar_akademik_pendek").required = true;
+                    // cek gelar yg dipilih apa 
+                    let gelar_ijazah = document.getElementById("gelar_ijazah").value;
+                    if (gelar_ijazah === 'SD' || gelar_ijazah === 'SMP') {
+                        document.getElementById("gelar_akademik_panjang").required = false;
+                        document.getElementById("gelar_akademik_pendek").required = false;
+                        document.getElementById("jurusan").required = false;
+                    } else if (gelar_ijazah === 'SMA' || gelar_ijazah === 'SMK') {
+                        document.getElementById("gelar_akademik_panjang").required = false;
+                        document.getElementById("gelar_akademik_pendek").required = false;
+                        document.getElementById("jurusan").required = true;
+                    } else {
+                        document.getElementById("gelar_akademik_panjang").required = true;
+                        document.getElementById("gelar_akademik_pendek").required = true;
+                        document.getElementById("jurusan").required = true;
+                    }
                 } else if (type === 'Non Akademik') {
                     $('.akademik').removeClass('show');
                     $('.non').addClass('show');
@@ -498,6 +511,7 @@
                     // required
                     document.getElementById("gelar_non_akademik_panjang").required = true;
                     document.getElementById("gelar_non_akademik_pendek").required = true;
+                    document.getElementById("gelar_ijazah_non").required = true;
                     document.getElementById("instansi").required = true;
                     // non required
                     document.getElementById("nama_pendidikan").required = false;
@@ -519,8 +533,8 @@
                 // non required
                 document.getElementById("gelar_non_akademik_panjang").required = false;
                 document.getElementById("gelar_non_akademik_pendek").required = false;
-                document.getElementById("instansi").required = false;
                 document.getElementById("gelar_ijazah_non").required = false;
+                document.getElementById("instansi").required = false;
                 // required
                 document.getElementById("nama_pendidikan").required = true;
                 document.getElementById("gelar_ijazah").required = true;
@@ -548,6 +562,7 @@
                 // required
                 document.getElementById("gelar_non_akademik_panjang").required = true;
                 document.getElementById("gelar_non_akademik_pendek").required = true;
+                document.getElementById("gelar_ijazah_non").required = true;
                 document.getElementById("instansi").required = true;
                 // non required
                 document.getElementById("nama_pendidikan").required = false;
@@ -557,7 +572,6 @@
                 document.getElementById("tahun_lulus").required = false;
                 document.getElementById("gelar_akademik_panjang").required = false;
                 document.getElementById("gelar_akademik_pendek").required = false;
-                console.log(type)
             }
             // end onload
         });

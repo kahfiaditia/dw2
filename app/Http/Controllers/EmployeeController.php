@@ -199,7 +199,8 @@ class EmployeeController extends Controller
                 ->orderBy('jenjang')
                 ->orderByRaw("FIELD('KB', 'TK', 'SD', 'SMP', 'SMK')")
                 ->get(),
-            'ijazah' => Ijazah::select('gelar_ijazah', 'type', 'karyawan_id')->where('karyawan_id', $id_karyawan)->groupby('gelar_ijazah')->get(),
+            'ijazah' => Ijazah::select('gelar_ijazah', 'type', 'karyawan_id')->where('karyawan_id', $id_karyawan)
+                ->orderByRaw("FIELD(gelar_ijazah, 'Kursus', 'Seminar', 'SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2','S3')")->groupby('gelar_ijazah')->get(),
             'sk' => Sk_karyawan::where('karyawan_id', $id_karyawan)->get(),
             'riwayat' => Riwayat_karyawan::where('karyawan_id', $id_karyawan)->get(),
             'kontak' => Kontak_darurat::where('karyawan_id', $id_karyawan)->get(),
