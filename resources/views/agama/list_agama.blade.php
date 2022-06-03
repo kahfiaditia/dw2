@@ -46,10 +46,10 @@
                                             <td>{{ $list->agama }}</td>
                                             <td>
                                                 <span class="badge badge-pill badge-soft-<?php if ($list->aktif === 1) {
-    echo 'success';
-} else {
-    echo 'danger';
-} ?> font-size-12">
+                                                    echo 'success';
+                                                } else {
+                                                    echo 'danger';
+                                                } ?> font-size-12">
                                                     @if ($list->aktif === 1)
                                                         Aktif
                                                     @else
@@ -86,8 +86,7 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/alert.js') }}"></script>
+
     <script>
         $('.delete_confirm').on('click', function(event) {
             event.preventDefault();

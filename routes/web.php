@@ -7,18 +7,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
+use App\Http\Controllers\SpecialNeedController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::get('/register', [LoginController::class, 'register'])->name('register');
@@ -126,7 +116,7 @@ Route::group(
         Route::get('/create', [AgamaController::class, 'create'])->name('agama.create');
         Route::post('/store', [AgamaController::class, 'store'])->name('agama.store');
         Route::get('/edit/{id}', [AgamaController::class, 'edit'])->name('agama.edit');
-        Route::post('/update', [AgamaController::class, 'update'])->name('agama.update');
+        Route::patch('/update/{id}', [AgamaController::class, 'update'])->name('agama.update');
         Route::delete('/destroy', [AgamaController::class, 'destroy'])->name('agama.destroy');
         Route::post('/dropdown', [AgamaController::class, 'dropdown'])->name('agama.dropdown');
     }
@@ -136,13 +126,8 @@ Route::group(
     ['middleware' => 'auth'],
     function () {
         Route::resource('/siswa', SiswaController::class);
-    }
-);
-
-Route::group(
-    ['middleware' => 'auth'],
-    function () {
         Route::resource('/akun', AkunController::class);
+        Route::resource('/specialneeds', SpecialNeedController::class);
         Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
         Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
