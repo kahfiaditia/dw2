@@ -11,6 +11,7 @@
         $akses_menu = DB::table('menu')
             ->select('menu.id', 'menu', 'sub_menu', 'menu.icon as icon_menu', DB::raw('group_concat(submenu.id) as id_submenu'))
             ->Join('submenu', 'submenu.menu_id', 'menu.id')
+            ->orderby('menu.order_menu', 'ASC')
             ->groupby('menu.id')
             ->get();
         ?>

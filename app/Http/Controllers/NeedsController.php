@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
-use Illuminate\Http\Request;
 use App\Models\Kebutuhan_khusus;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
-class SpecialNeedController extends Controller
+class NeedsController extends Controller
 {
     protected $title = 'dharmawidya';
-    protected $menu = 'Data';
-    protected $sub_menu = 'Kebutuhan Khusus';
+    protected $menu = 'setting';
+    protected $submenu = 'Kebutuhan Khusus';
 
     public function index()
     {
@@ -21,12 +21,12 @@ class SpecialNeedController extends Controller
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => $this->sub_menu,
+            'submenu' => $this->submenu,
             'label' => 'data kebutuhan khusus',
             'special_needs' => $special_needs
         ];
 
-        return view('specialneeds.index')->with($data);
+        return view('needs.index')->with($data);
     }
 
     public function create()
@@ -34,11 +34,10 @@ class SpecialNeedController extends Controller
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => $this->sub_menu,
-            'label' => 'Tambah kebutuhan khusus',
+            'submenu' => 'kebutuhan khusus',
+            'label' => 'tambah kebutuhan khusus',
         ];
-
-        return view('specialneeds.create')->with($data);
+        return view('needs.crete')->with($data);
     }
 
     public function store(Request $request)
@@ -82,7 +81,7 @@ class SpecialNeedController extends Controller
             'special_need' => $special_need
         ];
 
-        return view('specialneeds.edit')->with($data);
+        return view('needs.edit')->with($data);
     }
 
     public function update(Request $request, $id)

@@ -8,6 +8,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\SpecialNeedController;
+use App\Http\Controllers\NeedsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -125,9 +126,9 @@ Route::group(
 Route::group(
     ['middleware' => 'auth'],
     function () {
+        Route::resource('/needs', NeedsController::class);
         Route::resource('/siswa', SiswaController::class);
         Route::resource('/akun', AkunController::class);
-        Route::resource('/specialneeds', SpecialNeedController::class);
         Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
         Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
