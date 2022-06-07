@@ -16,6 +16,7 @@
                 </span>
                 <span class="logo-lg">
                     <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="" height="19">
+                    {{-- logo DW --}}
                     {{-- <img src="{{ URL::asset('assets/images/logo-sid.png') }}" alt="" height="40"> --}}
                 </span>
             </a>
