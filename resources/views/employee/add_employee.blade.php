@@ -331,8 +331,7 @@
                                                     <div class="mb-3">
                                                         <label class="form-label">Alamat KTP <code>*</code></label>
                                                         <div>
-                                                            <textarea required class="form-control" name="alamat_asal" placeholder="Alamat KTP"
-                                                                rows="3">{{ old('alamat_asal') }}</textarea>
+                                                            <textarea required class="form-control" name="alamat_asal" placeholder="Alamat KTP" rows="3">{{ old('alamat_asal') }}</textarea>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
                                                             </div>
@@ -463,8 +462,7 @@
                                                         <input class="form-check-input" style="float:right" id="AlamatSama"
                                                             type="checkbox" name="AlamatSama" onclick="Myalamat()">
                                                         <div>
-                                                            <textarea required class="form-control alamat-sama" name="alamat" placeholder="Alamat di Tangerang"
-                                                                rows="3">{{ old('alamat') }}</textarea>
+                                                            <textarea required class="form-control alamat-sama" name="alamat" placeholder="Alamat di Tangerang" rows="3">{{ old('alamat') }}</textarea>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
                                                             </div>
@@ -595,7 +593,7 @@
                                                             <code>*</code></label>
                                                         <select class="form-control select select2" name="jabatan"
                                                             required>
-                                                            <option value="">--Pilih Golongan Darah--</option>
+                                                            <option value="">--Pilih Jabatan--</option>
                                                             <option value="Guru">Guru</option>
                                                             <option value="Karyawan">Karyawan</option>
                                                         </select>
