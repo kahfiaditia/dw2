@@ -11,12 +11,12 @@
             </a>
             <a href="#" class="logo logo-light">
                 <span class="logo-sm">
-                    {{-- <img src="{{ URL::asset('assets/images/logo-light.svg') }}" alt="" height="22"> --}}
-                    <img src="{{ URL::asset('assets/images/logo-sid.svg') }}" alt="" height="52">
+                    <img src="{{ URL::asset('assets/images/logo-light.svg') }}" alt="" height="22">
+                    {{-- <img src="{{ URL::asset('assets/images/logo-sid.svg') }}" alt="" height="52"> --}}
                 </span>
                 <span class="logo-lg">
-                    {{-- <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="" height="19"> --}}
-                    <img src="{{ URL::asset('assets/images/logo-sid.png') }}" alt="" height="40">
+                    <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="" height="19">
+                    {{-- <img src="{{ URL::asset('assets/images/logo-sid.png') }}" alt="" height="40"> --}}
                 </span>
             </a>
         </div>
