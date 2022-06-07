@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <form class="needs-validation" action="{{ route('specialneeds.store') }}" method="POST" novalidate>
+            <form class="needs-validation" action="{{ route('needs.store') }}" method="POST" novalidate>
                 @csrf
                 <div class="row">
                     <div class="col-xl-12">
