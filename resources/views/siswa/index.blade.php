@@ -30,30 +30,18 @@
                             <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Siswa</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">NISN</th>
+                                        <th class="text-center">Nama Lengkap</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($lists as $list)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $list->agama }}</td>
-                                            <td>
-                                                <span class="badge badge-pill badge-soft-<?php if ($list->aktif === 1) {
-    echo 'success';
-} else {
-    echo 'danger';
-} ?> font-size-12">
-                                                    @if ($list->aktif === 1)
-                                                        Aktif
-                                                    @else
-                                                        Non Aktif
-                                                    @endif
-                                                </span>
-                                            </td>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $list->nisn }}</td>
+                                            <td class="text-center">{{ $list->nama_lengkap }}</td>
                                             <td>
                                                 <?php $id = Crypt::encryptString($list->id); ?>
                                                 <form class="delete-form"
@@ -79,24 +67,4 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/alert.js') }}"></script>
-    <script>
-        $('.delete_confirm').on('click', function(event) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Hapus Data',
-                text: 'Ingin menghapus data?',
-                icon: 'question',
-                showCloseButton: true,
-                showCancelButton: true,
-                cancelButtonText: "Batal",
-                focusConfirm: false,
-            }).then((value) => {
-                if (value.isConfirmed) {
-                    $(this).closest("form").submit()
-                }
-            });
-        });
-    </script>
 @endsection

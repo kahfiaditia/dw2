@@ -16,7 +16,7 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 @if (in_array('12', $session_menu))
-                                    <a href="{{ route('specialneeds.create') }}" type="button"
+                                    <a href="{{ route('needs.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="mdi mdi-plus me-1"></i> Tambah Kebutuhan Khusus
                                     </a>
@@ -47,12 +47,12 @@
                                             <td class="text-center">{{ $special_need->nama }}</td>
                                             <td class="text-center">
                                                 <form class="delete-form"
-                                                    action="{{ route('specialneeds.destroy', Crypt::encryptString($special_need->id)) }}"
+                                                    action="{{ route('needs.destroy', Crypt::encryptString($special_need->id)) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     @if (in_array('13', $session_menu))
-                                                        <a href="{{ route('specialneeds.edit', Crypt::encryptString($special_need->id)) }}"
+                                                        <a href="{{ route('needs.edit', Crypt::encryptString($special_need->id)) }}"
                                                             class="text-success"><i
                                                                 class="mdi mdi-pencil font-size-18"></i></a>
                                                     @endif
