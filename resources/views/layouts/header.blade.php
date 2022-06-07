@@ -12,6 +12,7 @@
             <a href="#" class="logo logo-light">
                 <span class="logo-sm">
                     <img src="{{ URL::asset('assets/images/logo-light.svg') }}" alt="" height="22">
+                    {{-- logo DW --}}
                     {{-- <img src="{{ URL::asset('assets/images/logo-sid.svg') }}" alt="" height="52"> --}}
                 </span>
                 <span class="logo-lg">
