@@ -57,12 +57,12 @@
                         $birthDate = new DateTime($tanggal_lahir);
                         $today = new DateTime('today');
                         if ($birthDate > $today) {
-                            exit('0 tahun 0 bulan 0 hari');
+                            exit('0 Tahun 0 Bulan 0 Hari');
                         }
                         $y = $today->diff($birthDate)->y;
                         $m = $today->diff($birthDate)->m;
                         $d = $today->diff($birthDate)->d;
-                        return $y . ' tahun ' . $m . ' bulan ' . $d . ' hari';
+                        return $y . ' Tahun ' . $m . ' Bulan ' . $d . ' Hari';
                     }
                     ?>
                     <div class="col-lg-10">
@@ -74,8 +74,12 @@
                                         <div class="d-flex">
                                             @if ($item->foto)
                                                 <div class="flex-shrink-0 me-4">
-                                                    <img src="{{ Storage::url('karyawan/foto/' . $item->foto) }}" alt=""
-                                                        class="avatar-sm rounded">
+                                                    <a href="javascript:void(0)"
+                                                        data-id="{{ $item->foto . '|foto|karyawan' }}" id="get_data"
+                                                        data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
+                                                        <img src="{{ Storage::url('karyawan/foto/' . $item->foto) }}"
+                                                            alt="" class="avatar-sm rounded">
+                                                    </a>
                                                 </div>
                                             @endif
                                             <div class="flex-grow-1 overflow-hidden">
@@ -237,7 +241,9 @@
                                                     <h5 class="font-size-14">Tanggal Masuk Kerja</h5>
                                                     <p class="text-muted mb-0">
                                                         {{ date('d F Y', strtotime($item->masuk_kerja)) }}
-                                                        ({{ hitung_umur($item->masuk_kerja) }})</p>
+                                                        <br>
+                                                        ({{ hitung_umur($item->masuk_kerja) }})
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
