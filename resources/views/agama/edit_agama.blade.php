@@ -15,9 +15,9 @@
                     </div>
                 </div>
             </div>
-            <form class="needs-validation" action="{{ route('agama.update') }}" method="POST" novalidate>
+            <form class="needs-validation" action="{{ route('agama.update', $agama->id) }}" method="POST" novalidate>
                 @csrf
-                <input type="hidden" class="Id" id="Id" name="id" value="{{ $agama->id }}">
+                @method('PATCH')
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card">
@@ -27,7 +27,8 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Agama</label>
                                             <input type="text" class="form-control" id="agama" name="agama"
-                                                value="{{ $agama->agama }}" required placeholder="Agama" autofocus>
+                                                value="{{ old('agama', $agama->agama) }}" required placeholder="Agama"
+                                                autofocus>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
@@ -39,7 +40,7 @@
                                             <label for="validationCustom02" class="form-label">Status Aktif</label>
                                             <div>
                                                 <input type="checkbox" id="switch1" switch="none" name="aktif"
-                                                    {{ $agama->aktif === '1' ? 'checked' : '' }} />
+                                                    {{ $agama->aktif == '1' ? 'checked' : '' }} />
                                                 <label for="switch1" data-on-label="On" data-off-label="Off"></label>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
@@ -62,5 +63,4 @@
             </form>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
 @endsection

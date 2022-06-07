@@ -5,7 +5,9 @@
             </div>
             <div class="col-sm-6">
                 <div class="text-sm-end d-none d-sm-block">
-                    <script>document.write(new Date().getFullYear())</script> © {{ strtoupper($title) }}.
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> © {{ strtoupper($title) }}.
                 </div>
             </div>
         </div>

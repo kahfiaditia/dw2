@@ -14,28 +14,21 @@ class NeedsController extends Controller
     protected $menu = 'setting';
     protected $submenu = 'Kebutuhan Khusus';
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        $special_needs = Kebutuhan_khusus::orderBy('id', 'DESC')->get();
+
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => ' data Kebutuhan Khusus',
-            'lists' => Kebutuhan_khusus::all()
+            'label' => 'data kebutuhan khusus',
+            'special_needs' => $special_needs
         ];
-        return view('needs.list')->with($data);
+
+        return view('needs.index')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $data = [
@@ -44,112 +37,83 @@ class NeedsController extends Controller
             'submenu' => 'kebutuhan khusus',
             'label' => 'tambah kebutuhan khusus',
         ];
-        return view('needs.add')->with($data);
+        return view('needs.crete')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'kode' => 'required|unique:kebutuhan_khusus|max:64',
-            'nama' => 'required|max:64',
+        $validated = $request->validate([
+            'kode' => 'required|unique:kebutuhan_khusus,kode,NULL,id,deleted_at,NULL|min:2',
+            'nama' => 'required'
         ]);
+
         DB::beginTransaction();
         try {
-            $needs = new Kebutuhan_khusus();
-            $needs->kode = $request->kode;
-            $needs->nama = $request->nama;
-            $needs->save();
-
+            Kebutuhan_khusus::create([
+                'kode' => $validated['kode'],
+                'nama' => $validated['nama']
+            ]);
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('needs');
-        } catch (\Exception $e) {
-            dd($e);
-            DB::rollback();
-            // something went wrong
+            return redirect('specialneeds');
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::addAlert(false);
+            return back();
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
+        $special_need = Kebutuhan_khusus::findOrFail(Crypt::decryptString($id));
+
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'kebutuhan khusus',
-            'label' => 'edit kebutuhan khusus',
-            'needs' => Kebutuhan_khusus::findorfail($id_decrypted)
+            'submenu' => $this->sub_menu,
+            'label' => 'Edit kebutuhan khusus',
+            'special_need' => $special_need
         ];
+
         return view('needs.edit')->with($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'kode' => 'required|max:64|unique:kebutuhan_khusus,kode,' . $request->id,
-            'nama' => 'required|max:64',
+        $decrypted_id = Crypt::decryptString($id);
+        $validated = $request->validate([
+            'kode' => "required|min:2|unique:kebutuhan_khusus,kode,$decrypted_id,id,deleted_at,NULL",
+            'nama' => 'required'
         ]);
+
         DB::beginTransaction();
         try {
-            $needs = Kebutuhan_khusus::findorfail($request->id);
-            $needs->kode = $request->kode;
-            $needs->nama = $request->nama;
-            $needs->save();
-
+            $special_need = Kebutuhan_khusus::findOrFail($decrypted_id);
+            $special_need->kode = $validated['kode'];
+            $special_need->nama = $validated['nama'];
+            $special_need->save();
             DB::commit();
             AlertHelper::updateAlert(true);
-            return redirect('needs');
-        } catch (\Exception $e) {
-            dd($e);
-            DB::rollback();
-            // something went wrong
+            return redirect('specialneeds');
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
-            $needs = Kebutuhan_khusus::findorfail($id_decrypted);
-            $needs->delete();
-
+            $special_need = Kebutuhan_khusus::findOrFail(Crypt::decryptString($id));
+            $special_need->delete();
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();
