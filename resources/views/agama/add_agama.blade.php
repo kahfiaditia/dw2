@@ -26,7 +26,7 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Agama</label>
                                             <input type="text" class="form-control" id="agama" name="agama" required
-                                                placeholder="Agama" autofocus>
+                                                placeholder="Agama" value="{{ old('agama') }}">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
@@ -48,5 +48,4 @@
             </form>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
 @endsection
