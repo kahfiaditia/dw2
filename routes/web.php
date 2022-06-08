@@ -7,8 +7,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
-use App\Http\Controllers\SpecialNeedController;
 use App\Http\Controllers\NeedsController;
+use App\Http\Controllers\ParentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -126,6 +126,7 @@ Route::group(
 Route::group(
     ['middleware' => 'auth'],
     function () {
+        Route::resource('parents', ParentController::class);
         Route::resource('/needs', NeedsController::class);
         Route::resource('/siswa', SiswaController::class);
         Route::resource('/akun', AkunController::class);

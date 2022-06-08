@@ -12,11 +12,12 @@
             <a href="#" class="logo logo-light">
                 <span class="logo-sm">
                     <img src="{{ URL::asset('assets/images/logo-light.svg') }}" alt="" height="22">
+                    {{-- logo DW dibuat okhe --}}
                     {{-- <img src="{{ URL::asset('assets/images/logo-sid.svg') }}" alt="" height="52"> --}}
                 </span>
                 <span class="logo-lg">
                     <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="" height="19">
-                    {{-- logo DW --}}
+                    {{-- logo DW dibuat okhe --}}
                     {{-- <img src="{{ URL::asset('assets/images/logo-sid.png') }}" alt="" height="40"> --}}
                 </span>
             </a>
