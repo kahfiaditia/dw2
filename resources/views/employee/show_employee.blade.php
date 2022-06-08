@@ -387,7 +387,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-anak" role="tabpanel"
                                         aria-labelledby="v-pills-anak-tab">
-                                        @if (count($child) > 0 and count($school) > 0)
+                                        @if (count($child) > 0 or count($school) > 0)
                                             <div class="mt-4">
                                                 <div class="accordion" id="accordionExample">
                                                     <div class="accordion-item">
@@ -475,7 +475,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-riwayat" role="tabpanel"
                                         aria-labelledby="v-pills-riwayat-tab">
-                                        @if (count($riwayat) > 0 and count($kontak) > 0)
+                                        @if (count($riwayat) > 0 or count($kontak) > 0)
                                             <div class="mt-4">
                                                 <div class="accordion" id="accordionExample">
                                                     <div class="accordion-item">
