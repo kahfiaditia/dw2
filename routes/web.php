@@ -104,6 +104,8 @@ Route::group(
         Route::post('/kecamatan', [KodeposController::class, 'kecamatan'])->name('kodepos.dropdown.kecamatan');
         Route::post('/kelurahan', [KodeposController::class, 'kelurahan'])->name('kodepos.dropdown.kelurahan');
         Route::get('/data_ajax', [KodeposController::class, 'data_ajax'])->name('kodepos.data_ajax');
+        Route::get('/get_villages_by_district/{district}', [KodeposController::class, 'get_villages_by_district'])->name('kodepos.get_villages_by_district');
+        Route::get('/get_postal_code_by_village/{village}', [KodeposController::class, 'get_postal_code_by_village'])->name('kodepos.get_postal_code_by_village');
     }
 );
 

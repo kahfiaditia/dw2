@@ -12,4 +12,9 @@ class Agama extends Model
     use SoftDeletes;
 
     protected $table = 'agama';
+
+    public function students()
+    {
+        return $this->hasMany(Siswa::class, 'agama_id');
+    }
 }

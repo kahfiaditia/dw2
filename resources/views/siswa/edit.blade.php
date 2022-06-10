@@ -22,9 +22,10 @@
             {{-- cek device moblie atau bukan --}}
             <?php preg_match('/(chrome|firefox|avantgo|blackberry|android|blazer|elaine|hiptop|iphone|ipod|kindle|midp|mmp|mobile|o2|opera mini|palm|palm os|pda|plucker|pocket|psp|smartphone|symbian|treo|up.browser|up.link|vodafone|wap|windows ce; iemobile|windows ce; ppc;|windows ce; smartphone;|xiino)/i', $_SERVER['HTTP_USER_AGENT'], $version); ?>
             <div class="checkout-tabs">
-                <form class="needs-validation" action="{{ route('siswa.store') }}" enctype="multipart/form-data"
-                    method="POST" novalidate>
+                <form class="needs-validation" action="{{ route('siswa.update', $student->id) }}"
+                    enctype="multipart/form-data" method="POST" novalidate>
                     @csrf
+                    @method('PATCH')
                     <div class="row">
                         @if ($version[1] == 'Android' || $version[1] == 'Mobile' || $version[1] == 'iPhone')
                             <?php $device = 'style="display:none;"';
@@ -40,7 +41,7 @@
                                     <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                     <p class="fw-bold mb-4">Data Pribadi</p>
                                 </a>
-                                <a class="nav-link" href="{{ route('parents.index') }}">
+                                <a class="nav-link" href="{{ route('parents.create') }}">
                                     <i class="bx bx-group d-block check-nav-icon mt-2"></i>
                                     {{-- <i class="bx bx-book-content d-block check-nav-icon mt-2"></i> --}}
                                     <p class="fw-bold mb-4">Orang Tua</p>
@@ -67,14 +68,11 @@
                                     <div class="card shadow-none border mb-0">
                                         <div class="card-body">
                                             <div class="row">
-                                                @foreach ($errors->all() as $error)
-                                                    <div>{{ $error }}</div>
-                                                @endforeach
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Nama Lengkap<code>*</code></label>
                                                     <input type="text" class="form-control" name="nama_lengkap"
                                                         placeholder="Nama Lengkap" required
-                                                        value="{{ old('nama_lengkap') }}">
+                                                        value="{{ old('nama_lengkap', $student->nama_lengkap) }}">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -85,7 +83,7 @@
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Email <code>*</code></label>
                                                     <input type="email" class="form-control" name="email" required
-                                                        placeholder="Email" value="{{ old('email') }}">
+                                                        placeholder="Email" value="{{ old('email', $student->email) }}">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -96,8 +94,8 @@
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Nomor Handphone<code>*</code></label>
                                                     <input type="text" class="form-control number-only" name="no_handphone"
-                                                        required value="{{ old('no_handphone') }}" minlength="12"
-                                                        maxlength="13" placeholder="Nomor Handphone">
+                                                        required value="{{ old('no_handphone', $student->no_handphone) }}"
+                                                        minlength="12" maxlength="13" placeholder="Nomor Handphone">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -110,9 +108,11 @@
                                                     <select name="jenis_kelamin" class="form-control" required>
                                                         <option value="">-- Pilih Jenis Kelamin --</option>
                                                         <option value="Laki - Laki"
+                                                            @if ($student->jenis_kelamin == 'Laki - Laki') selected @endif
                                                             {{ old('jenis_kelamin') == 'Laki - Laki' ? 'selected' : '' }}>
                                                             Laki - Laki</option>
                                                         <option value="Perempuan"
+                                                            @if ($student->jenis_kelamin == 'Perempuan') selected @endif
                                                             {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>
                                                             Perempuan</option>
                                                     </select>
@@ -127,17 +127,12 @@
                                                     <label for="">Golongan Darah <code>*</code></label>
                                                     <select name="golongan_darah" class="form-control" required>
                                                         <option value="">-- Pilih Golongan Darah --</option>
-                                                        <option value="A" {{ old('A') == 'A' ? 'selected' : '' }}>
-                                                            A</option>
-                                                        <option value="B"
-                                                            {{ old('golongan_darah') == 'B' ? 'selected' : '' }}>
-                                                            B</option>
-                                                        <option value="AB"
-                                                            {{ old('golongan_darah') == 'AB' ? 'selected' : '' }}>
-                                                            AB</option>
-                                                        <option value="O"
-                                                            {{ old('golongan_darah') == 'O' ? 'selected' : '' }}>
-                                                            O</option>
+                                                        @foreach ($blood_types as $blood_type)
+                                                            <option value="{{ $blood_type['value'] }}"
+                                                                {{ old('A') == 'A' ? 'selected' : '' }}
+                                                                @if ($blood_type['value'] == $student->golongan_darah) selected @endif>
+                                                                {{ $blood_type['name'] }}</option>
+                                                        @endforeach
                                                     </select>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -150,8 +145,8 @@
                                                     <label for="validationCustom02" class="form-label">NISN
                                                         <code>*</code></label>
                                                     <input type="text" class="form-control number-only" name="nisn"
-                                                        placeholder="NISN" value="{{ old('nisn') }}" maxlength="20"
-                                                        required>
+                                                        placeholder="NISN" value="{{ old('nisn', $student->nisn) }}"
+                                                        maxlength="20" required>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -164,8 +159,8 @@
                                                         <label for="validationCustom02"
                                                             class="form-label">NIK<code>*</code></label>
                                                         <input type="text" class="form-control number-only" name="nik"
-                                                            placeholder="NIK" value="{{ old('nik') }}" maxlength="20"
-                                                            required>
+                                                            placeholder="NIK" value="{{ old('nik', $student->nik) }}"
+                                                            maxlength="20" required>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -180,7 +175,7 @@
                                                             KK<code>*</code></label>
                                                         <input type="text" required name="no_kk"
                                                             class="number-only form-control" placeholder="Nomor KK"
-                                                            value="{{ old('no_kk') }}" maxlength="20">
+                                                            value="{{ old('no_kk', $student->no_kk) }}" maxlength="20">
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -195,7 +190,7 @@
                                                             Lahir<code>*</code></label>
                                                         <input type="text" class="form-control" required
                                                             name="tempat_lahir" placeholder="Tempat Lahir"
-                                                            value="{{ old('tempat_lahir') }}">
+                                                            value="{{ old('tempat_lahir', $student->tempat_lahir) }}">
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -211,7 +206,7 @@
                                                         <div class="input-group" id="datepicker2">
                                                             <input type="text" class="form-control"
                                                                 placeholder="yyyy-mm-dd" name="tanggal_lahir"
-                                                                value="{{ old('tanggal_lahir') }}"
+                                                                value="{{ old('tanggal_lahir', $student->tanggal_lahir) }}"
                                                                 data-date-format="yyyy-mm-dd"
                                                                 data-date-container='#datepicker2' data-provide="datepicker"
                                                                 required data-date-autoclose="true">
@@ -231,7 +226,7 @@
                                                         <label for="validationCustom02" class="form-label">No Registrasi
                                                             Akta Lahir <code>*</code></label>
                                                         <input type="text" class="form-control" name="akta_lahir"
-                                                            value="{{ old('akta_lahir') }}"
+                                                            value="{{ old('akta_lahir', $student->no_registrasi_akta_lahir) }}"
                                                             placeholder="Nomor Akta Lahir" required>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
@@ -249,6 +244,7 @@
                                                             <option value="">-- Pilih Agama --</option>
                                                             @foreach ($religions as $religion)
                                                                 <option value="{{ $religion->id }}"
+                                                                    @if ($religion->id == $student->agama_id) selected @endif
                                                                     {{ old('agama') == $religion->id ? 'selected' : '' }}>
                                                                     {{ $religion->agama }}</option>
                                                             @endforeach
@@ -267,9 +263,11 @@
                                                         <select name="kewarganegaraan" class="form-control" required>
                                                             <option value="">-- Pilih Kewarganegaraan --</option>
                                                             <option value="WNI"
+                                                                @if ($student->kewarganegaraan == 'WNI') selected @endif
                                                                 {{ old('kewarganegaraan') == 'WNI' ? 'selected' : '' }}>
                                                                 Indonesia (WNI)</option>
                                                             <option value="WNA"
+                                                                @if ($student->kewarganegaraan == 'WNA') selected @endif
                                                                 {{ old('kewarganegaraan') == 'WNA' ? 'selected' : '' }}>
                                                                 Asing (WNA)</option>
                                                         </select>
@@ -284,7 +282,8 @@
                                                 <div class="col-md-6">
                                                     <label for="">Nama Negara <code>*</code></label>
                                                     <input type="text" class="form-control" name="nama_negara" required
-                                                        placeholder="Nama Negara" value="{{ old('nama_negara') }}">
+                                                        placeholder="Nama Negara"
+                                                        value="{{ old('nama_negara', $student->nama_negara) }}">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -301,6 +300,7 @@
                                                             <option value="">-- Pilih Kebutuhan Khusus --</option>
                                                             @foreach ($special_needs as $special_need)
                                                                 <option value="{{ $special_need->id }}"
+                                                                    @if ($student->kebutuhan_khusus_id == $special_need->id) selected @endif
                                                                     {{ old('kebutuhan_khusus') == $special_need->id ? 'selected' : '' }}>
                                                                     {{ $special_need->nama }}</option>
                                                             @endforeach
@@ -317,7 +317,7 @@
                                                     <div class="mb-3">
                                                         <label for="formFile" class="form-label">Alamat Jalan
                                                             <code>*</code></label>
-                                                        <textarea name="alamat_jalan" class="form-control" cols="5" placeholder="Alamat Jalan" required>{{ old('alamat_jalan') }}</textarea>
+                                                        <textarea name="alamat_jalan" class="form-control" cols="5" placeholder="Alamat Jalan" required>{{ old('alamat_jalan', $student->alamat) }}</textarea>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -330,23 +330,15 @@
                                                     <label for="">Tempat Tinggal <code>*</code></label>
                                                     <select name="tempat_tinggal" required class="form-control">
                                                         <option value="">-- Pilih Tempat Tinggal --</option>
-                                                        <option value="Bersama Orang Tua"
-                                                            {{ old('tempat_tinggal') == 'Bersama Orang Tua' ? 'selected' : '' }}>
-                                                            Bersama Orang Tua</option>
-                                                        <option value="Wali"
-                                                            {{ old('tempat_tinggal') == 'Wali' ? 'selected' : '' }}>
-                                                            Wali
-                                                        </option>
-                                                        <option value="Kos"
-                                                            {{ old('tempat_tinggal') == 'Kos' ? 'selected' : '' }}>
-                                                            Kos
-                                                        </option>
-                                                        <option value="Asrama"
-                                                            {{ old('tempat_tinggal') == 'Asrama' ? 'selected' : '' }}>
-                                                            Asrama</option>
-                                                        <option value="Panti Asuhan"
-                                                            {{ old('tempat_tinggal') == 'Panti Asuhan' ? 'selected' : '' }}>
-                                                            Panti Asuhan</option>
+                                                        @foreach ($residences as $residence)
+                                                            @if ($residence['value'] == $student->tempat_tinggal)
+                                                                <option value="{{ $residence['value'] }}" selected>
+                                                                    {{ $residence['name'] }}</option>
+                                                            @else
+                                                                <option value="{{ $residence['value'] }}">
+                                                                    {{ $residence['name'] }}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -361,7 +353,7 @@
                                                             <label for="validationCustom02" class="form-label">RT
                                                                 <code>*</code></label>
                                                             <input type="text" min="0" class="number-only form-control"
-                                                                name="rt" value="{{ old('rt') }}" required
+                                                                name="rt" value="{{ old('rt', $student->rt) }}" required
                                                                 placeholder="RT">
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
@@ -373,7 +365,8 @@
                                                         <div class="col-md-6">
                                                             <label for="">RW <code>*</code></label>
                                                             <input type="text" class="number-only form-control" name="rw"
-                                                                required placeholder="RW" value="{{ old('rw') }}">
+                                                                required placeholder="RW"
+                                                                value="{{ old('rw', $student->rw) }}">
                                                         </div>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
@@ -390,7 +383,7 @@
                                                                 <code>*</code></label>
                                                             <input class="form-control" type="text" name="nama_dusun"
                                                                 required placeholder="Nama Dusun"
-                                                                value="{{ old('nama_dusun') }}">
+                                                                value="{{ old('nama_dusun', $student->dusun) }}">
                                                             @error('nama_dusun')
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
@@ -404,8 +397,14 @@
                                                                 class="form-control select2" required>
                                                                 <option value="">-- Pilih Kecamatan --</option>
                                                                 @foreach ($districts as $district)
-                                                                    <option value="{{ $district->kecamatan }}">
-                                                                        {{ $district->kecamatan }}</option>
+                                                                    @if ($district->kecamatan == $student->village)
+                                                                        <option value="{{ $district->kecamatan }}"
+                                                                            selected>
+                                                                            {{ $district->kecamatan }}</option>
+                                                                    @else
+                                                                        <option value="{{ $district->kecamatan }}">
+                                                                            {{ $district->kecamatan }}</option>
+                                                                    @endif
                                                                 @endforeach
                                                             </select>
                                                             <div class="invalid-feedback">
@@ -452,8 +451,9 @@
                                                         <div class="col-md-6">
                                                             <label for="">Moda Transportasi <code>*</code></label>
                                                             <input type="text" class="form-control"
-                                                                name="moda_transportasi" placeholder="Moda Transportaso"
-                                                                value="{{ old('moda_transportasi') }}" required>
+                                                                name="moda_transportasi" placeholder="Moda Transportasi"
+                                                                value="{{ old('moda_transportasi', $student->transportation) }}"
+                                                                required>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
                                                             </div>
@@ -465,7 +465,7 @@
                                                             <label for="">Anak keberapa <code>*</code></label>
                                                             <input required type="text" class="number-only form-control"
                                                                 name="anak_keberapa" placeholder="Anak Keberapa"
-                                                                value="{{ old('anak_keberapa') }}">
+                                                                value="{{ old('anak_keberapa', $student->child_order) }}">
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
                                                             </div>
@@ -473,46 +473,63 @@
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
-
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 form-group">
+                                                <div class="col-md-6">
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label for="">Apakah Punya KIP <code>*</code></label>
                                                             <select name="is_have_kip" class="form-control" required>
                                                                 <option value="">-- Pilih Salah Satu --</option>
-                                                                <option value="Ya">Ya</option>
-                                                                <option value="Tidak">Tidak</option>
+                                                                <option value="Ya"
+                                                                    @if ($student->is_have_kip == 'Ya') selected @endif>Ya
+                                                                </option>
+                                                                <option value="Tidak"
+                                                                    @if ($student->is_have_kip == 'Tidak') selected @endif>Tidak
+                                                                </option>
                                                             </select>
+                                                            <div class="invalid-feedback">
+                                                                Data wajib diisi.
+                                                            </div>
+                                                            @error('is_have_kip')
+                                                                <small class="text-danger">Data wajib diisi</small>
+                                                            @enderror
                                                         </div>
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        @error('is_have_kip')
-                                                            <small class="text-danger">Data wajib diisi</small>
-                                                        @enderror
                                                         <div class="col-md-6">
                                                             <label for="">Tetap Menerima KIP <code>*</code></label>
                                                             <select name="is_receive_kip" class="form-control" required>
                                                                 <option value="">-- Pilih Salah Satu --</option>
-                                                                <option value="Ya">Ya</option>
-                                                                <option value="Tidak">Tidak</option>
+                                                                <option value="Ya"
+                                                                    @if ($student->is_receive_kip == 'Ya') selected @endif>Ya
+                                                                </option>
+                                                                <option value="Tidak"
+                                                                    @if ($student->is_receive_kip == 'Tidak') selected @endif>
+                                                                    Tidak
+                                                                </option>
                                                             </select>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mt-3">
                                                     <label for="">Alasan Menolak KIP</label>
                                                     <select name="reason_reject_kip" class="form-control">
                                                         <option value="">-- Pilih Salah Satu --</option>
-                                                        <option value="Dilarah Pemda Karena Menerima Bantuan Serupa">Dilarah
-                                                            Pemda Karena Menerima Bantuan Serupa</option>
-                                                        <option value="Menolak">Menolak</option>
-                                                        <option value="Sudah Mampu">Sudah Mampu</option>
+                                                        @foreach ($reject_kip as $item)
+                                                            @if ($item['value'] == $student->reason_reject_kip)
+                                                                <option value="{{ $item['value'] }}" selected>
+                                                                    {{ $item['value'] }}</option>
+                                                            @else
+                                                                <option value="{{ $item['value'] }}">
+                                                                    {{ $item['value'] }}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+                                            <input type="hidden" id="old_district" value="{{ $student->district }}">
+                                            <input type="hidden" id="old_postal_code"
+                                                value="{{ $student->postal_code }}">
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('siswa.index') }}"
@@ -532,24 +549,88 @@
         </div>
     </div>
     <script>
+        let url = '{{ route('kodepos.get_villages_by_district', ':district') }}'
+        let urlPostalCode = '{{ route('kodepos.get_postal_code_by_village', ':oldVillage') }}'
+
+        let old_district = $("#old_district").val()
+        let oldVillage = ''
+        let oldPostalCode = $("#old_postal_code").val()
+
         $(document).ready(function() {
+            let district = $("#kecamatan :selected").val()
+            url = url.replace(':district', district)
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: response => {
+                    $("#kelurahan option").remove()
+                    $("#kelurahan").append(`<option value="">-- Pilih Kelurahan --</option>`)
+                    $.each(response.data, function(index, item) {
+                        if (item.kelurahan == old_district) {
+                            oldVillage = item.kelurahan
+                            urlPostalCode = urlPostalCode.replace(':oldVillage', oldVillage)
+                            next()
+                            $("#kelurahan").append(
+                                `<option value="${item.kelurahan}" selected>${item.kelurahan}</option>`
+                            )
+                        } else {
+                            $("#kelurahan").append(
+                                `<option value="${item.kelurahan}">${item.kelurahan}</option>`
+                            )
+                        }
+                    })
+                },
+                error: err => console.log(err)
+            })
+
+            function next() {
+                $.ajax({
+                    type: 'GET',
+                    url: urlPostalCode,
+                    success: response => {
+                        $("#kode_pos option").remove()
+                        $("#kode_pos").append(`<option value="">-- Pilih Kode Pos --</option>`)
+                        $.each(response.data, function(index, item) {
+                            if (item.kodepos == oldPostalCode) {
+                                $("#kode_pos").append(
+                                    `<option value="${item.kodepos}" selected>${item.kodepos}</option>`
+                                )
+                            } else {
+                                $("#kode_pos").append(
+                                    `<option value="${item.kodepos}">${item.kodepos}</option>`
+                                )
+                            }
+                        })
+                    },
+                    error: err => console.log(err)
+                })
+            }
+
             $("#kecamatan").bind('change', function() {
                 let district = $(this).val()
-                let url = '{{ route('kodepos.get_villages_by_district', ':district') }}'
                 url = url.replace(':district', district)
 
                 $.ajax({
                     type: "GET",
                     url: url,
                     success: response => {
-                        $("#kelurahan option").remove()
-                        $('#kelurahan').append(
-                            `<option value="">-- Pilih Kelurahan --</option>`)
-                        $.each(response.data, function(i, item) {
+                        if (response.status == 200) {
+                            $("#kelurahan option").remove()
                             $('#kelurahan').append(
-                                `<option value="${item.kelurahan}">${item.kelurahan}</option>`
+                                `<option value="">-- Pilih Kelurahan --</option>`)
+                            $.each(response.data, function(i, item) {
+                                $('#kelurahan').append(
+                                    `<option value="${item.kelurahan}">${item.kelurahan}</option>`
+                                )
+                            })
+                        } else {
+                            Swal.fire(
+                                'Gagal',
+                                'Gagal mendapatkan data kelurahan',
+                                'error'
                             )
-                        })
+                        }
                     },
                     error: err => console.log(err)
                 })

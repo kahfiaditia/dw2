@@ -27,7 +27,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
+                            <table id="mydata" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
@@ -37,28 +37,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($lists as $list)
-                                        <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $list->nisn }}</td>
-                                            <td class="text-center">{{ $list->nama_lengkap }}</td>
-                                            <td>
-                                                <?php $id = Crypt::encryptString($list->id); ?>
-                                                <form class="delete-form"
-                                                    action="{{ route('agama.destroy', ['id' => $id]) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <div class="d-flex gap-3">
-                                                        <a href="{{ route('agama.edit', ['id' => $id]) }}"
-                                                            class="text-success"><i
-                                                                class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href class="text-danger delete_confirm"><i
-                                                                class="mdi mdi-delete font-size-18"></i></a>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -67,4 +45,38 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(function() {
+            $('#mydata').DataTable({
+                destroy: true,
+                serverSide: true,
+                processing: true,
+                searchDelay: 1000,
+                ajax: {
+                    url: '{{ route('siswa.index') }}',
+                },
+                columnDefs: [{
+                    "className": "text-center",
+                    "targets": "_all"
+                }],
+                columns: [{
+                        data: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'nisn'
+                    },
+                    {
+                        data: 'nama_lengkap'
+                    },
+                    {
+                        data: 'Opsi',
+                        name: 'opsi',
+                        orderable: false,
+                        searchable: true
+                    },
+                ]
+            });
+        });
+    </script>
 @endsection

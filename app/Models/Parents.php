@@ -16,6 +16,11 @@ class Parents extends Model
 
     public function student()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id');
+        return $this->belongsTo(Siswa::class, 'siswa_id')->withTrashed();
+    }
+
+    public function special_need()
+    {
+        return $this->belongsTo(Kebutuhan_khusus::class, 'kebutuhan_khusus_id')->withTrashed();
     }
 }

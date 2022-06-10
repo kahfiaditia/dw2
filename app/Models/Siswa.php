@@ -18,4 +18,14 @@ class Siswa extends Model
     {
         return $this->hasMany(Parents::class, 'siswa_id');
     }
+
+    public function religion()
+    {
+        return $this->belongsTo(Agama::class, 'agama_id');
+    }
+
+    public function special_need()
+    {
+        return $this->belongsTo(Kebutuhan_khusus::class, 'kebutuhan_khusus_id')->withTrashed();
+    }
 }
