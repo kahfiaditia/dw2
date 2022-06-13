@@ -128,12 +128,15 @@ Route::group(
 Route::group(
     ['middleware' => 'auth'],
     function () {
+        Route::get('/edit_parents/{student_id}', [SiswaController::class, 'edit_parents'])->name('siswa.edit_parents');
+        Route::get('/add_parent_student/{student_id}/{wali}', [SiswaController::class, 'add_parent_student'])->name('siswa.add_parent_student');
+        Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
+        Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
+        Route::post('/store_parent_student', [SiswaController::class, 'store_parent_student'])->name('siswa.store_parent_student');
         Route::resource('parents', ParentController::class);
         Route::resource('/needs', NeedsController::class);
         Route::resource('/siswa', SiswaController::class);
         Route::resource('/akun', AkunController::class);
-        Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
-        Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
     }
 );

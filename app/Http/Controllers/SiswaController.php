@@ -325,4 +325,86 @@ class SiswaController extends Controller
             return back();
         }
     }
+
+    public function edit_parents($student_id)
+    {
+        $father = Parents::with('special_need')->where([
+            ['type', '=', 'Ayah'],
+            ['siswa_id', '=', $student_id]
+        ])->first();
+
+        $mother = Parents::with('special_need')->where([
+            ['type', '=', 'Ibu'],
+            ['siswa_id', '=', $student_id]
+        ])->first();
+
+        $guardian = Parents::with('special_need')->where([
+            ['type', '=', 'Wali'],
+            ['siswa_id', '=', $student_id]
+        ])->first();
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'orang tua',
+            'label' => 'edit orang tua siswa',
+            'father' => $father,
+            'mother' => $mother,
+            'guardian' => $guardian,
+            'student_id' => $student_id
+        ];
+
+        return view('siswa.edit_parents')->with($data);
+    }
+
+    public function add_parent_student($student_id, $data)
+    {
+        $student = Siswa::findOrFail($student_id);
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'orang tua',
+            'label' => 'tambah orang tua / wali siswa',
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'type' => $data,
+            'student' => $student
+        ];
+
+        return view('siswa.add_parent')->with($data);
+    }
+
+    public function store_parent_student(Request $request)
+    {
+        $status = 'Orang Tua';
+
+        if ($request->type == 'wali') {
+            $status = 'wali';
+        }
+        DB::beginTransaction();
+        try {
+            Parents::create([
+                'nik' => $request->nik_orang_tua,
+                'name' => $request->nama_orang_tua,
+                'tanggal_lahir' => $request->tanggal_lahir_orang_tua,
+                'no_hp' => $request->no_handphone_orang_tua,
+                'pendidikan' => $request->pendidikan_orang_tua,
+                'pekerjaan' => $request->pekerjaan_orang_tua,
+                'penghasilan' => $request->penghasilan_orang_tua,
+                'type' => $request->type,
+                'status' => $request->status,
+                'siswa_id' => $request->student_id,
+                'kebutuhan_khusus_id' => $request->kebutuhan_khusus,
+                'status' => $status
+            ]);
+            AlertHelper::addAlert(true);
+            DB::commit();
+            return redirect('edit_parents/' . $request->student_id);
+        } catch (\Throwable $err) {
+            AlertHelper::addAlert(false);
+            DB::rollBack();
+            throw $err;
+            return back();
+        }
+    }
 }

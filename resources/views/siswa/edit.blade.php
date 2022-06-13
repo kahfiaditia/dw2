@@ -41,14 +41,14 @@
                                     <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                     <p class="fw-bold mb-4">Data Pribadi</p>
                                 </a>
-                                <a class="nav-link" href="{{ route('parents.create') }}">
+                                <a class="nav-link" href="{{ route('siswa.edit_parents', $student->id) }}">
                                     <i class="bx bx-group d-block check-nav-icon mt-2"></i>
                                     {{-- <i class="bx bx-book-content d-block check-nav-icon mt-2"></i> --}}
                                     <p class="fw-bold mb-4">Orang Tua</p>
                                 </a>
                                 <a class="nav-link">
                                     <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Wali</p>
+                                    <p class="fw-bold mb-4">Data Priodik</p>
                                 </a>
                                 <a class="nav-link">
                                     <i class="bx bx-group d-block check-nav-icon mt-2"></i>
@@ -533,7 +533,7 @@
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('siswa.index') }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Batal</a>
+                                                        class="btn btn-secondary waves-effect btn-sm">Kembali</a>
                                                     <button class="btn btn-primary btn-sm" type="submit"
                                                         style="float: right" id="submit">Simpan</button>
                                                 </div>
