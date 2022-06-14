@@ -41,7 +41,7 @@
                                     <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                     <p class="fw-bold mb-4">Data Pribadi</p>
                                 </a>
-                                <a class="nav-link" href="{{ route('siswa.edit_parents', $student->id) }}">
+                                <a class="nav-link" href="{{ route('siswa.show_parents', $student->id) }}">
                                     <i class="bx bx-group d-block check-nav-icon mt-2"></i>
                                     {{-- <i class="bx bx-book-content d-block check-nav-icon mt-2"></i> --}}
                                     <p class="fw-bold mb-4">Orang Tua</p>

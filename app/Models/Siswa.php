@@ -28,4 +28,9 @@ class Siswa extends Model
     {
         return $this->belongsTo(Kebutuhan_khusus::class, 'kebutuhan_khusus_id')->withTrashed();
     }
+
+    public function periodic_student()
+    {
+        return $this->hasOne(Priodik_siswa::class, 'siswa_id');
+    }
 }

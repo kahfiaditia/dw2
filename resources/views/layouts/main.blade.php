@@ -113,6 +113,7 @@
                 cancelButtonText: "Batal",
                 focusConfirm: false,
             }).then((value) => {
+                console.log($(this).closest('form'))
                 if (value.isConfirmed) {
                     $(this).closest("form").submit()
                 }

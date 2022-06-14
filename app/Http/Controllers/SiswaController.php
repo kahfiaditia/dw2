@@ -11,6 +11,7 @@ use App\Helper\AlertHelper;
 use Yajra\DataTables\DataTables;
 use App\Models\Kodepos;
 use App\Models\Parents;
+use App\Models\Priodik_siswa;
 
 class SiswaController extends Controller
 {
@@ -326,7 +327,7 @@ class SiswaController extends Controller
         }
     }
 
-    public function edit_parents($student_id)
+    public function show_parents($student_id)
     {
         $father = Parents::with('special_need')->where([
             ['type', '=', 'Ayah'],
@@ -354,7 +355,7 @@ class SiswaController extends Controller
             'student_id' => $student_id
         ];
 
-        return view('siswa.edit_parents')->with($data);
+        return view('siswa.show_parents')->with($data);
     }
 
     public function add_parent_student($student_id, $data)
@@ -404,6 +405,146 @@ class SiswaController extends Controller
             AlertHelper::addAlert(false);
             DB::rollBack();
             throw $err;
+            return back();
+        }
+    }
+
+    public function show_periodic($id)
+    {
+        $student = Siswa::with('periodic_student')->findOrFail($id);
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'priodik',
+            'label' => 'tambah orang tua / wali siswa',
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'student' => $student
+        ];
+
+        return view('siswa.show_periodic')->with($data);
+    }
+
+    public function add_periodic_student($id)
+    {
+        $student = Siswa::with('periodic_student')->findOrFail($id);
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'priodik',
+            'label' => 'tambah orang tua / wali siswa',
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'student' => $student
+        ];
+
+        return view('siswa.add_periodic_student')->with($data);
+    }
+
+    public function destroy_parent($id)
+    {
+        DB::beginTransaction();
+        try {
+            $parent = Parents::findOrFail($id);
+            $parent->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_parent($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'priodik',
+            'label' => 'tambah orang tua / wali siswa',
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get()
+        ];
+
+        return view('siswa.edit_parent')->with($data);
+    }
+
+    public function store_periodic_student(Request $request)
+    {
+        DB::beginTransaction();
+        Priodik_siswa::create([
+            'tinggi_badan' => $request->tinggi_badan,
+            'berat_badan' => $request->berat_badan,
+            'lingkar_kepala' => $request->lingkar_kepala,
+            'jarak_tempat_tinggal_ke_sekolah' => $request->jarak_tempuh,
+            'in_km' => $request->in_km,
+            'waktu_tempuh_jam' => $request->jam,
+            'waktu_tempuh_menit' => $request->menit,
+            'jumlah_saudara_kandung' => $request->saudara_kandung,
+            'siswa_id' => $request->student_id
+        ]);
+        DB::commit();
+        AlertHelper::addAlert(true);
+        return redirect('show_periodic/' . $request->student_id);
+        try {
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::addAlert(false);
+            return redirect('show_periodic/' . $request->student_id);
+        }
+    }
+
+    public function destroy_periodic_student($id)
+    {
+        DB::beginTransaction();
+        try {
+            $periodic_student = Priodik_siswa::findOrFail($id);
+            $periodic_student->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_periodic_student($id)
+    {
+        $periodic = Priodik_siswa::with('student')->findOrFail($id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'priodik',
+            'label' => 'tambah orang tua / wali siswa',
+            'periodic' => $periodic
+        ];
+
+        return view('siswa.edit_periodic_student')->with($data);
+    }
+
+    public function update_student_periodic(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $periodic_student = Priodik_siswa::findOrFail($id);
+            $periodic_student->tinggi_badan = $request->tinggi_badan;
+            $periodic_student->berat_badan = $request->berat_badan;
+            $periodic_student->lingkar_kepala = $request->lingkar_kepala;
+            $periodic_student->jarak_tempat_tinggal_ke_sekolah = $request->jarak_tempuh;
+            $periodic_student->in_km = $request->in_km;
+            $periodic_student->waktu_tempuh_jam = $request->jam;
+            $periodic_student->waktu_tempuh_menit = $request->menit;
+            $periodic_student->jumlah_saudara_kandung = $request->saudara_kandung;
+            $periodic_student->save();
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('show_periodic/' . $request->student_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
             return back();
         }
     }
