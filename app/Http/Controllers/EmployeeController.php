@@ -89,10 +89,10 @@ class EmployeeController extends Controller
             'masuk_kerja' => 'required',
             'nik' => 'required|max:20',
             'kk' => 'required|max:20',
-            'dok_nik' => 'mimes:png,jpeg,jpg',
-            'dok_npwp' => 'mimes:png,jpeg,jpg',
-            'dok_kk' => 'mimes:png,jpeg,jpg',
-            'foto' => 'mimes:png,jpeg,jpg',
+            'dok_nik' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+            'dok_npwp' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+            'dok_kk' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+            'foto' => 'mimes:png,jpeg,jpg|max:2048',
         ]);
         DB::beginTransaction();
         try {
