@@ -113,10 +113,34 @@
                 cancelButtonText: "Batal",
                 focusConfirm: false,
             }).then((value) => {
+                console.log($(this).closest('form'))
                 if (value.isConfirmed) {
                     $(this).closest("form").submit()
                 }
             });
+        });
+
+        $(".datepicker").datepicker({
+            format: "yyyy",
+            viewMode: "years",
+            minViewMode: "years",
+        });
+
+        $(".datepicker").change(function() {
+            let tahun_masuk = document.getElementById("tahun_masuk").value;
+            let tahun_lulus = document.getElementById("tahun_lulus").value;
+            if (tahun_lulus < tahun_masuk && tahun_lulus != '') {
+                Swal.fire(
+                    'Gagal',
+                    'Tahun masuk tidak boleh lebih besar dari tahun lulus',
+                    'error'
+                ).then(function() {
+                    document.getElementById("submit").disabled = true;
+                    document.getElementById("tahun_lulus").value = null;
+                })
+            } else {
+                document.getElementById("submit").disabled = false;
+            }
         });
     </script>
 </body>

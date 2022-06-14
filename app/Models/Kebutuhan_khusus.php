@@ -13,4 +13,14 @@ class Kebutuhan_khusus extends Model
     protected $table = 'kebutuhan_khusus';
 
     protected $guarded = [];
+
+    public function students()
+    {
+        return $this->hasMany(Siswa::class, 'kebutuhan_khusus_id');
+    }
+
+    public function parents()
+    {
+        return $this->hasMany(Parents::class, 'kebutuhan_khusus_id');
+    }
 }

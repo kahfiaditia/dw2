@@ -252,4 +252,42 @@ class KodeposController extends Controller
             ->groupBy('kodepos')->get();
         return $kodepos;
     }
+
+    public function get_villages_by_district($district)
+    {
+        $villages = Kodepos::select('kelurahan')
+            ->where('kecamatan', $district)->get();
+
+        if (count($villages) > 0) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'success',
+                'data' => $villages
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Not Found'
+            ]);
+        }
+    }
+
+    public function get_postal_code_by_village($village)
+    {
+        $postal_codes = Kodepos::select('kodepos')->where('kelurahan', $village)->groupBy('kodepos')->get();
+
+        if (count($postal_codes) > 0) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'success',
+                'data' => $postal_codes
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Not Found',
+                'data' => $village
+            ]);
+        }
+    }
 }

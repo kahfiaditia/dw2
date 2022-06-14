@@ -9,6 +9,7 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NeedsController;
 use App\Http\Controllers\ParentController;
+use App\Http\Controllers\PriodikSiswaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -105,6 +106,8 @@ Route::group(
         Route::post('/kecamatan', [KodeposController::class, 'kecamatan'])->name('kodepos.dropdown.kecamatan');
         Route::post('/kelurahan', [KodeposController::class, 'kelurahan'])->name('kodepos.dropdown.kelurahan');
         Route::get('/data_ajax', [KodeposController::class, 'data_ajax'])->name('kodepos.data_ajax');
+        Route::get('/get_villages_by_district/{district}', [KodeposController::class, 'get_villages_by_district'])->name('kodepos.get_villages_by_district');
+        Route::get('/get_postal_code_by_village/{village}', [KodeposController::class, 'get_postal_code_by_village'])->name('kodepos.get_postal_code_by_village');
     }
 );
 
@@ -127,12 +130,24 @@ Route::group(
 Route::group(
     ['middleware' => 'auth'],
     function () {
-        Route::resource('parents', ParentController::class);
+        Route::get('/edit_periodic_student/{id}', [SiswaController::class, 'edit_periodic_student'])->name('siswa.edit_periodic_student');
+        Route::get('/edit_parent/{id}', [SiswaController::class, 'edit_parent'])->name('siswa.edit_parent');
+        Route::get('/add_periodic_student/{student_id}', [SiswaController::class, 'add_periodic_student'])->name('siswa.add_periodic_student');
+        Route::get('/show_periodic/{student_id}', [SiswaController::class, 'show_periodic'])->name('siswa.show_periodic');
+        Route::get('/show_parents/{student_id}', [SiswaController::class, 'show_parents'])->name('siswa.show_parents');
+        Route::get('/add_parent_student/{student_id}/{wali}', [SiswaController::class, 'add_parent_student'])->name('siswa.add_parent_student');
+        Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
+        Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
+        Route::post('/store_periodic_student', [SiswaController::class, 'store_periodic_student'])->name('siswa.store_periodic_student');
+        Route::post('/store_parent_student', [SiswaController::class, 'store_parent_student'])->name('siswa.store_parent_student');
+        Route::patch('/update_student_periodic/{id}', [SiswaController::class, 'update_student_periodic'])->name('siswa.update_student_periodic');
+        Route::delete('/destroy_periodic_student/{periodic_id}', [SiswaController::class, 'destroy_periodic_student'])->name('siswa.destroy_periodic_student');
+        Route::delete('/destroy_parent/{parent_id}', [SiswaController::class, 'destroy_parent'])->name('siswa.destroy_parent');
+        Route::resource('/priodik', PriodikSiswaController::class);
+        Route::resource('/parents', ParentController::class);
         Route::resource('/needs', NeedsController::class);
         Route::resource('/siswa', SiswaController::class);
         Route::resource('/akun', AkunController::class);
-        Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
-        Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
     }
 );
