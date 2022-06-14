@@ -45,11 +45,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $list->agama }}</td>
                                             <td>
-<<<<<<< HEAD
-                                                <span class="badge badge-pill badge-soft-<?php if ($list->aktif == 1) {
-=======
                                                 <span class="badge badge-pill badge-soft-<?php if ($list->aktif === 1) {
->>>>>>> b524a2074bcad64cb4805b207d54d1f0b004b8ec
                                                     echo 'success';
                                                 } else {
                                                     echo 'danger';
@@ -90,23 +86,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        $('.delete_confirm').on('click', function(event) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Hapus Data',
-                text: 'Ingin menghapus data?',
-                icon: 'question',
-                showCloseButton: true,
-                showCancelButton: true,
-                cancelButtonText: "Batal",
-                focusConfirm: false,
-            }).then((value) => {
-                if (value.isConfirmed) {
-                    $(this).closest("form").submit()
-                }
-            });
-        });
-    </script>
 @endsection

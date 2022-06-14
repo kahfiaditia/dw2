@@ -20,6 +20,6 @@ class Employee extends Model
 
     public function agama()
     {
-        return $this->belongsTo(Agama::class, 'agama_id');
+        return $this->belongsTo(Agama::class, 'agama_id')->withTrashed();
     }
 }
