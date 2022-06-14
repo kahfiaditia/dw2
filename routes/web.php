@@ -36,6 +36,7 @@ Route::group(
 );
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
+Route::get('/phpinfo', [DashboardController::class, 'phpinfo'])->name('phpinfo');
 
 Route::group(
     [
