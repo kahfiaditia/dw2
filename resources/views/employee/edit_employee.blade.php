@@ -203,6 +203,7 @@
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
+                                                        {!! $errors->first('dok_nik', '<div class="invalid-validasi">:message</div>') !!}
                                                         @if ($item->dok_nik)
                                                             <a href="javascript:void(0)"
                                                                 data-id="{{ $item->dok_nik . '|nik|karyawan' }}"
@@ -241,6 +242,7 @@
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
+                                                        {!! $errors->first('dok_kk', '<div class="invalid-validasi">:message</div>') !!}
                                                         @if ($item->dok_kk)
                                                             <a href="javascript:void(0)"
                                                                 data-id="{{ $item->dok_kk . '|kk|karyawan' }}"
@@ -273,9 +275,7 @@
                                                             Mb)</label>
                                                         <input class="form-control" type="file" name="dok_npwp"
                                                             id="dok_npwp">
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
+                                                        {!! $errors->first('dok_npwp', '<div class="invalid-validasi">:message</div>') !!}
                                                         @if ($item->dok_npwp)
                                                             <a href="javascript:void(0)"
                                                                 data-id="{{ $item->dok_npwp . '|npwp|karyawan' }}"
@@ -391,8 +391,7 @@
                                                     <div class="mb-3">
                                                         <label class="form-label">Alamat KTP <code>*</code></label>
                                                         <div>
-                                                            <textarea required class="form-control" name="alamat_asal" placeholder="Alamat KTP"
-                                                                rows="3">{{ $item->alamat_asal }}</textarea>
+                                                            <textarea required class="form-control" name="alamat_asal" placeholder="Alamat KTP" rows="3">{{ $item->alamat_asal }}</textarea>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
                                                             </div>
@@ -528,8 +527,7 @@
                                                         <input class="form-check-input" style="float:right" id="AlamatSama"
                                                             type="checkbox" name="AlamatSama" onclick="Myalamat()">
                                                         <div>
-                                                            <textarea required class="form-control alamat-sama" name="alamat" placeholder="Alamat di Tangerang"
-                                                                rows="3">{{ $item->alamat }}</textarea>
+                                                            <textarea required class="form-control alamat-sama" name="alamat" placeholder="Alamat di Tangerang" rows="3">{{ $item->alamat }}</textarea>
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
                                                             </div>
@@ -712,6 +710,7 @@
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
+                                                        {!! $errors->first('foto', '<div class="invalid-validasi">:message</div>') !!}
                                                         @if ($item->foto)
                                                             <a href="javascript:void(0)"
                                                                 data-id="{{ $item->foto . '|foto|karyawan' }}"

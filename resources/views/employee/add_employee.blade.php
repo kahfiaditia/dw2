@@ -193,6 +193,7 @@
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
+                                                        {!! $errors->first('dok_nik', '<div class="invalid-validasi">:message</div>') !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,6 +220,7 @@
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
+                                                        {!! $errors->first('dok_kk', '<div class="invalid-validasi">:message</div>') !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -236,6 +238,7 @@
                                                             Mb)</label>
                                                         <input class="form-control" type="file" name="dok_npwp"
                                                             id="dok_npwp">
+                                                        {!! $errors->first('dok_npwp', '<div class="invalid-validasi">:message</div>') !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -633,6 +636,7 @@
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
+                                                        {!! $errors->first('foto', '<div class="invalid-validasi">:message</div>') !!}
                                                     </div>
                                                 </div>
                                             </div>
