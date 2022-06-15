@@ -49,7 +49,8 @@
                                 <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Data Priodik</p>
                             </a>
-                            <a class="nav-link">
+                            <a href="{{ route('siswa.list_performance_students', $student->id) }}"
+                                class="nav-link @if ($submenu == 'performance') active @endif">
                                 <i class="bx bx-group d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Jumlah Anak</p>
                             </a>

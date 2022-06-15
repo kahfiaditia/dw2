@@ -129,6 +129,8 @@ Route::group(
 Route::group(
     ['middleware' => 'auth'],
     function () {
+        Route::get('/edit_performance_student/{id}', [SiswaController::class, 'edit_performance_student'])->name('siswa.edit_performance_student');
+        Route::get('/list_performance_students/{id}', [SiswaController::class, 'list_performance_students'])->name('siswa.list_performance_students');
         Route::get('/edit_periodic_student/{id}', [SiswaController::class, 'edit_periodic_student'])->name('siswa.edit_periodic_student');
         Route::get('/edit_parent/{id}', [SiswaController::class, 'edit_parent'])->name('siswa.edit_parent');
         Route::get('/add_periodic_student/{student_id}', [SiswaController::class, 'add_periodic_student'])->name('siswa.add_periodic_student');
@@ -137,9 +139,12 @@ Route::group(
         Route::get('/add_parent_student/{student_id}/{wali}', [SiswaController::class, 'add_parent_student'])->name('siswa.add_parent_student');
         Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
         Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
+        Route::post('/store_performances', [SiswaController::class, 'store_performances'])->name('siswa.store_performances');
         Route::post('/store_periodic_student', [SiswaController::class, 'store_periodic_student'])->name('siswa.store_periodic_student');
         Route::post('/store_parent_student', [SiswaController::class, 'store_parent_student'])->name('siswa.store_parent_student');
+        Route::patch('/update_performance_student/{id}', [SiswaController::class, 'update_performance_student'])->name('siswa.update_performance_student');
         Route::patch('/update_student_periodic/{id}', [SiswaController::class, 'update_student_periodic'])->name('siswa.update_student_periodic');
+        Route::delete('/destroy_performance_student/{id}', [SiswaController::class, 'destroy_performance_student'])->name('siswa.destroy_performance_student');
         Route::delete('/destroy_periodic_student/{periodic_id}', [SiswaController::class, 'destroy_periodic_student'])->name('siswa.destroy_periodic_student');
         Route::delete('/destroy_parent/{parent_id}', [SiswaController::class, 'destroy_parent'])->name('siswa.destroy_parent');
         Route::resource('/priodik', PriodikSiswaController::class);

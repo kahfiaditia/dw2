@@ -12,6 +12,7 @@ use Yajra\DataTables\DataTables;
 use App\Models\Kodepos;
 use App\Models\Parents;
 use App\Models\Priodik_siswa;
+use App\Models\Prestasi;
 
 class SiswaController extends Controller
 {
@@ -542,6 +543,101 @@ class SiswaController extends Controller
             DB::commit();
             AlertHelper::updateAlert(true);
             return redirect('show_periodic/' . $request->student_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
+        }
+    }
+
+    public function list_performance_students($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'prestasi',
+            'label' => 'tambah prestasi siswa',
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'student_id' => $id,
+            'performances' => Prestasi::where('siswa_id', $id)->orderBy('id', 'DESC')->get()
+        ];
+
+        return view('siswa.list_performance_students')->with($data);
+    }
+
+    public function store_performances(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            Prestasi::create([
+                'jenis_prestasi' => $request->jenis_prestasi,
+                'tingkat_prestasi' => $request->tingkat_prestasi,
+                'nama_prestasi' => $request->nama_prestasi,
+                'tahun_prestasi' => $request->tahun_prestasi,
+                'penyelenggara' => $request->penyelenggara,
+                'peringkat' => $request->peringkat,
+                'siswa_id' => $request->student_id
+            ]);
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_performance_student($id)
+    {
+        DB::beginTransaction();
+        try {
+            $performance = Prestasi::findOrFail($id);
+            $performance->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_performance_student($id)
+    {
+        $performance_types = ["Sains", "Seni", "Olahraga", 'Lain-lain'];
+        $perfomance_levels = ["Sekolah", "Kecamatan", "Kabupaten", "Provinsi", "Nasional", "Internasional"];
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'prestasi',
+            'label' => 'edit prestasi siswa',
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'student_id' => $id,
+            'performance' => Prestasi::findOrFail($id),
+            'performance_types' => $performance_types,
+            'performance_levels' => $perfomance_levels
+        ];
+
+        return view('siswa.edit_performance_student')->with($data);
+    }
+
+    public function update_performance_student(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $performance = Prestasi::findOrFail($id);
+            $performance->jenis_prestasi = $request->jenis_prestasi;
+            $performance->tingkat_prestasi = $request->tingkat_prestasi;
+            $performance->nama_prestasi = $request->nama_prestasi;
+            $performance->tahun_prestasi = $request->tahun_prestasi;
+            $performance->penyelenggara = $request->penyelenggara;
+            $performance->peringkat = $request->peringkat;
+            $performance->save();
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('list_performance_students/' . $request->student_id);
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::updateAlert(false);

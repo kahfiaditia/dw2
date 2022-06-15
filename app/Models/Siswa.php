@@ -33,4 +33,9 @@ class Siswa extends Model
     {
         return $this->hasOne(Priodik_siswa::class, 'siswa_id');
     }
+
+    public function performances()
+    {
+        return $this->hasMany(Prestasi::class, 'siswa_id');
+    }
 }

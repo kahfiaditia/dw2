@@ -50,9 +50,11 @@
                                     <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                     <p class="fw-bold mb-4">Data Priodik</p>
                                 </a>
-                                <a class="nav-link">
+                                <a href="{{ route('siswa.list_performance_students', $student->id) }}"
+                                    class="
+                                    nav-link">
                                     <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Jumlah Anak</p>
+                                    <p class="fw-bold mb-4">Prestasi</p>
                                 </a>
                                 <a class="nav-link">
                                     <i class="bx bx-phone check-nav-icon mt-2"></i>
@@ -94,7 +96,8 @@
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Nomor Handphone<code>*</code></label>
                                                     <input type="text" class="form-control number-only" name="no_handphone"
-                                                        required value="{{ old('no_handphone', $student->no_handphone) }}"
+                                                        required
+                                                        value="{{ old('no_handphone', $student->no_handphone) }}"
                                                         minlength="12" maxlength="13" placeholder="Nomor Handphone">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
