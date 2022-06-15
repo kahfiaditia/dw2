@@ -49,10 +49,10 @@
                                 <p class="fw-bold mb-4">Wali</p>
                             </a>
                             <a href="#" class="nav-link @if ($submenu == 'prestasi') active @endif">
-                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
+                                <i class="bx bx-chart d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Prestasi</p>
                             </a>
-                            <a href="{{ route('siswa.index_beasiswa_student', $student_id) }}" class="nav-link">
+                            <a class="nav-link">
                                 <i class="bx bx-phone check-nav-icon mt-2"></i>
                                 <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Riwayat Penyakit</p>
@@ -100,40 +100,33 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th class="text-center">No</th>
-                                                                    <th class="text-center">Jenis Prestasi</th>
-                                                                    <th class="text-center">Tingkat
-                                                                    </th>
-                                                                    <th class="text-center">Nama Prestasi</th>
-                                                                    <th class="text-center">Tahun Prestasi</th>
-                                                                    <th class="text-center">Penyelenggara</th>
-                                                                    <th class="text-center">Peringkat</th>
+                                                                    <th class="text-center">Jenis Beasiswa</th>
+                                                                    <th class="text-center">Keterangan</th>
+                                                                    <th class="text-center">Tahun Mulai</th>
+                                                                    <th class="text-center">Tahun Selesai</th>
                                                                     <th class="text-center">Opsi</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach ($performances as $performance)
+                                                                @foreach ($scholarships as $scholarship)
                                                                     <tr>
+                                                                        <td class="text-center">{{ $loop->iteration }}
+                                                                        </td>
                                                                         <td class="text-center">
-                                                                            {{ $loop->iteration }}</td>
+                                                                            {{ $scholarship->jenis_beasiswa }}</td>
                                                                         <td class="text-center">
-                                                                            {{ $performance->jenis_prestasi }}</td>
+                                                                            {{ $scholarship->keterangan }}</td>
                                                                         <td class="text-center">
-                                                                            {{ $performance->tingkat_prestasi }}</td>
+                                                                            {{ $scholarship->tahun_mulai }}</td>
                                                                         <td class="text-center">
-                                                                            {{ $performance->nama_prestasi }}</td>
-                                                                        <td class="text-center">
-                                                                            {{ $performance->tahun_prestasi }}</td>
-                                                                        <td class="text-center">
-                                                                            {{ $performance->penyelenggara }}</td>
-                                                                        <td class="text-center">
-                                                                            {{ $performance->peringkat }}</td>
+                                                                            {{ $scholarship->tahun_selesai }}</td>
                                                                         <td class="text-center">
                                                                             <form
-                                                                                action="{{ route('siswa.destroy_performance_student', $performance->id) }}"
+                                                                                action="{{ route('siswa.destroy_scholarship', $scholarship->id) }}"
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <a href="{{ route('siswa.edit_performance_student', $performance->id) }}"
+                                                                                <a href="{{ route('siswa.edit_scholarship', $scholarship->id) }}"
                                                                                     class="text-success"
                                                                                     data-toggle="tooltip"
                                                                                     data-placement="top" title="edit"><i
@@ -172,63 +165,42 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="POST" action="{{ route('siswa.store_performances') }}">
+                    <form method="POST" action="{{ route('siswa.store_beasiswa') }}">
                         <div class="modal-body">
                             @csrf
                             <input type="hidden" name="student_id" value="{{ $student_id }}">
                             <div class="row">
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Jenis Prestasi</label>
-                                        <select name="jenis_prestasi" id="" required class="form-control">
-                                            <option value="">-- Pilih Jenis Prestasi --</option>
-                                            <option value="Sains">Sains</option>
-                                            <option value="Seni">Seni</option>
-                                            <option value="Olahraga">Olahraga</option>
-                                            <option value="Lain-lain">Lain-lain</option>
+                                        <label for="exampleInputEmail1">Jenis Beasiswa</label>
+                                        <select name="jenis_beasiswa" id="" required class="form-control">
+                                            <option value="">-- Pilih Jenis Beasiswa --</option>
+                                            <option value="Anak Berprestasi">Anak Berprestasi</option>
+                                            <option value="Anak Miskin">Anak Miskin</option>
+                                            <option value="Pendidikan">Pendidikan</option>
+                                            <option value="Unggulan">Unggulan</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
-                                        <label for="exampleInputPassword1">Tingkat Prestasi</label>
-                                        <select name="tingkat_prestasi" id="" class="form-control" required>
-                                            <option value="">-- Pilih Tingkat Prestasi --</option>
-                                            <option value="Sekolah">Sekolah</option>
-                                            <option value="Kecamatan">Kecamatan</option>
-                                            <option value="Kabupaten">Kabupaten</option>
-                                            <option value="Provinsi">Provinsi</option>
-                                            <option value="Nasional">Nasional</option>
-                                            <option value="Internasional">Internasional</option>
-                                        </select>
+                                        <label for="exampleInputPassword1">Keterangan</label>
+                                        <input type="text" name="keterangan" class="form-control"
+                                            placeholder="Keterangan">
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
-                                        <label for="">Nama Prestasi</label>
-                                        <input type="text" class="form-control" name="nama_prestasi"
-                                            placeholder="Nama Prestasi">
+                                        <label for="">Tahun Mulai</label>
+                                        <input type="text" class="number-only form-control" name="tahun_mulai"
+                                            placeholder="Tahun Mulai" maxlength="4" minlength="4">
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
-                                        <label for="">Tahun Prestasi</label>
-                                        <input type="text" class="number-only form-control" name="tahun_prestasi"
-                                            placeholder="Tahun Prestasi" maxlength="4" minlength="4">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mt-3">
-                                    <div class="form-group">
-                                        <label for="">Penyelenggara</label>
-                                        <input type="text" class="form-control" name="penyelenggara"
-                                            placeholder="Peneyelenggara">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mt-3">
-                                    <div class="form-group">
-                                        <label for="">Peringkat</label>
-                                        <input type="text" class="number-only form-control" name="peringkat"
-                                            placeholder="peringkat">
+                                        <label for="">Tahun Selesai</label>
+                                        <input type="text" class="number-only form-control" name="tahun_selesai"
+                                            placeholder="Tahun Selesai" maxlength="4" minlength="4">
                                     </div>
                                 </div>
                             </div>

@@ -8,6 +8,7 @@ use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Helper\AlertHelper;
+use App\Models\Beasiswa;
 use Yajra\DataTables\DataTables;
 use App\Models\Kodepos;
 use App\Models\Parents;
@@ -640,6 +641,99 @@ class SiswaController extends Controller
             return redirect('list_performance_students/' . $request->student_id);
         } catch (\Throwable $err) {
             DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
+        }
+    }
+
+    public function index_beasiswa_student($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'beasiswa',
+            'label' => 'Beasiswa siswa',
+            'student_id' => $id,
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'scholarships' => Beasiswa::orderBy('id', 'DESC')->get()
+        ];
+
+        return view('siswa.index_beasiswa_student')->with($data);
+    }
+
+    public function store_beasiswa(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            Beasiswa::create([
+                'jenis_beasiswa' => $request->jenis_beasiswa,
+                'keterangan' => $request->keterangan,
+                'tahun_mulai' => $request->tahun_mulai,
+                'tahun_selesai' => $request->tahun_selesai,
+                'siswa_id' => $request->student_id
+            ]);
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_scholarship($id)
+    {
+        DB::beginTransaction();
+        try {
+            $scholarship = Beasiswa::findOrFail($id);
+            $scholarship->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_scholarship($id)
+    {
+        $scholarship_types = ["Anak Berprestasi", "Anak Miskin", "Pendidikan", "Unggulan"];
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'beasiswa',
+            'label' => 'Edit Beassiwa',
+            'student_id' => $id,
+            'scholarship' => Beasiswa::findOrFail($id),
+            'scholarship_types' => $scholarship_types
+        ];
+
+        return view('siswa.edit_scholarship')->with($data);
+    }
+
+    public function update_scholarship(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $scholarship = Beasiswa::findOrFail($id);
+            $scholarship->jenis_beasiswa = $request->jenis_beasiswa;
+            $scholarship->keterangan = $request->keterangan;
+            $scholarship->tahun_mulai = $request->tahun_mulai;
+            $scholarship->tahun_selesai = $request->tahun_selesai;
+
+            $scholarship->save();
+
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('index_beasiswa_student/' . $request->student_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
             AlertHelper::updateAlert(false);
             return back();
         }
