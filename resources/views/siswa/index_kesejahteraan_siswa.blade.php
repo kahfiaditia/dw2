@@ -84,7 +84,7 @@
                                                             <a id="modal_trigger" data-toggle="modal"
                                                                 data-target="#exampleModalLong" type="button"
                                                                 class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                                                <i class="mdi mdi-plus me-1"></i> Tambah Prestasi
+                                                                <i class="mdi mdi-plus me-1"></i> Tambah Kesejahteraan
                                                             </a>
                                                         </ol>
                                                     </div>
@@ -100,33 +100,30 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th class="text-center">No</th>
-                                                                    <th class="text-center">Jenis Beasiswa</th>
-                                                                    <th class="text-center">Keterangan</th>
-                                                                    <th class="text-center">Tahun Mulai</th>
-                                                                    <th class="text-center">Tahun Selesai</th>
+                                                                    <th class="text-center">Jenis Kesejahteraan</th>
+                                                                    <th class="text-center">Nomor Kartu</th>
+                                                                    <th class="text-center">Nama Di Kartu</th>
                                                                     <th class="text-center">Opsi</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach ($scholarships as $scholarship)
+                                                                @foreach ($kesejahteraan as $item)
                                                                     <tr>
                                                                         <td class="text-center">{{ $loop->iteration }}
                                                                         </td>
                                                                         <td class="text-center">
-                                                                            {{ $scholarship->jenis_beasiswa }}</td>
+                                                                            {{ $item->jenis_kesejahteraan }}</td>
                                                                         <td class="text-center">
-                                                                            {{ $scholarship->keterangan }}</td>
+                                                                            {{ $item->nomor_kartu }}</td>
                                                                         <td class="text-center">
-                                                                            {{ $scholarship->tahun_mulai }}</td>
-                                                                        <td class="text-center">
-                                                                            {{ $scholarship->tahun_selesai }}</td>
+                                                                            {{ $item->nama_kartu }}</td>
                                                                         <td class="text-center">
                                                                             <form
-                                                                                action="{{ route('siswa.destroy_scholarship', $scholarship->id) }}"
+                                                                                action="{{ route('siswa.destroy_kesejahteraan', $item->id) }}"
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <a href="{{ route('siswa.edit_scholarship', $scholarship->id) }}"
+                                                                                <a href="{{ route('siswa.edit_kesejahteraan', $item->id) }}"
                                                                                     class="text-success"
                                                                                     data-toggle="tooltip"
                                                                                     data-placement="top" title="edit"><i
@@ -160,12 +157,12 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Tambah Prestasi</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Kesejahteraan</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="POST" action="{{ route('siswa.store_beasiswa') }}">
+                    <form method="POST" action="{{ route('siswa.store_kesejahteraan') }}">
                         <div class="modal-body">
                             @csrf
                             <input type="hidden" name="student_id" value="{{ $student_id }}">
@@ -173,34 +170,28 @@
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Jenis Beasiswa</label>
-                                        <select name="jenis_beasiswa" id="" required class="form-control">
+                                        <select name="jenis_kesejahteraan" id="" required class="form-control">
                                             <option value="">-- Pilih Jenis Beasiswa --</option>
-                                            <option value="Anak Berprestasi">Anak Berprestasi</option>
-                                            <option value="Anak Miskin">Anak Miskin</option>
-                                            <option value="Pendidikan">Pendidikan</option>
-                                            <option value="Unggulan">Unggulan</option>
+                                            <option value="PKH">PKH</option>
+                                            <option value="PIP">PIP</option>
+                                            <option value="Kartu Perlindungan Sosial">Kartu Perlindungan Sosial</option>
+                                            <option value="Kartu Keluarga Sejahtera">Kartu Keluarga Sejahtera</option>
+                                            <option value="Kartu Kesehatan">Kartu Kesehatan</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
-                                        <label for="exampleInputPassword1">Keterangan</label>
-                                        <input type="text" name="keterangan" class="form-control"
-                                            placeholder="Keterangan">
+                                        <label for="exampleInputPassword1">Nomor Kartu</label>
+                                        <input type="text" name="nomor_kartu" class="form-control"
+                                            placeholder="Nomor Kartu">
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
-                                        <label for="">Tahun Mulai</label>
-                                        <input type="text" class="number-only form-control" name="tahun_mulai"
-                                            placeholder="Tahun Mulai" maxlength="4" minlength="4">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mt-3">
-                                    <div class="form-group">
-                                        <label for="">Tahun Selesai</label>
-                                        <input type="text" class="number-only form-control" name="tahun_selesai"
-                                            placeholder="Tahun Selesai" maxlength="4" minlength="4">
+                                        <label for="">Nama di Kartu</label>
+                                        <input type="text" class="form-control" name="nama_kartu"
+                                            placeholder="Nama di kartu">
                                     </div>
                                 </div>
                             </div>

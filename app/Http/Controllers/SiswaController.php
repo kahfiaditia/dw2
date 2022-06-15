@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Helper\AlertHelper;
 use App\Models\Beasiswa;
+use App\Models\Kesejahteraan_siswa;
 use Yajra\DataTables\DataTables;
 use App\Models\Kodepos;
 use App\Models\Parents;
@@ -734,6 +735,92 @@ class SiswaController extends Controller
         } catch (\Throwable $err) {
             DB::rollBack();
             throw $err;
+            AlertHelper::updateAlert(false);
+            return back();
+        }
+    }
+
+    public function index_kesejahteraan_siswa($id)
+    {
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'beasiswa',
+            'label' => 'List Kesejahteraan Peserta Didik',
+            'student_id' => $id,
+            'kesejahteraan' => Kesejahteraan_siswa::orderBy('id', 'DESC')->get()
+        ];
+
+        return view('siswa.index_kesejahteraan_siswa')->with($data);
+    }
+
+    public function store_kesejahteraan(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            Kesejahteraan_siswa::create([
+                'jenis_kesejahteraan' => $request->jenis_kesejahteraan,
+                'nomor_kartu' => $request->nomor_kartu,
+                'nama_kartu' => $request->nama_kartu,
+                'siswa_id' => $request->student_id
+            ]);
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_kesejahteraan($id)
+    {
+        DB::beginTransaction();
+        try {
+            $result = Kesejahteraan_siswa::findOrFail($id);
+            $result->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_kesejahteraan(Request $request, $id)
+    {
+        $kesejahteraan = ['PKH', "PIP", "Kartu Perlindungan Sosial", "Kartu Keluarga Sejahtera", "Kartu Kesehatan"];
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'beasiswa',
+            'label' => 'List Kesejahteraan Peserta Didik',
+            'student_id' => $id,
+            'result' => Kesejahteraan_siswa::findOrFail($id),
+            'kesejahteraan' => $kesejahteraan
+        ];
+
+        return view('siswa.edit_kesejahteraan')->with($data);
+    }
+
+    public function update_kesejahteraan(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $item = Kesejahteraan_siswa::findOrFail($id);
+            $item->jenis_kesejahteraan = $request->jenis_kesejahteraan;
+            $item->nomor_kartu = $request->nomor_kartu;
+            $item->nama_kartu = $request->nama_kartu;
+            $item->save();
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('index_kesejahteraan_siswa/' . $request->student_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
             AlertHelper::updateAlert(false);
             return back();
         }
