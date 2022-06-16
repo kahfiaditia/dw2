@@ -97,9 +97,10 @@
                                                                         <div class="form-group">
                                                                             <label for="exampleInputEmail1">Jenis
                                                                                 Beasiswa</label>
-                                                                            <select name="jenis_beasiswa" id="" required
-                                                                                class="form-control">
-                                                                                <option value="">-- Pilih Jenis Beasiswa --
+                                                                            <select name="jenis_beasiswa" id=""
+                                                                                required class="form-control">
+                                                                                <option value="">-- Pilih Jenis
+                                                                                    Beasiswa --
                                                                                 </option>
                                                                                 @foreach ($scholarship_types as $type)
                                                                                     <option value="{{ $type }}"
@@ -124,7 +125,8 @@
                                                                             <input type="text" class="form-control"
                                                                                 name="tahun_mulai"
                                                                                 placeholder="Nama Prestasi"
-                                                                                value="{{ old('tahun_mulai', $scholarship->tahun_mulai) }}">
+                                                                                value="{{ old('tahun_mulai', $scholarship->tahun_mulai) }}"
+                                                                                maxlength="4">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6 mt-3">
@@ -135,14 +137,16 @@
                                                                                 name="tahun_selesai"
                                                                                 placeholder="Tahun Prestasi" maxlength="4"
                                                                                 minlength="4"
-                                                                                value="{{ old('tahun_selesai', $scholarship->tahun_selesai) }}">
+                                                                                value="{{ old('tahun_selesai', $scholarship->tahun_selesai) }}"
+                                                                                minlength="4">
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary btn-sm"
-                                                                    data-dismiss="modal">Batal</button>
+                                                                <a href="{{ route('siswa.index_beasiswa_student', $scholarship->siswa_id) }}"
+                                                                    type="button" class="btn btn-secondary btn-sm"
+                                                                    data-dismiss="modal">Batal</a>
                                                                 <button type="submit"
                                                                     class="btn btn-primary btn-sm">Simpan</button>
                                                             </div>

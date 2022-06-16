@@ -137,7 +137,7 @@ Route::group(
         Route::get('/edit_performance_student/{id}', [SiswaController::class, 'edit_performance_student'])->name('siswa.edit_performance_student');
         Route::get('/list_performance_students/{id}', [SiswaController::class, 'list_performance_students'])->name('siswa.list_performance_students');
         Route::get('/edit_periodic_student/{id}', [SiswaController::class, 'edit_periodic_student'])->name('siswa.edit_periodic_student');
-        Route::get('/edit_parent/{id}', [SiswaController::class, 'edit_parent'])->name('siswa.edit_parent');
+        Route::get('/edit_parent/{id}/{wali}', [SiswaController::class, 'edit_parent'])->name('siswa.edit_parent');
         Route::get('/add_periodic_student/{student_id}', [SiswaController::class, 'add_periodic_student'])->name('siswa.add_periodic_student');
         Route::get('/show_periodic/{student_id}', [SiswaController::class, 'show_periodic'])->name('siswa.show_periodic');
         Route::get('/show_parents/{student_id}', [SiswaController::class, 'show_parents'])->name('siswa.show_parents');
@@ -149,6 +149,7 @@ Route::group(
         Route::post('/store_performances', [SiswaController::class, 'store_performances'])->name('siswa.store_performances');
         Route::post('/store_periodic_student', [SiswaController::class, 'store_periodic_student'])->name('siswa.store_periodic_student');
         Route::post('/store_parent_student', [SiswaController::class, 'store_parent_student'])->name('siswa.store_parent_student');
+        Route::patch('/update_parent/{id}', [SiswaController::class, 'update_parent'])->name('siswa.update_parent');
         Route::patch('/update_kesejahteraan/{id}', [SiswaController::class, 'update_kesejahteraan'])->name('siswa.update_kesejahteraan');
         Route::patch('/update_scholarship/{id}', [SiswaController::class, 'update_scholarship'])->name('siswa.update_scholarship');
         Route::patch('/update_performance_student/{id}', [SiswaController::class, 'update_performance_student'])->name('siswa.update_performance_student');

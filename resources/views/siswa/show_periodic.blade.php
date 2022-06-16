@@ -31,36 +31,7 @@
                         <?php $device = '';
                         $column = '10'; ?>
                     @endif
-                    <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
-                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a href="{{ route('siswa.edit', $student->id) }}"
-                                class="nav-link @if ($submenu == 'siswa') active @endif">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Data Pribadi</p>
-                            </a>
-                            <a class="nav-link @if ($submenu == 'orang tua') active @endif"
-                                href="{{ route('siswa.show_parents', $student->id) }}">
-                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                {{-- <i class="bx bx-book-content d-block check-nav-icon mt-2"></i> --}}
-                                <p class="fw-bold mb-4">Orang Tua</p>
-                            </a>
-                            <a href="{{ route('siswa.show_periodic', $student->id) }}"
-                                class="nav-link @if ($submenu == 'priodik') active @endif">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Data Priodik</p>
-                            </a>
-                            <a href="{{ route('siswa.list_performance_students', $student->id) }}"
-                                class="nav-link @if ($submenu == 'performance') active @endif">
-                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Jumlah Anak</p>
-                            </a>
-                            <a class="nav-link">
-                                <i class="bx bx-phone check-nav-icon mt-2"></i>
-                                <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Riwayat Penyakit</p>
-                            </a>
-                        </div>
-                    </div>
+                    @include('siswa.student_menu')
                     <div class="col-xl-<?php echo $column; ?> col-sm-9">
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel"
@@ -72,10 +43,10 @@
                                                 <h3>Data Priodik Siswa</h3>
                                             </div>
                                             @if ($student->periodic_student == null)
-                                                <div class="col-md-6" style="margin-top: -2px;">
+                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -8%;">
                                                     <a href="{{ route('siswa.add_periodic_student', $student->id) }}"><i
-                                                            class="bg-info rounded mdi mdi-plus text-white font-weight-bold font-size-20"
-                                                            style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px; margin-left: -14%;"></i></a>
+                                                            class="bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"
+                                                            style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
                                                 </div>
                                             @else
                                                 <div class="col-md-6" style="margin-top: -2px; margin-left: -8%;">
@@ -144,10 +115,8 @@
                                         <hr>
                                         <div class="row mt-4">
                                             <div class="col-sm-12">
-                                                <a href="{{ route('siswa.edit', $student->id) }}"
+                                                <a href="{{ route('siswa.show_parents', $student->id) }}"
                                                     class="btn btn-secondary waves-effect btn-sm">Kembali</a>
-                                                <button class="btn btn-primary btn-sm" type="submit" style="float: right"
-                                                    id="submit">Simpan</button>
                                             </div>
                                         </div>
                                     </div>

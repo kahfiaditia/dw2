@@ -31,34 +31,7 @@
                         <?php $device = '';
                         $column = '10'; ?>
                     @endif
-                    <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
-                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a href="{{ route('siswa.create') }}"
-                                class="nav-link @if ($submenu == 'siswa') active @endif">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Data Pribadi</p>
-                            </a>
-                            <a class="nav-link @if ($submenu == 'orang tua') active @endif"
-                                href="{{ route('parents.create') }}">
-                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                {{-- <i class="bx bx-book-content d-block check-nav-icon mt-2"></i> --}}
-                                <p class="fw-bold mb-4">Orang Tua / Wali</p>
-                            </a>
-                            <a class="nav-link">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Wali</p>
-                            </a>
-                            <a href="#" class="nav-link @if ($submenu == 'prestasi') active @endif">
-                                <i class="bx bx-chart d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Prestasi</p>
-                            </a>
-                            <a href="{{ route('siswa.index_kesejahteraan_siswa', $student_id) }}" class="nav-link">
-                                <i class="bx bx-phone check-nav-icon mt-2"></i>
-                                <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Riwayat Penyakit</p>
-                            </a>
-                        </div>
-                    </div>
+                    @include('siswa.student_menu')
                     <div class="col-xl-<?php echo $column; ?> col-sm-9">
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel"
@@ -165,13 +138,13 @@
                     <form method="POST" action="{{ route('siswa.store_kesejahteraan') }}">
                         <div class="modal-body">
                             @csrf
-                            <input type="hidden" name="student_id" value="{{ $student_id }}">
+                            <input type="hidden" name="student_id" value="{{ $student->id }}">
                             <div class="row">
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Jenis Beasiswa</label>
+                                        <label for="exampleInputEmail1">Jenis Kesejahteraan</label>
                                         <select name="jenis_kesejahteraan" id="" required class="form-control">
-                                            <option value="">-- Pilih Jenis Beasiswa --</option>
+                                            <option value="">-- Pilih Jenis Kesejahteraan --</option>
                                             <option value="PKH">PKH</option>
                                             <option value="PIP">PIP</option>
                                             <option value="Kartu Perlindungan Sosial">Kartu Perlindungan Sosial</option>
@@ -197,17 +170,23 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Batal</button>
+                            <button type="button" id="cancel" class="btn btn-secondary btn-sm"
+                                data-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            $("#modal_trigger").on('click', function() {
-                $("#modal_performance").modal('show')
-            })
-        </script>
-    @endsection
+    <script>
+        $("#modal_trigger").on('click', function() {
+            $("#modal_performance").modal('show')
+        })
+
+        $("#cancel").on('click', function() {
+            $("#modal_performance").modal('hide')
+        })
+    </script>
+@endsection

@@ -30,33 +30,7 @@
                         <?php $device = '';
                         $column = '10'; ?>
                     @endif
-                    <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
-                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a href="{{ route('siswa.create') }}"
-                                class="nav-link @if ($submenu == 'siswa') active @endif">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Data Pribadi</p>
-                            </a>
-                            <a class="nav-link @if ($submenu == 'orang tua') active @endif"
-                                href="{{ route('parents.create') }}">
-                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Orang Tua / Wali</p>
-                            </a>
-                            <a class="nav-link">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Wali</p>
-                            </a>
-                            <a href="#" class="nav-link @if ($submenu == 'prestasi') active @endif">
-                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Prestasi</p>
-                            </a>
-                            <a class="nav-link">
-                                <i class="bx bx-phone check-nav-icon mt-2"></i>
-                                <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Riwayat Penyakit</p>
-                            </a>
-                        </div>
-                    </div>
+                    @include('siswa.student_menu')
                     <div class="col-xl-<?php echo $column; ?> col-sm-9">
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel"
@@ -96,8 +70,9 @@
                                                                         <div class="form-group">
                                                                             <label for="exampleInputEmail1">Jenis
                                                                                 Kesejahteraan</label>
-                                                                            <select name="jenis_kesejahteraan" id=""
-                                                                                required class="form-control">
+                                                                            <select name="jenis_kesejahteraan"
+                                                                                id="" required
+                                                                                class="form-control">
                                                                                 <option value="">-- Pilih Jenis
                                                                                     Kesejahteraan --
                                                                                 </option>
@@ -129,8 +104,9 @@
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary btn-sm"
-                                                                    data-dismiss="modal">Batal</button>
+                                                                <a href="{{ route('siswa.index_kesejahteraan_siswa', $result->siswa_id) }}"
+                                                                    class="btn btn-secondary btn-sm"
+                                                                    data-dismiss="modal">Batal</a>
                                                                 <button type="submit"
                                                                     class="btn btn-primary btn-sm">Simpan</button>
                                                             </div>

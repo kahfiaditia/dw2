@@ -34,35 +34,7 @@
                             <?php $device = '';
                             $column = '10'; ?>
                         @endif
-                        <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
-                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
-                                aria-orientation="vertical">
-                                <a class="nav-link @if ($submenu == 'siswa') active @endif">
-                                    <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Data Pribadi</p>
-                                </a>
-                                <a class="nav-link" href="{{ route('siswa.show_parents', $student->id) }}">
-                                    <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                    {{-- <i class="bx bx-book-content d-block check-nav-icon mt-2"></i> --}}
-                                    <p class="fw-bold mb-4">Orang Tua</p>
-                                </a>
-                                <a class="nav-link">
-                                    <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Data Priodik</p>
-                                </a>
-                                <a href="{{ route('siswa.list_performance_students', $student->id) }}"
-                                    class="
-                                    nav-link">
-                                    <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Prestasi</p>
-                                </a>
-                                <a class="nav-link">
-                                    <i class="bx bx-phone check-nav-icon mt-2"></i>
-                                    <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Riwayat Penyakit</p>
-                                </a>
-                            </div>
-                        </div>
+                        @include('siswa.student_menu')
                         <div class="col-xl-<?php echo $column; ?> col-sm-9">
                             <div class="tab-content" id="v-pills-tabContent">
                                 <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel"
@@ -95,8 +67,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Nomor Handphone<code>*</code></label>
-                                                    <input type="text" class="form-control number-only" name="no_handphone"
-                                                        required
+                                                    <input type="text" class="form-control number-only"
+                                                        name="no_handphone" required
                                                         value="{{ old('no_handphone', $student->no_handphone) }}"
                                                         minlength="12" maxlength="13" placeholder="Nomor Handphone">
                                                     <div class="invalid-feedback">
@@ -161,9 +133,10 @@
                                                     <div class="mb-3">
                                                         <label for="validationCustom02"
                                                             class="form-label">NIK<code>*</code></label>
-                                                        <input type="text" class="form-control number-only" name="nik"
-                                                            placeholder="NIK" value="{{ old('nik', $student->nik) }}"
-                                                            maxlength="20" required>
+                                                        <input type="text" class="form-control number-only"
+                                                            name="nik" placeholder="NIK"
+                                                            value="{{ old('nik', $student->nik) }}" maxlength="20"
+                                                            required>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -211,8 +184,9 @@
                                                                 placeholder="yyyy-mm-dd" name="tanggal_lahir"
                                                                 value="{{ old('tanggal_lahir', $student->tanggal_lahir) }}"
                                                                 data-date-format="yyyy-mm-dd"
-                                                                data-date-container='#datepicker2' data-provide="datepicker"
-                                                                required data-date-autoclose="true">
+                                                                data-date-container='#datepicker2'
+                                                                data-provide="datepicker" required
+                                                                data-date-autoclose="true">
                                                             <span class="input-group-text"><i
                                                                     class="mdi mdi-calendar"></i></span>
                                                             <div class="invalid-feedback">
@@ -284,8 +258,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="">Nama Negara <code>*</code></label>
-                                                    <input type="text" class="form-control" name="nama_negara" required
-                                                        placeholder="Nama Negara"
+                                                    <input type="text" class="form-control" name="nama_negara"
+                                                        required placeholder="Nama Negara"
                                                         value="{{ old('nama_negara', $student->nama_negara) }}">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -355,8 +329,9 @@
                                                         <div class="col-md-6">
                                                             <label for="validationCustom02" class="form-label">RT
                                                                 <code>*</code></label>
-                                                            <input type="text" min="0" class="number-only form-control"
-                                                                name="rt" value="{{ old('rt', $student->rt) }}" required
+                                                            <input type="text" min="0"
+                                                                class="number-only form-control" name="rt"
+                                                                value="{{ old('rt', $student->rt) }}" required
                                                                 placeholder="RT">
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
@@ -367,8 +342,8 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="">RW <code>*</code></label>
-                                                            <input type="text" class="number-only form-control" name="rw"
-                                                                required placeholder="RW"
+                                                            <input type="text" class="number-only form-control"
+                                                                name="rw" required placeholder="RW"
                                                                 value="{{ old('rw', $student->rw) }}">
                                                         </div>
                                                         <div class="invalid-feedback">
@@ -466,8 +441,9 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="">Anak keberapa <code>*</code></label>
-                                                            <input required type="text" class="number-only form-control"
-                                                                name="anak_keberapa" placeholder="Anak Keberapa"
+                                                            <input required type="text"
+                                                                class="number-only form-control" name="anak_keberapa"
+                                                                placeholder="Anak Keberapa"
                                                                 value="{{ old('anak_keberapa', $student->child_order) }}">
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.

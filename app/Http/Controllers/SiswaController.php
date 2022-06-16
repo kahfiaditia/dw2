@@ -15,6 +15,7 @@ use App\Models\Kodepos;
 use App\Models\Parents;
 use App\Models\Priodik_siswa;
 use App\Models\Prestasi;
+use App\Models\Wali;
 
 class SiswaController extends Controller
 {
@@ -332,6 +333,8 @@ class SiswaController extends Controller
 
     public function show_parents($student_id)
     {
+        $student = Siswa::findOrFail($student_id);
+
         $father = Parents::with('special_need')->where([
             ['type', '=', 'Ayah'],
             ['siswa_id', '=', $student_id]
@@ -351,11 +354,11 @@ class SiswaController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'orang tua',
-            'label' => 'edit orang tua siswa',
+            'label' => 'data orang tua / wali siswa',
             'father' => $father,
             'mother' => $mother,
             'guardian' => $guardian,
-            'student_id' => $student_id
+            'student' => $student
         ];
 
         return view('siswa.show_parents')->with($data);
@@ -403,11 +406,10 @@ class SiswaController extends Controller
             ]);
             AlertHelper::addAlert(true);
             DB::commit();
-            return redirect('edit_parents/' . $request->student_id);
+            return redirect('show_parents/' . $request->student_id);
         } catch (\Throwable $err) {
             AlertHelper::addAlert(false);
             DB::rollBack();
-            throw $err;
             return back();
         }
     }
@@ -420,7 +422,7 @@ class SiswaController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'priodik',
-            'label' => 'tambah orang tua / wali siswa',
+            'label' => 'Data priodik siswa',
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
             'student' => $student
         ];
@@ -460,17 +462,52 @@ class SiswaController extends Controller
         }
     }
 
-    public function edit_parent($id)
+    public function edit_parent($id, $type)
     {
+        $educations = ["Tidak Sekolah", "Putus SD", "SD Sederajat", "SMP Sederajat", "SMA Sederajat", "D1", "D2", "D3", "D4/S1", "S2", "S3"];
+        $jobs = ["Tidak Bekerja", "Nelayan", "Petani", "Peternak", "PNS/TNI/POLRI", "Karyawan Swasta", "Pedagang Kecil", "Pedagang Besar", "Wiraswasta", "Wirausaha", "Buruh", "Pensiunan", "Dll"];
+        $incomes = ["< Rp. 500.000", "Rp. 500.000 - Rp. 999.999", "Rp. 1.000.000 - Rp. 1.999.999", "Rp. 2.000.000 - Rp. 4.999.999", "Rp. 5.000.000 - Rp. 20.000.000"];
+        $parent = Parents::findOrFail($id);
+        $student = Siswa::findOrFail($parent->siswa_id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'priodik',
-            'label' => 'tambah orang tua / wali siswa',
-            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get()
+            'submenu' => 'orang tua',
+            'label' => 'Edit data orang tua / wali siswa',
+            'type' => $type,
+            'parent' => $parent,
+            'student' => $student,
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'educations' => $educations,
+            'jobs' => $jobs,
+            'incomes' => $incomes
         ];
 
         return view('siswa.edit_parent')->with($data);
+    }
+
+    public function update_parent(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $parent = Parents::findOrFail($id);
+            $parent->nik = $request->nik_orang_tua;
+            $parent->name = $request->nama_orang_tua;
+            $parent->tanggal_lahir = $request->tanggal_lahir_orang_tua;
+            $parent->no_hp = $request->no_handphone_orang_tua;
+            $parent->pendidikan = $request->pendidikan_orang_tua;
+            $parent->pekerjaan = $request->pekerjaan_orang_tua;
+            $parent->penghasilan = $request->penghasilan_orang_tua;
+            $parent->kebutuhan_khusus_id = $request->kebutuhan_khusus;
+            $parent->save();
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('show_parents/' . $parent->siswa_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
+        }
     }
 
     public function store_periodic_student(Request $request)
@@ -517,12 +554,14 @@ class SiswaController extends Controller
     public function edit_periodic_student($id)
     {
         $periodic = Priodik_siswa::with('student')->findOrFail($id);
+        $student = Siswa::findOrFail($periodic->siswa_id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'priodik',
-            'label' => 'tambah orang tua / wali siswa',
-            'periodic' => $periodic
+            'label' => 'Edit Data Priodik Siswa',
+            'periodic' => $periodic,
+            'student' => $student
         ];
 
         return view('siswa.edit_periodic_student')->with($data);
@@ -554,13 +593,14 @@ class SiswaController extends Controller
 
     public function list_performance_students($id)
     {
+        $student = Siswa::findOrFail($id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'prestasi',
             'label' => 'tambah prestasi siswa',
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
-            'student_id' => $id,
+            'student' => $student,
             'performances' => Prestasi::where('siswa_id', $id)->orderBy('id', 'DESC')->get()
         ];
 
@@ -610,6 +650,8 @@ class SiswaController extends Controller
     {
         $performance_types = ["Sains", "Seni", "Olahraga", 'Lain-lain'];
         $perfomance_levels = ["Sekolah", "Kecamatan", "Kabupaten", "Provinsi", "Nasional", "Internasional"];
+        $performance = Prestasi::findOrFail($id);
+        $student = Siswa::findOrFail($performance->siswa_id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
@@ -617,7 +659,8 @@ class SiswaController extends Controller
             'label' => 'edit prestasi siswa',
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
             'student_id' => $id,
-            'performance' => Prestasi::findOrFail($id),
+            'performance' => $performance,
+            'student' => $student,
             'performance_types' => $performance_types,
             'performance_levels' => $perfomance_levels
         ];
@@ -649,12 +692,13 @@ class SiswaController extends Controller
 
     public function index_beasiswa_student($id)
     {
+        $student = Siswa::findOrFail($id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'beasiswa',
             'label' => 'Beasiswa siswa',
-            'student_id' => $id,
+            'student' => $student,
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
             'scholarships' => Beasiswa::orderBy('id', 'DESC')->get()
         ];
@@ -742,12 +786,13 @@ class SiswaController extends Controller
 
     public function index_kesejahteraan_siswa($id)
     {
+        $student = Siswa::findOrFail($id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'beasiswa',
+            'submenu' => 'kesejahteraan',
             'label' => 'List Kesejahteraan Peserta Didik',
-            'student_id' => $id,
+            'student' => $student,
             'kesejahteraan' => Kesejahteraan_siswa::orderBy('id', 'DESC')->get()
         ];
 
@@ -794,14 +839,17 @@ class SiswaController extends Controller
     public function edit_kesejahteraan(Request $request, $id)
     {
         $kesejahteraan = ['PKH', "PIP", "Kartu Perlindungan Sosial", "Kartu Keluarga Sejahtera", "Kartu Kesehatan"];
+
+        $result = Kesejahteraan_siswa::findOrFail($id);
+        $student = Siswa::findOrFail($result->siswa_id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'beasiswa',
-            'label' => 'List Kesejahteraan Peserta Didik',
-            'student_id' => $id,
-            'result' => Kesejahteraan_siswa::findOrFail($id),
-            'kesejahteraan' => $kesejahteraan
+            'submenu' => 'kesejahteraan',
+            'label' => 'Edit Kesejahteraan Peserta Didik',
+            'result' => $result,
+            'kesejahteraan' => $kesejahteraan,
+            'student' => $student
         ];
 
         return view('siswa.edit_kesejahteraan')->with($data);
