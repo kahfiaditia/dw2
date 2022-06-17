@@ -15,7 +15,6 @@ use App\Models\Kodepos;
 use App\Models\Parents;
 use App\Models\Priodik_siswa;
 use App\Models\Prestasi;
-use App\Models\Wali;
 
 class SiswaController extends Controller
 {
@@ -136,7 +135,7 @@ class SiswaController extends Controller
 
     public function show($id)
     {
-        $student = Siswa::with('religion', 'special_need')->findOrFail($id);
+        $student = Siswa::with('religion', 'special_need', 'periodic_student', 'beasiswa', 'performances', 'kesejahteraan')->findOrFail($id);
 
         $father = Parents::with('special_need')->where([
             ['type', '=', 'Ayah'],
