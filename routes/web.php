@@ -2,13 +2,17 @@
 
 use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\AkunController;
+use App\Http\Controllers\BillController;
+use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NeedsController;
 use App\Http\Controllers\ParentController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PriodikSiswaController;
 use Illuminate\Support\Facades\Route;
 
@@ -149,5 +153,9 @@ Route::group(
         Route::resource('/siswa', SiswaController::class);
         Route::resource('/akun', AkunController::class);
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
+        Route::resource('/bills', BillController::class);
+        Route::resource('/classes', ClassesController::class);
+        Route::resource('/invoice', InvoiceController::class);
+        Route::resource('/payment', PaymentController::class);
     }
 );

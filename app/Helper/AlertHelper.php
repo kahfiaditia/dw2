@@ -42,4 +42,12 @@ class AlertHelper
             Alert::error('Gagal', 'Gagal dibayar');
         }
     }
+
+    public static function addDuplicate($info)
+    {
+        if ($info) {
+        } else {
+            Alert::error('Gagal', 'Gagal disimpan, data sudah ada');
+        }
+    }
 }
