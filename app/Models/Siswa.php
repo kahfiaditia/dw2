@@ -38,4 +38,19 @@ class Siswa extends Model
     {
         return $this->belongsTo(Classes::class, 'class_id');
     }
+
+    public function performances()
+    {
+        return $this->hasMany(Prestasi::class, 'siswa_id');
+    }
+
+    public function beasiswa()
+    {
+        return $this->hasMany(Beasiswa::class, 'siswa_id');
+    }
+
+    public function kesejahteraan()
+    {
+        return $this->hasMany(Kesejahteraan_siswa::class, 'siswa_id');
+    }
 }

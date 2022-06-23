@@ -26,7 +26,7 @@
                     enctype="multipart/form-data" method="POST" novalidate>
                     @csrf
                     @method('PATCH')
-                    <input type="text" name="student_id" value="{{ $periodic->siswa_id }}">
+                    <input type="hidden" name="student_id" value="{{ $periodic->siswa_id }}">
                     <div class="row">
                         @if ($version[1] == 'Android' || $version[1] == 'Mobile' || $version[1] == 'iPhone')
                             <?php $device = 'style="display:none;"';
@@ -35,35 +35,7 @@
                             <?php $device = '';
                             $column = '10'; ?>
                         @endif
-                        <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
-                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
-                                aria-orientation="vertical">
-                                <a href="{{ route('siswa.create') }}"
-                                    class="nav-link @if ($submenu == 'siswa') active @endif">
-                                    <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Data Pribadi</p>
-                                </a>
-                                <a class="nav-link @if ($submenu == 'orang tua') active @endif"
-                                    href="{{ route('parents.index') }}">
-                                    <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                    {{-- <i class="bx bx-book-content d-block check-nav-icon mt-2"></i> --}}
-                                    <p class="fw-bold mb-4">Orang Tua / Wali</p>
-                                </a>
-                                <a class="nav-link @if ($submenu == 'priodik') active @endif">
-                                    <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Data Priodik</p>
-                                </a>
-                                <a class="nav-link">
-                                    <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Jumlah Anak</p>
-                                </a>
-                                <a class="nav-link">
-                                    <i class="bx bx-phone check-nav-icon mt-2"></i>
-                                    <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Riwayat Penyakit</p>
-                                </a>
-                            </div>
-                        </div>
+                        @include('siswa.student_menu')
                         <div class="col-xl-<?php echo $column; ?> col-sm-9">
                             <div class="tab-content" id="v-pills-tabContent">
                                 <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel"
@@ -145,7 +117,8 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
-                                                    <label for="">Jarak tempat tinggal ke sekolah <code>*</code></label>
+                                                    <label for="">Jarak tempat tinggal ke sekolah
+                                                        <code>*</code></label>
                                                     <select name="jarak_tempuh" class="form-control" required>
                                                         <option value="">-- Pilih Jarak Tempuh --</option>
                                                         <option value="Kurang dari 1 Km"
@@ -163,7 +136,8 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
-                                                    <label for="">Sebutkan dalam Kilometer (KM)<code>*</code></label>
+                                                    <label for="">Sebutkan dalam Kilometer
+                                                        (KM)<code>*</code></label>
                                                     <div class="row">
                                                         <div class="input-group">
                                                             <input type="text" class="number-only form-control"
@@ -229,8 +203,8 @@
                                             </div>
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
-                                                    <a href="{{ route('employee') }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Batal</a>
+                                                    <a href="{{ route('siswa.show_periodic', $student->id) }}"
+                                                        class="btn btn-secondary waves-effect btn-sm">Kembali</a>
                                                     <button class="btn btn-primary btn-sm" type="submit"
                                                         style="float: right" id="submit">Simpan</button>
                                                 </div>

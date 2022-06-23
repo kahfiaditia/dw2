@@ -21,36 +21,80 @@
             </div>
             <div class="checkout-tabs">
                 <div class="row">
+                    <?php preg_match('/(chrome|firefox|avantgo|blackberry|android|blazer|elaine|hiptop|iphone|ipod|kindle|midp|mmp|mobile|o2|opera mini|palm|palm os|pda|plucker|pocket|psp|smartphone|symbian|treo|up.browser|up.link|vodafone|wap|windows ce; iemobile|windows ce; ppc;|windows ce; smartphone;|xiino)/i', $_SERVER['HTTP_USER_AGENT'], $version); ?>
+                    @if ($version[1] == 'Android' || $version[1] == 'Mobile' || $version[1] == 'iPhone')
+                        <?php $device = 'style="display:none;"';
+                        $column = '12'; ?>
+                    @else
+                        <?php $device = '';
+                        $column = '10'; ?>
+                    @endif
                     <div class="col-lg-2">
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link active" id="v-pills-data-tab" data-bs-toggle="pill" href="#v-pills-data"
                                 role="tab" aria-controls="v-pills-data" aria-selected="true">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
+                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Data Pribadi</p>
                             </a>
                             <a class="nav-link" id="v-pills-orang-tua-tab" data-bs-toggle="pill" href="#v-pills-orang-tua"
                                 role="tab" aria-controls="v-pills-orang-tua" aria-selected="true">
-                                <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
+                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Orang Tua / Wali</p>
                             </a>
                             <a class="nav-link" id="v-pills-sk-tab" data-bs-toggle="pill" href="#v-pills-sk" role="tab"
                                 aria-controls="v-pills-sk" aria-selected="false">
-                                <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">SK Pengangkatan</p>
+                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Data Priodik</p>
                             </a>
                             <a class="nav-link" id="v-pills-anak-tab" data-bs-toggle="pill" href="#v-pills-anak"
                                 role="tab" aria-controls="v-pills-anak" aria-selected="true">
-                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Jumlah Anak</p>
+                                <i class="bx bx-chart d-block check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Prestasi</p>
                             </a>
                             <a class="nav-link" id="v-pills-riwayat-tab" data-bs-toggle="pill" href="#v-pills-riwayat"
                                 role="tab" aria-controls="v-pills-riwayat" aria-selected="true">
+                                <i class="bx bx-star check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Beasiswa</p>
+                            </a>
+                            <a class="nav-link" id="v-pills-kesejahteraan-tab" data-bs-toggle="pill"
+                                href="#v-pills-kesejahteraan" role="tab" aria-controls="v-pills-kesejahteraan"
+                                aria-selected="true">
                                 <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
-                                <i class="bx bx-phone check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Riwayat Penyakit & Kontak</p>
+                                <p class="fw-bold mb-4">Kesejahteraan Siswa</p>
                             </a>
                         </div>
                     </div>
+                    {{-- <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link @if ($submenu == 'siswa') active @endif">
+                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Data Pribadi</p>
+                            </a>
+                            <a class="nav-link @if ($submenu == 'orang tua') active @endif">
+                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Orang Tua / Wali</p>
+                            </a>
+                            <a class="nav-link @if ($submenu == 'priodik') active @endif">
+                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Data Priodik</p>
+                            </a>
+                            <a
+                                class="
+                                nav-link @if ($submenu == 'prestasi') active @endif">
+                                <i class="bx bx-chart d-block check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Prestasi</p>
+                            </a>
+                            <a class="nav-link @if ($submenu == 'beasiswa') active @endif">
+                                <i class="bx bx-star check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Beasiswa</p>
+                            </a>
+                            <a class="nav-link @if ($submenu == 'kesejahteraan') active @endif">
+                                <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
+                                <p class="fw-bold mb-4">Kesejahteraan Siswa</p>
+                            </a>
+                        </div>
+                    </div> --}}
+
                     <div class="col-lg-10">
                         <div class="card">
                             <div class="card-body">
@@ -412,34 +456,179 @@
                                                 </div>
                                             @endif
                                         </div>
+                                        <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
+                                            class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-sk" role="tabpanel"
                                         aria-labelledby="v-pills-sk-tab">
-                                        <table id="" class="table table-striped dt-responsive nowrap w-100">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No SK</th>
-                                                    <th>Tanggal SK</th>
-                                                    <th>Jabatan</th>
-                                                    <th>Dokumen SK</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                        <div class="alert alert-danger" role="alert">
-                                            <a class="alert-link">Belum isi SK Pengangkatan</a>
+                                        <div class="row">
+                                            <h3>Data Priodik</h3>
+                                            @if ($student->periodic_student != null)
+                                                <div class="col-sm-4 mt-4">
+                                                    <h5 class="font-size-14">Tinggi Badan</h5>
+                                                    <p class="text-muted">
+                                                        {{ $student->periodic_student->tinggi_badan . ' Cm' }}</p>
+                                                </div>
+                                                <div class="col-sm-4 mt-4">
+                                                    <h5 class="font-size-14">Berat Badan</h5>
+                                                    <p class="text-muted">
+                                                        {{ $student->periodic_student->berat_badan . ' Kg' }}</p>
+                                                </div>
+                                                <div class="col-sm-4 mt-4">
+                                                    <h5 class="font-size-14">Lingkar Kepala</h5>
+                                                    <p class="text-muted">
+                                                        {{ $student->periodic_student->lingkar_kepala . ' Cm' }}</p>
+                                                </div>
+                                                <div class="col-sm-4 mt-4">
+                                                    <h5 class="font-size-14">Jarak tempat tinggal ke sekolah</h5>
+                                                    <p class="text-muted">
+                                                        {{ $student->periodic_student->jarak_tempat_tinggal_ke_sekolah }}
+                                                    </p>
+                                                </div>
+                                                <div class="col-sm-4 mt-4">
+                                                    <h5 class="font-size-14">Sebutkan (dalam kilometer)</h5>
+                                                    <p class="text-muted">
+                                                        {{ $student->periodic_student->in_km . ' Km' }}
+                                                    </p>
+                                                </div>
+                                                <div class="col-sm-4 mt-4">
+                                                    <h5 class="font-size-14">Waktu tempuh ke sekolah</h5>
+                                                    <p class="text-muted">
+                                                        {{ $student->periodic_student->waktu_tempuh_jam . ' Jam ' . $student->periodic_student->waktu_tempuh_menit . ' Menit' }}
+                                                    </p>
+                                                </div>
+                                                <div class="col-sm-4 mt-4">
+                                                    <h5 class="font-size-14">Jumlah saudara kandung</h5>
+                                                    <p class="text-muted">
+                                                        {{ $student->periodic_student->jumlah_saudara_kandung }}</p>
+                                                </div>
+                                            @else
+                                                <div class="alert alert-danger" role="alert">
+                                                    <a class="alert-link">Tidak Data Periodic</a>
+                                                </div>
+                                            @endif
                                         </div>
+                                        <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
+                                            class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-anak" role="tabpanel"
                                         aria-labelledby="v-pills-anak-tab">
-
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h3>Data Prestasi</h3>
+                                                        <table id="mydata"
+                                                            class="table table-striped dt-responsive nowrap w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center">No</th>
+                                                                    <th class="text-center">Jenis Prestasi</th>
+                                                                    <th class="text-center">Tingkat
+                                                                    </th>
+                                                                    <th class="text-center">Nama Prestasi</th>
+                                                                    <th class="text-center">Tahun Prestasi</th>
+                                                                    <th class="text-center">Penyelenggara</th>
+                                                                    <th class="text-center">Peringkat</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($student->performances as $performance)
+                                                                    <tr>
+                                                                        <td class="text-center">
+                                                                            {{ $loop->iteration }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $performance->jenis_prestasi }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $performance->tingkat_prestasi }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $performance->nama_prestasi }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $performance->tahun_prestasi }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $performance->penyelenggara }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $performance->peringkat }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                        <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
+                                                            class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-riwayat" role="tabpanel"
                                         aria-labelledby="v-pills-riwayat-tab">
-
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <table id="mydata"
+                                                            class="table table-striped dt-responsive nowrap w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center">No</th>
+                                                                    <th class="text-center">Jenis Beasiswa</th>
+                                                                    <th class="text-center">Keterangan</th>
+                                                                    <th class="text-center">Tahun Mulai</th>
+                                                                    <th class="text-center">Tahun Selesai</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($student->beasiswa as $scholarship)
+                                                                    <tr>
+                                                                        <td class="text-center">{{ $loop->iteration }}
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            {{ $scholarship->jenis_beasiswa }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $scholarship->keterangan }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $scholarship->tahun_mulai }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $scholarship->tahun_selesai }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
+                                                        class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="v-pills-kesejahteraan" role="tabpanel"
+                                        aria-labelledby="v-pills-kesejahteraan-tab">
+                                        <table id="mydata" class="table table-striped dt-responsive nowrap w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">No</th>
+                                                    <th class="text-center">Jenis Kesejahteraan</th>
+                                                    <th class="text-center">Nomor Kartu</th>
+                                                    <th class="text-center">Nama Di Kartu</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($student->kesejahteraan as $item)
+                                                    <tr>
+                                                        <td class="text-center">{{ $loop->iteration }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ $item->jenis_kesejahteraan }}</td>
+                                                        <td class="text-center">
+                                                            {{ $item->nomor_kartu }}</td>
+                                                        <td class="text-center">
+                                                            {{ $item->nama_kartu }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
+                                            class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
                                     </div>
                                 </div>
                             </div>

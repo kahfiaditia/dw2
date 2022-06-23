@@ -8,10 +8,13 @@ use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Helper\AlertHelper;
+use App\Models\Beasiswa;
+use App\Models\Kesejahteraan_siswa;
 use Yajra\DataTables\DataTables;
 use App\Models\Kodepos;
 use App\Models\Parents;
 use App\Models\Priodik_siswa;
+use App\Models\Prestasi;
 
 class SiswaController extends Controller
 {
@@ -132,7 +135,7 @@ class SiswaController extends Controller
 
     public function show($id)
     {
-        $student = Siswa::with('religion', 'special_need')->findOrFail($id);
+        $student = Siswa::with('religion', 'special_need', 'periodic_student', 'beasiswa', 'performances', 'kesejahteraan')->findOrFail($id);
 
         $father = Parents::with('special_need')->where([
             ['type', '=', 'Ayah'],
@@ -329,6 +332,8 @@ class SiswaController extends Controller
 
     public function show_parents($student_id)
     {
+        $student = Siswa::findOrFail($student_id);
+
         $father = Parents::with('special_need')->where([
             ['type', '=', 'Ayah'],
             ['siswa_id', '=', $student_id]
@@ -348,11 +353,11 @@ class SiswaController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'orang tua',
-            'label' => 'edit orang tua siswa',
+            'label' => 'data orang tua / wali siswa',
             'father' => $father,
             'mother' => $mother,
             'guardian' => $guardian,
-            'student_id' => $student_id
+            'student' => $student
         ];
 
         return view('siswa.show_parents')->with($data);
@@ -400,11 +405,10 @@ class SiswaController extends Controller
             ]);
             AlertHelper::addAlert(true);
             DB::commit();
-            return redirect('edit_parents/' . $request->student_id);
+            return redirect('show_parents/' . $request->student_id);
         } catch (\Throwable $err) {
             AlertHelper::addAlert(false);
             DB::rollBack();
-            throw $err;
             return back();
         }
     }
@@ -417,7 +421,7 @@ class SiswaController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'priodik',
-            'label' => 'tambah orang tua / wali siswa',
+            'label' => 'Data priodik siswa',
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
             'student' => $student
         ];
@@ -457,17 +461,52 @@ class SiswaController extends Controller
         }
     }
 
-    public function edit_parent($id)
+    public function edit_parent($id, $type)
     {
+        $educations = ["Tidak Sekolah", "Putus SD", "SD Sederajat", "SMP Sederajat", "SMA Sederajat", "D1", "D2", "D3", "D4/S1", "S2", "S3"];
+        $jobs = ["Tidak Bekerja", "Nelayan", "Petani", "Peternak", "PNS/TNI/POLRI", "Karyawan Swasta", "Pedagang Kecil", "Pedagang Besar", "Wiraswasta", "Wirausaha", "Buruh", "Pensiunan", "Dll"];
+        $incomes = ["< Rp. 500.000", "Rp. 500.000 - Rp. 999.999", "Rp. 1.000.000 - Rp. 1.999.999", "Rp. 2.000.000 - Rp. 4.999.999", "Rp. 5.000.000 - Rp. 20.000.000"];
+        $parent = Parents::findOrFail($id);
+        $student = Siswa::findOrFail($parent->siswa_id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'priodik',
-            'label' => 'tambah orang tua / wali siswa',
-            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get()
+            'submenu' => 'orang tua',
+            'label' => 'Edit data orang tua / wali siswa',
+            'type' => $type,
+            'parent' => $parent,
+            'student' => $student,
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'educations' => $educations,
+            'jobs' => $jobs,
+            'incomes' => $incomes
         ];
 
         return view('siswa.edit_parent')->with($data);
+    }
+
+    public function update_parent(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $parent = Parents::findOrFail($id);
+            $parent->nik = $request->nik_orang_tua;
+            $parent->name = $request->nama_orang_tua;
+            $parent->tanggal_lahir = $request->tanggal_lahir_orang_tua;
+            $parent->no_hp = $request->no_handphone_orang_tua;
+            $parent->pendidikan = $request->pendidikan_orang_tua;
+            $parent->pekerjaan = $request->pekerjaan_orang_tua;
+            $parent->penghasilan = $request->penghasilan_orang_tua;
+            $parent->kebutuhan_khusus_id = $request->kebutuhan_khusus;
+            $parent->save();
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('show_parents/' . $parent->siswa_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
+        }
     }
 
     public function store_periodic_student(Request $request)
@@ -514,12 +553,14 @@ class SiswaController extends Controller
     public function edit_periodic_student($id)
     {
         $periodic = Priodik_siswa::with('student')->findOrFail($id);
+        $student = Siswa::findOrFail($periodic->siswa_id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'priodik',
-            'label' => 'tambah orang tua / wali siswa',
-            'periodic' => $periodic
+            'label' => 'Edit Data Priodik Siswa',
+            'periodic' => $periodic,
+            'student' => $student
         ];
 
         return view('siswa.edit_periodic_student')->with($data);
@@ -542,6 +583,289 @@ class SiswaController extends Controller
             DB::commit();
             AlertHelper::updateAlert(true);
             return redirect('show_periodic/' . $request->student_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
+        }
+    }
+
+    public function list_performance_students($id)
+    {
+        $student = Siswa::findOrFail($id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'prestasi',
+            'label' => 'tambah prestasi siswa',
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'student' => $student,
+            'performances' => Prestasi::where('siswa_id', $id)->orderBy('id', 'DESC')->get()
+        ];
+
+        return view('siswa.list_performance_students')->with($data);
+    }
+
+    public function store_performances(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            Prestasi::create([
+                'jenis_prestasi' => $request->jenis_prestasi,
+                'tingkat_prestasi' => $request->tingkat_prestasi,
+                'nama_prestasi' => $request->nama_prestasi,
+                'tahun_prestasi' => $request->tahun_prestasi,
+                'penyelenggara' => $request->penyelenggara,
+                'peringkat' => $request->peringkat,
+                'siswa_id' => $request->student_id
+            ]);
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_performance_student($id)
+    {
+        DB::beginTransaction();
+        try {
+            $performance = Prestasi::findOrFail($id);
+            $performance->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_performance_student($id)
+    {
+        $performance_types = ["Sains", "Seni", "Olahraga", 'Lain-lain'];
+        $perfomance_levels = ["Sekolah", "Kecamatan", "Kabupaten", "Provinsi", "Nasional", "Internasional"];
+        $performance = Prestasi::findOrFail($id);
+        $student = Siswa::findOrFail($performance->siswa_id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'prestasi',
+            'label' => 'edit prestasi siswa',
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'student_id' => $id,
+            'performance' => $performance,
+            'student' => $student,
+            'performance_types' => $performance_types,
+            'performance_levels' => $perfomance_levels
+        ];
+
+        return view('siswa.edit_performance_student')->with($data);
+    }
+
+    public function update_performance_student(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $performance = Prestasi::findOrFail($id);
+            $performance->jenis_prestasi = $request->jenis_prestasi;
+            $performance->tingkat_prestasi = $request->tingkat_prestasi;
+            $performance->nama_prestasi = $request->nama_prestasi;
+            $performance->tahun_prestasi = $request->tahun_prestasi;
+            $performance->penyelenggara = $request->penyelenggara;
+            $performance->peringkat = $request->peringkat;
+            $performance->save();
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('list_performance_students/' . $request->student_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
+        }
+    }
+
+    public function index_beasiswa_student($id)
+    {
+        $student = Siswa::findOrFail($id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'beasiswa',
+            'label' => 'Beasiswa siswa',
+            'student' => $student,
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'scholarships' => Beasiswa::orderBy('id', 'DESC')->get()
+        ];
+
+        return view('siswa.index_beasiswa_student')->with($data);
+    }
+
+    public function store_beasiswa(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            Beasiswa::create([
+                'jenis_beasiswa' => $request->jenis_beasiswa,
+                'keterangan' => $request->keterangan,
+                'tahun_mulai' => $request->tahun_mulai,
+                'tahun_selesai' => $request->tahun_selesai,
+                'siswa_id' => $request->student_id
+            ]);
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_scholarship($id)
+    {
+        DB::beginTransaction();
+        try {
+            $scholarship = Beasiswa::findOrFail($id);
+            $scholarship->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_scholarship($id)
+    {
+        $scholarship_types = ["Anak Berprestasi", "Anak Miskin", "Pendidikan", "Unggulan"];
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'beasiswa',
+            'label' => 'Edit Beassiwa',
+            'student_id' => $id,
+            'scholarship' => Beasiswa::findOrFail($id),
+            'scholarship_types' => $scholarship_types
+        ];
+
+        return view('siswa.edit_scholarship')->with($data);
+    }
+
+    public function update_scholarship(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $scholarship = Beasiswa::findOrFail($id);
+            $scholarship->jenis_beasiswa = $request->jenis_beasiswa;
+            $scholarship->keterangan = $request->keterangan;
+            $scholarship->tahun_mulai = $request->tahun_mulai;
+            $scholarship->tahun_selesai = $request->tahun_selesai;
+
+            $scholarship->save();
+
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('index_beasiswa_student/' . $request->student_id);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::updateAlert(false);
+            return back();
+        }
+    }
+
+    public function index_kesejahteraan_siswa($id)
+    {
+        $student = Siswa::findOrFail($id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'kesejahteraan',
+            'label' => 'List Kesejahteraan Peserta Didik',
+            'student' => $student,
+            'kesejahteraan' => Kesejahteraan_siswa::orderBy('id', 'DESC')->get()
+        ];
+
+        return view('siswa.index_kesejahteraan_siswa')->with($data);
+    }
+
+    public function store_kesejahteraan(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            Kesejahteraan_siswa::create([
+                'jenis_kesejahteraan' => $request->jenis_kesejahteraan,
+                'nomor_kartu' => $request->nomor_kartu,
+                'nama_kartu' => $request->nama_kartu,
+                'siswa_id' => $request->student_id
+            ]);
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    public function destroy_kesejahteraan($id)
+    {
+        DB::beginTransaction();
+        try {
+            $result = Kesejahteraan_siswa::findOrFail($id);
+            $result->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function edit_kesejahteraan(Request $request, $id)
+    {
+        $kesejahteraan = ['PKH', "PIP", "Kartu Perlindungan Sosial", "Kartu Keluarga Sejahtera", "Kartu Kesehatan"];
+
+        $result = Kesejahteraan_siswa::findOrFail($id);
+        $student = Siswa::findOrFail($result->siswa_id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'kesejahteraan',
+            'label' => 'Edit Kesejahteraan Peserta Didik',
+            'result' => $result,
+            'kesejahteraan' => $kesejahteraan,
+            'student' => $student
+        ];
+
+        return view('siswa.edit_kesejahteraan')->with($data);
+    }
+
+    public function update_kesejahteraan(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $item = Kesejahteraan_siswa::findOrFail($id);
+            $item->jenis_kesejahteraan = $request->jenis_kesejahteraan;
+            $item->nomor_kartu = $request->nomor_kartu;
+            $item->nama_kartu = $request->nama_kartu;
+            $item->save();
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('index_kesejahteraan_siswa/' . $request->student_id);
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::updateAlert(false);

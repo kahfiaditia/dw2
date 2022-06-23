@@ -33,35 +33,7 @@
                             <?php $device = '';
                             $column = '10'; ?>
                         @endif
-                        <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
-                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
-                                aria-orientation="vertical">
-                                <a href="{{ route('siswa.create') }}"
-                                    class="nav-link @if ($submenu == 'siswa') active @endif">
-                                    <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Data Pribadi</p>
-                                </a>
-                                <a class="nav-link @if ($submenu == 'orang tua') active @endif"
-                                    href="{{ route('parents.index') }}">
-                                    <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                    {{-- <i class="bx bx-book-content d-block check-nav-icon mt-2"></i> --}}
-                                    <p class="fw-bold mb-4">Orang Tua / Wali</p>
-                                </a>
-                                <a class="nav-link">
-                                    <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Wali</p>
-                                </a>
-                                <a class="nav-link">
-                                    <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Jumlah Anak</p>
-                                </a>
-                                <a class="nav-link">
-                                    <i class="bx bx-phone check-nav-icon mt-2"></i>
-                                    <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
-                                    <p class="fw-bold mb-4">Riwayat Penyakit</p>
-                                </a>
-                            </div>
-                        </div>
+                        @include('siswa.student_menu')
                         <div class="col-xl-<?php echo $column; ?> col-sm-9">
                             <div class="tab-content" id="v-pills-tabContent">
                                 <div class="tab-pane fade show active" id="v-pills-shipping" role="tabpanel"
@@ -69,9 +41,6 @@
                                     <div class="card shadow-none border mb-0">
                                         <div class="card-body">
                                             <div class="row">
-                                                @foreach ($errors->all() as $error)
-                                                    <div>{{ $error }}</div>
-                                                @endforeach
                                                 <div class="col-md-12 mb-3 form-group">
                                                     <label for="">Nama Siswa</label>
                                                     <h3>{{ $student->nama_lengkap }}</h3>
@@ -102,8 +71,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">NIK {{ $type }} <code>*</code></label>
-                                                    <input type="text" class="number-only form-control" name="nik_orang_tua"
-                                                        required placeholder="NIK {{ $type }}"
+                                                    <input type="text" class="number-only form-control"
+                                                        name="nik_orang_tua" required placeholder="NIK {{ $type }}"
                                                         value="{{ old('nik_orang_tua') }}" maxlength="16" minlength="16">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -313,8 +282,8 @@
                                             <input type="hidden" name="student_id" value="{{ $student->id }}">
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
-                                                    <a href="{{ route('employee') }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Batal</a>
+                                                    <a href="{{ route('siswa.show_parents', $student->id) }}"
+                                                        class="btn btn-secondary waves-effect btn-sm">Kembali</a>
                                                     <button class="btn btn-primary btn-sm" type="submit"
                                                         style="float: right" id="submit">Simpan</button>
                                                 </div>
