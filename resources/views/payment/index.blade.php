@@ -48,7 +48,7 @@
                                             <td class="text-center">{{ $item->year }}</td>
                                             <td class="text-center">{{ $item->classes->jenjang }}</td>
                                             <td class="text-center">{{ $item->bills->bills }}</td>
-                                            <td class="text-center">{{ number_format($item->amount, 0, ',', '.') }}</td>
+                                            <td class="text-center">{{ number_format($item->amount, 0, ',') }}</td>
                                             <td class="text-center">
                                                 <form class="delete-form"
                                                     action="{{ route('payment.destroy', Crypt::encryptString($item->id)) }}"

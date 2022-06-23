@@ -156,6 +156,12 @@ Route::group(
         Route::resource('/bills', BillController::class);
         Route::resource('/classes', ClassesController::class);
         Route::resource('/invoice', InvoiceController::class);
+        Route::get('/list_invoice', [InvoiceController::class, 'list_invoice'])->name('invoice.list_invoice');
+        Route::post('/get_jenjang', [InvoiceController::class, 'get_jenjang'])->name('invoice.get_jenjang');
+        Route::post('/get_siswa', [InvoiceController::class, 'get_siswa'])->name('invoice.get_siswa');
+        Route::post('/get_class', [InvoiceController::class, 'get_class'])->name('invoice.get_class');
+        Route::post('/get_payment', [InvoiceController::class, 'get_payment'])->name('invoice.get_payment');
+        Route::post('/cek_payment', [InvoiceController::class, 'cek_payment'])->name('invoice.cek_payment');
         Route::resource('/payment', PaymentController::class);
     }
 );

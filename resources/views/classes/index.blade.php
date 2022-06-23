@@ -35,6 +35,7 @@
                                     <tr>
                                         <th class="text-center">No</th>
                                         <th class="text-center">Jenjang</th>
+                                        <th class="text-center">Jurusan</th>
                                         <th class="text-center">Kelas</th>
                                         <th class="text-center">Type</th>
                                         <th class="text-center">Action</th>
@@ -45,6 +46,7 @@
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-center">{{ $item->jenjang }}</td>
+                                            <td class="text-center">{{ $item->jurusan }}</td>
                                             <td class="text-center">{{ $item->class }}</td>
                                             <td class="text-center">{{ $item->type }}</td>
                                             <td class="text-center">

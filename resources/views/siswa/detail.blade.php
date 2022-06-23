@@ -28,13 +28,13 @@
                                 <i class="bx bx-user d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Data Pribadi</p>
                             </a>
-                            <a class="nav-link" id="v-pills-orang-tua-tab" data-bs-toggle="pill"
-                                href="#v-pills-orang-tua" role="tab" aria-controls="v-pills-orang-tua" aria-selected="true">
+                            <a class="nav-link" id="v-pills-orang-tua-tab" data-bs-toggle="pill" href="#v-pills-orang-tua"
+                                role="tab" aria-controls="v-pills-orang-tua" aria-selected="true">
                                 <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Orang Tua / Wali</p>
                             </a>
-                            <a class="nav-link" id="v-pills-sk-tab" data-bs-toggle="pill" href="#v-pills-sk"
-                                role="tab" aria-controls="v-pills-sk" aria-selected="false">
+                            <a class="nav-link" id="v-pills-sk-tab" data-bs-toggle="pill" href="#v-pills-sk" role="tab"
+                                aria-controls="v-pills-sk" aria-selected="false">
                                 <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">SK Pengangkatan</p>
                             </a>
@@ -68,6 +68,14 @@
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">NISN</h5>
                                                     <p class="text-muted mb-0">{{ $student->nisn }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Kelas</h5>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $student->classes_student->jenjang . ' - [ ' . $student->classes_student->class . ' ]' }}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>

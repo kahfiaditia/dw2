@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\AlertHelper;
+use App\Models\Bills;
 use App\Models\Classes;
 use App\Models\Invoice;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class InvoiceController extends Controller
 {
@@ -31,6 +36,49 @@ class InvoiceController extends Controller
         return view('invoice.index')->with($data);
     }
 
+    public function list_invoice(Request $request)
+    {
+        $invoice = DB::table('invoice')
+            ->select('invoice.id', 'year', 'month', 'invoice.amount', 'bills', 'nama_lengkap', 'classes.*')
+            ->leftjoin('bills', 'bills.id', '=', 'invoice.bills_id')
+            ->leftjoin('classes', 'classes.id', '=', 'invoice.class_id')
+            ->leftjoin('siswa', 'siswa.id', '=', 'invoice.siswa_id')
+            ->whereNull('invoice.deleted_at')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get();
+        return DataTables::of($invoice)
+            ->addColumn('tahun', function ($invoice) {
+                return $invoice->year;
+            })
+            ->addColumn('bulan', function ($invoice) {
+                return date('F', mktime(0, 0, 0, $invoice->month, 10));
+            })
+            ->addColumn('pembayaran', function ($invoice) {
+                return $invoice->bills;
+            })
+            ->addColumn('biaya', function ($invoice) {
+                return $invoice->amount;
+            })
+            ->addColumn('siswa', function ($invoice) {
+                return $invoice->nama_lengkap;
+            })
+            ->addColumn('jenjang', function ($invoice) {
+                return $invoice->jenjang;
+            })
+            ->addColumn('kelas', function ($invoice) {
+                if ($invoice->type) {
+                    $kelas = $invoice->class . ' - [ ' . $invoice->type . ' ]';
+                } else {
+                    $kelas = $invoice->class;
+                }
+                return $kelas;
+            })
+            ->addColumn('action', 'invoice.button')
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -43,11 +91,84 @@ class InvoiceController extends Controller
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'tambah ' . $this->submenu,
-            // 'mounth' => ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+            'bills' => Bills::orderBY('bills', 'ASC')->get(),
             'students' => Siswa::all(),
             'classes' => Classes::groupBY('jenjang')->orderByRaw("FIELD(jenjang, 'TK', 'SD', 'SMP', 'SMA', 'SMK')")->get(),
         ];
         return view('invoice.create')->with($data);
+    }
+
+    public function get_jenjang(Request $request)
+    {
+        return Classes::groupBY('jenjang')->orderByRaw("FIELD(jenjang, 'TK', 'SD', 'SMP', 'SMA', 'SMK')")->get();
+    }
+
+    public function get_siswa(Request $request)
+    {
+        $siswa = DB::table('siswa')
+            ->select('siswa.id', 'siswa.nama_lengkap')
+            ->join('classes', 'classes.id', '=', 'siswa.class_id')
+            ->where('classes.jenjang', '=', $request->class_jenjang)
+            ->get();
+        return $siswa;
+    }
+
+    public function get_class(Request $request)
+    {
+        $class = DB::table('siswa')
+            ->select('classes.*', 'siswa.class_id')
+            ->join('classes', 'classes.id', '=', 'siswa.class_id')
+            ->where('siswa.id', '=', $request->siswa_id)
+            ->where('classes.jenjang', '=', $request->jenjang)
+            ->get();
+        return $class;
+    }
+
+    public function get_payment(Request $request)
+    {
+        $payment = DB::table('payment')
+            ->select('payment.amount')
+            ->join('bills', 'bills.id', '=', 'payment.bills_id')
+            ->join('classes', 'classes.id', '=', 'payment.class_id')
+            ->where('payment.year', '=', $request->year)
+            ->where('bills.id', '=', $request->bills_id)
+            ->where('classes.jenjang', '=', $request->jenjang)
+            ->get();
+        if (count($payment) > 0) {
+            return $payment[0]->amount;
+        } else {
+            return null;
+        }
+    }
+
+    public function cek_payment(Request $request)
+    {
+        if ($request->payment_value == 'SPP') {
+            $invoice = DB::table('invoice')
+                ->select('invoice.id')
+                ->join('bills', 'bills.id', '=', 'invoice.bills_id')
+                ->join('classes', 'classes.id', '=', 'invoice.class_id')
+                ->where('invoice.year', '=', $request->year)
+                ->where('invoice.month', '=', $request->month)
+                ->where('invoice.bills_id', '=', $request->bills_id)
+                ->where('invoice.siswa_id', '=', $request->siswa_id)
+                ->where('classes.jenjang', '=', $request->jenjang)
+                ->get();
+        } else {
+            $invoice = DB::table('invoice')
+                ->select('invoice.id')
+                ->join('bills', 'bills.id', '=', 'invoice.bills_id')
+                ->join('classes', 'classes.id', '=', 'invoice.class_id')
+                ->where('invoice.year', '=', $request->year)
+                ->where('invoice.bills_id', '=', $request->bills_id)
+                ->where('invoice.siswa_id', '=', $request->siswa_id)
+                ->where('classes.jenjang', '=', $request->jenjang)
+                ->get();
+        }
+        return response()->json([
+            'code' => 402,
+            'count' => count($invoice),
+        ]);
     }
 
     /**
@@ -59,15 +180,24 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'year' => 'required',
+            'month' => 'required',
+            'bills_id' => 'required',
+            'class_id' => 'required',
+            'siswa_id' => 'required',
+            'class_siswa' => 'required',
+            'amount' => 'required',
             'jenjang' => 'required',
-            'kelas' => 'required',
         ]);
         DB::beginTransaction();
         try {
-            Classes::create([
-                'jenjang' => $validated['jenjang'],
-                'class' => $validated['kelas'],
-                'type' => $request->type
+            Invoice::create([
+                'year' => $validated['year'],
+                'month' => $validated['month'],
+                'bills_id' => $validated['bills_id'],
+                'class_id' => $validated['class_id'],
+                'siswa_id' => $validated['siswa_id'],
+                'amount' => str_replace(",", "", $validated['amount']),
             ]);
             DB::commit();
             AlertHelper::addAlert(true);
@@ -99,14 +229,16 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $invoice = Classes::findOrFail(Crypt::decryptString($id));
+        $invoice = Invoice::findOrFail(Crypt::decryptString($id));
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'Edit bills',
+            'label' => 'Edit ' . $this->submenu,
             'invoice' => $invoice,
-            'jurusan' => ['TK', 'SD', 'SMP', 'SMA', 'SMK'],
+            'bills' => Bills::orderBY('bills', 'ASC')->get(),
+            'students' => Siswa::all(),
+            'classes' => Classes::groupBY('jenjang')->orderByRaw("FIELD(jenjang, 'TK', 'SD', 'SMP', 'SMA', 'SMK')")->get(),
         ];
         return view('invoice.edit')->with($data);
     }
@@ -122,15 +254,22 @@ class InvoiceController extends Controller
     {
         $decrypted_id = Crypt::decryptString($id);
         $validated = $request->validate([
-            'jenjang' => 'required',
-            'kelas' => 'required',
+            'year' => 'required',
+            'month' => 'required',
+            'amount' => 'required',
+            'bills_id' => 'required',
+            'siswa_id' => 'required',
+            'class_id' => 'required',
         ]);
         DB::beginTransaction();
         try {
-            $invoice = Classes::findOrFail($decrypted_id);
-            $invoice->jenjang = $validated['jenjang'];
-            $invoice->class = $validated['kelas'];
-            $invoice->type = $request->type;
+            $invoice = Invoice::findOrFail($decrypted_id);
+            $invoice->year = $validated['year'];
+            $invoice->month = $validated['month'];
+            $invoice->bills_id = $validated['bills_id'];
+            $invoice->siswa_id = $validated['siswa_id'];
+            $invoice->class_id = $validated['class_id'];
+            $invoice->amount = str_replace(",", "", $validated['amount']);
             $invoice->save();
             DB::commit();
             AlertHelper::updateAlert(true);
@@ -152,7 +291,7 @@ class InvoiceController extends Controller
     {
         DB::beginTransaction();
         try {
-            $delete = Classes::findOrFail(Crypt::decryptString($id));
+            $delete = Invoice::findOrFail(Crypt::decryptString($id));
             $delete->delete();
             DB::commit();
             AlertHelper::deleteAlert(true);

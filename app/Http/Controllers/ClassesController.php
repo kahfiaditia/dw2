@@ -60,12 +60,14 @@ class ClassesController extends Controller
     {
         $validated = $request->validate([
             'jenjang' => 'required',
+            'jurusan' => 'required',
             'kelas' => 'required',
         ]);
         DB::beginTransaction();
         try {
             Classes::create([
                 'jenjang' => $validated['jenjang'],
+                'jurusan' => $validated['jurusan'],
                 'class' => $validated['kelas'],
                 'type' => $request->type
             ]);
@@ -123,12 +125,14 @@ class ClassesController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $validated = $request->validate([
             'jenjang' => 'required',
+            'jurusan' => 'required',
             'kelas' => 'required',
         ]);
         DB::beginTransaction();
         try {
             $classes = Classes::findOrFail($decrypted_id);
             $classes->jenjang = $validated['jenjang'];
+            $classes->jurusan = $validated['jurusan'];
             $classes->class = $validated['kelas'];
             $classes->type = $request->type;
             $classes->save();

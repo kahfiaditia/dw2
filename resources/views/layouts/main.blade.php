@@ -36,6 +36,7 @@
 </head>
 
 <body data-sidebar="dark">
+    {{-- <body data-sidebar="dark" oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;"> --}}
     {{-- loading --}}
     <div id="loader"></div>
     @include('sweetalert::alert')
@@ -84,6 +85,7 @@
     <script src="{{ asset('assets/libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
     <script src="{{ asset('assets/libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
+    <script src="{{ asset('assets/numeral.js') }}"></script>
     {{-- loading --}}
     <script type="text/javascript">
         var $loading = $('#loader').hide();
@@ -96,10 +98,17 @@
             });
 
         $('.number-only').on('keydown keyup', function(e) {
-
             let value = $(this).val().replace(/[^0-9.]/g, "");
             $(this).val(value);
         });
+
+        function setMoney(num) {
+            return numeral(num).format('0,0');
+        }
+
+        function unMoney(num) {
+            return numeral(num).value();
+        };
 
         // Pop up for delete confirm
         $('.delete_confirm').on('click', function(event) {

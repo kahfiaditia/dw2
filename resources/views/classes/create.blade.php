@@ -44,6 +44,21 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="">Jurusan</label>
+                                            <input type="text" class="form-control" name="jurusan" placeholder="Jurusan"
+                                                value="{{ old('jurusan') }}">
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            @error('jurusan')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <label for="">Kelas <code>*</code></label>
                                             <input type="text" class="form-control" name="kelas" placeholder="Kelas"
                                                 required value="{{ old('kelas') }}">
@@ -55,8 +70,6 @@
                                             @enderror
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="">Type</label>

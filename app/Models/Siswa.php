@@ -33,4 +33,9 @@ class Siswa extends Model
     {
         return $this->hasOne(Priodik_siswa::class, 'siswa_id');
     }
+
+    public function classes_student()
+    {
+        return $this->belongsTo(Classes::class, 'class_id');
+    }
 }
