@@ -14,10 +14,12 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <a href="{{ route('siswa.create') }}" type="button"
-                                    class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                    <i class="mdi mdi-plus me-1"></i> Tambah Siswa
-                                </a>
+                                @if (Auth::user()->roles == 'Siswa' || Auth::user()->student == null)
+                                    <a href="{{ route('siswa.create') }}" type="button"
+                                        class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Siswa
+                                    </a>
+                                @endif
                             </ol>
                         </div>
                     </div>

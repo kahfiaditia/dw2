@@ -102,11 +102,11 @@
                                                                             {{ $performance->peringkat }}</td>
                                                                         <td class="text-center">
                                                                             <form
-                                                                                action="{{ route('siswa.destroy_performance_student', $performance->id) }}"
+                                                                                action="{{ route('siswa.destroy_performance_student', \Crypt::encryptString($performance->id)) }}"
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <a href="{{ route('siswa.edit_performance_student', $performance->id) }}"
+                                                                                <a href="{{ route('siswa.edit_performance_student', \Crypt::encryptString($performance->id)) }}"
                                                                                     class="text-success"
                                                                                     data-toggle="tooltip"
                                                                                     data-placement="top" title="edit"><i
