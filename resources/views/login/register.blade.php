@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
-    <link rel="shortcut icon" href="{{ URL::asset('assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ URL::asset('assets/images/logo/icon.png') }}">
     <link href="{{ URL::asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet"
         type="text/css" />
     <link href="{{ URL::asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
@@ -43,7 +43,7 @@
                                 <a href="#">
                                     <div class="avatar-md profile-user-wid mb-4">
                                         <span class="avatar-title rounded-circle bg-light">
-                                            <img src="{{ URL::asset('assets/images/logo.svg') }}" alt=""
+                                            <img src="{{ URL::asset('assets/images/logo/icon.png') }}" alt=""
                                                 class="rounded-circle" height="34">
                                         </span>
                                     </div>
@@ -66,8 +66,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="username" class="form-label">Username</label>
-                                        <input type="text" name="name" maxlength="255" class="form-control" id="name"
-                                            placeholder="Enter username" required>
+                                        <input type="text" name="name" maxlength="255" class="form-control"
+                                            id="name" placeholder="Enter username" required>
                                         <div class="invalid-feedback">
                                             Please Enter Username
                                         </div>
@@ -83,7 +83,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="validationCustom02" class="form-label">Roles</label>
-                                        <select class="form-control select select2" name="roles" id="roles" required>
+                                        <select class="form-control select select2" name="roles" id="roles"
+                                            required>
                                             <option value="">--Pilih Roles--</option>
                                             <option value="Karyawan">Karyawan</option>
                                             <option value="Alumni">Alumni</option>
