@@ -15,10 +15,10 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('12', $session_menu))
-                                    <a href="{{ route('needs.create') }}" type="button"
+                                @if (in_array('28', $session_menu))
+                                    <a href="{{ route('bills.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="mdi mdi-plus me-1"></i> Tambah Kebutuhan Khusus
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Tagihan
                                     </a>
                                 @endif
                             </ol>
@@ -34,30 +34,44 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
-                                        <th class="text-center">Kode</th>
-                                        <th class="text-center">Nama</th>
+                                        <th class="text-center">Tagihan</th>
+                                        <th class="text-center">Keterangan</th>
+                                        <th class="text-center">Pengulangan</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($special_needs as $special_need)
+                                    @foreach ($bills as $bill)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $special_need->kode }}</td>
-                                            <td class="text-center">{{ $special_need->nama }}</td>
+                                            <td class="text-center">{{ $bill->bills }}</td>
+                                            <td class="text-center">{{ $bill->notes }}</td>
+                                            <td class="text-center">
+                                                <span class="badge badge-pill badge-soft-<?php if ($bill->looping == 1) {
+                                                    echo 'success';
+                                                } else {
+                                                    echo 'danger';
+                                                } ?> font-size-12">
+                                                    @if ($bill->looping == 1)
+                                                        Tagihan Berulang
+                                                    @else
+                                                        Tagihan Tidak Berulang
+                                                    @endif
+                                                </span>
+                                            </td>
                                             <td class="text-center">
                                                 <form class="delete-form"
-                                                    action="{{ route('needs.destroy', Crypt::encryptString($special_need->id)) }}"
+                                                    action="{{ route('bills.destroy', Crypt::encryptString($bill->id)) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <div class="d-flex gap-3">
-                                                        @if (in_array('13', $session_menu))
-                                                            <a href="{{ route('needs.edit', Crypt::encryptString($special_need->id)) }}"
+                                                        @if (in_array('29', $session_menu))
+                                                            <a href="{{ route('bills.edit', Crypt::encryptString($bill->id)) }}"
                                                                 class="text-success"><i
                                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                                         @endif
-                                                        @if (in_array('14', $session_menu))
+                                                        @if (in_array('30', $session_menu))
                                                             <a href class="text-danger delete_confirm"><i
                                                                     class="mdi mdi-delete font-size-18"></i></a>
                                                         @endif

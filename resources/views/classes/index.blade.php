@@ -15,10 +15,10 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('12', $session_menu))
-                                    <a href="{{ route('needs.create') }}" type="button"
+                                @if (in_array('32', $session_menu))
+                                    <a href="{{ route('classes.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="mdi mdi-plus me-1"></i> Tambah Kebutuhan Khusus
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Kelas
                                     </a>
                                 @endif
                             </ol>
@@ -34,31 +34,35 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
-                                        <th class="text-center">Kode</th>
-                                        <th class="text-center">Nama</th>
+                                        <th class="text-center">Jenjang</th>
+                                        <th class="text-center">Jurusan</th>
+                                        <th class="text-center">Kelas</th>
+                                        <th class="text-center">Type</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($special_needs as $special_need)
+                                    @foreach ($classes as $item)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $special_need->kode }}</td>
-                                            <td class="text-center">{{ $special_need->nama }}</td>
+                                            <td class="text-center">{{ $item->jenjang }}</td>
+                                            <td class="text-center">{{ $item->jurusan }}</td>
+                                            <td class="text-center">{{ $item->class }}</td>
+                                            <td class="text-center">{{ $item->type }}</td>
                                             <td class="text-center">
                                                 <form class="delete-form"
-                                                    action="{{ route('needs.destroy', Crypt::encryptString($special_need->id)) }}"
+                                                    action="{{ route('classes.destroy', Crypt::encryptString($item->id)) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <div class="d-flex gap-3">
-                                                        @if (in_array('13', $session_menu))
-                                                            <a href="{{ route('needs.edit', Crypt::encryptString($special_need->id)) }}"
+                                                        @if (in_array('33', $session_menu))
+                                                            <a href="{{ route('classes.edit', Crypt::encryptString($item->id)) }}"
                                                                 class="text-success"><i
                                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                                         @endif
-                                                        @if (in_array('14', $session_menu))
-                                                            <a href class="text-danger delete_confirm"><i
+                                                        @if (in_array('34', $session_menu))
+                                                            <a href="" class="text-danger delete_confirm"><i
                                                                     class="mdi mdi-delete font-size-18"></i></a>
                                                         @endif
                                                     </div>

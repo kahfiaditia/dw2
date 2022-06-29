@@ -114,6 +114,14 @@
                                                     <p class="text-muted mb-0">{{ $student->nisn }}</p>
                                                 </div>
                                             </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Kelas</h5>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $student->classes_student->jenjang . ' - [ ' . $student->classes_student->class . ' ]' }}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row task-dates">
                                             <div class="col-sm-4 col-6">

@@ -71,8 +71,8 @@
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Jenis
                                                             <code>*</code></label>
-                                                        <select class="form-control select select2" name="type" id="type"
-                                                            required>
+                                                        <select class="form-control select select2" name="type"
+                                                            id="type" required>
                                                             <option value="">--Pilih Jenis--</option>
                                                             <option value="Akademik">Akademik</option>
                                                             <option value="Non Akademik">Non Akademik</option>
@@ -87,8 +87,8 @@
                                                     <div class="mb-3">
                                                         <label for="formFile" class="form-label">Dokumen
                                                             Sertifikat/Ijazah (Max 2 Mb) <code>*</code></label>
-                                                        <input class="form-control dok_ijazah" type="file" name="dok_ijazah"
-                                                            id="dok_ijazah" required>
+                                                        <input class="form-control dok_ijazah" type="file"
+                                                            name="dok_ijazah" id="dok_ijazah" required>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -135,7 +135,8 @@
                                                                             <select class="form-control select select2"
                                                                                 name="gelar_ijazah" id="gelar_ijazah"
                                                                                 required>
-                                                                                <option value="">--Pilih Gelar--</option>
+                                                                                <option value="">--Pilih Gelar--
+                                                                                </option>
                                                                                 @foreach ($jurusan as $jurusan)
                                                                                     <option value="{{ $jurusan }}">
                                                                                         {{ $jurusan }}
@@ -263,7 +264,8 @@
                                                                             <select class="form-control select select2"
                                                                                 name="gelar_ijazah_non"
                                                                                 id="gelar_ijazah_non" required>
-                                                                                <option value="">--Pilih Gelar--</option>
+                                                                                <option value="">--Pilih Gelar--
+                                                                                </option>
                                                                                 @foreach ($jurusan_non as $jurusan)
                                                                                     <option value="{{ $jurusan }}">
                                                                                         {{ $jurusan }}

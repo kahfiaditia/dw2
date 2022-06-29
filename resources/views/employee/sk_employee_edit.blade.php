@@ -6,8 +6,8 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="validationCustom02" class="form-label">No SK <code>*</code></label>
-                <input type="text" class="form-control" id="edit_no_sk" name="edit_no_sk" value="{{ $item->no_sk }}"
-                    autofocus placeholder="No SK">
+                <input type="text" class="form-control" id="edit_no_sk" name="edit_no_sk"
+                    value="{{ $item->no_sk }}" autofocus placeholder="No SK">
             </div>
         </div>
         <div class="col-md-6">
@@ -16,7 +16,8 @@
                 <div class="input-group" id="datepickerModal">
                     <input type="text" class="form-control" placeholder="yyyy-mm-dd" id="edit_tgl_sk"
                         name="edit_tgl_sk" value="{{ $item->tgl_sk }}" data-date-format="yyyy-mm-dd"
-                        data-date-container='#datepickerModal' data-provide="datepicker" data-date-autoclose="true">
+                        data-date-end-date="{{ date('Y-m-d') }}" data-date-container='#datepickerModal'
+                        data-provide="datepicker" data-date-autoclose="true">
                     <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                 </div>
             </div>

@@ -15,9 +15,8 @@
                     </div>
                 </div>
             </div>
-            <form class="needs-validation"
-                action="{{ route('specialneeds.update', Crypt::encryptString($special_need->id)) }}" method="POST"
-                novalidate>
+            <form class="needs-validation" action="{{ route('needs.update', Crypt::encryptString($special_need->id)) }}"
+                method="POST" novalidate>
                 @csrf
                 @method('PATCH')
                 <div class="row">
@@ -38,8 +37,8 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Nama Kebutuhan
                                                 Khusus</label>
-                                            <input type="text" class="form-control" id="nama" name="nama" required
-                                                placeholder="Nama Kebutuhan Khusus"
+                                            <input type="text" class="form-control" id="nama" name="nama"
+                                                required placeholder="Nama Kebutuhan Khusus"
                                                 value="{{ old('nama', $special_need->nama) }}">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.

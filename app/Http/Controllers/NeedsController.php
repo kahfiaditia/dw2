@@ -37,7 +37,7 @@ class NeedsController extends Controller
             'submenu' => 'kebutuhan khusus',
             'label' => 'tambah kebutuhan khusus',
         ];
-        return view('needs.crete')->with($data);
+        return view('needs.create')->with($data);
     }
 
     public function store(Request $request)
@@ -55,7 +55,7 @@ class NeedsController extends Controller
             ]);
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('specialneeds');
+            return redirect('needs');
         } catch (\Throwable $err) {
             DB::rollBack();
             throw $err;
@@ -76,7 +76,7 @@ class NeedsController extends Controller
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => $this->sub_menu,
+            'submenu' => $this->submenu,
             'label' => 'Edit kebutuhan khusus',
             'special_need' => $special_need
         ];
@@ -100,7 +100,7 @@ class NeedsController extends Controller
             $special_need->save();
             DB::commit();
             AlertHelper::updateAlert(true);
-            return redirect('specialneeds');
+            return redirect('needs');
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::updateAlert(false);

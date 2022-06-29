@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
-use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 
 class KodeposController extends Controller
 {

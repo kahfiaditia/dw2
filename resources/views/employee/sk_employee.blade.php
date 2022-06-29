@@ -89,6 +89,7 @@
                                                                 <input type="text" class="form-control"
                                                                     placeholder="yyyy-mm-dd" name="tgl_sk"
                                                                     value="{{ old('tgl_sk') }}"
+                                                                    data-date-end-date="{{ date('Y-m-d') }}"
                                                                     data-date-format="yyyy-mm-dd"
                                                                     data-date-container='#datepicker2'
                                                                     data-provide="datepicker" required
@@ -231,8 +232,8 @@
         </div>
     </div>
     <!-- modal -->
-    <div class="modal fade bs-example-modal-lg-edit" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
-        aria-hidden="true">
+    <div class="modal fade bs-example-modal-lg-edit" tabindex="-1" role="dialog"
+        aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
