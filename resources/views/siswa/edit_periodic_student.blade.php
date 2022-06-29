@@ -22,11 +22,12 @@
             {{-- cek device moblie atau bukan --}}
             <?php preg_match('/(chrome|firefox|avantgo|blackberry|android|blazer|elaine|hiptop|iphone|ipod|kindle|midp|mmp|mobile|o2|opera mini|palm|palm os|pda|plucker|pocket|psp|smartphone|symbian|treo|up.browser|up.link|vodafone|wap|windows ce; iemobile|windows ce; ppc;|windows ce; smartphone;|xiino)/i', $_SERVER['HTTP_USER_AGENT'], $version); ?>
             <div class="checkout-tabs">
-                <form class="needs-validation" action="{{ route('siswa.update_student_periodic', $periodic->id) }}"
+                <form class="needs-validation"
+                    action="{{ route('siswa.update_student_periodic', \Crypt::encryptString($periodic->id)) }}"
                     enctype="multipart/form-data" method="POST" novalidate>
                     @csrf
                     @method('PATCH')
-                    <input type="hidden" name="student_id" value="{{ $periodic->siswa_id }}">
+                    <input type="hidden" name="student_id" value="{{ \Crypt::encryptString($periodic->siswa_id) }}">
                     <div class="row">
                         @if ($version[1] == 'Android' || $version[1] == 'Mobile' || $version[1] == 'iPhone')
                             <?php $device = 'style="display:none;"';
@@ -43,9 +44,6 @@
                                     <div class="card shadow-none border mb-0">
                                         <div class="card-body">
                                             <div class="row">
-                                                @foreach ($errors->all() as $error)
-                                                    <div>{{ $error }}</div>
-                                                @endforeach
                                                 <div class="col-md-12 mb-3 form-group">
                                                     <label for="">Nama Siswa</label>
                                                     <h3>{{ $periodic->student->nama_lengkap }}</h3>
@@ -203,8 +201,8 @@
                                             </div>
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
-                                                    <a href="{{ route('siswa.show_periodic', $student->id) }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Kembali</a>
+                                                    <a href="{{ route('siswa.show_periodic', \Crypt::encryptString($student->id)) }}"
+                                                        class="btn btn-secondary waves-effect btn-sm">Batal</a>
                                                     <button class="btn btn-primary btn-sm" type="submit"
                                                         style="float: right" id="submit">Simpan</button>
                                                 </div>

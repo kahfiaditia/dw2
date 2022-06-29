@@ -22,7 +22,8 @@
             {{-- cek device moblie atau bukan --}}
             <?php preg_match('/(chrome|firefox|avantgo|blackberry|android|blazer|elaine|hiptop|iphone|ipod|kindle|midp|mmp|mobile|o2|opera mini|palm|palm os|pda|plucker|pocket|psp|smartphone|symbian|treo|up.browser|up.link|vodafone|wap|windows ce; iemobile|windows ce; ppc;|windows ce; smartphone;|xiino)/i', $_SERVER['HTTP_USER_AGENT'], $version); ?>
             <div class="checkout-tabs">
-                <form class="needs-validation" action="{{ route('siswa.update_parent', $parent->id) }}"
+                <form class="needs-validation"
+                    action="{{ route('siswa.update_parent', \Crypt::encryptString($parent->id)) }}"
                     enctype="multipart/form-data" method="POST" novalidate>
                     @csrf
                     @method('PATCH')
@@ -191,7 +192,7 @@
                                             <input type="hidden" name="student_id" value="{{ $parent->siswa_id }}">
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
-                                                    <a href="{{ route('siswa.show_parents', $parent->siswa_id) }}"
+                                                    <a href="{{ route('siswa.show_parents', \Crypt::encryptString($parent->siswa_id)) }}"
                                                         class="btn btn-secondary waves-effect btn-sm">Kembali</a>
                                                     <button class="btn btn-primary btn-sm" type="submit"
                                                         style="float: right" id="submit">Simpan</button>

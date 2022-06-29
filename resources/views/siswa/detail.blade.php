@@ -630,34 +630,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        $(document).ready(function() {
-            $(document).on('click', '#get_data', function(e) {
-                e.preventDefault();
-                var id = $(this).data('id'); // it will get id of clicked row
-                $('#dynamic-content').html(''); // leave it blank before ajax call
-                $('#modal-loader').show(); // load ajax loader
-                var url = "{{ route('employee.dokumen') }}"
-                $.ajax({
-                        url: url,
-                        type: 'POST',
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id
-                        }
-                    })
-                    .done(function(url) {
-                        $('#dynamic-content').html(url); // load response
-                        $('#modal-loader').hide(); // hide ajax loader
-                    })
-                    .fail(function(err) {
-                        $('#dynamic-content').html(
-                            '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
-                        );
-                        $('#modal-loader').hide();
-                    });
-            });
-        });
-    </script>
 @endsection

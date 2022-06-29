@@ -59,12 +59,12 @@
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <form method="POST"
-                                                            action="{{ route('siswa.update_kesejahteraan', $result->id) }}">
+                                                            action="{{ route('siswa.update_kesejahteraan', \Crypt::encryptString($result->id)) }}">
                                                             <div class="modal-body">
                                                                 @csrf
                                                                 @method('PATCH')
                                                                 <input type="hidden" name="student_id"
-                                                                    value="{{ $result->siswa_id }}">
+                                                                    value="{{ \Crypt::encryptString($result->siswa_id) }}">
                                                                 <div class="row">
                                                                     <div class="col-md-6 mt-3">
                                                                         <div class="form-group">
@@ -104,7 +104,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <a href="{{ route('siswa.index_kesejahteraan_siswa', $result->siswa_id) }}"
+                                                                <a href="{{ route('siswa.index_kesejahteraan_siswa', \Crypt::encryptString($result->siswa_id)) }}"
                                                                     class="btn btn-secondary btn-sm"
                                                                     data-dismiss="modal">Batal</a>
                                                                 <button type="submit"

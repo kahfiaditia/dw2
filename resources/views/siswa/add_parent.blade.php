@@ -279,10 +279,11 @@
                                             @else
                                                 <input type="hidden" name="type" value="Wali">
                                             @endif
-                                            <input type="hidden" name="student_id" value="{{ $student->id }}">
+                                            <input type="hidden" name="student_id"
+                                                value="{{ \Crypt::encryptString($student->id) }}">
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
-                                                    <a href="{{ route('siswa.show_parents', $student->id) }}"
+                                                    <a href="{{ route('siswa.show_parents', \Crypt::encryptString($student->id)) }}"
                                                         class="btn btn-secondary waves-effect btn-sm">Kembali</a>
                                                     <button class="btn btn-primary btn-sm" type="submit"
                                                         style="float: right" id="submit">Simpan</button>

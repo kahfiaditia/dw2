@@ -44,19 +44,20 @@
                                             </div>
                                             @if ($student->periodic_student == null)
                                                 <div class="col-md-6" style="margin-top: -2px; margin-left: -8%;">
-                                                    <a href="{{ route('siswa.add_periodic_student', $student->id) }}"><i
+                                                    <a
+                                                        href="{{ route('siswa.add_periodic_student', \Crypt::encryptString($student->id)) }}"><i
                                                             class="bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"
                                                             style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
                                                 </div>
                                             @else
                                                 <div class="col-md-6" style="margin-top: -2px; margin-left: -8%;">
                                                     <form class="form_parents"
-                                                        action="{{ route('siswa.destroy_periodic_student', $student->periodic_student->id) }}"
+                                                        action="{{ route('siswa.destroy_periodic_student', \Crypt::encryptString($student->periodic_student->id)) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <a
-                                                            href="{{ route('siswa.edit_periodic_student', $student->periodic_student->id) }}"><i
+                                                            href="{{ route('siswa.edit_periodic_student', \Crypt::encryptString($student->periodic_student->id)) }}"><i
                                                                 class="bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"
                                                                 style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
                                                         <a href="#"><i
@@ -115,7 +116,7 @@
                                         <hr>
                                         <div class="row mt-4">
                                             <div class="col-sm-12">
-                                                <a href="{{ route('siswa.show_parents', $student->id) }}"
+                                                <a href="{{ route('siswa.show_parents', \Crypt::encryptString($student->id)) }}"
                                                     class="btn btn-secondary waves-effect btn-sm">Kembali</a>
                                             </div>
                                         </div>

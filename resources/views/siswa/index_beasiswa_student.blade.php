@@ -95,11 +95,11 @@
                                                                             {{ $scholarship->tahun_selesai }}</td>
                                                                         <td class="text-center">
                                                                             <form
-                                                                                action="{{ route('siswa.destroy_scholarship', $scholarship->id) }}"
+                                                                                action="{{ route('siswa.destroy_scholarship', \Crypt::encryptString($scholarship->id)) }}"
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <a href="{{ route('siswa.edit_scholarship', $scholarship->id) }}"
+                                                                                <a href="{{ route('siswa.edit_scholarship', \Crypt::encryptString($scholarship->id)) }}"
                                                                                     class="text-success"
                                                                                     data-toggle="tooltip"
                                                                                     data-placement="top" title="edit"><i

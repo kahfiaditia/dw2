@@ -15,6 +15,9 @@ use App\Models\Kodepos;
 use App\Models\Parents;
 use App\Models\Priodik_siswa;
 use App\Models\Prestasi;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class SiswaController extends Controller
 {
@@ -30,7 +33,11 @@ class SiswaController extends Controller
             'label' => 'data siswa'
         ];
 
-        $students = Siswa::orderBy('id', 'DESC')->get();
+        if (Auth::user()->roles == 'Siswa') {
+            $students = Siswa::where('user_id', Auth::user()->id)->get();
+        } else {
+            $students = Siswa::orderBy('id', 'DESC')->get();
+        }
 
         if ($request->ajax()) {
             return DataTables::of($students)
@@ -47,11 +54,19 @@ class SiswaController extends Controller
 
     public function create()
     {
+        if (Auth::user()->roles == 'Admin') {
+            $students = User::doesntHave('student')->where('roles', 'Siswa')->orderBy('id', 'DESC')->get();
+        } else {
+            $students = '';
+        }
+
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'siswa',
             'label' => 'tambah siswa',
+            'student' => Auth::user()->student,
+            'users' => $students,
             'religions' => Agama::orderBy('id', 'DESC')->get(),
             'districts' => Kodepos::select('kecamatan')->groupBy('kecamatan')->get(),
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get()
@@ -120,11 +135,13 @@ class SiswaController extends Controller
                 'child_order' => $validated['anak_keberapa'],
                 'is_have_kip' => $request->is_have_kip,
                 'is_receive_kip' => $request->is_receive_kip,
-                'reason_reject_kip' => $request->reason_reject_kip
+                'reason_reject_kip' => $request->reason_reject_kip,
+                'user_id' => Auth::user()->id
             ]);
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('parents/create');
+            $siswa = Siswa::orderBy('id', 'DESC')->first();
+            return redirect('show_parents/' . $siswa->id);
         } catch (\Throwable $err) {
             DB::rollBack();
             throw $err;
@@ -168,7 +185,7 @@ class SiswaController extends Controller
 
     public function edit($id)
     {
-        $student = Siswa::findOrFail($id);
+        $student = Siswa::findOrFail(Crypt::decryptString($id));
 
         $blood_types = [
             [
@@ -243,6 +260,7 @@ class SiswaController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decryptString($id);
         $validated = $request->validate([
             'nisn' => "required|unique:siswa,nisn,$id,id,deleted_at,NULL",
             'nik' => "required|unique:siswa,nik,$id,id,deleted_at,NULL",
@@ -305,7 +323,11 @@ class SiswaController extends Controller
             $student->save();
             DB::commit();
             AlertHelper::updateAlert(true);
-            return redirect('siswa');
+            if (Auth::user()->roles == 'Siswa') {
+                return back();
+            } else {
+                return redirect('siswa');
+            }
         } catch (\Throwable $err) {
             DB::rollback();
             throw $err;
@@ -332,21 +354,21 @@ class SiswaController extends Controller
 
     public function show_parents($student_id)
     {
-        $student = Siswa::findOrFail($student_id);
+        $student = Siswa::findOrFail(Crypt::decryptString($student_id));
 
         $father = Parents::with('special_need')->where([
             ['type', '=', 'Ayah'],
-            ['siswa_id', '=', $student_id]
+            ['siswa_id', '=', $student->id]
         ])->first();
 
         $mother = Parents::with('special_need')->where([
             ['type', '=', 'Ibu'],
-            ['siswa_id', '=', $student_id]
+            ['siswa_id', '=', $student->id]
         ])->first();
 
         $guardian = Parents::with('special_need')->where([
             ['type', '=', 'Wali'],
-            ['siswa_id', '=', $student_id]
+            ['siswa_id', '=', $student->id]
         ])->first();
 
         $data = [
@@ -365,7 +387,8 @@ class SiswaController extends Controller
 
     public function add_parent_student($student_id, $data)
     {
-        $student = Siswa::findOrFail($student_id);
+
+        $student = Siswa::findOrFail(Crypt::decryptString($student_id));
 
         $data = [
             'title' => $this->title,
@@ -387,6 +410,7 @@ class SiswaController extends Controller
         if ($request->type == 'wali') {
             $status = 'wali';
         }
+        $student_id = Crypt::decryptString($request->student_id);
         DB::beginTransaction();
         try {
             Parents::create([
@@ -399,7 +423,7 @@ class SiswaController extends Controller
                 'penghasilan' => $request->penghasilan_orang_tua,
                 'type' => $request->type,
                 'status' => $request->status,
-                'siswa_id' => $request->student_id,
+                'siswa_id' => $student_id,
                 'kebutuhan_khusus_id' => $request->kebutuhan_khusus,
                 'status' => $status
             ]);
@@ -415,6 +439,7 @@ class SiswaController extends Controller
 
     public function show_periodic($id)
     {
+        $id = Crypt::decryptString($id);
         $student = Siswa::with('periodic_student')->findOrFail($id);
 
         $data = [
@@ -431,6 +456,7 @@ class SiswaController extends Controller
 
     public function add_periodic_student($id)
     {
+        $id = Crypt::decryptString($id);
         $student = Siswa::with('periodic_student')->findOrFail($id);
 
         $data = [
@@ -447,6 +473,7 @@ class SiswaController extends Controller
 
     public function destroy_parent($id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $parent = Parents::findOrFail($id);
@@ -463,6 +490,7 @@ class SiswaController extends Controller
 
     public function edit_parent($id, $type)
     {
+        $id = Crypt::decryptString($id);
         $educations = ["Tidak Sekolah", "Putus SD", "SD Sederajat", "SMP Sederajat", "SMA Sederajat", "D1", "D2", "D3", "D4/S1", "S2", "S3"];
         $jobs = ["Tidak Bekerja", "Nelayan", "Petani", "Peternak", "PNS/TNI/POLRI", "Karyawan Swasta", "Pedagang Kecil", "Pedagang Besar", "Wiraswasta", "Wirausaha", "Buruh", "Pensiunan", "Dll"];
         $incomes = ["< Rp. 500.000", "Rp. 500.000 - Rp. 999.999", "Rp. 1.000.000 - Rp. 1.999.999", "Rp. 2.000.000 - Rp. 4.999.999", "Rp. 5.000.000 - Rp. 20.000.000"];
@@ -487,6 +515,7 @@ class SiswaController extends Controller
 
     public function update_parent(Request $request, $id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $parent = Parents::findOrFail($id);
@@ -501,7 +530,7 @@ class SiswaController extends Controller
             $parent->save();
             DB::commit();
             AlertHelper::updateAlert(true);
-            return redirect('show_parents/' . $parent->siswa_id);
+            return redirect('show_parents/' . Crypt::encryptString($parent->siswa_id));
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::updateAlert(false);
@@ -511,31 +540,33 @@ class SiswaController extends Controller
 
     public function store_periodic_student(Request $request)
     {
+        $student_id = Crypt::decryptString($request->student_id);
         DB::beginTransaction();
-        Priodik_siswa::create([
-            'tinggi_badan' => $request->tinggi_badan,
-            'berat_badan' => $request->berat_badan,
-            'lingkar_kepala' => $request->lingkar_kepala,
-            'jarak_tempat_tinggal_ke_sekolah' => $request->jarak_tempuh,
-            'in_km' => $request->in_km,
-            'waktu_tempuh_jam' => $request->jam,
-            'waktu_tempuh_menit' => $request->menit,
-            'jumlah_saudara_kandung' => $request->saudara_kandung,
-            'siswa_id' => $request->student_id
-        ]);
-        DB::commit();
-        AlertHelper::addAlert(true);
-        return redirect('show_periodic/' . $request->student_id);
         try {
+            Priodik_siswa::create([
+                'tinggi_badan' => $request->tinggi_badan,
+                'berat_badan' => $request->berat_badan,
+                'lingkar_kepala' => $request->lingkar_kepala,
+                'jarak_tempat_tinggal_ke_sekolah' => $request->jarak_tempuh,
+                'in_km' => $request->in_km,
+                'waktu_tempuh_jam' => $request->jam,
+                'waktu_tempuh_menit' => $request->menit,
+                'jumlah_saudara_kandung' => $request->saudara_kandung,
+                'siswa_id' => $student_id
+            ]);
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return redirect('show_periodic/' . $student_id);
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::addAlert(false);
-            return redirect('show_periodic/' . $request->student_id);
+            return back();
         }
     }
 
     public function destroy_periodic_student($id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $periodic_student = Priodik_siswa::findOrFail($id);
@@ -552,6 +583,7 @@ class SiswaController extends Controller
 
     public function edit_periodic_student($id)
     {
+        $id = Crypt::decryptString($id);
         $periodic = Priodik_siswa::with('student')->findOrFail($id);
         $student = Siswa::findOrFail($periodic->siswa_id);
         $data = [
@@ -568,6 +600,7 @@ class SiswaController extends Controller
 
     public function update_student_periodic(Request $request, $id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $periodic_student = Priodik_siswa::findOrFail($id);
@@ -592,6 +625,7 @@ class SiswaController extends Controller
 
     public function list_performance_students($id)
     {
+        $id = Crypt::decryptString($id);
         $student = Siswa::findOrFail($id);
         $data = [
             'title' => $this->title,
@@ -624,6 +658,7 @@ class SiswaController extends Controller
             return back();
         } catch (\Throwable $err) {
             DB::rollBack();
+            throw $err;
             AlertHelper::addAlert(false);
             return back();
         }
@@ -631,6 +666,7 @@ class SiswaController extends Controller
 
     public function destroy_performance_student($id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $performance = Prestasi::findOrFail($id);
@@ -647,6 +683,7 @@ class SiswaController extends Controller
 
     public function edit_performance_student($id)
     {
+        $id = Crypt::decryptString($id);
         $performance_types = ["Sains", "Seni", "Olahraga", 'Lain-lain'];
         $perfomance_levels = ["Sekolah", "Kecamatan", "Kabupaten", "Provinsi", "Nasional", "Internasional"];
         $performance = Prestasi::findOrFail($id);
@@ -669,6 +706,7 @@ class SiswaController extends Controller
 
     public function update_performance_student(Request $request, $id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $performance = Prestasi::findOrFail($id);
@@ -691,6 +729,7 @@ class SiswaController extends Controller
 
     public function index_beasiswa_student($id)
     {
+        $id = Crypt::decryptString($id);
         $student = Siswa::findOrFail($id);
         $data = [
             'title' => $this->title,
@@ -729,6 +768,7 @@ class SiswaController extends Controller
 
     public function destroy_scholarship($id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $scholarship = Beasiswa::findOrFail($id);
@@ -745,6 +785,7 @@ class SiswaController extends Controller
 
     public function edit_scholarship($id)
     {
+        $id = Crypt::decryptString($id);
         $scholarship_types = ["Anak Berprestasi", "Anak Miskin", "Pendidikan", "Unggulan"];
 
         $data = [
@@ -762,6 +803,7 @@ class SiswaController extends Controller
 
     public function update_scholarship(Request $request, $id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $scholarship = Beasiswa::findOrFail($id);
@@ -785,6 +827,7 @@ class SiswaController extends Controller
 
     public function index_kesejahteraan_siswa($id)
     {
+        $id = Crypt::decryptString($id);
         $student = Siswa::findOrFail($id);
         $data = [
             'title' => $this->title,
@@ -821,6 +864,7 @@ class SiswaController extends Controller
 
     public function destroy_kesejahteraan($id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $result = Kesejahteraan_siswa::findOrFail($id);
@@ -835,9 +879,11 @@ class SiswaController extends Controller
         }
     }
 
-    public function edit_kesejahteraan(Request $request, $id)
+    public function edit_kesejahteraan($id)
     {
         $kesejahteraan = ['PKH', "PIP", "Kartu Perlindungan Sosial", "Kartu Keluarga Sejahtera", "Kartu Kesehatan"];
+
+        $id = Crypt::decryptString($id);
 
         $result = Kesejahteraan_siswa::findOrFail($id);
         $student = Siswa::findOrFail($result->siswa_id);
@@ -856,6 +902,7 @@ class SiswaController extends Controller
 
     public function update_kesejahteraan(Request $request, $id)
     {
+        $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $item = Kesejahteraan_siswa::findOrFail($id);

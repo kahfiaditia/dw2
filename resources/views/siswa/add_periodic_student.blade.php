@@ -25,7 +25,8 @@
                 <form class="needs-validation" action="{{ route('siswa.store_periodic_student') }}"
                     enctype="multipart/form-data" method="POST" novalidate>
                     @csrf
-                    <input type="hidden" class="form-control" name="student_id" value="{{ $student->id }}">
+                    <input type="hidden" class="form-control" name="student_id"
+                        value="{{ \Crypt::encryptString($student->id) }}">
                     <div class="row">
                         @if ($version[1] == 'Android' || $version[1] == 'Mobile' || $version[1] == 'iPhone')
                             <?php $device = 'style="display:none;"';
@@ -192,7 +193,7 @@
                                             </div>
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
-                                                    <a href="{{ route('siswa.show_periodic', $student->id) }}"
+                                                    <a href="{{ route('siswa.show_periodic', \Crypt::encryptString($student->id)) }}"
                                                         class="btn btn-secondary waves-effect btn-sm">Batal</a>
                                                     <button class="btn btn-primary btn-sm" type="submit"
                                                         style="float: right" id="submit">Simpan</button>

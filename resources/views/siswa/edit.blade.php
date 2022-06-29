@@ -22,7 +22,7 @@
             {{-- cek device moblie atau bukan --}}
             <?php preg_match('/(chrome|firefox|avantgo|blackberry|android|blazer|elaine|hiptop|iphone|ipod|kindle|midp|mmp|mobile|o2|opera mini|palm|palm os|pda|plucker|pocket|psp|smartphone|symbian|treo|up.browser|up.link|vodafone|wap|windows ce; iemobile|windows ce; ppc;|windows ce; smartphone;|xiino)/i', $_SERVER['HTTP_USER_AGENT'], $version); ?>
             <div class="checkout-tabs">
-                <form class="needs-validation" action="{{ route('siswa.update', $student->id) }}"
+                <form class="needs-validation" action="{{ route('siswa.update', \Crypt::encryptString($student->id)) }}"
                     enctype="multipart/form-data" method="POST" novalidate>
                     @csrf
                     @method('PATCH')
@@ -611,7 +611,7 @@
                             )
                         }
                     },
-                    error: err => console.log(err)
+                    error: err => Swal.fire('Error', 'Internal Server Error', 'error')
                 })
             })
 
@@ -623,18 +623,20 @@
                     type: "GET",
                     url: url,
                     success: response => {
-                        $("#kode_pos option").remove()
-                        $('#kode_pos').append(
-                            `<option value="">-- Pilih Kode Pos --</option>`)
-                        $.each(response.data, function(i, item) {
+                        if (response.status == 200) {
+                            $("#kode_pos option").remove()
                             $('#kode_pos').append(
-                                `<option value="${item.kodepos}">${item.kodepos}</option>`
-                            )
-                        })
+                                `<option value="">-- Pilih Kode Pos --</option>`)
+                            $.each(response.data, function(i, item) {
+                                $('#kode_pos').append(
+                                    `<option value="${item.kodepos}">${item.kodepos}</option>`
+                                )
+                            })
+                        } else {
+                            Swal.fire('Gagal', 'Gagal mendapatkan data kode pos', 'error')
+                        }
                     },
-                    error: (err) => {
-                        console.log(err)
-                    },
+                    error: (err) => Swal.fire('Error', 'Internal Server Error', 'error'),
                 });
             });
         })

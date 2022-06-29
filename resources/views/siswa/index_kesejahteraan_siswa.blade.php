@@ -92,11 +92,11 @@
                                                                             {{ $item->nama_kartu }}</td>
                                                                         <td class="text-center">
                                                                             <form
-                                                                                action="{{ route('siswa.destroy_kesejahteraan', $item->id) }}"
+                                                                                action="{{ route('siswa.destroy_kesejahteraan', \Crypt::encryptString($item->id)) }}"
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <a href="{{ route('siswa.edit_kesejahteraan', $item->id) }}"
+                                                                                <a href="{{ route('siswa.edit_kesejahteraan', \Crypt::encryptString($item->id)) }}"
                                                                                     class="text-success"
                                                                                     data-toggle="tooltip"
                                                                                     data-placement="top" title="edit"><i
