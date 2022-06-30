@@ -116,7 +116,7 @@
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Jarak tempat tinggal ke sekolah
                                                         <code>*</code></label>
-                                                    <select name="jarak_tempuh" class="form-control" required>
+                                                    <select name="jarak_tempuh" class="select2 form-control" required>
                                                         <option value="">-- Pilih Jarak Tempuh --</option>
                                                         <option value="Kurang dari 1 Km">Kurang dari 1 Km</option>
                                                         <option value="Lebih dari 1 Km">Lebih dari 1 Km</option>
@@ -180,9 +180,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label for="">Jumkah saudara kandung <code>*</code></label>
+                                                    <label for="">Jumlah saudara kandung <code>*</code></label>
                                                     <input type="text" class="number-only form-control"
-                                                        name="saudara_kandung" placeholder="Jumlah saudara kandung">
+                                                        name="saudara_kandung" placeholder="Jumlah saudara kandung"
+                                                        required>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>

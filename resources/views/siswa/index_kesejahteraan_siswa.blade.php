@@ -157,14 +157,14 @@
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Nomor Kartu</label>
                                         <input type="text" name="nomor_kartu" class="form-control"
-                                            placeholder="Nomor Kartu">
+                                            placeholder="Nomor Kartu" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="">Nama di Kartu</label>
                                         <input type="text" class="form-control" name="nama_kartu"
-                                            placeholder="Nama di kartu">
+                                            placeholder="Nama di kartu" required>
                                     </div>
                                 </div>
                             </div>

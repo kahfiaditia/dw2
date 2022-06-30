@@ -463,7 +463,7 @@ class SiswaController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'priodik',
-            'label' => 'tambah orang tua / wali siswa',
+            'label' => 'tambah priodik siswa',
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
             'student' => $student
         ];
@@ -556,7 +556,7 @@ class SiswaController extends Controller
             ]);
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('show_periodic/' . $student_id);
+            return redirect('show_periodic/' . Crypt::encryptString($student_id));
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::addAlert(false);

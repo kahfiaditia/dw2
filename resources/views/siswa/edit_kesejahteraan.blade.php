@@ -90,7 +90,8 @@
                                                                                 for="exampleInputPassword1">nomor_kartu</label>
                                                                             <input type="text" name="nomor_kartu"
                                                                                 class="form-control"
-                                                                                value="{{ old('nomor_kartu', $result->nomor_kartu) }}">
+                                                                                value="{{ old('nomor_kartu', $result->nomor_kartu) }}"
+                                                                                placeholder="Nomor Kartu" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6 mt-3">
@@ -98,7 +99,8 @@
                                                                             <label for="">Nama Kartu</label>
                                                                             <input type="text" class="form-control"
                                                                                 name="nama_kartu" placeholder="Nama Kartu"
-                                                                                value="{{ old('nama_kartu', $result->nama_kartu) }}">
+                                                                                value="{{ old('nama_kartu', $result->nama_kartu) }}"
+                                                                                required>
                                                                         </div>
                                                                     </div>
                                                                 </div>

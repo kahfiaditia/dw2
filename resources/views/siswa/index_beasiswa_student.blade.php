@@ -133,7 +133,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Tambah Prestasi</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Beasiswa</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -159,21 +159,21 @@
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Keterangan</label>
                                         <input type="text" name="keterangan" class="form-control"
-                                            placeholder="Keterangan">
+                                            placeholder="Keterangan" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="">Tahun Mulai</label>
                                         <input type="text" class="number-only form-control" name="tahun_mulai"
-                                            placeholder="Tahun Mulai" maxlength="4" minlength="4">
+                                            placeholder="Tahun Mulai" maxlength="4" minlength="4" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="">Tahun Selesai</label>
                                         <input type="text" class="number-only form-control" name="tahun_selesai"
-                                            placeholder="Tahun Selesai" maxlength="4" minlength="4">
+                                            placeholder="Tahun Selesai" maxlength="4" minlength="4" required>
                                     </div>
                                 </div>
                             </div>

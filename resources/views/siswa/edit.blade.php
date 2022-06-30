@@ -217,7 +217,7 @@
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Agama
                                                             <code>*</code></label>
-                                                        <select name="agama" class="form-control" required>
+                                                        <select name="agama" class="form-control select2" required>
                                                             <option value="">-- Pilih Agama --</option>
                                                             @foreach ($religions as $religion)
                                                                 <option value="{{ $religion->id }}"
@@ -237,7 +237,8 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-4">
                                                         <label>Kewarganegaraan <code>*</code></label>
-                                                        <select name="kewarganegaraan" class="form-control" required>
+                                                        <select name="kewarganegaraan" class="select2 form-control"
+                                                            required>
                                                             <option value="">-- Pilih Kewarganegaraan --</option>
                                                             <option value="WNI"
                                                                 @if ($student->kewarganegaraan == 'WNI') selected @endif
@@ -332,7 +333,7 @@
                                                             <input type="text" min="0"
                                                                 class="number-only form-control" name="rt"
                                                                 value="{{ old('rt', $student->rt) }}" required
-                                                                placeholder="RT">
+                                                                placeholder="RT" maxlength="2" minlength="2">
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
                                                             </div>
@@ -344,7 +345,8 @@
                                                             <label for="">RW <code>*</code></label>
                                                             <input type="text" class="number-only form-control"
                                                                 name="rw" required placeholder="RW"
-                                                                value="{{ old('rw', $student->rw) }}">
+                                                                value="{{ old('rw', $student->rw) }}" maxlength="2"
+                                                                minlength="2">
                                                         </div>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.

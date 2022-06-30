@@ -109,7 +109,8 @@
                                                                             <input type="text" class="form-control"
                                                                                 name="nama_prestasi"
                                                                                 placeholder="Nama Prestasi"
-                                                                                value="{{ old('nama_prestasi', $performance->nama_prestasi) }}">
+                                                                                value="{{ old('nama_prestasi', $performance->nama_prestasi) }}"
+                                                                                required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6 mt-3">
@@ -120,7 +121,8 @@
                                                                                 name="tahun_prestasi"
                                                                                 placeholder="Tahun Prestasi" maxlength="4"
                                                                                 minlength="4"
-                                                                                value="{{ old('tahun_prestasi', $performance->tahun_prestasi) }}">
+                                                                                value="{{ old('tahun_prestasi', $performance->tahun_prestasi) }}"
+                                                                                required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6 mt-3">
@@ -129,7 +131,8 @@
                                                                             <input type="text" class="form-control"
                                                                                 name="penyelenggara"
                                                                                 placeholder="Peneyelenggara"
-                                                                                value="{{ old('penyelenggara', $performance->penyelenggara) }}">
+                                                                                value="{{ old('penyelenggara', $performance->penyelenggara) }}"
+                                                                                required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6 mt-3">
@@ -138,7 +141,8 @@
                                                                             <input type="text"
                                                                                 class="number-only form-control"
                                                                                 name="peringkat" placeholder="peringkat"
-                                                                                value="{{ old('peringkat', $performance->peringkat) }}">
+                                                                                value="{{ old('peringkat', $performance->peringkat) }}"
+                                                                                required>
                                                                         </div>
                                                                     </div>
                                                                 </div>

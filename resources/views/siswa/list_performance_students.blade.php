@@ -153,7 +153,7 @@
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Jenis Prestasi</label>
-                                        <select name="jenis_prestasi" id="" required class="form-control">
+                                        <select name="jenis_prestasi" id="jenis" required class="form-control">
                                             <option value="">-- Pilih Jenis Prestasi --</option>
                                             <option value="Sains">Sains</option>
                                             <option value="Seni">Seni</option>
@@ -165,7 +165,7 @@
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Tingkat Prestasi</label>
-                                        <select name="tingkat_prestasi" id="" class="form-control" required>
+                                        <select name="tingkat_prestasi" id="tingkat" class="form-control" required>
                                             <option value="">-- Pilih Tingkat Prestasi --</option>
                                             <option value="Sekolah">Sekolah</option>
                                             <option value="Kecamatan">Kecamatan</option>
@@ -180,28 +180,28 @@
                                     <div class="form-group">
                                         <label for="">Nama Prestasi</label>
                                         <input type="text" class="form-control" name="nama_prestasi"
-                                            placeholder="Nama Prestasi">
+                                            placeholder="Nama Prestasi" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="">Tahun Prestasi</label>
                                         <input type="text" class="number-only form-control" name="tahun_prestasi"
-                                            placeholder="Tahun Prestasi" maxlength="4" minlength="4">
+                                            placeholder="Tahun Prestasi" maxlength="4" minlength="4" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="">Penyelenggara</label>
                                         <input type="text" class="form-control" name="penyelenggara"
-                                            placeholder="Peneyelenggara">
+                                            placeholder="Peneyelenggara" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="">Peringkat</label>
                                         <input type="text" class="number-only form-control" name="peringkat"
-                                            placeholder="peringkat">
+                                            placeholder="peringkat" required>
                                     </div>
                                 </div>
                             </div>

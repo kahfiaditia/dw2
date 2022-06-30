@@ -116,7 +116,8 @@
                                                                                 for="exampleInputPassword1">Keterangan</label>
                                                                             <input type="text" name="keterangan"
                                                                                 class="form-control"
-                                                                                value="{{ old('keterangan', $scholarship->keterangan) }}">
+                                                                                value="{{ old('keterangan', $scholarship->keterangan) }}"
+                                                                                placeholder="Keterangan" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6 mt-3">
@@ -126,7 +127,7 @@
                                                                                 name="tahun_mulai"
                                                                                 placeholder="Nama Prestasi"
                                                                                 value="{{ old('tahun_mulai', $scholarship->tahun_mulai) }}"
-                                                                                maxlength="4">
+                                                                                maxlength="4" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6 mt-3">
@@ -138,7 +139,7 @@
                                                                                 placeholder="Tahun Prestasi" maxlength="4"
                                                                                 minlength="4"
                                                                                 value="{{ old('tahun_selesai', $scholarship->tahun_selesai) }}"
-                                                                                minlength="4">
+                                                                                minlength="4" required>
                                                                         </div>
                                                                     </div>
                                                                 </div>
