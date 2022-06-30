@@ -1,24 +1,12 @@
 <div class="navbar-header">
     <div class="d-flex">
         <div class="navbar-brand-box">
-            <a href="#" class="logo logo-dark">
-                <span class="logo-sm">
-                    <img src="{{ URL::asset('assets/images/logo.svg') }}" alt="" height="22">
-                </span>
-                <span class="logo-lg">
-                    <img src="{{ URL::asset('assets/images/logo-dark.png') }}" alt="" height="17">
-                </span>
-            </a>
             <a href="#" class="logo logo-light">
                 <span class="logo-sm">
-                    <img src="{{ URL::asset('assets/images/logo-light.svg') }}" alt="" height="22">
-                    {{-- logo DW dibuat okhe --}}
-                    {{-- <img src="{{ URL::asset('assets/images/logo-sid.svg') }}" alt="" height="52"> --}}
+                    <img src="{{ URL::asset('assets/images/logo/icon.png') }}" alt="" height="25">
                 </span>
                 <span class="logo-lg">
-                    <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="" height="19">
-                    {{-- logo DW dibuat okhe --}}
-                    {{-- <img src="{{ URL::asset('assets/images/logo-sid.png') }}" alt="" height="40"> --}}
+                    <img src="{{ URL::asset('assets/images/logo/sid.png') }}" alt="" height="40">
                 </span>
             </a>
         </div>

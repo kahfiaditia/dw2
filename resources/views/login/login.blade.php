@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
-    <link rel="shortcut icon" href="{{ URL::asset('assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ URL::asset('assets/images/logo/icon.png') }}">
     <link href="{{ URL::asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet"
         type="text/css" />
     <link href="{{ URL::asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
@@ -23,9 +23,10 @@
                         <div class="bg-primary bg-soft">
                             <div class="row">
                                 <div class="col-7">
-                                    <div class="text-primary p-4">
+                                    <div class="text-primary" style="padding: 15px 0px 0px 25px;">
                                         <h5 class="text-primary">Welcome Back !</h5>
-                                        <p>Sign in to Dharmawidya.</p>
+                                        Sign in to
+                                        <p>System Information Dharmawidya.</p>
                                     </div>
                                 </div>
                                 <div class="col-5 align-self-end">
@@ -39,7 +40,7 @@
                                 <a href="#" class="auth-logo-dark">
                                     <div class="avatar-md profile-user-wid mb-4">
                                         <span class="avatar-title rounded-circle bg-light">
-                                            <img src="{{ URL::asset('assets/images/logo.svg') }}" alt=""
+                                            <img src="{{ URL::asset('assets/images/logo/icon.png') }}" alt=""
                                                 class="rounded-circle" height="34">
                                         </span>
                                     </div>
