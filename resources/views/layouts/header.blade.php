@@ -1,7 +1,7 @@
 <div class="navbar-header">
     <div class="d-flex">
         <div class="navbar-brand-box">
-            <a href="#" class="logo logo-light">
+            <a href="{{ route('dashboard') }}" class="logo logo-light">
                 <span class="logo-sm">
                     <img src="{{ URL::asset('assets/images/logo/icon.png') }}" alt="" height="25">
                 </span>

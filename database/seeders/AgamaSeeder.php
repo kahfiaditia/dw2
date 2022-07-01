@@ -14,23 +14,26 @@ class AgamaSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('agama')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $agama = [
             [
                 'agama' => 'Islam',
                 'aktif' => '1',
-            ],[
+            ], [
                 'agama' => 'Protestan',
                 'aktif' => '1',
-            ],[
+            ], [
                 'agama' => 'Katolik',
                 'aktif' => '1',
-            ],[
+            ], [
                 'agama' => 'Hindu',
                 'aktif' => '1',
-            ],[
+            ], [
                 'agama' => 'Buddha',
                 'aktif' => '1',
-            ],[
+            ], [
                 'agama' => 'Khonghucu',
                 'aktif' => '1',
             ]

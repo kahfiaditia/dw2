@@ -20,13 +20,13 @@
             <div class="mb-3">
                 <label for="validationCustom02" class="form-label">Keterangan <code>*</code></label>
                 <textarea class="form-control" id="edit_keterangan_kontak" name="edit_keterangan_kontak" placeholder="Keterangan"
-                    rows="1">{{ $item->keterangan }}</textarea>
+                    rows="3">{{ $item->keterangan }}</textarea>
             </div>
         </div>
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="">Tipe</label>
-                <select name="tipe" id="tipe" class="form-control" id="select2" required>
+                <select name="tipe" id="tipe" class="form-control select select2" id="select2" required>
                     <option value="">-- Pilih Tipe --</option>
                     @foreach ($results as $result)
                         @if ($result == $item->tipe)
@@ -71,3 +71,9 @@
         return ok;
     }
 </script>
+
+{{-- <link href="{{ URL::asset('assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+<script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
+<link href="{{ URL::asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet"
+    type="text/css" /> --}}

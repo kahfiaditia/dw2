@@ -14,52 +14,65 @@ class MenuSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('menu')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $menus = [
             [
-                'menu' => 'Management',
-                'order' => '1',
-                'icon' => 'fa fa-unlock-alt',
-                'flag_menu' => 'management',
+                'menu' => 'Beranda',
+                'icon' => 'bx bxs-dashboard',
+                'sub_menu' => '0',
+                'order_menu' => '1',
             ], [
-                'menu' => 'Report',
-                'order' => '2',
-                'icon' => 'fa fa-book',
-                'flag_menu' => 'report',
+                'menu' => 'Data',
+                'icon' => 'bx bx-group',
+                'sub_menu' => '1',
+                'order_menu' => '2',
             ], [
-                'menu' => 'Sales & Marketing',
-                'order' => '3',
-                'icon' => 'fa fa-briefcase',
-                'flag_menu' => 'sales',
+                'menu' => 'Akun',
+                'icon' => 'bx bx-group',
+                'sub_menu' => '0',
+                'order_menu' => '4',
             ], [
-                'menu' => 'Purchasing',
-                'order' => '4',
-                'icon' => 'fa fa-shopping-cart',
-                'flag_menu' => 'purchasing',
+                'menu' => 'Agama',
+                'icon' => 'bx bx-list-ul',
+                'sub_menu' => '0',
+                'order_menu' => '5',
             ], [
-                'menu' => 'Inventory',
-                'order' => '5',
-                'icon' => 'fa fa-cubes',
-                'flag_menu' => 'inventory',
+                'menu' => 'Kodepos',
+                'icon' => 'bx bx-directions',
+                'sub_menu' => '0',
+                'order_menu' => '6',
             ], [
-                'menu' => 'Produksi',
-                'order' => '6',
-                'icon' => 'fa fa-cogs',
-                'flag_menu' => 'produksi',
+                'menu' => 'Siswa',
+                'icon' => 'bx bx-group',
+                'sub_menu' => '0',
+                'order_menu' => '3',
             ], [
-                'menu' => 'Pengiriman',
-                'order' => '7',
-                'icon' => 'fa fa-truck',
-                'flag_menu' => 'delivery',
+                'menu' => 'Kebutuhan Khusus',
+                'icon' => 'bx bx-accessibility',
+                'sub_menu' => '0',
+                'order_menu' => '7',
             ], [
-                'menu' => 'Finance',
-                'order' => '8',
-                'icon' => 'fa fa-money',
-                'flag_menu' => 'finances',
+                'menu' => 'Tagihan',
+                'icon' => 'bx bx-receipt',
+                'sub_menu' => '0',
+                'order_menu' => '9',
             ], [
-                'menu' => 'Master',
-                'order' => '9',
-                'icon' => 'fa fa-file',
-                'flag_menu' => 'master',
+                'menu' => 'Kelas',
+                'icon' => 'bx bxs-school',
+                'sub_menu' => '0',
+                'order_menu' => '8',
+            ], [
+                'menu' => 'Pembayaran',
+                'icon' => 'bx bx-wallet',
+                'sub_menu' => '0',
+                'order_menu' => '11',
+            ], [
+                'menu' => 'Setting Pembayaran',
+                'icon' => 'bx bx-wallet-alt',
+                'sub_menu' => '0',
+                'order_menu' => '10',
             ]
         ];
         DB::table('menu')->insert($menus);
