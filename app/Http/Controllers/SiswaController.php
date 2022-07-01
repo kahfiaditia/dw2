@@ -152,6 +152,7 @@ class SiswaController extends Controller
 
     public function show($id)
     {
+        $id = Crypt::decryptString($id);
         $student = Siswa::with('religion', 'special_need', 'periodic_student', 'beasiswa', 'performances', 'kesejahteraan')->findOrFail($id);
 
         $father = Parents::with('special_need')->where([
