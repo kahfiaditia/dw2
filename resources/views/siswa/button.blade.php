@@ -1,14 +1,21 @@
+<?php $session_menu = explode(',', Auth::user()->akses_submenu); ?>
 <form action="{{ route('siswa.destroy', $students->id) }}" method="POST">
     @csrf
     @method('DELETE')
-    <a href="{{ route('siswa.show', \Crypt::encryptString($students->id)) }}" class="text-info"><i
-            class="mdi mdi-eye font-size-18"></i></a>
-    <a href="{{ route('siswa.edit', \Crypt::encryptString($students->id)) }}" class="text-success" data-toggle="tooltip"
-        data-placement="top" title="edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-    @if (Auth::user()->roles == 'Admin')
-        <a href="#" class="text-danger delete-confirm" data-toggle="tooltip" data-placement="top"
-            title="hapus"><i class="mdi mdi-delete font-size-18"></i></a>
-    @endif
+    <div class="d-flex gap-3">
+        @if (in_array('19', $session_menu))
+            <a href="{{ route('siswa.show', \Crypt::encryptString($students->id)) }}" class="text-info"><i
+                    class="mdi mdi-eye font-size-18"></i></a>
+        @endif
+        @if (in_array('21', $session_menu))
+            <a href="{{ route('siswa.edit', \Crypt::encryptString($students->id)) }}" class="text-success"
+                data-toggle="tooltip" data-placement="top" title="edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+        @endif
+        @if (in_array('22', $session_menu))
+            <a href="#" class="text-danger delete-confirm" data-toggle="tooltip" data-placement="top"
+                title="hapus"><i class="mdi mdi-delete font-size-18"></i></a>
+        @endif
+    </div>
 </form>
 
 <script>

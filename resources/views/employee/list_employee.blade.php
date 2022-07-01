@@ -1,5 +1,6 @@
 @extends('layouts.main')
 @section('container')
+    <?php $session_menu = explode(',', Auth::user()->akses_submenu); ?>
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
@@ -14,14 +15,16 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (Auth::user()->roles === 'Admin')
-                                    <a href="{{ route('employee.create') }}" type="button"
-                                        class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
-                                            class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
-                                @elseif (count($employee) === 0 and Auth::user()->roles != 'Admin')
-                                    <a href="{{ route('employee.create') }}" type="button"
-                                        class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
-                                            class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
+                                @if (in_array('3', $session_menu))
+                                    @if (Auth::user()->roles === 'Admin')
+                                        <a href="{{ route('employee.create') }}" type="button"
+                                            class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
+                                                class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
+                                    @elseif (Auth::user()->employee == null and Auth::user()->roles != 'Admin')
+                                        <a href="{{ route('employee.create') }}" type="button"
+                                            class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i
+                                                class="mdi mdi-plus me-1"></i> Tambah Karyawan</a>
+                                    @endif
                                 @endif
                             </ol>
                         </div>

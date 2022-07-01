@@ -33,7 +33,7 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => 'karyawan',
             'label' => 'list karyawan',
-            'employee' => Employee::where('user_id', Auth::user()->id)->orderBy("nama_lengkap", 'ASC')->get(),
+            // 'employee' => Employee::where('user_id', Auth::user()->id)->orderBy("nama_lengkap", 'ASC')->get(),
         ];
 
         if (Auth::user()->roles !== 'Admin') {

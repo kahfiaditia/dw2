@@ -5,14 +5,14 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="validationCustom02" class="form-label">Penyakit <code>*</code></label>
-                <input type="text" class="form-control" id="edit_penyakit" name="edit_penyakit" value="{{ $item->penyakit }}"  autofocus
-                    placeholder="Penyakit">
+                <input type="text" class="form-control" id="edit_penyakit" name="edit_penyakit"
+                    value="{{ $item->penyakit }}" autofocus placeholder="Penyakit">
             </div>
         </div>
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="validationCustom02" class="form-label">Keterangan <code>*</code></label>
-                <textarea class="form-control" id="edit_keterangan" name="edit_keterangan" placeholder="Keterangan" rows="1">{{ $item->keterangan }}</textarea>
+                <textarea class="form-control" id="edit_keterangan" name="edit_keterangan" placeholder="Keterangan" rows="3">{{ $item->keterangan }}</textarea>
             </div>
         </div>
     </div>
@@ -29,12 +29,12 @@
         </div>
     </div>
 </form>
-<script type = "text/javascript">
+<script type="text/javascript">
     function validate() {
         var ok = true;
         var edit_penyakit = document.getElementById("edit_penyakit").value;
         var edit_keterangan = document.getElementById("edit_keterangan").value;
-        if(edit_penyakit === '' || edit_keterangan === ''){
+        if (edit_penyakit === '' || edit_keterangan === '') {
             Swal.fire(
                 'Gagal',
                 'Tanda * (bintang) wajib diisi',
