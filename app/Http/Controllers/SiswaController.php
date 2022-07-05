@@ -141,7 +141,7 @@ class SiswaController extends Controller
             DB::commit();
             AlertHelper::addAlert(true);
             $siswa = Siswa::orderBy('id', 'DESC')->first();
-            return redirect('show_parents/' . $siswa->id);
+            return redirect('show_parents/' . Crypt::encryptString($siswa->id));
         } catch (\Throwable $err) {
             DB::rollBack();
             throw $err;

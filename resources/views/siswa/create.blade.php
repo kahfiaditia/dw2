@@ -76,13 +76,17 @@
                                         <div class="card-body">
                                             @if (Auth::user()->roles == 'Admin')
                                                 <label for="">Pilih User Siswa</label>
-                                                <select name="user_id" id="" class="form-control mb-3">
+                                                <select name="user_id" id="" style="margin-bottom: 20px;"
+                                                    class="select2 form-control mb-3" required>
                                                     <option value="">-- Pilih User Siswa --</option>
                                                     @foreach ($users as $user)
                                                         <option value="{{ $user->id }}">
                                                             {{ $user->name . ' - ' . $user->email }}</option>
                                                     @endforeach
                                                 </select>
+                                                <div class="invalid-feedback">
+                                                    Data wajib diisi.
+                                                </div>
                                             @endif
                                             <div class="row">
                                                 @foreach ($errors->all() as $error)
@@ -103,7 +107,8 @@
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Email <code>*</code></label>
                                                     <input type="email" class="form-control" name="email" required
-                                                        placeholder="Email" value="{{ old('email') }}">
+                                                        placeholder="Email"
+                                                        value="{{ old('email', Auth::user()->email) }}" readonly>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -285,7 +290,8 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-4">
                                                         <label>Kewarganegaraan <code>*</code></label>
-                                                        <select name="kewarganegaraan" class="form-control" required>
+                                                        <select id="nationality" name="kewarganegaraan"
+                                                            class="form-control" required>
                                                             <option value="">-- Pilih Kewarganegaraan --</option>
                                                             <option value="WNI"
                                                                 {{ old('kewarganegaraan') == 'WNI' ? 'selected' : '' }}>
@@ -304,7 +310,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="">Nama Negara <code>*</code></label>
-                                                    <input type="text" class="form-control" name="nama_negara"
+                                                    <input type="text" class="form-control" id="national_name" name="nama_negara"
                                                         required placeholder="Nama Negara"
                                                         value="{{ old('nama_negara') }}">
                                                     <div class="invalid-feedback">
@@ -522,7 +528,8 @@
                                                         <div class="col-md-6">
                                                             <label for="">Tetap Menerima KIP
                                                                 <code>*</code></label>
-                                                            <select name="is_receive_kip" class="form-control" required>
+                                                            <select name="is_receive_kip" id="is_receive_kip"
+                                                                class="form-control" required>
                                                                 <option value="">-- Pilih Salah Satu --</option>
                                                                 <option value="Ya">Ya</option>
                                                                 <option value="Tidak">Tidak</option>
@@ -530,9 +537,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mt-3">
+                                                <div id="reason_reject_kip" style="display: none;" class="col-md-6 mt-3">
                                                     <label for="">Alasan Menolak KIP</label>
-                                                    <select name="reason_reject_kip" class="form-control">
+                                                    <select id="select_reason" name="reason_reject_kip"
+                                                        class="form-control">
                                                         <option value="">-- Pilih Salah Satu --</option>
                                                         <option value="Dilarang Pemda Karena Menerima Bantuan Serupa">
                                                             Dilarang
@@ -562,6 +570,24 @@
     </div>
     <script>
         $(document).ready(function() {
+            $("#nationality").bind('change', function(){
+                if($(this).val() == 'WNI') {
+                    $("#national_name").val('Indonesia')
+                } else {
+                    $("#national_name").val('')
+                }
+            })
+            $("#is_receive_kip").bind('change', function() {
+                let result = $(this).val()
+
+                if (result == 'Ya') {
+                    $("#reason_reject_kip").show()
+                } else {
+                    $("#select_reason").val("");
+                    $("#reason_reject_kip").hide()
+                }
+            })
+
             $("#kecamatan").bind('change', function() {
                 let district = $(this).val()
                 let url = '{{ route('kodepos.get_villages_by_district', ':district') }}'
