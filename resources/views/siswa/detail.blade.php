@@ -118,7 +118,11 @@
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Kelas</h5>
                                                     <p class="text-muted mb-0">
-                                                        {{ $student->classes_student->jenjang . ' - [ ' . $student->classes_student->class . ' ]' }}
+                                                        @if ($student->classes_student)
+                                                            {{ $student->classes_student->jenjang . ' - [ ' . $student->classes_student->class . ' ]' }}
+                                                        @else
+                                                            -
+                                                        @endif
                                                     </p>
                                                 </div>
                                             </div>
