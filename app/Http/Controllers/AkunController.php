@@ -34,7 +34,7 @@ class AkunController extends Controller
 
     public function data_ajax(Request $request)
     {
-        $user = User::select(['*']);
+        $user = User::select(['*'])->orderBy('id', 'DESC')->get();
         return DataTables::of($user)
             ->addColumn('status', function ($model) {
                 $model->aktif === '1' ? $flag = 'success' : $flag = 'danger';
