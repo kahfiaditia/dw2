@@ -72,7 +72,7 @@
                                                                                 Kesejahteraan</label>
                                                                             <select name="jenis_kesejahteraan"
                                                                                 id="" required
-                                                                                class="form-control">
+                                                                                class="form-control select select2">
                                                                                 <option value="">-- Pilih Jenis
                                                                                     Kesejahteraan --
                                                                                 </option>

@@ -33,7 +33,7 @@
                                                 @for ($i = 2022; $i <= date('Y') + 1; $i++)
                                                     <option value='{{ $i }}'
                                                         {{ $payment->year == $i ? 'selected' : '' }}>
-                                                        {{ $i }}
+                                                        {{ $i . ' s/d ' . $i + 1 }}
                                                     </option>
                                                 @endfor
                                             </select>
@@ -47,14 +47,37 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="">Kelas <code>*</code></label>
-                                            <select class="form-control select select2" name="class_id" id="class_id"
-                                                required>
-                                                <option value="">--Pilih Kelas--</option>
+                                            <label for="">Junjangan <code>*</code></label>
+                                            <select class="form-control select select2 school_level_id"
+                                                name="school_level_id" id="school_level_id" required>
+                                                <option value="">--Pilih Junjangan--</option>
                                                 @foreach ($classes as $class)
-                                                    <option value="{{ $class->id }}"
-                                                        {{ $class->id == $payment->class_id ? 'selected' : '' }}>
-                                                        {{ $class->jenjang }}
+                                                    <option value="{{ $class->id }}" data-id="{{ $class->level }}"
+                                                        {{ $class->id == $payment->school_level_id ? 'selected' : '' }}>
+                                                        {{ $class->level }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            @error('school_level_id')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="">Kelas <code>*</code></label>
+                                            <select class="form-control select select2 class_id" name="class_id"
+                                                id="class_id" required>
+                                                <option value="">--Pilih Kelas--</option>
+                                                @foreach ($kelas as $kls)
+                                                    <option value="{{ $kls->id }}"
+                                                        {{ $kls->id == $payment->school_class_id ? 'selected' : '' }}>
+                                                        {{ $kls->classes }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -66,8 +89,6 @@
                                             @enderror
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="">Pembayaran <code>*</code></label>
@@ -89,6 +110,8 @@
                                             @enderror
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="">Biaya <code>*</code></label>
@@ -133,5 +156,38 @@
 
             return rupiahInput.value = rupiahValue
         }
+
+        $(document).ready(function() {
+            $(".school_level_id").change(function() {
+                let school_level_id = $(this).val();
+                data_id_jenjang = this.querySelector(':checked').getAttribute('data-id');
+                if (data_id_jenjang == 'KB' || data_id_jenjang == 'TK') {
+                    document.getElementById("class_id").required = false;
+                } else {
+                    document.getElementById("class_id").required = true;
+                }
+                $(".class_id option").remove();
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('payment.get_class_payment') }}',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        school_level_id
+                    },
+                    success: response => {
+                        console.log(response)
+                        $('.class_id').append(`<option value="">-- Pilih Kelas --</option>`)
+                        $.each(response.message, function(i, item) {
+                            $('.class_id').append(
+                                `<option value="${item.id}">${item.classes}</option>`
+                            )
+                        })
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            });
+        });
     </script>
 @endsection

@@ -75,14 +75,19 @@
                                     <div class="card shadow-none border mb-0">
                                         <div class="card-body">
                                             @if (Auth::user()->roles == 'Admin')
-                                                <label for="">Pilih User Siswa</label>
-                                                <select name="user_id" id="" class="form-control mb-3">
-                                                    <option value="">-- Pilih User Siswa --</option>
-                                                    @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">
-                                                            {{ $user->name . ' - ' . $user->email }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3 form-group">
+                                                        <label for="">Pilih User Siswa</label>
+                                                        <select name="user_id" id=""
+                                                            class="form-control mb-3 select select2">
+                                                            <option value="">-- Pilih User Siswa --</option>
+                                                            @foreach ($users as $user)
+                                                                <option value="{{ $user->id }}">
+                                                                    {{ $user->name . ' - ' . $user->email }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             @endif
                                             <div class="row">
                                                 @foreach ($errors->all() as $error)
@@ -125,7 +130,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Jenis Kelamin<code>*</code></label>
-                                                    <select name="jenis_kelamin" class="form-control" required>
+                                                    <select name="jenis_kelamin" class="form-control select select2"
+                                                        required>
                                                         <option value="">-- Pilih Jenis Kelamin --</option>
                                                         <option value="Laki - Laki"
                                                             {{ old('jenis_kelamin') == 'Laki - Laki' ? 'selected' : '' }}>
@@ -143,7 +149,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Golongan Darah <code>*</code></label>
-                                                    <select name="golongan_darah" class="form-control" required>
+                                                    <select name="golongan_darah" class="form-control select select2"
+                                                        required>
                                                         <option value="">-- Pilih Golongan Darah --</option>
                                                         <option value="A" {{ old('A') == 'A' ? 'selected' : '' }}>
                                                             A</option>
@@ -266,7 +273,8 @@
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Agama
                                                             <code>*</code></label>
-                                                        <select name="agama" class="form-control" required>
+                                                        <select name="agama" class="form-control select select2"
+                                                            required>
                                                             <option value="">-- Pilih Agama --</option>
                                                             @foreach ($religions as $religion)
                                                                 <option value="{{ $religion->id }}"
@@ -285,7 +293,8 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-4">
                                                         <label>Kewarganegaraan <code>*</code></label>
-                                                        <select name="kewarganegaraan" class="form-control" required>
+                                                        <select name="kewarganegaraan" class="form-control select select2"
+                                                            required>
                                                             <option value="">-- Pilih Kewarganegaraan --</option>
                                                             <option value="WNI"
                                                                 {{ old('kewarganegaraan') == 'WNI' ? 'selected' : '' }}>
@@ -319,7 +328,8 @@
                                                         <label for="validationCustom02" class="form-label">Berkebutuhan
                                                             Khusus
                                                             <code>*</code></label>
-                                                        <select name="kebutuhan_khusus" class="form-control" required>
+                                                        <select name="kebutuhan_khusus"
+                                                            class="form-control select select2" required>
                                                             <option value="">-- Pilih Kebutuhan Khusus --
                                                             </option>
                                                             @foreach ($special_needs as $special_need)
@@ -351,7 +361,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="">Tempat Tinggal <code>*</code></label>
-                                                    <select name="tempat_tinggal" required class="form-control">
+                                                    <select name="tempat_tinggal" required
+                                                        class="form-control select select2">
                                                         <option value="">-- Pilih Tempat Tinggal --</option>
                                                         <option value="Bersama Orang Tua"
                                                             {{ old('tempat_tinggal') == 'Bersama Orang Tua' ? 'selected' : '' }}>
@@ -507,7 +518,8 @@
                                                         <div class="col-md-6">
                                                             <label for="">Apakah Punya KIP
                                                                 <code>*</code></label>
-                                                            <select name="is_have_kip" class="form-control" required>
+                                                            <select name="is_have_kip" class="form-control select select2"
+                                                                required>
                                                                 <option value="">-- Pilih Salah Satu --</option>
                                                                 <option value="Ya">Ya</option>
                                                                 <option value="Tidak">Tidak</option>
@@ -522,7 +534,8 @@
                                                         <div class="col-md-6">
                                                             <label for="">Tetap Menerima KIP
                                                                 <code>*</code></label>
-                                                            <select name="is_receive_kip" class="form-control" required>
+                                                            <select name="is_receive_kip"
+                                                                class="form-control select select2" required>
                                                                 <option value="">-- Pilih Salah Satu --</option>
                                                                 <option value="Ya">Ya</option>
                                                                 <option value="Tidak">Tidak</option>
@@ -532,7 +545,7 @@
                                                 </div>
                                                 <div class="col-md-6 mt-3">
                                                     <label for="">Alasan Menolak KIP</label>
-                                                    <select name="reason_reject_kip" class="form-control">
+                                                    <select name="reason_reject_kip" class="form-control select select2">
                                                         <option value="">-- Pilih Salah Satu --</option>
                                                         <option value="Dilarang Pemda Karena Menerima Bantuan Serupa">
                                                             Dilarang

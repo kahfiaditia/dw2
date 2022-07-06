@@ -80,7 +80,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Jenis Kelamin<code>*</code></label>
-                                                    <select name="jenis_kelamin" class="form-control" required>
+                                                    <select name="jenis_kelamin" class="form-control select select2"
+                                                        required>
                                                         <option value="">-- Pilih Jenis Kelamin --</option>
                                                         <option value="Laki - Laki"
                                                             @if ($student->jenis_kelamin == 'Laki - Laki') selected @endif
@@ -100,7 +101,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Golongan Darah <code>*</code></label>
-                                                    <select name="golongan_darah" class="form-control" required>
+                                                    <select name="golongan_darah" class="form-control select select2"
+                                                        required>
                                                         <option value="">-- Pilih Golongan Darah --</option>
                                                         @foreach ($blood_types as $blood_type)
                                                             <option value="{{ $blood_type['value'] }}"
@@ -274,7 +276,8 @@
                                                         <label for="validationCustom02" class="form-label">Berkebutuhan
                                                             Khusus
                                                             <code>*</code></label>
-                                                        <select name="kebutuhan_khusus" class="form-control" required>
+                                                        <select name="kebutuhan_khusus"
+                                                            class="form-control select select2" required>
                                                             <option value="">-- Pilih Kebutuhan Khusus --</option>
                                                             @foreach ($special_needs as $special_need)
                                                                 <option value="{{ $special_need->id }}"
@@ -306,7 +309,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="">Tempat Tinggal <code>*</code></label>
-                                                    <select name="tempat_tinggal" required class="form-control">
+                                                    <select name="tempat_tinggal" required
+                                                        class="form-control select select2">
                                                         <option value="">-- Pilih Tempat Tinggal --</option>
                                                         @foreach ($residences as $residence)
                                                             @if ($residence['value'] == $student->tempat_tinggal)
@@ -460,7 +464,8 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label for="">Apakah Punya KIP <code>*</code></label>
-                                                            <select name="is_have_kip" class="form-control" required>
+                                                            <select name="is_have_kip" class="form-control select select2"
+                                                                required>
                                                                 <option value="">-- Pilih Salah Satu --</option>
                                                                 <option value="Ya"
                                                                     @if ($student->is_have_kip == 'Ya') selected @endif>Ya
@@ -478,7 +483,8 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="">Tetap Menerima KIP <code>*</code></label>
-                                                            <select name="is_receive_kip" class="form-control" required>
+                                                            <select name="is_receive_kip"
+                                                                class="form-control select select2" required>
                                                                 <option value="">-- Pilih Salah Satu --</option>
                                                                 <option value="Ya"
                                                                     @if ($student->is_receive_kip == 'Ya') selected @endif>Ya
@@ -494,7 +500,7 @@
                                                 </div>
                                                 <div class="col-md-6 mt-3">
                                                     <label for="">Alasan Menolak KIP</label>
-                                                    <select name="reason_reject_kip" class="form-control">
+                                                    <select name="reason_reject_kip" class="form-control select select2">
                                                         <option value="">-- Pilih Salah Satu --</option>
                                                         @foreach ($reject_kip as $item)
                                                             @if ($item['value'] == $student->reason_reject_kip)

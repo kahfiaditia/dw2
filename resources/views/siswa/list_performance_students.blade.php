@@ -106,16 +106,20 @@
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <a href="{{ route('siswa.edit_performance_student', \Crypt::encryptString($performance->id)) }}"
-                                                                                    class="text-success"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="top" title="edit"><i
-                                                                                        class="mdi mdi-pencil font-size-18"></i></a>
-                                                                                <a href="#"
-                                                                                    class="text-danger delete_confirm"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="top" title="hapus"><i
-                                                                                        class="mdi mdi-delete font-size-18"></i></a>
+                                                                                <div class="d-flex gap-3">
+                                                                                    <a href="{{ route('siswa.edit_performance_student', \Crypt::encryptString($performance->id)) }}"
+                                                                                        class="text-success"
+                                                                                        data-toggle="tooltip"
+                                                                                        data-placement="top"
+                                                                                        title="edit"><i
+                                                                                            class="mdi mdi-pencil font-size-18"></i></a>
+                                                                                    <a href="#"
+                                                                                        class="text-danger delete_confirm"
+                                                                                        data-toggle="tooltip"
+                                                                                        data-placement="top"
+                                                                                        title="hapus"><i
+                                                                                            class="mdi mdi-delete font-size-18"></i></a>
+                                                                                </div>
                                                                             </form>
                                                                         </td>
                                                                     </tr>

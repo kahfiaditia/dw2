@@ -72,7 +72,8 @@
                                                                             <label for="exampleInputEmail1">Jenis
                                                                                 Prestasi</label>
                                                                             <select name="jenis_prestasi" id=""
-                                                                                required class="form-control">
+                                                                                required
+                                                                                class="form-control select select2">
                                                                                 <option value="">-- Pilih Jenis
                                                                                     Prestasi --
                                                                                 </option>
@@ -90,7 +91,8 @@
                                                                             <label for="exampleInputPassword1">Tingkat
                                                                                 Prestasi</label>
                                                                             <select name="tingkat_prestasi" id=""
-                                                                                class="form-control" required>
+                                                                                class="form-control select select2"
+                                                                                required>
                                                                                 <option value="">-- Pilih Tingkat
                                                                                     Prestasi
                                                                                     --</option>

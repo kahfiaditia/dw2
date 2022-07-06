@@ -21,7 +21,7 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = Bills::orderBy('id', 'DESC')->get();
+        $bills = Bills::orderBy('id', 'ASC')->get();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,

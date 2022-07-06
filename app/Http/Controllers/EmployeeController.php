@@ -33,7 +33,6 @@ class EmployeeController extends Controller
             'menu' => 'data',
             'submenu' => 'karyawan',
             'label' => 'list karyawan',
-            // 'employee' => Employee::where('user_id', Auth::user()->id)->orderBy("nama_lengkap", 'ASC')->get(),
         ];
 
         if (Auth::user()->roles !== 'Admin') {
@@ -1033,7 +1032,7 @@ class EmployeeController extends Controller
 
     public function dropdown_email_create()
     {
-        $email = User::select('users.*')->where('aktif', '=', '1')->whereNotIn('id', function ($query) {
+        $email = User::select('users.*')->where('roles', '=', 'Karyawan')->where('aktif', '=', '1')->whereNotIn('id', function ($query) {
             $query->select('user_id')->from('karyawan')->wherenotnull('user_id');
         })->get();
         return $email;

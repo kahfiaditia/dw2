@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email_verified_at',
         'password_reset_at',
         'aktif',
+        'id_school_level',
     ];
 
     /**

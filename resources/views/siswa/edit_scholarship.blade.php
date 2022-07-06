@@ -98,7 +98,8 @@
                                                                             <label for="exampleInputEmail1">Jenis
                                                                                 Beasiswa</label>
                                                                             <select name="jenis_beasiswa" id=""
-                                                                                required class="form-control">
+                                                                                required
+                                                                                class="form-control select select2">
                                                                                 <option value="">-- Pilih Jenis
                                                                                     Beasiswa --
                                                                                 </option>

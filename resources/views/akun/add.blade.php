@@ -36,7 +36,8 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Roles <code>*</code></label>
-                                            <select class="form-control select select2" name="roles" required>
+                                            <select class="form-control select select2" name="roles" id="roles"
+                                                required>
                                                 <option value="">--Pilih Roles--</option>
                                                 <option value="Admin">Admin</option>
                                                 <option value="Karyawan">Karyawan</option>
@@ -74,6 +75,24 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row" id="kelas_class">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Kelas <code>*</code></label>
+                                            <select class="form-control select select2" name="id_school_level"
+                                                id="id_school_level" required>
+                                                <option value="">--Pilih Kelas--</option>
+                                                @foreach ($school_level as $itm)
+                                                    <option value="{{ $itm->id }}">
+                                                        {{ $itm->level }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-6">
                                         <a href="{{ route('akun.index') }}"
@@ -90,7 +109,21 @@
                     </div>
                 </div>
             </form>
-        </div> <!-- container-fluid -->
+        </div>
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#roles').bind('change', function() {
+                let roles = document.getElementById("roles").value;
+                if (roles == 'Siswa') {
+                    document.getElementById("id_school_level").required = true;
+                    document.getElementById("kelas_class").style.display = 'block';
+                } else {
+                    document.getElementById("id_school_level").required = false;
+                    document.getElementById("kelas_class").style.display = 'none';
+                }
+            });
+        });
+    </script>
 @endsection

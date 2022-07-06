@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Classes;
+use App\Models\School_class;
+use App\Models\School_level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +47,7 @@ class ClassesController extends Controller
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'tambah Kelas',
-            'jurusan' => ['TK', 'SD', 'SMP', 'SMA', 'SMK'],
+            'jurusan' => School_level::all(),
         ];
         return view('classes.create')->with($data);
     }
@@ -60,15 +62,13 @@ class ClassesController extends Controller
     {
         $validated = $request->validate([
             'jenjang' => 'required',
-            'jurusan' => 'required',
-            'kelas' => 'required',
         ]);
         DB::beginTransaction();
         try {
             Classes::create([
-                'jenjang' => $validated['jenjang'],
-                'jurusan' => $validated['jurusan'],
-                'class' => $validated['kelas'],
+                'id_school_level' => $validated['jenjang'],
+                'jurusan' => $request->jurusan,
+                'class_id' => $request->kelas,
                 'type' => $request->type
             ]);
             DB::commit();
@@ -106,9 +106,10 @@ class ClassesController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'Edit bills',
+            'label' => 'Edit ' . $this->submenu,
             'classes' => $classes,
-            'jurusan' => ['TK', 'SD', 'SMP', 'SMA', 'SMK'],
+            'jurusan' => School_level::all(),
+            'kelas' => School_class::where('school_level_id', $classes->id_school_level)->get(),
         ];
         return view('classes.edit')->with($data);
     }
@@ -125,15 +126,13 @@ class ClassesController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $validated = $request->validate([
             'jenjang' => 'required',
-            'jurusan' => 'required',
-            'kelas' => 'required',
         ]);
         DB::beginTransaction();
         try {
             $classes = Classes::findOrFail($decrypted_id);
-            $classes->jenjang = $validated['jenjang'];
-            $classes->jurusan = $validated['jurusan'];
-            $classes->class = $validated['kelas'];
+            $classes->id_school_level = $validated['jenjang'];
+            $classes->jurusan = $request->jurusan;
+            $classes->class_id = $request->kelas;
             $classes->type = $request->type;
             $classes->save();
             DB::commit();
@@ -166,5 +165,19 @@ class ClassesController extends Controller
             AlertHelper::deleteAlert(false);
             return back();
         }
+    }
+
+    public function get_school_class(Request $request)
+    {
+        $kelas = School_class::where('school_level_id', $request->jenjang)->get();
+        if (count($kelas) > 0) {
+            $code = 200;
+        } else {
+            $code = 400;
+        }
+        return response()->json([
+            'code' => $code,
+            'message' => $kelas,
+        ]);
     }
 }

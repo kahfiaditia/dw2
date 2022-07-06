@@ -96,16 +96,20 @@
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <a href="{{ route('siswa.edit_kesejahteraan', \Crypt::encryptString($item->id)) }}"
-                                                                                    class="text-success"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="top" title="edit"><i
-                                                                                        class="mdi mdi-pencil font-size-18"></i></a>
-                                                                                <a href="#"
-                                                                                    class="text-danger delete_confirm"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="top" title="hapus"><i
-                                                                                        class="mdi mdi-delete font-size-18"></i></a>
+                                                                                <div class="d-flex gap-3">
+                                                                                    <a href="{{ route('siswa.edit_kesejahteraan', \Crypt::encryptString($item->id)) }}"
+                                                                                        class="text-success"
+                                                                                        data-toggle="tooltip"
+                                                                                        data-placement="top"
+                                                                                        title="edit"><i
+                                                                                            class="mdi mdi-pencil font-size-18"></i></a>
+                                                                                    <a href="#"
+                                                                                        class="text-danger delete_confirm"
+                                                                                        data-toggle="tooltip"
+                                                                                        data-placement="top"
+                                                                                        title="hapus"><i
+                                                                                            class="mdi mdi-delete font-size-18"></i></a>
+                                                                                </div>
                                                                             </form>
                                                                         </td>
                                                                     </tr>
@@ -143,8 +147,9 @@
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Jenis Kesejahteraan</label>
-                                        <select name="jenis_kesejahteraan" id="" required class="form-control">
-                                            <option value="">-- Pilih Jenis Kesejahteraan --</option>
+                                        <select name="jenis_kesejahteraan" id="" required class="form-control"
+                                            style="">
+                                            <option value="">-- Jenis Kesejahteraan --</option>
                                             <option value="PKH">PKH</option>
                                             <option value="PIP">PIP</option>
                                             <option value="Kartu Perlindungan Sosial">Kartu Perlindungan Sosial</option>
@@ -160,6 +165,8 @@
                                             placeholder="Nomor Kartu" required>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6 mt-3">
                                     <div class="form-group">
                                         <label for="">Nama di Kartu</label>

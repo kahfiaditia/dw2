@@ -6,6 +6,8 @@ use App\Helper\AlertHelper;
 use App\Models\Bills;
 use App\Models\Classes;
 use App\Models\Payment;
+use App\Models\School_class;
+use App\Models\School_level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -46,8 +48,8 @@ class PaymentController extends Controller
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'tambah ' . $this->submenu,
-            'classes' => Classes::groupBY('jenjang')->orderByRaw("FIELD(jenjang, 'TK', 'SD', 'SMP', 'SMA', 'SMK')")->get(),
-            'bills' => Bills::orderBy("bills")->get(),
+            'classes' => School_level::all(),
+            'bills' => Bills::orderByRaw("FIELD(bills, 'SPP', 'Uang Kegiatan', 'Uang Pangkal', 'Uang Formulir')")->get(),
         ];
         return view('payment.create')->with($data);
     }
@@ -62,20 +64,26 @@ class PaymentController extends Controller
     {
         $validated = $request->validate([
             'tahun' => 'required',
-            'class_id' => 'required',
+            'school_level_id' => 'required',
             'bills_id' => 'required',
             'amount' => 'required',
         ]);
         DB::beginTransaction();
         try {
-            $cek = Payment::where('year', $request->tahun)->where('class_id', $request->class_id)->where('bills_id', $request->bills_id)->count();
+            $cek = Payment::where('year', $request->tahun)
+                ->where('school_level_id', $request->school_level_id)
+                ->where('school_class_id', $request->class_id)
+                ->where('bills_id', $request->bills_id)
+                ->count();
             if ($cek > 0) {
                 AlertHelper::addDuplicate(false);
                 return back();
             }
             Payment::create([
                 'year' => $validated['tahun'],
-                'class_id' => $validated['class_id'],
+                'year_end' => $validated['tahun'] + 1,
+                'school_level_id' => $validated['school_level_id'],
+                'school_class_id' => $request->class_id,
                 'bills_id' => $validated['bills_id'],
                 'amount' => str_replace(".", "", $validated['amount']),
             ]);
@@ -110,13 +118,15 @@ class PaymentController extends Controller
     public function edit($id)
     {
         $payment = Payment::findOrFail(Crypt::decryptString($id));
+        // dd($payment->school_class_id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'tambah ' . $this->submenu,
-            'classes' => Classes::groupBY('jenjang')->orderByRaw("FIELD(jenjang, 'TK', 'SD', 'SMP', 'SMA', 'SMK')")->get(),
-            'bills' => Bills::orderBy("bills")->get(),
+            'classes' => School_level::all(),
+            'kelas' => School_class::where('school_level_id', $payment->school_level_id)->get(),
+            'bills' => Bills::orderByRaw("FIELD(bills, 'SPP', 'Uang Kegiatan', 'Uang Pangkal', 'Uang Formulir')")->get(),
             'payment' => $payment,
         ];
         return view('payment.edit')->with($data);
@@ -134,7 +144,7 @@ class PaymentController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $validated = $request->validate([
             'tahun' => 'required',
-            'class_id' => 'required',
+            'school_level_id' => 'required',
             'bills_id' => 'required',
             'amount' => 'required',
         ]);
@@ -142,7 +152,9 @@ class PaymentController extends Controller
         try {
             $payment = Payment::findOrFail($decrypted_id);
             $payment->year = $validated['tahun'];
-            $payment->class_id = $validated['class_id'];
+            $payment->year_end = $validated['tahun'] + 1;
+            $payment->school_level_id = $validated['school_level_id'];
+            $payment->school_class_id = $request->class_id;
             $payment->bills_id = $validated['bills_id'];
             $payment->amount = str_replace(".", "", $validated['amount']);
             $payment->save();
@@ -176,5 +188,21 @@ class PaymentController extends Controller
             AlertHelper::deleteAlert(false);
             return back();
         }
+    }
+
+    public function get_class_payment(Request $request)
+    {
+        $kelas = DB::table('school_class')
+            ->where('school_level_id', $request->school_level_id)
+            ->get();
+        if (count($kelas) > 0) {
+            $code = 200;
+        } else {
+            $code = 400;
+        }
+        return response()->json([
+            'code' => $code,
+            'message' => $kelas,
+        ]);
     }
 }

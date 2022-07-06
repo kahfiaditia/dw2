@@ -69,6 +69,26 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($akun->id_school_level)
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="validationCustom02" class="form-label">Kelas
+                                                    <code>*</code></label>
+                                                <select class="form-control select select2" name="id_school_level" disabled
+                                                    id="id_school_level">
+                                                    <option value="">--Pilih Kelas--</option>
+                                                    @foreach ($school_level as $itm)
+                                                        <option value="{{ $itm->id }}"
+                                                            {{ $itm->id === $akun->id_school_level ? 'selected' : '' }}>
+                                                            {{ $itm->level }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    Data wajib diisi.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Confirmasi Akun
