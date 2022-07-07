@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AgamaSeeder::class,
+            MenuSeeder::class,
+            SubMenuSeeder::class
         ]);
     }
 }

@@ -20,6 +20,8 @@
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="mdi mdi-plus me-1"></i> Tambah Siswa
                                     </a>
+                                    <button id="button_trigger" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#csvModal">Import CSV</button>
                                 @endif
                             </ol>
                         </div>
@@ -28,6 +30,13 @@
             </div>
             <div class="row">
                 <div class="col-12">
+                    @if ($errors->all())
+                        <div class="alert alert-danger alert-dismissible">
+                            @foreach ($errors->all() as $error)
+                                {{ $error }} <br>
+                            @endforeach
+                        </div>
+                    @endif
                     <div class="card">
                         <div class="card-body">
                             <table id="mydata" class="table table-striped dt-responsive nowrap w-100">
@@ -49,7 +58,42 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="csvModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="{{ route('student.import_csv') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="">Upload File CSV</label>
+                        <input type="file" class="form-control" name="student_csv">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"
+                            id="cancel">Close</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        $("#button_trigger").on('click', function() {
+            $("#csvModal").modal('show')
+        })
+
+        $("#cancel").on('click', function() {
+            $("#csvModal").modal('toggle')
+        })
+
         $(function() {
             $('#mydata').DataTable({
                 destroy: true,

@@ -178,6 +178,7 @@ Route::group(
         Route::post('/get_class', [InvoiceController::class, 'get_class'])->name('invoice.get_class');
         Route::post('/get_payment', [InvoiceController::class, 'get_payment'])->name('invoice.get_payment');
         Route::post('/cek_payment', [InvoiceController::class, 'cek_payment'])->name('invoice.cek_payment');
+        Route::post('/import_student_csv', [SiswaController::class, 'import_csv'])->name('student.import_csv');
         Route::resource('/payment', PaymentController::class);
     }
 );
