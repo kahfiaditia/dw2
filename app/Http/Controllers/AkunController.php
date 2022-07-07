@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Employee;
+use App\Models\School_level;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +87,7 @@ class AkunController extends Controller
             'menu' => $this->menu,
             'submenu' => 'akun',
             'label' => 'data akun',
+            'school_level' => School_level::all(),
         ];
         return view('akun.add')->with($data);
     }
@@ -122,6 +124,7 @@ class AkunController extends Controller
             } elseif ($request->roles === 'Siswa') {
                 $user->akses_menu = '1,6';
                 $user->akses_submenu = '1,19,20,21';
+                $user->id_school_level = $request->id_school_level;
             } elseif ($request->roles === 'Alumni') {
                 $user->tahun_lulus = $request->tahun_lulus;
                 $user->akses_menu = '1';
@@ -166,6 +169,7 @@ class AkunController extends Controller
             'menu' => $this->menu,
             'submenu' => 'akun',
             'label' => 'ubah akun',
+            'school_level' => School_level::all(),
             'akun' => User::findorfail($id_decrypted)
         ];
         return view('akun.edit')->with($data);
@@ -210,6 +214,12 @@ class AkunController extends Controller
                 $user->akses_menu = '1';
                 $user->akses_submenu = '1';
             } elseif ($request->roles === 'Ortu') {
+            }
+            // update class
+            if ($request->roles === 'Siswa') {
+                $user->id_school_level = $request->id_school_level;
+            } else {
+                $user->id_school_level = null;
             }
             $user->aktif = isset($request->aktif) ? 1 : 0;
             $user->save();
@@ -263,6 +273,7 @@ class AkunController extends Controller
             'menu' => $this->menu,
             'submenu' => 'akun',
             'label' => 'ubah akun',
+            'school_level' => School_level::all(),
             'akun' => User::findorfail($id_decrypted)
         ];
         return view('akun.confirmasi')->with($data);

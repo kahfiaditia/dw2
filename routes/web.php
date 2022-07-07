@@ -14,6 +14,7 @@ use App\Http\Controllers\NeedsController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PriodikSiswaController;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -171,6 +172,7 @@ Route::group(
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
         Route::resource('/bills', BillController::class);
         Route::resource('/classes', ClassesController::class);
+        Route::post('/get_school_class', [ClassesController::class, 'get_school_class'])->name('classes.get_school_class');
         Route::resource('/invoice', InvoiceController::class);
         Route::get('/list_invoice', [InvoiceController::class, 'list_invoice'])->name('invoice.list_invoice');
         Route::post('/get_jenjang', [InvoiceController::class, 'get_jenjang'])->name('invoice.get_jenjang');
@@ -180,5 +182,6 @@ Route::group(
         Route::post('/cek_payment', [InvoiceController::class, 'cek_payment'])->name('invoice.cek_payment');
         Route::post('/import_student_csv', [SiswaController::class, 'import_csv'])->name('student.import_csv');
         Route::resource('/payment', PaymentController::class);
+        Route::post('/get_class_payment', [PaymentController::class, 'get_class_payment'])->name('payment.get_class_payment');
     }
 );

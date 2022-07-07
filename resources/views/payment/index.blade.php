@@ -36,6 +36,7 @@
                                         <th class="text-center">No</th>
                                         <th class="text-center">Tahun</th>
                                         <th class="text-center">Jenjang</th>
+                                        <th class="text-center">Kelas</th>
                                         <th class="text-center">Pembayaran</th>
                                         <th class="text-center">Biaya</th>
                                         <th class="text-center">Action</th>
@@ -45,8 +46,10 @@
                                     @foreach ($payment as $item)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $item->year }}</td>
-                                            <td class="text-center">{{ $item->classes->jenjang }}</td>
+                                            <td class="text-center">{{ $item->year . ' s/d ' . $item->year_end }}</td>
+                                            <td class="text-center">{{ $item->schools_level->level }}</td>
+                                            <td class="text-center">
+                                                {{ $item->schools_class ? $item->schools_class->classes : '' }}</td>
                                             <td class="text-center">{{ $item->bills->bills }}</td>
                                             <td class="text-center">{{ number_format($item->amount, 0, ',') }}</td>
                                             <td class="text-center">

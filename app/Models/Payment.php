@@ -17,8 +17,13 @@ class Payment extends Model
         return $this->belongsTo(Bills::class, 'bills_id')->withTrashed();
     }
 
-    public function classes()
+    public function schools_class()
     {
-        return $this->belongsTo(Classes::class, 'class_id')->withTrashed();
+        return $this->belongsTo(School_class::class, 'school_class_id');
+    }
+
+    public function schools_level()
+    {
+        return $this->belongsTo(School_level::class, 'school_level_id');
     }
 }

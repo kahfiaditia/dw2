@@ -27,13 +27,13 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="">Jenjang <code>*</code></label>
-                                            <select class="form-control select select2" name="jenjang" id="jenjang"
-                                                required>
+                                            <select class="form-control select select2 jenjang" name="jenjang"
+                                                id="jenjang" required>
                                                 <option value="">--Pilih Jenjang--</option>
-                                                @foreach ($jurusan as $jurusan)
-                                                    <option value="{{ $jurusan }}"
-                                                        {{ $classes->jenjang == $jurusan ? 'selected' : '' }}>
-                                                        {{ $jurusan }}
+                                                @foreach ($jurusan as $jur)
+                                                    <option value="{{ $jur->id }}" data-id="{{ $jur->level }}"
+                                                        {{ $classes->id_school_level == $jur->id ? 'selected' : '' }}>
+                                                        {{ $jur->level }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -47,24 +47,16 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="">Jurusan <code>*</code></label>
-                                            <input type="text" class="form-control" name="jurusan" placeholder="Jurusan"
-                                                required value="{{ $classes->jurusan }}">
-                                            <div class="invalid-feedback">
-                                                Data wajib diisi.
-                                            </div>
-                                            @error('jurusan')
-                                                <small class="text-danger">{{ $message }}</small>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="">Kelas <code>*</code></label>
-                                            <input type="text" class="form-control" name="kelas" placeholder="Kelas"
-                                                required value="{{ $classes->class }}">
+                                            <label for="">Kelas</label>
+                                            <select class="form-control select select2 kelas" name="kelas" id="kelas">
+                                                <option value="">--Pilih Kelas--</option>
+                                                @foreach ($kelas as $kls)
+                                                    <option value="{{ $kls->id }}"
+                                                        {{ $kls->id == $classes->class_id ? 'selected' : '' }}>
+                                                        {{ $kls->classes . ' ' . $kls->jurusan . ' ' . $kls->type }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
@@ -73,9 +65,24 @@
                                             @enderror
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="">Type</label>
+                                            <label for="">Jurusan</label>
+                                            <input type="text" class="form-control" name="jurusan" placeholder="Jurusan"
+                                                value="{{ $classes->jurusan }}">
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            @error('jurusan')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="">Type <code>1 atau 2</code></label>
                                             <input type="text" class="form-control" name="type" placeholder="Type"
                                                 value="{{ $classes->type }}">
                                             <div class="invalid-feedback">
@@ -102,4 +109,38 @@
             </form>
         </div>
     </div>
+    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $(".jenjang").change(function() {
+                let jenjang = $(this).val();
+                data_id_jenjang = this.querySelector(':checked').getAttribute('data-id');
+                if (data_id_jenjang == 'KB' || data_id_jenjang == 'TK') {
+                    document.getElementById("kelas").required = false;
+                } else {
+                    document.getElementById("kelas").required = true;
+                }
+                $(".kelas option").remove();
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('classes.get_school_class') }}',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        jenjang
+                    },
+                    success: response => {
+                        $('.kelas').append(`<option value="">-- Pilih Kelas --</option>`)
+                        $.each(response.message, function(i, item) {
+                            $('.kelas').append(
+                                `<option value="${item.id}">${item.classes}</option>`
+                            )
+                        })
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            });
+        });
+    </script>
 @endsection

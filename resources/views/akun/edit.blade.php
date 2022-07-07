@@ -38,7 +38,8 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Roles <code>*</code></label>
-                                            <select class="form-control select select2" name="roles" required>
+                                            <select class="form-control select select2" name="roles" id="roles"
+                                                required>
                                                 @if ($akun->roles === 'Admin')
                                                     <option value="">--Pilih Roles--</option>
                                                     <option value="Admin"
@@ -90,8 +91,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" {{ Auth::user()->roles === 'Admin' ? '' : 'hidden' }}>
-                                    <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6" id="kelas_class">
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Kelas
+                                                <code>*</code></label>
+                                            <select class="form-control select select2" name="id_school_level"
+                                                id="id_school_level">
+                                                <option value="">--Pilih Kelas--</option>
+                                                @foreach ($school_level as $itm)
+                                                    <option value="{{ $itm->id }}"
+                                                        {{ $itm->id === $akun->id_school_level ? 'selected' : '' }}>
+                                                        {{ $itm->level }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" {{ Auth::user()->roles === 'Admin' ? '' : 'hidden' }}>
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Status Aktif
                                                 <code>*</code></label>
@@ -130,4 +149,28 @@
         </div>
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            // onload
+            let roles = document.getElementById("roles").value;
+            if (roles == 'Siswa') {
+                document.getElementById("id_school_level").required = true;
+                document.getElementById("kelas_class").style.display = 'block';
+            } else {
+                document.getElementById("id_school_level").required = false;
+                document.getElementById("kelas_class").style.display = 'none';
+            }
+            // change dropdown siswa
+            $('#roles').bind('change', function() {
+                let roles = document.getElementById("roles").value;
+                if (roles == 'Siswa') {
+                    document.getElementById("id_school_level").required = true;
+                    document.getElementById("kelas_class").style.display = 'block';
+                } else {
+                    document.getElementById("id_school_level").required = false;
+                    document.getElementById("kelas_class").style.display = 'none';
+                }
+            });
+        });
+    </script>
 @endsection
