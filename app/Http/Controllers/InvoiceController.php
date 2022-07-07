@@ -92,15 +92,28 @@ class InvoiceController extends Controller
             'submenu' => $this->submenu,
             'label' => 'tambah ' . $this->submenu,
             'bills' => Bills::orderBY('bills', 'ASC')->get(),
-            'students' => Siswa::all(),
-            'classes' => Classes::groupBY('jenjang')->orderByRaw("FIELD(jenjang, 'TK', 'SD', 'SMP', 'SMA', 'SMK')")->get(),
         ];
         return view('invoice.create')->with($data);
     }
 
     public function get_jenjang(Request $request)
     {
-        return Classes::groupBY('jenjang')->orderByRaw("FIELD(jenjang, 'TK', 'SD', 'SMP', 'SMA', 'SMK')")->get();
+        $kelas = DB::table('classes')
+            ->select('classes.id', 'level', 'school_class.classes', 'jurusan', 'type')
+            ->join('school_class', 'school_class.id', '=', 'classes.class_id')
+            ->join('school_level', 'school_level.id', '=', 'school_class.school_level_id')
+            ->get();
+        if (count($kelas) > 0) {
+            return response()->json([
+                'code' => 200,
+                'data' => $kelas,
+            ]);
+        } else {
+            return response()->json([
+                'code' => 400,
+                'data' => null,
+            ]);
+        }
     }
 
     public function get_siswa(Request $request)
@@ -108,10 +121,62 @@ class InvoiceController extends Controller
         $siswa = DB::table('siswa')
             ->select('siswa.id', 'siswa.nama_lengkap')
             ->join('classes', 'classes.id', '=', 'siswa.class_id')
-            ->where('classes.jenjang', '=', $request->class_jenjang)
+            ->where('classes.id', '=', $request->class_jenjang)
             ->get();
-        return $siswa;
+        if (count($siswa) > 0) {
+            return response()->json([
+                'code' => 200,
+                'data' => $siswa,
+            ]);
+        } else {
+            return response()->json([
+                'code' => 400,
+                'data' => null,
+            ]);
+        }
     }
+
+    public function cek_siswa_manual(Request $request)
+    {
+        return redirect('search/' . Crypt::encryptString($request->siswa_id) . '/' . $request->year . '/' . $request->month . '/' . $request->bills_id);
+    }
+
+    public function search($siswa_id = null, $year = null, $month = null, $payment = null)
+    {
+        $student = Siswa::findorfail(Crypt::decryptString($siswa_id));
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => $this->submenu,
+            'label' => 'tambah ' . $this->submenu,
+            'students' => $student,
+            'invoice' => Invoice::where('siswa_id', $student->id)->get(),
+        ];
+        return view('invoice.search')->with($data);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function get_class(Request $request)
     {

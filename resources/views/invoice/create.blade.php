@@ -15,7 +15,8 @@
                     </div>
                 </div>
             </div>
-            <form class="needs-validation" action="{{ route('invoice.store') }}" method="POST" novalidate>
+            {{-- <form class="needs-validation" action="{{ route('invoice.store') }}" method="POST" novalidate> --}}
+            <form class="needs-validation" action="{{ route('invoice.cek_siswa_manual') }}" method="POST" novalidate>
                 @csrf
                 <div class="row">
                     <div class="col-xl-12">
@@ -31,7 +32,7 @@
                                                 @for ($i = 2022; $i <= date('Y') + 1; $i++)
                                                     <option value='{{ $i }}'
                                                         {{ $i == date('Y') ? 'selected' : '' }}>
-                                                        {{ $i }}
+                                                        {{ $i . ' s/d ' . $i + 1 }}
                                                     </option>
                                                 @endfor
                                             </select>
@@ -107,11 +108,6 @@
                                             <select class="form-control select select2 siswa" name="siswa_id" id="siswa_id"
                                                 required>
                                                 <option value="">--Pilih Siswa--</option>
-                                                @foreach ($students as $student)
-                                                    <option value="{{ $student->id }}">
-                                                        {{ $student->nik . ' - ' . $student->nama_lengkap }}
-                                                    </option>
-                                                @endforeach
                                             </select>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
@@ -148,7 +144,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div hidden>
+                                <div>
                                     <label for="">payment_value</label>
                                     <input type="text" name="payment_value" id="payment_value">
                                     <label for="">class_id</label>
@@ -206,9 +202,9 @@
                     },
                     success: response => {
                         $('.classes').append(`<option value="">-- Pilih Jenjang --</option>`)
-                        $.each(response, function(i, item) {
+                        $.each(response.data, function(i, item) {
                             $('.classes').append(
-                                `<option value="${item.jenjang}">${item.jenjang}</option>`
+                                `<option value="${item.id}">${item.level+' '+item.classes+' '+item.jurusan+' '+item.type}</option>`
                             )
                         })
                     },
@@ -230,7 +226,7 @@
                     },
                     success: response => {
                         $('.siswa').append(`<option value="">-- Pilih Siswa --</option>`)
-                        $.each(response, function(i, item) {
+                        $.each(response.data, function(i, item) {
                             $('.siswa').append(
                                 `<option value="${item.id}">${item.nama_lengkap}</option>`
                             )
@@ -245,99 +241,99 @@
                 });
             });
 
-            $(".siswa").change(function() {
-                let siswa_id = $(this).val();
-                let jenjang = document.getElementById("jenjang").value;
-                if (siswa_id) {
-                    // get kelas siswa
-                    $.ajax({
-                        type: "POST",
-                        url: '{{ route('invoice.get_class') }}',
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            siswa_id,
-                            jenjang
-                        },
-                        success: response => {
-                            document.getElementById("class_siswa").value = response[0].jenjang +
-                                ' - [ ' + response[0].class + ' ]';
-                            document.getElementById("class_id").value = response[0].class_id;
-                        },
-                        error: (err) => {
-                            console.log(err);
-                        },
-                    });
+            // $(".siswa").change(function() {
+            //     let siswa_id = $(this).val();
+            //     let jenjang = document.getElementById("jenjang").value;
+            //     if (siswa_id) {
+            //         // get kelas siswa
+            //         $.ajax({
+            //             type: "POST",
+            //             url: '{{ route('invoice.get_class') }}',
+            //             data: {
+            //                 "_token": "{{ csrf_token() }}",
+            //                 siswa_id,
+            //                 jenjang
+            //             },
+            //             success: response => {
+            //                 document.getElementById("class_siswa").value = response[0].jenjang +
+            //                     ' - [ ' + response[0].class + ' ]';
+            //                 document.getElementById("class_id").value = response[0].class_id;
+            //             },
+            //             error: (err) => {
+            //                 console.log(err);
+            //             },
+            //         });
 
-                    // cek sudah input invoice belum 
-                    let year = document.getElementById("year").value;
-                    let month = document.getElementById("month").value;
-                    let bills_id = document.getElementById("bills_id").value;
-                    let payment_value = document.getElementById("payment_value").value;
-                    $.ajax({
-                        type: "POST",
-                        url: '{{ route('invoice.cek_payment') }}',
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            siswa_id,
-                            jenjang,
-                            year,
-                            bills_id,
-                            month,
-                            payment_value,
-                        },
-                        success: response => {
-                            if (response.count > 0) {
-                                Swal.fire(
-                                    'Gagal',
-                                    'Pembayaran sudah dibayar',
-                                    'error'
-                                )
-                                document.getElementById("submit").disabled = true;
-                                document.getElementById("payment_done").value = true;
-                            } else {
-                                document.getElementById("submit").disabled = false;
-                                document.getElementById("payment_done").value = false;
-                            }
-                        },
-                        error: (err) => {
-                            console.log(err);
-                        },
-                    });
+            //         // cek sudah input invoice belum 
+            //         let year = document.getElementById("year").value;
+            //         let month = document.getElementById("month").value;
+            //         let bills_id = document.getElementById("bills_id").value;
+            //         let payment_value = document.getElementById("payment_value").value;
+            //         $.ajax({
+            //             type: "POST",
+            //             url: '{{ route('invoice.cek_payment') }}',
+            //             data: {
+            //                 "_token": "{{ csrf_token() }}",
+            //                 siswa_id,
+            //                 jenjang,
+            //                 year,
+            //                 bills_id,
+            //                 month,
+            //                 payment_value,
+            //             },
+            //             success: response => {
+            //                 if (response.count > 0) {
+            //                     Swal.fire(
+            //                         'Gagal',
+            //                         'Pembayaran sudah dibayar',
+            //                         'error'
+            //                     )
+            //                     document.getElementById("submit").disabled = true;
+            //                     document.getElementById("payment_done").value = true;
+            //                 } else {
+            //                     document.getElementById("submit").disabled = false;
+            //                     document.getElementById("payment_done").value = false;
+            //                 }
+            //             },
+            //             error: (err) => {
+            //                 console.log(err);
+            //             },
+            //         });
 
-                    // get payment dan cek sudah input setting payment belum 
-                    $.ajax({
-                        type: "POST",
-                        url: '{{ route('invoice.get_payment') }}',
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            siswa_id,
-                            jenjang,
-                            year,
-                            bills_id
-                        },
-                        success: response => {
-                            if (response > 0) {
-                                document.getElementById("amount").value = setMoney(response);
-                            } else {
-                                document.getElementById("amount").value = '';
-                                document.getElementById("submit").disabled = true;
-                                payment_done = document.getElementById("payment_done").value;
-                                if (payment_done == true) {
-                                    document.getElementById("submit").disabled = true;
-                                }
-                                Swal.fire(
-                                    'Gagal',
-                                    'Setting biaya belum diinput',
-                                    'error'
-                                )
-                            }
-                        },
-                        error: (err) => {
-                            console.log(err);
-                        },
-                    });
-                }
-            });
+            //         // get payment dan cek sudah input setting payment belum 
+            //         $.ajax({
+            //             type: "POST",
+            //             url: '{{ route('invoice.get_payment') }}',
+            //             data: {
+            //                 "_token": "{{ csrf_token() }}",
+            //                 siswa_id,
+            //                 jenjang,
+            //                 year,
+            //                 bills_id
+            //             },
+            //             success: response => {
+            //                 if (response > 0) {
+            //                     document.getElementById("amount").value = setMoney(response);
+            //                 } else {
+            //                     document.getElementById("amount").value = '';
+            //                     document.getElementById("submit").disabled = true;
+            //                     payment_done = document.getElementById("payment_done").value;
+            //                     if (payment_done == true) {
+            //                         document.getElementById("submit").disabled = true;
+            //                     }
+            //                     Swal.fire(
+            //                         'Gagal',
+            //                         'Setting biaya belum diinput',
+            //                         'error'
+            //                     )
+            //                 }
+            //             },
+            //             error: (err) => {
+            //                 console.log(err);
+            //             },
+            //         });
+            //     }
+            // });
         });
     </script>
 @endsection

@@ -174,9 +174,14 @@ Route::group(
         Route::resource('/classes', ClassesController::class);
         Route::post('/get_school_class', [ClassesController::class, 'get_school_class'])->name('classes.get_school_class');
         Route::resource('/invoice', InvoiceController::class);
-        Route::get('/list_invoice', [InvoiceController::class, 'list_invoice'])->name('invoice.list_invoice');
         Route::post('/get_jenjang', [InvoiceController::class, 'get_jenjang'])->name('invoice.get_jenjang');
         Route::post('/get_siswa', [InvoiceController::class, 'get_siswa'])->name('invoice.get_siswa');
+        Route::post('/cek_siswa_manual', [InvoiceController::class, 'cek_siswa_manual'])->name('invoice.cek_siswa_manual');
+        Route::get('/search/{id}/{year?}/{month?}/{payment?}', [InvoiceController::class, 'search'])->name('invoice.search');
+        // search
+
+
+        Route::get('/list_invoice', [InvoiceController::class, 'list_invoice'])->name('invoice.list_invoice');
         Route::post('/get_class', [InvoiceController::class, 'get_class'])->name('invoice.get_class');
         Route::post('/get_payment', [InvoiceController::class, 'get_payment'])->name('invoice.get_payment');
         Route::post('/cek_payment', [InvoiceController::class, 'cek_payment'])->name('invoice.cek_payment');
