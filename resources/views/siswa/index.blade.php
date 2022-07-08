@@ -20,8 +20,17 @@
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="mdi mdi-plus me-1"></i> Tambah Siswa
                                     </a>
-                                    <button id="button_trigger" class="btn btn-primary btn-sm" data-toggle="modal"
-                                        data-target="#csvModal">Import CSV</button>
+                                @endif
+                                @if (Auth::user()->roles == 'Admin')
+                                    <a href="{{ route('siswa.csv_download') }}"
+                                        class="float-end btn btn-warning btn-rounded waves-effect waves-light mb-2 me-2"
+                                        class="btn btn-primary btn-sm"><i class="bx bx-cloud-download me-1"></i>Download
+                                        File
+                                        Import</a>
+                                    <a href="#"
+                                        class="float-end btn btn-primary btn-rounded waves-effect waves-light mb-2 me-2"
+                                        id="button_trigger" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#csvModal"><i class="bx bx-import me-1"></i>Import CSV</a>
                                 @endif
                             </ol>
                         </div>
@@ -45,6 +54,7 @@
                                         <th class="text-center">No</th>
                                         <th class="text-center">NISN</th>
                                         <th class="text-center">Nama Lengkap</th>
+                                        <th class="text-center">Email</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -66,7 +76,7 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Import Data Siswa</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -115,6 +125,9 @@
                     },
                     {
                         data: 'nama_lengkap'
+                    },
+                    {
+                        data: 'email'
                     },
                     {
                         data: 'Opsi',

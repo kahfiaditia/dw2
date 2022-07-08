@@ -59,4 +59,11 @@ class AlertHelper
             Alert::error('Gagal', 'Gagal import file');
         }
     }
+
+    public static function uploadValidation($info)
+    {
+        if ($info !== true) {
+            Alert::error('Gagal', 'Format file harus CSV');
+        }
+    }
 }

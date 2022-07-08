@@ -20,6 +20,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class SiswaController extends Controller
 {
@@ -925,6 +926,17 @@ class SiswaController extends Controller
 
     public function import_csv(Request $request)
     {
+        $original_extension = $request->file('student_csv')->getClientOriginalExtension();
+
+        if ($original_extension !== 'csv') {
+            AlertHelper::uploadValidation(false);
+            return back();
+        }
+
+        $request->validate([
+            'student_csv' => 'mimes:csv,txt',
+        ]);
+
         DB::beginTransaction();
         try {
             Excel::import(new StudentImport, $request->file('student_csv'));
@@ -937,5 +949,10 @@ class SiswaController extends Controller
             AlertHelper::import(false);
             return back();
         }
+    }
+
+    public function csv_download()
+    {
+        return Storage::download('public/student/import_student.xls');
     }
 }
