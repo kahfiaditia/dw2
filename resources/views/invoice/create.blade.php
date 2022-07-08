@@ -15,14 +15,95 @@
                     </div>
                 </div>
             </div>
+
             {{-- <form class="needs-validation" action="{{ route('invoice.store') }}" method="POST" novalidate> --}}
-            <form class="needs-validation" action="{{ route('invoice.cek_siswa_manual') }}" method="POST" novalidate>
+            <form class="needs-validation" action="{{ route('invoice.pencarian_siswa') }}" method="POST" novalidate>
                 @csrf
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
+                                    @if (session()->has('logError'))
+                                        <div class="p-2">
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ Session::get('logError') }}
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button fw-medium" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    Pencarian Manual
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse show"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionExample"
+                                                style="">
+                                                <div class="accordion-body">
+                                                    <div class="text-muted">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="">Jenjang </label>
+                                                                    <select class="form-control select select2 classes"
+                                                                        name="jenjang" id="jenjang">
+                                                                        <option value="">--Pilih Jenjang--</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="">Siswa </label>
+                                                                    <select class="form-control select select2 siswa"
+                                                                        name="siswa_id" id="siswa_id">
+                                                                        <option value="">--Pilih Siswa--</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button fw-medium" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    Pencarian NISN
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse show"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="text-muted">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="">NISN</label>
+                                                                    <input type="text" class="form-control"
+                                                                        name="nisn" placeholder="NISN">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="">NIK/NIS</label>
+                                                                    <input type="text" class="form-control"
+                                                                        name="nik" placeholder="NIK/NIS">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="row">
                                     <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="">Tahun <code>*</code></label>
@@ -87,38 +168,6 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="mb-3">
-                                            <label for="">Jenjang <code>*</code></label>
-                                            <select class="form-control select select2 classes" name="jenjang"
-                                                id="jenjang" required>
-                                                <option value="">--Pilih Jenjang--</option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                Data wajib diisi.
-                                            </div>
-                                            @error('jenjang')
-                                                <small class="text-danger">{{ $message }}</small>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="mb-3">
-                                            <label for="">Siswa <code>*</code></label>
-                                            <select class="form-control select select2 siswa" name="siswa_id" id="siswa_id"
-                                                required>
-                                                <option value="">--Pilih Siswa--</option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                Data wajib diisi.
-                                            </div>
-                                            @error('siswa_id')
-                                                <small class="text-danger">{{ $message }}</small>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="mb-3">
                                             <label for="">Kelas</label>
                                             <input type="text" class="form-control class_siswa" name="class_siswa"
                                                 id="class_siswa" readonly placeholder="Kelas">
@@ -143,21 +192,21 @@
                                             @enderror
                                         </div>
                                     </div>
-                                </div>
-                                <div>
+                                </div> --}}
+                                {{-- <div hidden>
                                     <label for="">payment_value</label>
                                     <input type="text" name="payment_value" id="payment_value">
                                     <label for="">class_id</label>
                                     <input type="text" name="class_id" id="class_id">
                                     <label for="">payment_done</label>
                                     <input type="text" name="payment_done" id="payment_done">
-                                </div>
+                                </div> --}}
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
                                         <a href="{{ route('invoice.index') }}"
                                             class="btn btn-secondary waves-effect">Kembali</a>
                                         <button class="btn btn-primary" type="submit" style="float: right"
-                                            id="submit">Simpan</button>
+                                            id="submit">Cari</button>
                                     </div>
                                 </div>
                             </div>
@@ -185,33 +234,22 @@
                 $('#amount').val("")
             });
 
-            $(".bills_id").change(function() {
-                paymentText = this.querySelector(':checked').getAttribute('data-id')
-                document.getElementById("payment_value").value = paymentText;
-                $('#siswa').val("").trigger('change')
-                $('#jenjang').val("").trigger('change')
-                $('#class_siswa').val("")
-                $('#amount').val("")
-                // menampilkan jenjang sekolah
-                $(".classes option").remove();
-                $.ajax({
-                    type: "POST",
-                    url: '{{ route('invoice.get_jenjang') }}',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                    },
-                    success: response => {
-                        $('.classes').append(`<option value="">-- Pilih Jenjang --</option>`)
-                        $.each(response.data, function(i, item) {
-                            $('.classes').append(
-                                `<option value="${item.id}">${item.level+' '+item.classes+' '+item.jurusan+' '+item.type}</option>`
-                            )
-                        })
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    },
-                });
+            $.ajax({
+                type: "POST",
+                url: '{{ route('invoice.get_jenjang') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: response => {
+                    $.each(response.data, function(i, item) {
+                        $('.classes').append(
+                            `<option value="${item.id}">${item.level+' '+item.classes+' '+item.jurusan+' '+item.type}</option>`
+                        )
+                    })
+                },
+                error: (err) => {
+                    console.log(err);
+                },
             });
 
             $(".classes").change(function() {
@@ -240,6 +278,45 @@
                     },
                 });
             });
+
+
+
+
+
+
+
+
+
+            // -----------------------------------------------------------------------------------------------------------------------
+
+            // $(".bills_id").change(function() {
+            //     paymentText = this.querySelector(':checked').getAttribute('data-id')
+            //     document.getElementById("payment_value").value = paymentText;
+            //     $('#siswa').val("").trigger('change')
+            //     $('#jenjang').val("").trigger('change')
+            //     $('#class_siswa').val("")
+            //     $('#amount').val("")
+            //     // menampilkan jenjang sekolah
+            //     $(".classes option").remove();
+            //     $.ajax({
+            //         type: "POST",
+            //         url: '{{ route('invoice.get_jenjang') }}',
+            //         data: {
+            //             "_token": "{{ csrf_token() }}",
+            //         },
+            //         success: response => {
+            //             $('.classes').append(`<option value="">-- Pilih Jenjang --</option>`)
+            //             $.each(response.data, function(i, item) {
+            //                 $('.classes').append(
+            //                     `<option value="${item.id}">${item.level+' '+item.classes+' '+item.jurusan+' '+item.type}</option>`
+            //                 )
+            //             })
+            //         },
+            //         error: (err) => {
+            //             console.log(err);
+            //         },
+            //     });
+            // });
 
             // $(".siswa").change(function() {
             //     let siswa_id = $(this).val();

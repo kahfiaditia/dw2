@@ -136,21 +136,52 @@ class InvoiceController extends Controller
         }
     }
 
-    public function cek_siswa_manual(Request $request)
+    public function pencarian_siswa(Request $request)
     {
-        return redirect('search/' . Crypt::encryptString($request->siswa_id) . '/' . $request->year . '/' . $request->month . '/' . $request->bills_id);
+        if ($request->siswa_id) {
+            $siswa_id = Crypt::encryptString($request->siswa_id);
+        } elseif ($request->nik or $request->nisn) {
+            $where = [];
+            if ($request->nik) {
+                $nik = array('nik' => $request->nik);
+                array_push($where, $nik);
+            } else {
+                $nik = array();
+            }
+            if ($request->nisn) {
+                $nisn = array('nisn' => $request->nisn);
+                array_push($where, $nisn);
+            } else {
+                $nisn = array();
+            }
+            $where = $nik + $nisn;
+            $siswa = Siswa::where($where)->get();
+            if (count($siswa) > 0) {
+                $siswa_id = Crypt::encryptString($siswa[0]->id);
+            } else {
+                return back()->with('logError', 'Pencarian data tidak ditemukan.');
+            }
+        } else {
+            return back()->with('logError', "Salah satu data pencarian Siswa/NISN/NIK/NIS wajib diisi.");
+        }
+        return redirect('search/' . $siswa_id);
     }
 
-    public function search($siswa_id = null, $year = null, $month = null, $payment = null)
+    public function search($siswa_id)
     {
         $student = Siswa::findorfail(Crypt::decryptString($siswa_id));
+        $payment = DB::table('bills')
+            ->leftJoin('payment', 'payment.bills_id', '=', 'bills.id')
+            ->where('school_level_id', $student->classes_student->id_school_level)
+            ->get();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'tambah ' . $this->submenu,
             'students' => $student,
-            'invoice' => Invoice::where('siswa_id', $student->id)->get(),
+            'bills' => $payment,
+            // 'invoice' => Invoice::where('siswa_id', $student->id)->get(),
         ];
         return view('invoice.search')->with($data);
     }

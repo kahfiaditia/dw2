@@ -51,7 +51,7 @@
                                             <td class="text-center">
                                                 {{ $item->schools_class ? $item->schools_class->classes : '' }}</td>
                                             <td class="text-center">{{ $item->bills->bills }}</td>
-                                            <td class="text-center">{{ number_format($item->amount, 0, ',') }}</td>
+                                            <td align="right">{{ number_format($item->amount, 0, ',') }}</td>
                                             <td class="text-center">
                                                 <form class="delete-form"
                                                     action="{{ route('payment.destroy', Crypt::encryptString($item->id)) }}"

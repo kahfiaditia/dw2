@@ -13,8 +13,8 @@ use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NeedsController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
-use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -133,7 +133,9 @@ Route::group(
 );
 
 Route::group(
-    ['middleware' => 'auth'],
+    [
+        'middleware' => 'auth'
+    ],
     function () {
         Route::get('/edit_kesejahteraan/{id}', [SiswaController::class, 'edit_kesejahteraan'])->name('siswa.edit_kesejahteraan');
         Route::get('/index_kesejahteraan_siswa/{id}', [SiswaController::class, 'index_kesejahteraan_siswa'])->name('siswa.index_kesejahteraan_siswa');
@@ -176,8 +178,10 @@ Route::group(
         Route::resource('/invoice', InvoiceController::class);
         Route::post('/get_jenjang', [InvoiceController::class, 'get_jenjang'])->name('invoice.get_jenjang');
         Route::post('/get_siswa', [InvoiceController::class, 'get_siswa'])->name('invoice.get_siswa');
-        Route::post('/cek_siswa_manual', [InvoiceController::class, 'cek_siswa_manual'])->name('invoice.cek_siswa_manual');
-        Route::get('/search/{id}/{year?}/{month?}/{payment?}', [InvoiceController::class, 'search'])->name('invoice.search');
+        Route::post('/pencarian_siswa', [InvoiceController::class, 'pencarian_siswa'])->name('invoice.pencarian_siswa');
+        Route::get('/search/{id}', [InvoiceController::class, 'search'])->name('invoice.search');
+        Route::resource('/primession', PrimessionController::class);
+        Route::get('/data_primession', [PrimessionController::class, 'data_primession'])->name('primession.data_primession');
         // search
 
 
