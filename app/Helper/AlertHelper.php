@@ -50,4 +50,20 @@ class AlertHelper
             Alert::error('Gagal', 'Gagal disimpan, data sudah ada');
         }
     }
+
+    public static function import($info)
+    {
+        if ($info) {
+            Alert::success('Berhasil', 'Berhasil import file');
+        } else {
+            Alert::error('Gagal', 'Gagal import file');
+        }
+    }
+
+    public static function uploadValidation($info)
+    {
+        if ($info !== true) {
+            Alert::error('Gagal', 'Format file harus CSV');
+        }
+    }
 }

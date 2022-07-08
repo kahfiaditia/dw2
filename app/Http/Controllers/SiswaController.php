@@ -8,6 +8,7 @@ use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Helper\AlertHelper;
+use App\Imports\StudentImport;
 use App\Models\Beasiswa;
 use App\Models\Kesejahteraan_siswa;
 use Yajra\DataTables\DataTables;
@@ -18,6 +19,8 @@ use App\Models\Prestasi;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class SiswaController extends Controller
 {
@@ -919,5 +922,37 @@ class SiswaController extends Controller
             AlertHelper::updateAlert(false);
             return back();
         }
+    }
+
+    public function import_csv(Request $request)
+    {
+        $original_extension = $request->file('student_csv')->getClientOriginalExtension();
+
+        if ($original_extension !== 'csv') {
+            AlertHelper::uploadValidation(false);
+            return back();
+        }
+
+        $request->validate([
+            'student_csv' => 'mimes:csv,txt',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            Excel::import(new StudentImport, $request->file('student_csv'));
+            DB::commit();
+            AlertHelper::import(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::import(false);
+            return back();
+        }
+    }
+
+    public function csv_download()
+    {
+        return Storage::download('public/student/import_student.xls');
     }
 }

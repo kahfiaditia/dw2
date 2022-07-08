@@ -21,6 +21,17 @@
                                         <i class="mdi mdi-plus me-1"></i> Tambah Siswa
                                     </a>
                                 @endif
+                                @if (Auth::user()->roles == 'Admin')
+                                    <a href="{{ route('siswa.csv_download') }}"
+                                        class="float-end btn btn-warning btn-rounded waves-effect waves-light mb-2 me-2"
+                                        class="btn btn-primary btn-sm"><i class="bx bx-cloud-download me-1"></i>Download
+                                        File
+                                        Import</a>
+                                    <a href="#"
+                                        class="float-end btn btn-primary btn-rounded waves-effect waves-light mb-2 me-2"
+                                        id="button_trigger" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#csvModal"><i class="bx bx-import me-1"></i>Import CSV</a>
+                                @endif
                             </ol>
                         </div>
                     </div>
@@ -28,6 +39,13 @@
             </div>
             <div class="row">
                 <div class="col-12">
+                    @if ($errors->all())
+                        <div class="alert alert-danger alert-dismissible">
+                            @foreach ($errors->all() as $error)
+                                {{ $error }} <br>
+                            @endforeach
+                        </div>
+                    @endif
                     <div class="card">
                         <div class="card-body">
                             <table id="mydata" class="table table-striped dt-responsive nowrap w-100">
@@ -36,6 +54,7 @@
                                         <th class="text-center">No</th>
                                         <th class="text-center">NISN</th>
                                         <th class="text-center">Nama Lengkap</th>
+                                        <th class="text-center">Email</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -49,7 +68,42 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="csvModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="{{ route('student.import_csv') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import Data Siswa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="">Upload File CSV</label>
+                        <input type="file" class="form-control" name="student_csv">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"
+                            id="cancel">Close</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        $("#button_trigger").on('click', function() {
+            $("#csvModal").modal('show')
+        })
+
+        $("#cancel").on('click', function() {
+            $("#csvModal").modal('toggle')
+        })
+
         $(function() {
             $('#mydata').DataTable({
                 destroy: true,
@@ -71,6 +125,9 @@
                     },
                     {
                         data: 'nama_lengkap'
+                    },
+                    {
+                        data: 'email'
                     },
                     {
                         data: 'Opsi',

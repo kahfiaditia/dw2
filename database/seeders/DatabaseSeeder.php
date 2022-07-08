@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AgamaSeeder::class,
+            SubMenuSeeder::class
             SchoolLevelSeeder::class,
             MenuSeeder::class,
             SubMenuSeeder::class,
