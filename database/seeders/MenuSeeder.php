@@ -37,12 +37,12 @@ class MenuSeeder extends Seeder
                 'menu' => 'Agama',
                 'icon' => 'bx bx-list-ul',
                 'sub_menu' => '0',
-                'order_menu' => '5',
+                'order_menu' => '6',
             ], [
                 'menu' => 'Kodepos',
                 'icon' => 'bx bx-directions',
                 'sub_menu' => '0',
-                'order_menu' => '6',
+                'order_menu' => '7',
             ], [
                 'menu' => 'Siswa',
                 'icon' => 'bx bx-group',
@@ -52,27 +52,32 @@ class MenuSeeder extends Seeder
                 'menu' => 'Kebutuhan Khusus',
                 'icon' => 'bx bx-accessibility',
                 'sub_menu' => '0',
-                'order_menu' => '7',
+                'order_menu' => '8',
             ], [
                 'menu' => 'Tagihan',
                 'icon' => 'bx bx-receipt',
                 'sub_menu' => '0',
-                'order_menu' => '9',
+                'order_menu' => '10',
             ], [
                 'menu' => 'Kelas',
                 'icon' => 'bx bxs-school',
                 'sub_menu' => '0',
-                'order_menu' => '8',
+                'order_menu' => '9',
             ], [
                 'menu' => 'Pembayaran',
                 'icon' => 'bx bx-wallet',
                 'sub_menu' => '0',
-                'order_menu' => '11',
+                'order_menu' => '12',
             ], [
                 'menu' => 'Setting Pembayaran',
                 'icon' => 'bx bx-wallet-alt',
                 'sub_menu' => '0',
-                'order_menu' => '10',
+                'order_menu' => '11',
+            ], [
+                'menu' => 'Hak Akses',
+                'icon' => 'bx bx-select-multiple',
+                'sub_menu' => '0',
+                'order_menu' => '5',
             ]
         ];
         DB::table('menu')->insert($menus);

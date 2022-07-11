@@ -102,6 +102,10 @@ class SubMenuSeeder extends Seeder
                 'submenu' => 'Setting Pembayaran', 'route_submenu' => 'payment.index', 'type_menu' => 'edit', 'menu_id' => '11',
             ], [
                 'submenu' => 'Setting Pembayaran', 'route_submenu' => 'payment.index', 'type_menu' => 'delete', 'menu_id' => '11',
+            ], [
+                'submenu' => 'Hak Akses', 'route_submenu' => 'primession.index', 'type_menu' => 'view', 'menu_id' => '12',
+            ], [
+                'submenu' => 'Hak Akses', 'route_submenu' => 'primession.index', 'type_menu' => 'insert', 'menu_id' => '12',
             ]
         ];
         DB::table('submenu')->insert($sub_menus);

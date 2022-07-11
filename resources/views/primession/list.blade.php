@@ -17,7 +17,7 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('8', $session_menu))
+                                @if (in_array('8', $session_menu) and Request::segment(1) == 'akun')
                                     <a href="{{ route('akun.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="mdi mdi-plus me-1"></i> Tambah Akun
@@ -39,7 +39,6 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Roles</th>
-                                        <th>Verifikasi Email</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -62,7 +61,7 @@
                 serverSide: true,
                 responsive: true,
                 ajax: {
-                    url: "{{ route('akun.data_ajax') }}",
+                    url: "{{ route('primession.data_primession') }}",
                     data: function(d) {
                         d.search = $('input[type="search"]').val()
                     }
@@ -87,11 +86,6 @@
                     {
                         data: 'roles',
                         name: 'roles'
-                    },
-                    {
-                        data: 'verifikasi',
-                        name: 'verifikasi',
-                        className: 'text-center'
                     },
                     {
                         data: 'status',
