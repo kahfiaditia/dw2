@@ -953,6 +953,7 @@ class SiswaController extends Controller
 
     public function csv_download()
     {
-        return Storage::download('public/student/import_student.xls');
+        $files = public_path('assets' . '\\' . 'files' . '\\' . 'import_student.xls');
+        return response()->download($files);
     }
 }
