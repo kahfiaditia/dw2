@@ -104,14 +104,14 @@
                                         <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
-                                                    <h5 class="font-size-14">NIK</h5>
-                                                    <p class="text-muted mb-0">{{ $student->nik }}</p>
+                                                    <h5 class="font-size-14">NISN</h5>
+                                                    <p class="text-muted mb-0">{{ $student->nisn }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
-                                                    <h5 class="font-size-14">NISN</h5>
-                                                    <p class="text-muted mb-0">{{ $student->nisn }}</p>
+                                                    <h5 class="font-size-14">NIK</h5>
+                                                    <p class="text-muted mb-0">{{ $student->nik }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
@@ -119,7 +119,7 @@
                                                     <h5 class="font-size-14">Kelas</h5>
                                                     <p class="text-muted mb-0">
                                                         @if ($student->classes_student)
-                                                            {{ $student->classes_student->jenjang . ' - [ ' . $student->classes_student->class . ' ]' }}
+                                                            {{ $student->classes_student->school_level->level . ' ' . $student->classes_student->school_class->classes . ' ' . $student->classes_student->jurusan . '.' . $student->classes_student->type }}
                                                         @else
                                                             -
                                                         @endif

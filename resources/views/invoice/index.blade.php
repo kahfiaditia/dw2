@@ -34,13 +34,14 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
-                                        <th class="text-center">Tahun</th>
+                                        <th class="text-center">Tahun Ajaran</th>
                                         <th class="text-center">Bulan</th>
                                         <th class="text-center">Pembayaran</th>
                                         <th class="text-center">Biaya</th>
+                                        <th class="text-center">NISN/NIK</th>
                                         <th class="text-center">Siswa</th>
                                         <th class="text-center">Jenjang</th>
-                                        <th class="text-center">Kelas</th>
+                                        <th class="text-center">Tanggal</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -94,6 +95,10 @@
                         render: $.fn.dataTable.render.number(',', '.')
                     },
                     {
+                        data: 'nik',
+                        name: 'nik',
+                    },
+                    {
                         data: 'siswa',
                         name: 'siswa',
                     },
@@ -102,8 +107,8 @@
                         name: 'jenjang',
                     },
                     {
-                        data: 'kelas',
-                        name: 'kelas',
+                        data: 'tanggal',
+                        name: 'tanggal',
                     },
                     {
                         data: 'action',

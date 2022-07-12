@@ -36,15 +36,15 @@
                                                 $jabatan = $avatar[0]->jabatan;
                                                 $karyawan_id = $avatar[0]->id;
                                                 ?>
-                                                <img src="{{ Storage::url('karyawan/foto/' . $avatar[0]->foto) }}" alt=""
-                                                    class="avatar-md rounded-circle img-thumbnail">
+                                                <img src="{{ Storage::url('karyawan/foto/' . $avatar[0]->foto) }}"
+                                                    alt="" class="avatar-md rounded-circle img-thumbnail">
                                             @else
                                                 <?php
                                                 $jabatan = null;
                                                 $karyawan_id = null;
                                                 ?>
-                                                <img src="{{ URL::asset('assets/images/users/avatar.png') }}" alt=""
-                                                    class="avatar-md rounded-circle img-thumbnail">
+                                                <img src="{{ URL::asset('assets/images/users/avatar.png') }}"
+                                                    alt="" class="avatar-md rounded-circle img-thumbnail">
                                             @endif
                                             <input type="hidden" id="roles" value="{{ Auth::user()->roles }}">
                                             <input type="hidden" id="jabatan" value="{{ $jabatan }}">
@@ -65,10 +65,10 @@
                                     </div>
                                 </div>
 
-                                {{-- <div class="col-lg-4 align-self-center">
+                                <div class="col-lg-4 align-self-center">
                                     <div class="text-lg-center mt-4 mt-lg-0">
                                         <div class="row">
-                                            <div class="col-4">
+                                            {{-- <div class="col-4">
                                                 <div>
                                                     <p class="text-muted text-truncate mb-2">Total Projects</p>
                                                     <h5 class="mb-0">48</h5>
@@ -86,7 +86,7 @@
                                                     <h5 class="mb-0">18</h5>
 
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -94,18 +94,43 @@
                                 <div class="col-lg-4 d-none d-lg-block">
                                     <div class="clearfix mt-4 mt-lg-0">
                                         <div class="dropdown float-end">
-                                            <button class="btn btn-primary dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bx bxs-cog align-middle me-1"></i> Setting
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else</a>
+                                            <div class="dropdown">
+                                                <button type="button" class="btn btn-light dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                                        class="mdi mdi-wallet me-1"></i> <span
+                                                        class="d-none d-sm-inline-block">Wallet Balance <i
+                                                            class="mdi mdi-chevron-down"></i></span></button>
+                                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-md"
+                                                    style="">
+                                                    <div class="dropdown-item-text">
+                                                        <div>
+                                                            <p class="text-muted mb-2">Available Balance</p>
+                                                            <h5 class="mb-0">$ 9148.23</h5>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="dropdown-divider"></div>
+
+                                                    <a class="dropdown-item" href="#">
+                                                        BTC : <span class="float-end">1.02356</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        ETH : <span class="float-end">0.04121</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        LTC : <span class="float-end">0.00356</span>
+                                                    </a>
+
+                                                    <div class="dropdown-divider"></div>
+
+                                                    <a class="dropdown-item text-primary text-center" href="#">
+                                                        Learn more
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -209,101 +234,80 @@
                     </div>
                     <!-- end row -->
                 </div>
-            </div>
+            </div> --}}
 
             <div class="row">
-                <div class="col-xl-8">
+                <div class="col-xl-6">
                     <div class="card">
                         <div class="card-body">
-                            <div class="clearfix">
-                                <div class="float-end">
-                                    <div class="input-group input-group-sm">
-                                        <select class="form-select form-select-sm">
-                                            <option value="JA" selected>Jan</option>
-                                            <option value="DE">Dec</option>
-                                            <option value="NO">Nov</option>
-                                            <option value="OC">Oct</option>
-                                        </select>
-                                        <label class="input-group-text">Month</label>
-                                    </div>
-                                </div>
-                                <h4 class="card-title mb-4">Earning</h4>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="text-muted">
-                                        <div class="mb-4">
-                                            <p>This month</p>
-                                            <h4>$2453.35</h4>
-                                            <div><span class="badge badge-soft-success font-size-12 me-1"> + 0.2% </span>
-                                                From previous period</div>
-                                        </div>
-
-                                        <div>
-                                            <a href="javascript: void(0);"
-                                                class="btn btn-primary waves-effect waves-light btn-sm">View Details <i
-                                                    class="mdi mdi-chevron-right ms-1"></i></a>
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <p class="mb-2">Last month</p>
-                                            <h5>$2281.04</h5>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-8">
-                                    <div id="line-chart" class="apex-charts" dir="ltr"></div>
-                                </div>
-                            </div>
+                            <h4 class="card-title mb-4">Order book</h4>
+                            {{ $invoice }}
                         </div>
                     </div>
                 </div>
-
-                <div class="col-xl-4">
+                <div class="col-xl-6">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title mb-4">Sales Analytics</h4>
+                            <h4 class="card-title mb-4">Pembayaran</h4>
 
-                            <div>
-                                <div id="donut-chart" class="apex-charts"></div>
-                            </div>
-
-                            <div class="text-center text-muted">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="mt-4">
-                                            <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-primary me-1"></i>
-                                                Product A</p>
-                                            <h5>$ 2,132</h5>
+                            <div data-simplebar="init" style="max-height: 310px;">
+                                <div class="simplebar-wrapper" style="margin: 0px;">
+                                    <div class="simplebar-height-auto-observer-wrapper">
+                                        <div class="simplebar-height-auto-observer"></div>
+                                    </div>
+                                    <div class="simplebar-mask">
+                                        <div class="simplebar-offset" style="right: -17px; bottom: 0px;">
+                                            <div class="simplebar-content-wrapper"
+                                                style="height: auto; overflow: hidden scroll;">
+                                                <div class="simplebar-content" style="padding: 0px;">
+                                                    <ul class="verti-timeline list-unstyled">
+                                                        @foreach ($invoice as $item)
+                                                            <li class="event-list">
+                                                                <div class="event-timeline-dot">
+                                                                    <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                                                </div>
+                                                                <div class="d-flex">
+                                                                    <div class="flex-shrink-0 me-3">
+                                                                        <h5 class="font-size-14">
+                                                                            {{ date('d F Y H:i:s', strtotime($item->created_at)) }}
+                                                                            <i
+                                                                                class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="flex-grow-1">
+                                                                        <div>
+                                                                            {{ $item->bills->bills . ' (' . number_format($item->amount) . ')' }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="mt-4">
-                                            <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-success me-1"></i>
-                                                Product B</p>
-                                            <h5>$ 1,763</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="mt-4">
-                                            <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-danger me-1"></i>
-                                                Product C</p>
-                                            <h5>$ 973</h5>
-                                        </div>
+                                    <div class="simplebar-placeholder" style="width: auto; height: 481px;"></div>
+                                </div>
+                                <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                    <div class="simplebar-scrollbar"
+                                        style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+                                </div>
+                                <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                                    <div class="simplebar-scrollbar"
+                                        style="height: 199px; transform: translate3d(0px, 0px, 0px); display: block;">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
         </div>
     </div>
     <!-- subscribeModal -->
-    <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0">

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -17,11 +19,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->student != null) {
+            $invoice = Invoice::where('siswa_id', Auth::user()->student->id)->get();
+        } else {
+            $invoice = null;
+        }
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'dashboard',
             'label' => 'dashboard',
+            'invoice' => $invoice,
         ];
         return view('dashboard.dashboard')->with($data);
     }
