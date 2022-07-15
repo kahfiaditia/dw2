@@ -107,8 +107,10 @@
                                                         {{ $student->periodic_student->jumlah_saudara_kandung }}</p>
                                                 </div>
                                             @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <a class="alert-link">Tidak Data Periodic</a>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <a class="alert-link">Tidak Data Periodic</a>
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>

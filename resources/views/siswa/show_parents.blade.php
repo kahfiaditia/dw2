@@ -112,8 +112,10 @@
                                                     </p>
                                                 </div>
                                             @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <a class="alert-link">Tidak Ada Ayah Kandung</a>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <a class="alert-link">Tidak Ada Ayah Kandung</a>
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>
@@ -193,8 +195,10 @@
                                                     </p>
                                                 </div>
                                             @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <a class="alert-link">Tidak Ada Ibu Kandung</a>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <a class="alert-link">Tidak Ada Ibu Kandung</a>
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>
@@ -274,8 +278,10 @@
                                                     </p>
                                                 </div>
                                             @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <a class="alert-link">Tidak Ada Wali</a>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <a class="alert-link">Tidak Ada Wali</a>
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>
