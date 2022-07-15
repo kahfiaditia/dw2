@@ -46,7 +46,8 @@
                                             $karyawan_id = $avatar[0]->id;
                                             ?>
                                             <img src="{{ Storage::url('karyawan/foto/' . $avatar[0]->foto) }}"
-                                                alt="" class="img-thumbnail rounded-circle">
+                                                style="height: 75px;width: 75px;" alt=""
+                                                class="img-thumbnail rounded-circle">
                                         @else
                                             <?php
                                             $jabatan = null;

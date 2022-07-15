@@ -19,6 +19,6 @@ class Classes extends Model
 
     public function school_class()
     {
-        return $this->belongsTo(school_class::class, 'class_id');
+        return $this->belongsTo(School_class::class, 'class_id');
     }
 }
