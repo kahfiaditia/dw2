@@ -2,7 +2,7 @@
     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <a href="{{ route('siswa.edit', \Crypt::encryptString($student->id)) }}"
             class="nav-link @if ($submenu == 'Data Pribadi') active @endif">
-            <i class="bx bx-user d-block check-nav-icon mt-2"></i>
+            <i class="bx bx-group d-block check-nav-icon mt-2"></i>
             <p class="fw-bold mb-4">Data Pribadi</p>
         </a>
         <a class="nav-link @if ($submenu == 'orang tua') active @endif"

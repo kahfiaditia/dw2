@@ -1,5 +1,19 @@
 @extends('layouts.main')
 @section('container')
+    <?php
+    function hitung_umur($tanggal_lahir)
+    {
+        $birthDate = new DateTime($tanggal_lahir);
+        $today = new DateTime('today');
+        if ($birthDate > $today) {
+            exit('0 Tahun 0 Bulan 0 Hari');
+        }
+        $y = $today->diff($birthDate)->y;
+        $m = $today->diff($birthDate)->m;
+        $d = $today->diff($birthDate)->d;
+        return $y . ' Tahun ' . $m . ' Bulan ' . $d . ' Hari';
+    }
+    ?>
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
@@ -119,7 +133,10 @@
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Tempat, Tanggal Lahir</h5>
                                                     <p class="text-muted mb-0">
-                                                        {{ $student->tempat_lahir . ', ' . \Carbon\Carbon::parse($student->tanggal_lahir)->format('d F Y') }}
+                                                        {{ $student->tempat_lahir . ', ' }}
+                                                        @if ($student->tanggal_lahir)
+                                                            {{ \Carbon\Carbon::parse($student->tanggal_lahir)->format('d F Y') . '(' . hitung_umur($student->tanggal_lahir) . ')' }}
+                                                        @endif
                                                     </p>
                                                     <a href="javascript:void(0)" data-id="" id="get_data"
                                                         data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
