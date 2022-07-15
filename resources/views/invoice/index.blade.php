@@ -33,16 +33,16 @@
                             <table id="table" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Tahun Ajaran</th>
-                                        <th class="text-center">Bulan</th>
-                                        <th class="text-center">Pembayaran</th>
+                                        <th>No</th>
+                                        <th>Tahun Ajaran</th>
+                                        <th>Bulan</th>
+                                        <th>Pembayaran</th>
                                         <th class="text-center">Biaya</th>
-                                        <th class="text-center">NISN/NIK</th>
-                                        <th class="text-center">Siswa</th>
-                                        <th class="text-center">Jenjang</th>
-                                        <th class="text-center">Tanggal</th>
-                                        <th class="text-center">Action</th>
+                                        <th>NISN/NIK</th>
+                                        <th>Siswa</th>
+                                        <th>Jenjang</th>
+                                        <th>Tanggal</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -56,6 +56,11 @@
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
+    <style>
+        .right {
+            text-align: right;
+        }
+    </style>
     <script>
         $(document).ready(function() {
             $('#table').DataTable({
@@ -65,10 +70,6 @@
                 ajax: {
                     url: "{{ route('invoice.list_invoice') }}",
                 },
-                columnDefs: [{
-                    "className": "text-center",
-                    "targets": "_all"
-                }],
                 columns: [{
                         data: null,
                         sortable: false,
@@ -92,7 +93,8 @@
                     {
                         data: 'biaya',
                         name: 'biaya',
-                        render: $.fn.dataTable.render.number(',', '.')
+                        render: $.fn.dataTable.render.number(',', '.'),
+                        className: "right"
                     },
                     {
                         data: 'nik',

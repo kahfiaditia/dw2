@@ -216,7 +216,7 @@
                                                         <small class="text-danger">{{ $message }}</small>
                                                     @enderror
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Penghasilan <code>*</code></label>
                                                     <select name="penghasilan_orang_tua" class="select2 form-control"
                                                         required>
@@ -284,9 +284,9 @@
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('siswa.show_parents', \Crypt::encryptString($student->id)) }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Kembali</a>
-                                                    <button class="btn btn-primary btn-sm" type="submit"
-                                                        style="float: right" id="submit">Simpan</button>
+                                                        class="btn btn-secondary waves-effect">Kembali</a>
+                                                    <button class="btn btn-primary" type="submit" style="float: right"
+                                                        id="submit">Simpan</button>
                                                 </div>
                                             </div>
                                         </div>

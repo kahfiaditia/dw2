@@ -45,12 +45,12 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $list->agama }}</td>
                                             <td>
-                                                <span class="badge badge-pill badge-soft-<?php if ($list->aktif === 1) {
+                                                <span class="badge badge-pill badge-soft-<?php if ($list->aktif == 1) {
                                                     echo 'success';
                                                 } else {
                                                     echo 'danger';
                                                 } ?> font-size-12">
-                                                    @if ($list->aktif === 1)
+                                                    @if ($list->aktif == 1)
                                                         Aktif
                                                     @else
                                                         Non Aktif

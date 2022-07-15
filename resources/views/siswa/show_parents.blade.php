@@ -38,33 +38,32 @@
                                 <div class="card shadow-none border mb-0">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-sm-4">
-                                                <h3>Ayah Kandung</h3>
+                                            <div class="py-3 border-bottm">
+                                                <ul class="list-inline mb-0">
+                                                    <li class="list-inline-item me-3">
+                                                        <h3>Ayah Kandung</h3>
+                                                    </li>
+                                                    <li class="list-inline-item me-3">
+                                                        @if ($father == null)
+                                                            <a
+                                                                href="{{ route('siswa.add_parent_student', [\Crypt::encryptString($student->id), 'Ayah Kandung']) }}"><i
+                                                                    class="btn-sm bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"></i></a>
+                                                        @else
+                                                            <form class="form_parents"
+                                                                action="{{ route('siswa.destroy_parent', \Crypt::encryptString($father->id)) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <a
+                                                                    href="{{ route('siswa.edit_parent', [\Crypt::encryptString($father->id), 'Ayah Kandung']) }}"><i
+                                                                        class="btn-sm bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"></i></a>
+                                                                <a href="#"><i
+                                                                        class="delete-confirm btn-sm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"></i></a>
+                                                            </form>
+                                                        @endif
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            @if ($father == null)
-                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -8%;">
-                                                    <a
-                                                        href="{{ route('siswa.add_parent_student', [\Crypt::encryptString($student->id), 'Ayah Kandung']) }}"><i
-                                                            class="bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"
-                                                            style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px; margin-left: -10%;"></i></a>
-                                                </div>
-                                            @else
-                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -13%;">
-                                                    <form class="form_parents"
-                                                        action="{{ route('siswa.destroy_parent', \Crypt::encryptString($father->id)) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a
-                                                            href="{{ route('siswa.edit_parent', [\Crypt::encryptString($father->id), 'Ayah Kandung']) }}"><i
-                                                                class="bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"
-                                                                style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                        <a href="#"><i
-                                                                class="delete-confirm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"
-                                                                style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                    </form>
-                                                </div>
-                                            @endif
                                         </div>
                                         <div class="row">
                                             @if ($father != null)
@@ -120,33 +119,32 @@
                                         </div>
                                         <hr>
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <h3>Ibu Kandung</h3>
+                                            <div class="py-3 border-bottm">
+                                                <ul class="list-inline mb-0">
+                                                    <li class="list-inline-item me-3">
+                                                        <h3>Ibu Kandung</h3>
+                                                    </li>
+                                                    <li class="list-inline-item me-3">
+                                                        @if ($mother == null)
+                                                            <a
+                                                                href="{{ route('siswa.add_parent_student', [\Crypt::encryptString($student->id), 'Ibu Kandung']) }}"><i
+                                                                    class="btn-sm bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"></i></a>
+                                                        @else
+                                                            <form class="form_parents"
+                                                                action="{{ route('siswa.destroy_parent', \Crypt::encryptString($mother->id)) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <a
+                                                                    href="{{ route('siswa.edit_parent', [\Crypt::encryptString($mother->id), 'Ibu Kandung']) }}"><i
+                                                                        class="btn-sm bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"></i></a>
+                                                                <a href="#"><i
+                                                                        class="delete-confirm btn-sm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"></i></a>
+                                                            </form>
+                                                        @endif
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            @if ($mother == null)
-                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -15%;">
-                                                    <a
-                                                        href="{{ route('siswa.add_parent_student', [\Crypt::encryptString($student->id), 'Ibu Kandung']) }}"><i
-                                                            class="bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"
-                                                            style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                </div>
-                                            @else
-                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -15%;">
-                                                    <form
-                                                        action="{{ route('siswa.destroy_parent', \Crypt::encryptString($mother->id)) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a
-                                                            href="{{ route('siswa.edit_parent', [\Crypt::encryptString($mother->id), 'Ibu Kandung']) }}"><i
-                                                                class="bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"
-                                                                style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px; margin-left: -%;"></i></a>
-                                                        <a href="#"><i
-                                                                class="delete-confirm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"
-                                                                style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                    </form>
-                                                </div>
-                                            @endif
                                         </div>
                                         <div class="row">
                                             @if ($mother != null)
@@ -202,33 +200,32 @@
                                         </div>
                                         <hr>
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <h3>Wali</h3>
+                                            <div class="py-3 border-bottm">
+                                                <ul class="list-inline mb-0">
+                                                    <li class="list-inline-item me-3">
+                                                        <h3>Wali</h3>
+                                                    </li>
+                                                    <li class="list-inline-item me-3">
+                                                        @if ($guardian == null)
+                                                            <a
+                                                                href="{{ route('siswa.add_parent_student', [\Crypt::encryptString($student->id), 'wali']) }}"><i
+                                                                    class="btn-sm bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"></i></a>
+                                                        @else
+                                                            <form class="form_parents"
+                                                                action="{{ route('siswa.destroy_parent', \Crypt::encryptString($guardian->id)) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <a
+                                                                    href="{{ route('siswa.edit_parent', [\Crypt::encryptString($guardian->id), 'wali']) }}"><i
+                                                                        class="btn-sm bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"></i></a>
+                                                                <a href="#"><i
+                                                                        class="delete-confirm btn-sm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"></i></a>
+                                                            </form>
+                                                        @endif
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            @if ($guardian == null)
-                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -18%;">
-                                                    <a
-                                                        href="{{ route('siswa.add_parent_student', [\Crypt::encryptString($student->id), 'wali']) }}"><i
-                                                            class="bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"
-                                                            style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                </div>
-                                            @else
-                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -15%;">
-                                                    <form
-                                                        action="{{ route('siswa.destroy_parent', \Crypt::encryptString($guardian->id)) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a
-                                                            href="{{ route('siswa.edit_parent', [\Crypt::encryptString($guardian->id), 'wali']) }}"><i
-                                                                class="bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"
-                                                                style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px; margin-left: -5%;"></i></a>
-                                                        <a href="#"><i
-                                                                class="delete_confirm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"
-                                                                style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                    </form>
-                                                </div>
-                                            @endif
                                         </div>
                                         <div class="row">
                                             @if ($guardian != null)
@@ -282,10 +279,13 @@
                                                 </div>
                                             @endif
                                         </div>
+                                        <hr>
                                         <div class="row mt-4">
                                             <div class="col-sm-12">
                                                 <a href="{{ route('siswa.edit', \Crypt::encryptString($student->id)) }}"
-                                                    class="btn btn-secondary waves-effect btn-sm">Kembali</a>
+                                                    class="btn btn-secondary waves-effect">Kembali</a>
+                                                <a href="{{ route('siswa.show_periodic', Crypt::encryptString($student->id)) }}"
+                                                    style="float: right" class="btn btn-primary">Selanjutnya</a>
                                             </div>
                                         </div>
                                     </div>

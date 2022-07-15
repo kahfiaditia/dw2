@@ -39,33 +39,32 @@
                                 <div class="card shadow-none border mb-0">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-sm-4">
-                                                <h3>Data Priodik Siswa</h3>
+                                            <div class="py-3 border-bottm">
+                                                <ul class="list-inline mb-0">
+                                                    <li class="list-inline-item me-3">
+                                                        <h3>Data Priodik Siswa</h3>
+                                                    </li>
+                                                    <li class="list-inline-item me-3">
+                                                        @if ($student->periodic_student == null)
+                                                            <a
+                                                                href="{{ route('siswa.add_periodic_student', \Crypt::encryptString($student->id)) }}"><i
+                                                                    class="btn-sm bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"></i></a>
+                                                        @else
+                                                            <form class="form_parents"
+                                                                action="{{ route('siswa.destroy_periodic_student', \Crypt::encryptString($student->periodic_student->id)) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <a
+                                                                    href="{{ route('siswa.edit_periodic_student', \Crypt::encryptString($student->periodic_student->id)) }}"><i
+                                                                        class="btn-sm bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"></i></a>
+                                                                <a href="#"><i
+                                                                        class="delete_confirm btn-sm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"></i></a>
+                                                            </form>
+                                                        @endif
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            @if ($student->periodic_student == null)
-                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -8%;">
-                                                    <a
-                                                        href="{{ route('siswa.add_periodic_student', \Crypt::encryptString($student->id)) }}"><i
-                                                            class="bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"
-                                                            style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                </div>
-                                            @else
-                                                <div class="col-md-6" style="margin-top: -2px; margin-left: -8%;">
-                                                    <form class="form_parents"
-                                                        action="{{ route('siswa.destroy_periodic_student', \Crypt::encryptString($student->periodic_student->id)) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a
-                                                            href="{{ route('siswa.edit_periodic_student', \Crypt::encryptString($student->periodic_student->id)) }}"><i
-                                                                class="bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"
-                                                                style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                        <a href="#"><i
-                                                                class="delete_confirm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"
-                                                                style="margin-bottom: 20px; padding-left: 3px; padding-right: 3px;"></i></a>
-                                                    </form>
-                                                </div>
-                                            @endif
                                         </div>
                                         <div class="row">
                                             @if ($student->periodic_student != null)
@@ -117,7 +116,9 @@
                                         <div class="row mt-4">
                                             <div class="col-sm-12">
                                                 <a href="{{ route('siswa.show_parents', \Crypt::encryptString($student->id)) }}"
-                                                    class="btn btn-secondary waves-effect btn-sm">Kembali</a>
+                                                    class="btn btn-secondary waves-effect">Kembali</a>
+                                                <a href="{{ route('siswa.list_performance_students', Crypt::encryptString($student->id)) }}"
+                                                    style="float: right" class="btn btn-primary">Selanjutnya</a>
                                             </div>
                                         </div>
                                     </div>

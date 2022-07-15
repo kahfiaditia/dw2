@@ -233,8 +233,8 @@ class InvoiceController extends Controller
                     return back();
                 }
                 Invoice::create([
-                    'year' => $request->tahun_ajaran_start,
-                    'year_end' => $request->tahun_ajaran_end,
+                    'year' => $payment->year,
+                    'year_end' => $payment->year_end,
                     'amount' => $request->hiddenFormulir,
                     'payment_id' => $request->PaymentIdFormulir,
                     'bills_id' => $payment->bills_id,
@@ -251,8 +251,8 @@ class InvoiceController extends Controller
                     return back();
                 }
                 Invoice::create([
-                    'year' => $request->tahun_ajaran_start,
-                    'year_end' => $request->tahun_ajaran_end,
+                    'year' => $payment->year,
+                    'year_end' => $payment->year_end,
                     'amount' => $request->hiddenPangkal,
                     'payment_id' => $request->PaymentIdPangkal,
                     'bills_id' => $payment->bills_id,

@@ -29,63 +29,63 @@ class SchoolClassSeeder extends Seeder
             // ],
             [
                 'school_level_id' => '3', // SD
-                'classes' => '1',
+                'classes' => 'I',
             ],
             [
                 'school_level_id' => '3', // SD
-                'classes' => '2',
+                'classes' => 'II',
             ],
             [
                 'school_level_id' => '3', // SD
-                'classes' => '3',
+                'classes' => 'III',
             ],
             [
                 'school_level_id' => '3', // SD
-                'classes' => '4',
+                'classes' => 'IV',
             ],
             [
                 'school_level_id' => '3', // SD
-                'classes' => '5',
+                'classes' => 'V',
             ],
             [
                 'school_level_id' => '3', // SD
-                'classes' => '6',
+                'classes' => 'VI',
             ],
             [
                 'school_level_id' => '4', // SMP
-                'classes' => '1',
+                'classes' => 'VII',
             ],
             [
                 'school_level_id' => '4', // SMP
-                'classes' => '2',
+                'classes' => 'VIII',
             ],
             [
                 'school_level_id' => '4', // SMP
-                'classes' => '3',
+                'classes' => 'IX',
             ],
             [
                 'school_level_id' => '5', // SMA
-                'classes' => '1',
+                'classes' => 'X',
             ],
             [
                 'school_level_id' => '5', // SMA
-                'classes' => '2',
+                'classes' => 'XI',
             ],
             [
                 'school_level_id' => '5', // SMA
-                'classes' => '3',
+                'classes' => 'XII',
             ],
             [
                 'school_level_id' => '6', // SMK
-                'classes' => '1',
+                'classes' => 'X',
             ],
             [
                 'school_level_id' => '6', // SMK
-                'classes' => '2',
+                'classes' => 'XI',
             ],
             [
                 'school_level_id' => '6', // SMK
-                'classes' => '3',
+                'classes' => 'XII',
             ],
         ];
 

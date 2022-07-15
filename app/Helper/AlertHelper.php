@@ -81,4 +81,11 @@ class AlertHelper
             Alert::error('Gagal', 'Pembayaran wajib diisi');
         }
     }
+
+    public static function settingPayment($info)
+    {
+        if ($info !== true) {
+            Alert::error('Gagal', 'Wajib setting pembayaran terlebih dahulu');
+        }
+    }
 }

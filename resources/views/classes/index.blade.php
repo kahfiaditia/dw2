@@ -30,48 +30,18 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
+                            <table id="table" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Jenjang</th>
-                                        <th class="text-center">Kelas</th>
-                                        <th class="text-center">Jurusan</th>
-                                        <th class="text-center">Type</th>
-                                        <th class="text-center">Action</th>
+                                        <th>No</th>
+                                        <th>Jenjang</th>
+                                        <th>Kelas</th>
+                                        <th>Jurusan</th>
+                                        <th>Type</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($classes as $item)
-                                        <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">
-                                                {{ $item->school_level ? $item->school_level->level : '' }}</td>
-                                            <td class="text-center">
-                                                {{ $item->school_class ? $item->school_class->classes : '' }}</td>
-                                            <td class="text-center">{{ $item->jurusan }}</td>
-                                            <td class="text-center">{{ $item->type }}</td>
-                                            <td class="text-center">
-                                                <form class="delete-form"
-                                                    action="{{ route('classes.destroy', Crypt::encryptString($item->id)) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <div class="d-flex gap-3">
-                                                        @if (in_array('33', $session_menu))
-                                                            <a href="{{ route('classes.edit', Crypt::encryptString($item->id)) }}"
-                                                                class="text-success"><i
-                                                                    class="mdi mdi-pencil font-size-18"></i></a>
-                                                        @endif
-                                                        @if (in_array('34', $session_menu))
-                                                            <a href="" class="text-danger delete_confirm"><i
-                                                                    class="mdi mdi-delete font-size-18"></i></a>
-                                                        @endif
-                                                    </div>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -80,4 +50,49 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/alert.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: {
+                    url: "{{ route('classes.list_classes') }}",
+                },
+                columns: [{
+                        data: null,
+                        sortable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        },
+                    },
+                    {
+                        data: 'level',
+                        name: 'level',
+                    },
+                    {
+                        data: 'classes',
+                        name: 'classes',
+                    },
+                    {
+                        data: 'jurusan',
+                        name: 'jurusan',
+                    },
+                    {
+                        data: 'type',
+                        name: 'type',
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+        });
+    </script>
 @endsection

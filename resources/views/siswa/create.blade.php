@@ -173,17 +173,19 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label for="validationCustom02" class="form-label">NISN
-                                                        <code>*</code></label>
-                                                    <input type="text" class="form-control number-only" name="nisn"
-                                                        placeholder="NISN" value="{{ old('nisn') }}" maxlength="20"
-                                                        required>
-                                                    <div class="invalid-feedback">
-                                                        Data wajib diisi.
+                                                    <div class="mb-3">
+                                                        <label for="validationCustom02" class="form-label">NISN
+                                                            <code>*</code></label>
+                                                        <input type="text" class="form-control number-only"
+                                                            name="nisn" placeholder="NISN"
+                                                            value="{{ old('nisn') }}" maxlength="20" required>
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                        @error('nisn')
+                                                            <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
                                                     </div>
-                                                    @error('nisn')
-                                                        <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
@@ -313,16 +315,18 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label for="">Nama Negara <code>*</code></label>
-                                                    <input type="text" class="form-control" id="national_name"
-                                                        name="nama_negara" required placeholder="Nama Negara"
-                                                        value="{{ old('nama_negara') }}">
-                                                    <div class="invalid-feedback">
-                                                        Data wajib diisi.
+                                                    <div class="mb-3">
+                                                        <label for="">Nama Negara <code>*</code></label>
+                                                        <input type="text" class="form-control" id="national_name"
+                                                            name="nama_negara" required placeholder="Nama Negara"
+                                                            value="{{ old('nama_negara') }}">
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                        @error('nama_negara')
+                                                            <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
                                                     </div>
-                                                    @error('nama_negara')
-                                                        <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
@@ -393,19 +397,22 @@
                                                 <div class="col-md-6">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <label for="validationCustom02" class="form-label">RT
-                                                                <code>*</code></label>
-                                                            <input type="text" min="0"
-                                                                class="number-only form-control" name="rt"
-                                                                value="{{ old('rt') }}" required placeholder="RT">
-                                                            <div class="invalid-feedback">
-                                                                Data wajib diisi.
+                                                            <div class="mb-3">
+                                                                <label for="validationCustom02" class="form-label">RT
+                                                                    <code>*</code></label>
+                                                                <input type="text" min="0"
+                                                                    class="number-only form-control" name="rt"
+                                                                    value="{{ old('rt') }}" required
+                                                                    placeholder="RT">
+                                                                <div class="invalid-feedback">
+                                                                    Data wajib diisi.
+                                                                </div>
+                                                                @error('rt')
+                                                                    <small class="text-danger">{{ $message }}</small>
+                                                                @enderror
                                                             </div>
-                                                            @error('rt')
-                                                                <small class="text-danger">{{ $message }}</small>
-                                                            @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">RW <code>*</code></label>
                                                             <input type="text" class="number-only form-control"
                                                                 name="rw" required placeholder="RW"
@@ -419,9 +426,9 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="formFile" class="form-label">Dusun
                                                                 <code>*</code></label>
                                                             <input class="form-control" type="text" name="nama_dusun"
@@ -453,9 +460,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kelurahan <code>*</code></label>
                                                             <select name="kelurahan" id="kelurahan"
                                                                 class="form-control select2" required>
@@ -483,9 +490,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Moda Transportasi
                                                                 <code>*</code></label>
                                                             <input type="text" class="form-control"
@@ -514,9 +521,9 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 form-group">
+                                                <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Apakah Punya KIP
                                                                 <code>*</code></label>
                                                             <select name="is_have_kip" class="form-control select select2"
@@ -569,9 +576,9 @@
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('siswa.index') }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Batal</a>
-                                                    <button class="btn btn-primary btn-sm" type="submit"
-                                                        style="float: right" id="submit">Simpan</button>
+                                                        class="btn btn-secondary waves-effect">Batal</a>
+                                                    <button class="btn btn-primary" type="submit" style="float: right"
+                                                        id="submit">Simpan</button>
                                                 </div>
                                             </div>
                                         </div>

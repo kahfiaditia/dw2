@@ -37,86 +37,59 @@
                                 aria-labelledby="v-pills-shipping-tab">
                                 <div class="card shadow-none border mb-0">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div
-                                                    class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                                    <div class="page-title-left">
-                                                        <h4 class="mb-sm-0 font-size-18">{{ $label }}
-                                                        </h4>
-                                                        <ol class="breadcrumb m-0">
-                                                            <li class="breadcrumb-item">{{ ucwords($menu) }}
-                                                            </li>
-                                                            <li class="breadcrumb-item">
-                                                                {{ ucwords($submenu) }}</li>
-                                                        </ol>
+                                        <form method="POST"
+                                            action="{{ route('siswa.update_kesejahteraan', \Crypt::encryptString($result->id)) }}">
+                                            <div class="modal-body">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="student_id"
+                                                    value="{{ \Crypt::encryptString($result->siswa_id) }}">
+                                                <div class="row">
+                                                    <div class="col-md-6 mt-3">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputEmail1">Jenis
+                                                                Kesejahteraan</label>
+                                                            <select name="jenis_kesejahteraan" id="" required
+                                                                class="form-control select select2">
+                                                                <option value="">-- Pilih Jenis
+                                                                    Kesejahteraan --
+                                                                </option>
+                                                                @foreach ($kesejahteraan as $item)
+                                                                    <option value="{{ $item }}"
+                                                                        @if ($item == $result->jenis_kesejahteraan) selected @endif>
+                                                                        {{ $item }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mt-3">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPassword1">nomor_kartu</label>
+                                                            <input type="text" name="nomor_kartu" class="form-control"
+                                                                value="{{ old('nomor_kartu', $result->nomor_kartu) }}"
+                                                                placeholder="Nomor Kartu" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mt-3">
+                                                        <div class="form-group">
+                                                            <label for="">Nama Kartu</label>
+                                                            <input type="text" class="form-control" name="nama_kartu"
+                                                                placeholder="Nama Kartu"
+                                                                value="{{ old('nama_kartu', $result->nama_kartu) }}"
+                                                                required>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <form method="POST"
-                                                            action="{{ route('siswa.update_kesejahteraan', \Crypt::encryptString($result->id)) }}">
-                                                            <div class="modal-body">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <input type="hidden" name="student_id"
-                                                                    value="{{ \Crypt::encryptString($result->siswa_id) }}">
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="exampleInputEmail1">Jenis
-                                                                                Kesejahteraan</label>
-                                                                            <select name="jenis_kesejahteraan"
-                                                                                id="" required
-                                                                                class="form-control select select2">
-                                                                                <option value="">-- Pilih Jenis
-                                                                                    Kesejahteraan --
-                                                                                </option>
-                                                                                @foreach ($kesejahteraan as $item)
-                                                                                    <option value="{{ $item }}"
-                                                                                        @if ($item == $result->jenis_kesejahteraan) selected @endif>
-                                                                                        {{ $item }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label
-                                                                                for="exampleInputPassword1">nomor_kartu</label>
-                                                                            <input type="text" name="nomor_kartu"
-                                                                                class="form-control"
-                                                                                value="{{ old('nomor_kartu', $result->nomor_kartu) }}"
-                                                                                placeholder="Nomor Kartu" required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="">Nama Kartu</label>
-                                                                            <input type="text" class="form-control"
-                                                                                name="nama_kartu" placeholder="Nama Kartu"
-                                                                                value="{{ old('nama_kartu', $result->nama_kartu) }}"
-                                                                                required>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <a href="{{ route('siswa.index_kesejahteraan_siswa', \Crypt::encryptString($result->siswa_id)) }}"
-                                                                    class="btn btn-secondary btn-sm"
-                                                                    data-dismiss="modal">Batal</a>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary btn-sm">Simpan</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                            <div class="row mt-4">
+                                                <div class="col-sm-12">
+                                                    <a href="{{ route('siswa.index_kesejahteraan_siswa', \Crypt::encryptString($result->siswa_id)) }}"
+                                                        class="btn btn-secondary" data-dismiss="modal">Batal</a>
+                                                    <button type="submit" style="float: right"
+                                                        class="btn btn-primary">Simpan</button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

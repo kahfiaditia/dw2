@@ -259,7 +259,7 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mb-3">
                                                     <label for="">Nama Negara <code>*</code></label>
                                                     <input type="text" class="form-control" name="nama_negara"
                                                         required placeholder="Nama Negara"
@@ -331,7 +331,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="validationCustom02" class="form-label">RT
                                                                 <code>*</code></label>
                                                             <input type="text" min="0"
@@ -345,7 +345,7 @@
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">RW <code>*</code></label>
                                                             <input type="text" class="number-only form-control"
                                                                 name="rw" required placeholder="RW"
@@ -360,9 +360,9 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="formFile" class="form-label">Dusun
                                                                 <code>*</code></label>
                                                             <input class="form-control" type="text" name="nama_dusun"
@@ -375,7 +375,7 @@
                                                                 Data wajib diisi.
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kecamatan <code>*</code></label>
                                                             <select name="kecamatan" id="kecamatan"
                                                                 class="form-control select2" required>
@@ -400,9 +400,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kelurahan <code>*</code></label>
                                                             <select name="kelurahan" id="kelurahan"
                                                                 class="form-control select2" required>
@@ -415,7 +415,7 @@
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kode Pos <code>*</code></label>
                                                             <select name="kode_pos" id="kode_pos"
                                                                 class="form-control select2" required>
@@ -432,7 +432,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Moda Transportasi <code>*</code></label>
                                                             <input type="text" class="form-control"
                                                                 name="moda_transportasi" placeholder="Moda Transportasi"
@@ -445,7 +445,7 @@
                                                                 <small>{{ $mesasge }}</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Anak keberapa <code>*</code></label>
                                                             <input required type="text"
                                                                 class="number-only form-control" name="anak_keberapa"
@@ -462,7 +462,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Apakah Punya KIP <code>*</code></label>
                                                             <select name="is_have_kip" class="form-control select select2"
                                                                 required>
@@ -481,7 +481,7 @@
                                                                 <small class="text-danger">Data wajib diisi</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Tetap Menerima KIP <code>*</code></label>
                                                             <select name="is_receive_kip"
                                                                 class="form-control select select2" required>
@@ -498,7 +498,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mt-3">
+                                                <div class="col-md-6">
                                                     <label for="">Alasan Menolak KIP</label>
                                                     <select name="reason_reject_kip" class="form-control select select2">
                                                         <option value="">-- Pilih Salah Satu --</option>
@@ -520,9 +520,9 @@
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('siswa.index') }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Kembali</a>
-                                                    <button class="btn btn-primary btn-sm" type="submit"
-                                                        style="float: right" id="submit">Simpan</button>
+                                                        class="btn btn-secondary waves-effect">Kembali</a>
+                                                    <button class="btn btn-primary" type="submit" style="float: right"
+                                                        id="submit">Simpan</button>
                                                 </div>
                                             </div>
                                         </div>

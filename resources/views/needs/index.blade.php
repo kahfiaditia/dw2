@@ -33,19 +33,19 @@
                             <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Kode</th>
-                                        <th class="text-center">Nama</th>
-                                        <th class="text-center">Action</th>
+                                        <th>No</th>
+                                        <th>Kode</th>
+                                        <th>Nama</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($special_needs as $special_need)
                                         <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $special_need->kode }}</td>
-                                            <td class="text-center">{{ $special_need->nama }}</td>
-                                            <td class="text-center">
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $special_need->kode }}</td>
+                                            <td>{{ $special_need->nama }}</td>
+                                            <td>
                                                 <form class="delete-form"
                                                     action="{{ route('needs.destroy', Crypt::encryptString($special_need->id)) }}"
                                                     method="POST">

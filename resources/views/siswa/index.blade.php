@@ -21,7 +21,7 @@
                                         <i class="mdi mdi-plus me-1"></i> Tambah Siswa
                                     </a>
                                 @endif
-                                @if (Auth::user()->roles == 'Admin')
+                                @if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator')
                                     <a href="{{ route('siswa.csv_download') }}"
                                         class="float-end btn btn-warning btn-rounded waves-effect waves-light mb-2 me-2"
                                         class="btn btn-primary btn-sm"><i class="bx bx-cloud-download me-1"></i>Download
@@ -51,11 +51,13 @@
                             <table id="mydata" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">NISN</th>
-                                        <th class="text-center">Nama Lengkap</th>
-                                        <th class="text-center">Email</th>
-                                        <th class="text-center">Action</th>
+                                        <th>No</th>
+                                        <th>NISN</th>
+                                        <th>NIK</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Email</th>
+                                        <th>Kelas</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -76,14 +78,12 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Import Data Siswa</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        Import Data Siswa
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <label for="">Upload File CSV</label>
-                        <input type="file" class="form-control" name="student_csv">
+                        <label for="">Upload File CSV <code>*</code></label>
+                        <input type="file" required class="form-control" name="student_csv">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"
@@ -113,10 +113,10 @@
                 ajax: {
                     url: '{{ route('siswa.index') }}',
                 },
-                columnDefs: [{
-                    "className": "text-center",
-                    "targets": "_all"
-                }],
+                // columnDefs: [{
+                //     "className": "text-center",
+                //     "targets": "_all"
+                // }],
                 columns: [{
                         data: 'DT_RowIndex'
                     },
@@ -124,10 +124,16 @@
                         data: 'nisn'
                     },
                     {
+                        data: 'nik'
+                    },
+                    {
                         data: 'nama_lengkap'
                     },
                     {
                         data: 'email'
+                    },
+                    {
+                        data: 'kelas'
                     },
                     {
                         data: 'Opsi',

@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Bills;
-use App\Models\Classes;
 use App\Models\Payment;
 use App\Models\School_class;
 use App\Models\School_level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class PaymentController extends Controller
 {
@@ -34,6 +34,30 @@ class PaymentController extends Controller
             'payment' => $payment
         ];
         return view('payment.index')->with($data);
+    }
+
+    public function list_payment(Request $request)
+    {
+        $payment = Payment::orderBy('id', 'DESC')->get();
+        return DataTables::of($payment)
+            ->addColumn('tahun', function ($payment) {
+                return $payment->year . '/' . $payment->year_end;
+            })
+            ->addColumn('level', function ($payment) {
+                return  $payment->schools_level->level;
+            })
+            ->addColumn('classes', function ($payment) {
+                return $payment->schools_class ? $payment->schools_class->classes : '';
+            })
+            ->addColumn('bills', function ($payment) {
+                return $payment->bills->bills;
+            })
+            ->addColumn('amount', function ($payment) {
+                return $payment->amount;
+            })
+            ->addColumn('action', 'payment.button')
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**

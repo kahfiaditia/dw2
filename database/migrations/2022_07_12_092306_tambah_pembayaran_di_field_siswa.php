@@ -22,6 +22,7 @@ class TambahPembayaranDiFieldSiswa extends Migration
             $table->foreign('spp_id')->references('id')->on('payment');
             $table->unsignedBigInteger('kegiatan_id')->nullable()->after('spp_id');
             $table->foreign('kegiatan_id')->references('id')->on('payment');
+            $table->boolean('flag_upload')->nullable()->after('kegiatan_id');
         });
     }
 
@@ -41,6 +42,7 @@ class TambahPembayaranDiFieldSiswa extends Migration
             $table->dropColumn('spp_id');
             $table->dropForeign(['kegiatan_id']);
             $table->dropColumn('kegiatan_id');
+            $table->dropColumn('flag_upload');
         });
     }
 }

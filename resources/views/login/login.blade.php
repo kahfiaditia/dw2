@@ -88,7 +88,7 @@
                                             <button class="btn btn-light" type="button" id="password-addon"><i
                                                     class="mdi mdi-eye-outline"></i></button>
                                             <div class="invalid-feedback">
-                                                Please Enter Password and It should have 6 characters or more.
+                                                Please Enter Password and It should have 5 characters or more.
                                             </div>
                                         </div>
                                     </div>
