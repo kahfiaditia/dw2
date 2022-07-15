@@ -76,7 +76,7 @@ class SiswaController extends Controller
             'student' => Auth::user()->student,
             'users' => $students,
             'religions' => Agama::orderBy('agama', 'ASC')->get(),
-            'districts' => Kodepos::select('kecamatan')->groupBy('kecamatan')->get(),
+            'districts' => Kodepos::select('kecamatan')->where('provinsi', 'BANTEN')->groupBy('kecamatan')->get(),
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
         ];
 
@@ -257,7 +257,7 @@ class SiswaController extends Controller
             'label' => 'siswa',
             'student' => $student,
             'religions' => Agama::orderBy('agama', 'ASC')->get(),
-            'districts' => Kodepos::select('kecamatan')->groupBy('kecamatan')->get(),
+            'districts' => Kodepos::select('kecamatan')->where('provinsi', 'BANTEN')->groupBy('kecamatan')->get(),
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
             'blood_types' => $blood_types,
             'residences' => $residences,

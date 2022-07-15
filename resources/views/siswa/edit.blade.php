@@ -548,57 +548,59 @@
             let district = $("#kecamatan :selected").val()
             url = url.replace(':district', district)
 
-            $.ajax({
-                type: 'GET',
-                url: url,
-                success: response => {
-                    $("#kelurahan option").remove()
-                    $("#kelurahan").append(`<option value="">-- Pilih Kelurahan --</option>`)
-                    $.each(response.data, function(index, item) {
-                        if (item.kelurahan == old_district) {
-                            oldVillage = item.kelurahan
-                            urlPostalCode = urlPostalCode.replace(':oldVillage', oldVillage)
-                            next()
-                            $("#kelurahan").append(
-                                `<option value="${item.kelurahan}" selected>${item.kelurahan}</option>`
-                            )
-                        } else {
-                            $("#kelurahan").append(
-                                `<option value="${item.kelurahan}">${item.kelurahan}</option>`
-                            )
-                        }
-                    })
-                },
-                error: err => console.log(err)
-            })
-
-            function next() {
+            if (district) {
                 $.ajax({
                     type: 'GET',
-                    url: urlPostalCode,
+                    url: url,
                     success: response => {
-                        $("#kode_pos option").remove()
-                        $("#kode_pos").append(`<option value="">-- Pilih Kode Pos --</option>`)
+                        $("#kelurahan option").remove()
+                        $("#kelurahan").append(`<option value="">-- Pilih Kelurahan --</option>`)
                         $.each(response.data, function(index, item) {
-                            if (item.kodepos == oldPostalCode) {
-                                $("#kode_pos").append(
-                                    `<option value="${item.kodepos}" selected>${item.kodepos}</option>`
+                            if (item.kelurahan == old_district) {
+                                oldVillage = item.kelurahan
+                                urlPostalCode = urlPostalCode.replace(':oldVillage', oldVillage)
+                                next()
+                                $("#kelurahan").append(
+                                    `<option value="${item.kelurahan}" selected>${item.kelurahan}</option>`
                                 )
                             } else {
-                                $("#kode_pos").append(
-                                    `<option value="${item.kodepos}">${item.kodepos}</option>`
+                                $("#kelurahan").append(
+                                    `<option value="${item.kelurahan}">${item.kelurahan}</option>`
                                 )
                             }
                         })
                     },
                     error: err => console.log(err)
                 })
+
+                function next() {
+                    $.ajax({
+                        type: 'GET',
+                        url: urlPostalCode,
+                        success: response => {
+                            $("#kode_pos option").remove()
+                            $("#kode_pos").append(`<option value="">-- Pilih Kode Pos --</option>`)
+                            $.each(response.data, function(index, item) {
+                                if (item.kodepos == oldPostalCode) {
+                                    $("#kode_pos").append(
+                                        `<option value="${item.kodepos}" selected>${item.kodepos}</option>`
+                                    )
+                                } else {
+                                    $("#kode_pos").append(
+                                        `<option value="${item.kodepos}">${item.kodepos}</option>`
+                                    )
+                                }
+                            })
+                        },
+                        error: err => console.log(err)
+                    })
+                }
             }
 
             $("#kecamatan").bind('change', function() {
                 let district = $(this).val()
+                let url = '{{ route('kodepos.get_villages_by_district', ':district') }}'
                 url = url.replace(':district', district)
-
                 $.ajax({
                     type: "GET",
                     url: url,
