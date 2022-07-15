@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             SchoolClassSeeder::class,
             MenuSeeder::class,
             SubMenuSeeder::class,
+            BillsSeeder::class,
+            KebutuhanKhususSeeder::class,
         ]);
     }
 }

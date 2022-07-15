@@ -340,7 +340,8 @@
                                                             @foreach ($special_needs as $special_need)
                                                                 <option value="{{ $special_need->id }}"
                                                                     {{ old('kebutuhan_khusus') == $special_need->id ? 'selected' : '' }}>
-                                                                    {{ $special_need->nama }}</option>
+                                                                    {{ $special_need->kode . ') ' . $special_need->nama }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                         <div class="invalid-feedback">

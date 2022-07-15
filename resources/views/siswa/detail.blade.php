@@ -212,7 +212,7 @@
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Berkebutuhan Khusus</h5>
                                                     <p class="text-muted mb-0">
-                                                        {{ $student->special_need ? $student->special_need->nama : '' }}
+                                                        {{ $student->special_need ? $student->special_need->kode . ') ' . $student->special_need->nama : '' }}
                                                     </p>
                                                 </div>
                                             </div>

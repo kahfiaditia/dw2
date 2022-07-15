@@ -283,7 +283,8 @@
                                                                 <option value="{{ $special_need->id }}"
                                                                     @if ($student->kebutuhan_khusus_id == $special_need->id) selected @endif
                                                                     {{ old('kebutuhan_khusus') == $special_need->id ? 'selected' : '' }}>
-                                                                    {{ $special_need->nama }}</option>
+                                                                    {{ $special_need->kode . ') ' . $special_need->nama }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                         <div class="invalid-feedback">
