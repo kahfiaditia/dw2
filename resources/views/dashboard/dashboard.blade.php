@@ -193,14 +193,12 @@
                                                                     class="float-end">{{ number_format($siswa->uang_pangkal->amount) }}</span>
                                                             </a>
                                                             <a class="dropdown-item" href="#">
-                                                                Uang SPP : <span
-                                                                    class="float-end">{{ number_format($siswa->spp->amount) }}
-                                                                    @ 12</span>
+                                                                Uang SPP : <span class="float-end">@
+                                                                    {{ number_format($siswa->spp->amount) }}</span>
                                                             </a>
                                                             <a class="dropdown-item" href="#">
-                                                                Uang Kegiatan : <span
-                                                                    class="float-end">{{ number_format($siswa->kegiatan->amount) }}
-                                                                    @ 12</span>
+                                                                Uang Kegiatan : <span class="float-end">@
+                                                                    {{ number_format($siswa->kegiatan->amount) }}</span>
                                                             </a>
                                                             <div class="dropdown-divider"></div>
                                                             <a class="dropdown-item text-primary text-center"

@@ -23,7 +23,7 @@ class BillsSeeder extends Seeder
                 'notes' => 'setiap siswa baru membayar 1x',
                 'looping' => null,
             ], [
-                'bills' => 'Uang Formulir',
+                'bills' => 'Uang Pangkal',
                 'notes' => 'setiap siswa baru membayar 1x',
                 'looping' => null,
             ], [
@@ -31,7 +31,7 @@ class BillsSeeder extends Seeder
                 'notes' => 'pembayaran tiap bulan',
                 'looping' => '1',
             ], [
-                'bills' => 'Uang Formulir',
+                'bills' => 'Uang Kegiatan',
                 'notes' => 'pembayaran tiap bulan',
                 'looping' => '1',
             ]

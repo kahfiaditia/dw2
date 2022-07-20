@@ -91,7 +91,8 @@
                                                 <tbody>
                                                     <tr>
                                                         <th valign="middle" class="text-center"><i
-                                                                class="bx bx-right-arrow-circle font-size-18"></i></th>
+                                                                class="bx bx-right-arrow-circle text-primary font-size-18"></i>
+                                                        </th>
                                                         <td valign="middle">{{ $students->uang_formulir->bills->bills }}
                                                         </td>
                                                         <td valign="middle" style="text-align: right;">
@@ -116,7 +117,8 @@
                                                     </tr>
                                                     <tr>
                                                         <th valign="middle" class="text-center"><i
-                                                                class="bx bx-right-arrow-circle font-size-18"></i></th>
+                                                                class="bx bx-right-arrow-circle text-primary font-size-18"></i>
+                                                        </th>
                                                         <td valign="middle">{{ $students->uang_pangkal->bills->bills }}
                                                         </td>
                                                         <td valign="middle" style="text-align: right;">
@@ -142,7 +144,8 @@
                                                     </tr>
                                                     <tr>
                                                         <th valign="middle" class="text-center"><i
-                                                                class="bx bx-right-arrow-circle font-size-18"></i></th>
+                                                                class="bx bx-right-arrow-circle text-primary font-size-18"></i>
+                                                        </th>
                                                         <td valign="middle">{{ $students->spp->bills->bills }}
                                                         </td>
                                                         <td valign="middle" style="text-align: right;">
@@ -171,7 +174,8 @@
                                                     </tr>
                                                     <tr>
                                                         <th valign="middle" class="text-center"><i
-                                                                class="bx bx-right-arrow-circle font-size-18"></i></th>
+                                                                class="bx bx-right-arrow-circle text-primary font-size-18"></i>
+                                                        </th>
                                                         <td valign="middle">{{ $students->kegiatan->bills->bills }}
                                                         </td>
                                                         <td valign="middle" style="text-align: right;">
@@ -266,36 +270,14 @@
                                                                         <li class="event-list">
                                                                             <div class="event-timeline-dot">
                                                                                 <i
-                                                                                    class="bx bx-right-arrow-circle font-size-18"></i>
+                                                                                    class="bx bx-right-arrow-circle text-success font-size-18"></i>
                                                                             </div>
                                                                             <div class="d-flex">
                                                                                 <div class="flex-shrink-0 me-3">
                                                                                     <h5 class="font-size-14">
                                                                                         {{ date('d F Y H:i:s', strtotime($item->created_at)) }}
                                                                                         <i
-                                                                                            class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
-                                                                                    </h5>
-                                                                                </div>
-                                                                                <div class="flex-grow-1">
-                                                                                    <div>
-                                                                                        {{ $item->bills->bills . ' (' . number_format($item->amount) . ')' }}
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    @endforeach
-                                                                    @foreach ($invoice as $item)
-                                                                        <li class="event-list">
-                                                                            <div class="event-timeline-dot">
-                                                                                <i
-                                                                                    class="bx bx-right-arrow-circle font-size-18"></i>
-                                                                            </div>
-                                                                            <div class="d-flex">
-                                                                                <div class="flex-shrink-0 me-3">
-                                                                                    <h5 class="font-size-14">
-                                                                                        {{ date('d F Y H:i:s', strtotime($item->created_at)) }}
-                                                                                        <i
-                                                                                            class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
+                                                                                            class="bx bx-right-arrow-alt font-size-16 text-info align-middle ms-2"></i>
                                                                                     </h5>
                                                                                 </div>
                                                                                 <div class="flex-grow-1">
