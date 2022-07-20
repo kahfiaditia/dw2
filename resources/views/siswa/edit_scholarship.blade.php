@@ -64,99 +64,68 @@
                                 aria-labelledby="v-pills-shipping-tab">
                                 <div class="card shadow-none border mb-0">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div
-                                                    class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                                    <div class="page-title-left">
-                                                        <h4 class="mb-sm-0 font-size-18">{{ $label }}
-                                                        </h4>
-                                                        <ol class="breadcrumb m-0">
-                                                            <li class="breadcrumb-item">{{ ucwords($menu) }}
-                                                            </li>
-                                                            <li class="breadcrumb-item">
-                                                                {{ ucwords($submenu) }}</li>
-                                                        </ol>
+                                        <form method="POST"
+                                            action="{{ route('siswa.update_scholarship', \Crypt::encryptString($scholarship->id)) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="student_id"
+                                                value="{{ \Crypt::encryptString($scholarship->siswa_id) }}">
+                                            <div class="row">
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">Jenis
+                                                            Beasiswa</label>
+                                                        <select name="jenis_beasiswa" id="" required
+                                                            class="form-control select select2">
+                                                            <option value="">-- Pilih Jenis
+                                                                Beasiswa --
+                                                            </option>
+                                                            @foreach ($scholarship_types as $type)
+                                                                <option value="{{ $type }}"
+                                                                    @if ($type == $scholarship->jenis_beasiswa) selected @endif>
+                                                                    {{ $type }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Keterangan</label>
+                                                        <input type="text" name="keterangan" class="form-control"
+                                                            value="{{ old('keterangan', $scholarship->keterangan) }}"
+                                                            placeholder="Keterangan" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="">Tahun Mulai</label>
+                                                        <input type="text" class="form-control" name="tahun_mulai"
+                                                            placeholder="Nama Prestasi"
+                                                            value="{{ old('tahun_mulai', $scholarship->tahun_mulai) }}"
+                                                            maxlength="4" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="">Tahun Selesai</label>
+                                                        <input type="text" class="number-only form-control"
+                                                            name="tahun_selesai" placeholder="Tahun Prestasi" maxlength="4"
+                                                            minlength="4"
+                                                            value="{{ old('tahun_selesai', $scholarship->tahun_selesai) }}"
+                                                            minlength="4" required>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <form method="POST"
-                                                            action="{{ route('siswa.update_scholarship', \Crypt::encryptString($scholarship->id)) }}">
-                                                            <div class="modal-body">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <input type="hidden" name="student_id"
-                                                                    value="{{ \Crypt::encryptString($scholarship->siswa_id) }}">
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="exampleInputEmail1">Jenis
-                                                                                Beasiswa</label>
-                                                                            <select name="jenis_beasiswa" id=""
-                                                                                required
-                                                                                class="form-control select select2">
-                                                                                <option value="">-- Pilih Jenis
-                                                                                    Beasiswa --
-                                                                                </option>
-                                                                                @foreach ($scholarship_types as $type)
-                                                                                    <option value="{{ $type }}"
-                                                                                        @if ($type == $scholarship->jenis_beasiswa) selected @endif>
-                                                                                        {{ $type }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label
-                                                                                for="exampleInputPassword1">Keterangan</label>
-                                                                            <input type="text" name="keterangan"
-                                                                                class="form-control"
-                                                                                value="{{ old('keterangan', $scholarship->keterangan) }}"
-                                                                                placeholder="Keterangan" required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="">Tahun Mulai</label>
-                                                                            <input type="text" class="form-control"
-                                                                                name="tahun_mulai"
-                                                                                placeholder="Nama Prestasi"
-                                                                                value="{{ old('tahun_mulai', $scholarship->tahun_mulai) }}"
-                                                                                maxlength="4" required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="">Tahun Selesai</label>
-                                                                            <input type="text"
-                                                                                class="number-only form-control"
-                                                                                name="tahun_selesai"
-                                                                                placeholder="Tahun Prestasi" maxlength="4"
-                                                                                minlength="4"
-                                                                                value="{{ old('tahun_selesai', $scholarship->tahun_selesai) }}"
-                                                                                minlength="4" required>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <a href="{{ route('siswa.index_beasiswa_student', \Crypt::encryptString($scholarship->siswa_id)) }}"
-                                                                    type="button" class="btn btn-secondary btn-sm"
-                                                                    data-dismiss="modal">Batal</a>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary btn-sm">Simpan</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                            <div class="row mt-4">
+                                                <div class="col-sm-12">
+                                                    <a href="{{ route('siswa.index_beasiswa_student', \Crypt::encryptString($scholarship->siswa_id)) }}"
+                                                        type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Batal</a>
+                                                    <button type="submit" style="float: right"
+                                                        class="btn btn-primary">Simpan</button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

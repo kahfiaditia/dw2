@@ -35,7 +35,7 @@ class EmployeeController extends Controller
             'label' => 'list karyawan',
         ];
 
-        if (Auth::user()->roles !== 'Admin') {
+        if (Auth::user()->roles !== 'Admin' and Auth::user()->roles !== 'Administrator') {
             $employee = Employee::where('user_id', Auth::user()->id)->orderBy("nama_lengkap", 'ASC')->get();
         } else {
             $employee = Employee::all()->sortBy("nama_lengkap");
@@ -322,12 +322,12 @@ class EmployeeController extends Controller
             $employee->save();
 
             DB::commit();
-            AlertHelper::addAlert(true);
+            AlertHelper::updateAlert(true);
             return redirect('employee/ijazah/' . $request->id);
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();
-            AlertHelper::addAlert(false);
+            AlertHelper::updateAlert(false);
             return back();
         }
     }

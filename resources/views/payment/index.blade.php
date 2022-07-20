@@ -30,49 +30,19 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
+                            <table id="table" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Tahun</th>
-                                        <th class="text-center">Jenjang</th>
-                                        <th class="text-center">Kelas</th>
-                                        <th class="text-center">Pembayaran</th>
+                                        <th>No</th>
+                                        <th>Tahun</th>
+                                        <th>Jenjang</th>
+                                        <th>Kelas</th>
+                                        <th>Pembayaran</th>
                                         <th class="text-center">Biaya</th>
-                                        <th class="text-center">Action</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($payment as $item)
-                                        <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $item->year . ' s/d ' . $item->year_end }}</td>
-                                            <td class="text-center">{{ $item->schools_level->level }}</td>
-                                            <td class="text-center">
-                                                {{ $item->schools_class ? $item->schools_class->classes : '' }}</td>
-                                            <td class="text-center">{{ $item->bills->bills }}</td>
-                                            <td align="right">{{ number_format($item->amount, 0, ',') }}</td>
-                                            <td class="text-center">
-                                                <form class="delete-form"
-                                                    action="{{ route('payment.destroy', Crypt::encryptString($item->id)) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <div class="d-flex gap-3">
-                                                        @if (in_array('41', $session_menu))
-                                                            <a href="{{ route('payment.edit', Crypt::encryptString($item->id)) }}"
-                                                                class="text-success"><i
-                                                                    class="mdi mdi-pencil font-size-18"></i></a>
-                                                        @endif
-                                                        @if (in_array('42', $session_menu))
-                                                            <a href="" class="text-danger delete_confirm"><i
-                                                                    class="mdi mdi-delete font-size-18"></i></a>
-                                                        @endif
-                                                    </div>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -81,4 +51,60 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/alert.js') }}"></script>
+    <style>
+        .right {
+            text-align: right;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: {
+                    url: "{{ route('payment.list_payment') }}",
+                },
+                columns: [{
+                        data: null,
+                        sortable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        },
+                    },
+                    {
+                        data: 'tahun',
+                        name: 'tahun',
+                    },
+                    {
+                        data: 'level',
+                        name: 'level',
+                    },
+                    {
+                        data: 'classes',
+                        name: 'classes',
+                    },
+                    {
+                        data: 'bills',
+                        name: 'bills',
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount',
+                        render: $.fn.dataTable.render.number(',', '.'),
+                        className: "right"
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+        });
+    </script>
 @endsection

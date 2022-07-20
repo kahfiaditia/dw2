@@ -231,7 +231,7 @@ class AkunController extends Controller
             $user->save();
 
             DB::commit();
-            AlertHelper::addAlert(true);
+            AlertHelper::updateAlert(true);
             if (Auth::user()->roles === 'Admin') {
                 return redirect('akun');
             } else {
@@ -240,7 +240,7 @@ class AkunController extends Controller
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();
-            AlertHelper::addAlert(false);
+            AlertHelper::updateAlert(false);
             return back();
         }
     }

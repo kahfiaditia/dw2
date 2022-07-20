@@ -58,4 +58,26 @@ class Siswa extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    // pembayaran
+    public function uang_formulir()
+    {
+        return $this->belongsTo(Payment::class, 'formulir_id');
+    }
+
+    public function uang_pangkal()
+    {
+        return $this->belongsTo(Payment::class, 'pangkal_id');
+    }
+
+    public function spp()
+    {
+        return $this->belongsTo(Payment::class, 'spp_id');
+    }
+
+    public function kegiatan()
+    {
+        return $this->belongsTo(Payment::class, 'kegiatan_id');
+    }
+    // pembayaran
 }

@@ -1,15 +1,15 @@
 <?php $session_menu = explode(',', Auth::user()->akses_submenu); ?>
 <?php $id = Crypt::encryptString($model->id); ?>
-<form class="delete-form" action="{{ route('invoice.destroy', $id) }}" method="POST">
+<form class="delete-form" action="{{ route('classes.destroy', $id) }}" method="POST">
     @csrf
     @method('DELETE')
     <div class="d-flex gap-3">
-        {{-- @if (in_array('37', $session_menu))
-            <a href="{{ route('invoice.edit', $id) }}" class="text-success"><i
+        @if (in_array('33', $session_menu))
+            <a href="{{ route('classes.edit', $id) }}" class="text-success"><i
                     class="mdi mdi-pencil font-size-18"></i></a>
-        @endif --}}
-        @if (in_array('38', $session_menu))
-            <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
+        @endif
+        @if (in_array('34', $session_menu))
+            <a href="" class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
         @endif
     </div>
 </form>

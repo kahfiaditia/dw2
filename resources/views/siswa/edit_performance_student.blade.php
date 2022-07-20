@@ -38,129 +38,95 @@
                                 aria-labelledby="v-pills-shipping-tab">
                                 <div class="card shadow-none border mb-0">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div
-                                                    class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                                    <div class="page-title-left">
-                                                        <h4 class="mb-sm-0 font-size-18">{{ $label }}
-                                                        </h4>
-                                                        <ol class="breadcrumb m-0">
-                                                            <li class="breadcrumb-item">{{ ucwords($menu) }}
-                                                            </li>
-                                                            <li class="breadcrumb-item">
-                                                                {{ ucwords($submenu) }}</li>
-                                                        </ol>
+                                        <form method="POST"
+                                            action="{{ route('siswa.update_performance_student', Crypt::encryptString($performance->id)) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="student_id"
+                                                value="{{ \Crypt::encryptString($performance->siswa_id) }}">
+                                            <div class="row">
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">Jenis
+                                                            Prestasi</label>
+                                                        <select name="jenis_prestasi" id="" required
+                                                            class="form-control select select2">
+                                                            <option value="">-- Pilih Jenis
+                                                                Prestasi --
+                                                            </option>
+                                                            @foreach ($performance_types as $performance_type)
+                                                                <option value="{{ $performance_type }}"
+                                                                    @if ($performance_type == $performance->jenis_prestasi) selected @endif>
+                                                                    {{ $performance_type }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Tingkat
+                                                            Prestasi</label>
+                                                        <select name="tingkat_prestasi" id=""
+                                                            class="form-control select select2" required>
+                                                            <option value="">-- Pilih Tingkat
+                                                                Prestasi
+                                                                --</option>
+                                                            @foreach ($performance_levels as $performance_level)
+                                                                <option value="{{ $performance_level }}"
+                                                                    @if ($performance_level == $performance->tingkat_prestasi) selected @endif>
+                                                                    {{ $performance_level }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="">Nama Prestasi</label>
+                                                        <input type="text" class="form-control" name="nama_prestasi"
+                                                            placeholder="Nama Prestasi"
+                                                            value="{{ old('nama_prestasi', $performance->nama_prestasi) }}"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="">Tahun Prestasi</label>
+                                                        <input type="text" class="number-only form-control"
+                                                            name="tahun_prestasi" placeholder="Tahun Prestasi"
+                                                            maxlength="4" minlength="4"
+                                                            value="{{ old('tahun_prestasi', $performance->tahun_prestasi) }}"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="">Penyelenggara</label>
+                                                        <input type="text" class="form-control" name="penyelenggara"
+                                                            placeholder="Peneyelenggara"
+                                                            value="{{ old('penyelenggara', $performance->penyelenggara) }}"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="form-group">
+                                                        <label for="">Peringkat</label>
+                                                        <input type="text" class="number-only form-control"
+                                                            name="peringkat" placeholder="peringkat"
+                                                            value="{{ old('peringkat', $performance->peringkat) }}"
+                                                            required>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <form method="POST"
-                                                            action="{{ route('siswa.update_performance_student', Crypt::encryptString($performance->id)) }}">
-                                                            <div class="modal-body">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <input type="hidden" name="student_id"
-                                                                    value="{{ \Crypt::encryptString($performance->siswa_id) }}">
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="exampleInputEmail1">Jenis
-                                                                                Prestasi</label>
-                                                                            <select name="jenis_prestasi" id=""
-                                                                                required
-                                                                                class="form-control select select2">
-                                                                                <option value="">-- Pilih Jenis
-                                                                                    Prestasi --
-                                                                                </option>
-                                                                                @foreach ($performance_types as $performance_type)
-                                                                                    <option
-                                                                                        value="{{ $performance_type }}"
-                                                                                        @if ($performance_type == $performance->jenis_prestasi) selected @endif>
-                                                                                        {{ $performance_type }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="exampleInputPassword1">Tingkat
-                                                                                Prestasi</label>
-                                                                            <select name="tingkat_prestasi" id=""
-                                                                                class="form-control select select2"
-                                                                                required>
-                                                                                <option value="">-- Pilih Tingkat
-                                                                                    Prestasi
-                                                                                    --</option>
-                                                                                @foreach ($performance_levels as $performance_level)
-                                                                                    <option
-                                                                                        value="{{ $performance_level }}"
-                                                                                        @if ($performance_level == $performance->tingkat_prestasi) selected @endif>
-                                                                                        {{ $performance_level }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="">Nama Prestasi</label>
-                                                                            <input type="text" class="form-control"
-                                                                                name="nama_prestasi"
-                                                                                placeholder="Nama Prestasi"
-                                                                                value="{{ old('nama_prestasi', $performance->nama_prestasi) }}"
-                                                                                required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="">Tahun Prestasi</label>
-                                                                            <input type="text"
-                                                                                class="number-only form-control"
-                                                                                name="tahun_prestasi"
-                                                                                placeholder="Tahun Prestasi" maxlength="4"
-                                                                                minlength="4"
-                                                                                value="{{ old('tahun_prestasi', $performance->tahun_prestasi) }}"
-                                                                                required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="">Penyelenggara</label>
-                                                                            <input type="text" class="form-control"
-                                                                                name="penyelenggara"
-                                                                                placeholder="Peneyelenggara"
-                                                                                value="{{ old('penyelenggara', $performance->penyelenggara) }}"
-                                                                                required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 mt-3">
-                                                                        <div class="form-group">
-                                                                            <label for="">Peringkat</label>
-                                                                            <input type="text"
-                                                                                class="number-only form-control"
-                                                                                name="peringkat" placeholder="peringkat"
-                                                                                value="{{ old('peringkat', $performance->peringkat) }}"
-                                                                                required>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <a href="{{ route('siswa.list_performance_students', \Crypt::encryptString($student->id)) }}"
-                                                                    type="button" class="btn btn-secondary btn-sm"
-                                                                    data-dismiss="modal">Batal</a>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary btn-sm">Simpan</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                            <div class="row mt-4">
+                                                <div class="col-sm-12">
+                                                    <a href="{{ route('siswa.list_performance_students', \Crypt::encryptString($student->id)) }}"
+                                                        type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Batal</a>
+                                                    <button type="submit" style="float: right"
+                                                        class="btn btn-primary">Simpan</button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

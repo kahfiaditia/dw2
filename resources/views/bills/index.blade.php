@@ -33,20 +33,20 @@
                             <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Tagihan</th>
-                                        <th class="text-center">Keterangan</th>
-                                        <th class="text-center">Pengulangan</th>
-                                        <th class="text-center">Action</th>
+                                        <th>No</th>
+                                        <th>Tagihan</th>
+                                        <th>Keterangan</th>
+                                        <th>Pengulangan</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($bills as $bill)
                                         <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td class="text-center">{{ $bill->bills }}</td>
-                                            <td class="text-center">{{ $bill->notes }}</td>
-                                            <td class="text-center">
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $bill->bills }}</td>
+                                            <td>{{ $bill->notes }}</td>
+                                            <td>
                                                 <span class="badge badge-pill badge-soft-<?php if ($bill->looping == 1) {
                                                     echo 'success';
                                                 } else {
@@ -59,7 +59,7 @@
                                                     @endif
                                                 </span>
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 <form class="delete-form"
                                                     action="{{ route('bills.destroy', Crypt::encryptString($bill->id)) }}"
                                                     method="POST">

@@ -45,8 +45,7 @@ class AlertHelper
 
     public static function addDuplicate($info)
     {
-        if ($info) {
-        } else {
+        if ($info !== true) {
             Alert::error('Gagal', 'Gagal disimpan, data sudah ada');
         }
     }
@@ -64,6 +63,29 @@ class AlertHelper
     {
         if ($info !== true) {
             Alert::error('Gagal', 'Format file harus CSV');
+        }
+    }
+
+    public static function paymentValidation($info)
+    {
+        if ($info) {
+            Alert::success('Berhasil', 'Pembayaran sudah Lunas');
+        } else {
+            Alert::error('Gagal', 'Pembayaran melebihi tagihan');
+        }
+    }
+
+    public static function nullValidation($info)
+    {
+        if ($info !== true) {
+            Alert::error('Gagal', 'Pembayaran wajib diisi');
+        }
+    }
+
+    public static function settingPayment($info)
+    {
+        if ($info !== true) {
+            Alert::error('Gagal', 'Wajib setting pembayaran terlebih dahulu');
         }
     }
 }

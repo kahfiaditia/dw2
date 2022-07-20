@@ -6,6 +6,7 @@ use App\Helper\AlertHelper;
 use App\Models\Bills;
 use App\Models\Classes;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -39,17 +40,18 @@ class InvoiceController extends Controller
     public function list_invoice(Request $request)
     {
         $invoice = DB::table('invoice')
-            ->select('invoice.id', 'year', 'month', 'invoice.amount', 'bills', 'nama_lengkap', 'classes.*')
+            ->select('invoice.id', 'invoice.created_at', 'year', 'year_end', 'month', 'invoice.amount', 'bills', 'nama_lengkap', 'level', 'classes', 'jurusan', 'type', 'nisn', 'nik')
             ->leftjoin('bills', 'bills.id', '=', 'invoice.bills_id')
             ->leftjoin('classes', 'classes.id', '=', 'invoice.class_id')
+            ->leftjoin('school_level', 'school_level.id', '=', 'classes.id_school_level')
+            ->leftjoin('school_class', 'school_class.id', '=', 'classes.class_id')
             ->leftjoin('siswa', 'siswa.id', '=', 'invoice.siswa_id')
             ->whereNull('invoice.deleted_at')
-            ->orderBy('year', 'asc')
-            ->orderBy('month', 'asc')
+            ->orderBy('invoice.id', 'desc')
             ->get();
         return DataTables::of($invoice)
             ->addColumn('tahun', function ($invoice) {
-                return $invoice->year;
+                return $invoice->year . '/' . $invoice->year_end;
             })
             ->addColumn('bulan', function ($invoice) {
                 return date('F', mktime(0, 0, 0, $invoice->month, 10));
@@ -60,19 +62,17 @@ class InvoiceController extends Controller
             ->addColumn('biaya', function ($invoice) {
                 return $invoice->amount;
             })
+            ->addColumn('nik', function ($invoice) {
+                return $invoice->nisn . '/' . $invoice->nik;
+            })
             ->addColumn('siswa', function ($invoice) {
                 return $invoice->nama_lengkap;
             })
-            ->addColumn('jenjang', function ($invoice) {
-                return $invoice->jenjang;
+            ->addColumn('tanggal', function ($invoice) {
+                return $invoice->created_at;
             })
-            ->addColumn('kelas', function ($invoice) {
-                if ($invoice->type) {
-                    $kelas = $invoice->class . ' - [ ' . $invoice->type . ' ]';
-                } else {
-                    $kelas = $invoice->class;
-                }
-                return $kelas;
+            ->addColumn('jenjang', function ($invoice) {
+                return $invoice->level . ' ' . $invoice->classes . ' ' . $invoice->jurusan . '.' . $invoice->type;
             })
             ->addColumn('action', 'invoice.button')
             ->rawColumns(['action'])
@@ -155,9 +155,9 @@ class InvoiceController extends Controller
                 $nisn = array();
             }
             $where = $nik + $nisn;
-            $siswa = Siswa::where($where)->get();
-            if (count($siswa) > 0) {
-                $siswa_id = Crypt::encryptString($siswa[0]->id);
+            $siswa = Siswa::where($where)->first();
+            if ($siswa) {
+                $siswa_id = Crypt::encryptString($siswa->id);
             } else {
                 return back()->with('logError', 'Pencarian data tidak ditemukan.');
             }
@@ -170,22 +170,155 @@ class InvoiceController extends Controller
     public function search($siswa_id)
     {
         $student = Siswa::findorfail(Crypt::decryptString($siswa_id));
-        $payment = DB::table('bills')
-            ->leftJoin('payment', 'payment.bills_id', '=', 'bills.id')
-            ->where('school_level_id', $student->classes_student->id_school_level)
-            ->get();
+        // cek histori uang formulir
+        $invoice_tahunan = DB::table('invoice')
+            ->selectRaw("sum(CASE WHEN bills = 'Uang Formulir' THEN amount ELSE 0 END) AS formulir, sum(CASE WHEN bills = 'Uang Pangkal' THEN amount ELSE 0 END) AS pangkal")
+            ->Join('bills', 'bills.id', '=', 'invoice.bills_id')
+            ->whereNull('invoice.deleted_at')
+            ->where('siswa_id', Crypt::decryptString($siswa_id))
+            ->first();
+        // cek histori uang pangkal
+        $invoice_bulanan = DB::table('invoice')
+            ->selectRaw("group_concat(DISTINCT `month` separator ',') AS bulan, count(DISTINCT month) count_bulan")
+            ->selectRaw("sum(CASE WHEN bills = 'SPP' THEN amount ELSE 0 END) AS uang_spp, sum(CASE WHEN bills = 'Uang Kegiatan' THEN amount ELSE 0 END) AS uang_kegiatan")
+            ->Join('bills', 'bills.id', '=', 'invoice.bills_id')
+            ->whereNull('invoice.deleted_at')
+            ->where('siswa_id', Crypt::decryptString($siswa_id))
+            ->where(function ($query) use ($student) {
+                $query->where('payment_id', '=', $student->spp_id)
+                    ->orWhere('payment_id', '=', $student->kegiatan_id);
+            })
+            ->where('year', $student->spp->year)
+            ->where('year_end', $student->spp->year_end)
+            ->first();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'tambah ' . $this->submenu,
             'students' => $student,
-            'bills' => $payment,
-            // 'invoice' => Invoice::where('siswa_id', $student->id)->get(),
+            'invoice_tahunan' => $invoice_tahunan,
+            'invoice_bulanan' => $invoice_bulanan,
         ];
         return view('invoice.search')->with($data);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nik' => 'required',
+            'siswa' => 'required',
+            'tahun_ajaran_start' => 'required',
+            'tahun_ajaran_end' => 'required',
+        ]);
+        $total = $request->hiddenPangkal + $request->hiddenFormulir + $request->hiddenSpp + $request->hiddenKegiatan;
+        if ($total <= 0) {
+            AlertHelper::nullValidation(false);
+            return back();
+        }
+        DB::beginTransaction();
+        try {
+            // pembayaran uang formulir
+            if ($request->hiddenFormulir) {
+                $payment = Payment::findorfail($request->PaymentIdFormulir);
+                $cek_invoice_formulir = Invoice::where('siswa_id', Crypt::decryptString($request->studentsId))->where('bills_id', $payment->bills_id)->sum('amount');
+                if (($cek_invoice_formulir + $request->hiddenFormulir) > $request->UangFormulir) {
+                    AlertHelper::paymentValidation(false);
+                    return back();
+                }
+                Invoice::create([
+                    'year' => $payment->year,
+                    'year_end' => $payment->year_end,
+                    'amount' => $request->hiddenFormulir,
+                    'payment_id' => $request->PaymentIdFormulir,
+                    'bills_id' => $payment->bills_id,
+                    'siswa_id' => Crypt::decryptString($request->studentsId),
+                    'class_id' => Crypt::decryptString($request->classId),
+                ]);
+            }
+            // pembayaran uang pangkal
+            if ($request->hiddenPangkal) {
+                $payment = Payment::findorfail($request->PaymentIdPangkal);
+                $cek_invoice_pangkal = Invoice::where('siswa_id', Crypt::decryptString($request->studentsId))->where('bills_id', $payment->bills_id)->sum('amount');
+                if (($cek_invoice_pangkal + $request->hiddenPangkal) > $request->UangPangkal) {
+                    AlertHelper::paymentValidation(false);
+                    return back();
+                }
+                Invoice::create([
+                    'year' => $payment->year,
+                    'year_end' => $payment->year_end,
+                    'amount' => $request->hiddenPangkal,
+                    'payment_id' => $request->PaymentIdPangkal,
+                    'bills_id' => $payment->bills_id,
+                    'siswa_id' => Crypt::decryptString($request->studentsId),
+                    'class_id' => Crypt::decryptString($request->classId),
+                ]);
+            }
+            // pembayaran bulanan
+            if ($request->bulan != null) {
+                for ($i = 0; $i < count($request->bulan); $i++) {
+                    $spp = Payment::findorfail($request->SPP_id);
+                    Invoice::create([
+                        'year' => $request->tahun_ajaran_start,
+                        'year_end' => $request->tahun_ajaran_end,
+                        'month' => $request->bulan[$i],
+                        'amount' => $request->SPP,
+                        'payment_id' => $request->SPP_id,
+                        'bills_id' => $spp->bills_id,
+                        'siswa_id' => Crypt::decryptString($request->studentsId),
+                        'class_id' => Crypt::decryptString($request->classId),
+                    ]);
+                    $kegiatan = Payment::findorfail($request->Kegiatan_id);
+                    Invoice::create([
+                        'year' => $request->tahun_ajaran_start,
+                        'year_end' => $request->tahun_ajaran_end,
+                        'month' => $request->bulan[$i],
+                        'amount' => $request->UangKegiatan,
+                        'payment_id' => $request->Kegiatan_id,
+                        'bills_id' => $kegiatan->bills_id,
+                        'siswa_id' => Crypt::decryptString($request->studentsId),
+                        'class_id' => Crypt::decryptString($request->classId),
+                    ]);
+                }
+            }
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::addAlert(false);
+            return back();
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+            $delete = Invoice::findOrFail(Crypt::decryptString($id));
+            $delete->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
     // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -268,45 +401,6 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'year' => 'required',
-            'month' => 'required',
-            'bills_id' => 'required',
-            'class_id' => 'required',
-            'siswa_id' => 'required',
-            'class_siswa' => 'required',
-            'amount' => 'required',
-            'jenjang' => 'required',
-        ]);
-        DB::beginTransaction();
-        try {
-            Invoice::create([
-                'year' => $validated['year'],
-                'month' => $validated['month'],
-                'bills_id' => $validated['bills_id'],
-                'class_id' => $validated['class_id'],
-                'siswa_id' => $validated['siswa_id'],
-                'amount' => str_replace(",", "", $validated['amount']),
-            ]);
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('invoice');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
-        }
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -373,28 +467,6 @@ class InvoiceController extends Controller
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::updateAlert(false);
-            return back();
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        DB::beginTransaction();
-        try {
-            $delete = Invoice::findOrFail(Crypt::decryptString($id));
-            $delete->delete();
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
             return back();
         }
     }
