@@ -131,7 +131,7 @@
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
                                         <a href="{{ route('payment.index') }}"
-                                            class="btn btn-secondary waves-effect">Kembali</a>
+                                            class="btn btn-secondary waves-effect">Batal</a>
                                         <button class="btn btn-primary" type="submit" style="float: right"
                                             id="submit">Simpan</button>
                                     </div>

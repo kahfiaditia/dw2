@@ -15,28 +15,28 @@
                     </div>
                 </div>
             </div>
-            <form class="needs-validation" action="{{ route('agama.store') }}" method="POST" novalidate>
+            <form class="needs-validation" action="{{ route('setting.store') }}" method="POST" novalidate>
                 @csrf
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Agama</label>
-                                            <input type="text" class="form-control" id="agama" name="agama"
-                                                required placeholder="Agama" value="{{ old('agama') }}">
-                                            <div class="invalid-feedback">
-                                                Data wajib diisi.
+                                            <label for="validationCustom02" class="form-label">Maintenance Website
+                                                <code>*</code></label>
+                                            <div>
+                                                <input type="checkbox" id="switch1" switch="none" name="maintenance" />
+                                                <label for="switch1" data-on-label="On" data-off-label="Off"></label>
                                             </div>
-                                            {!! $errors->first('agama', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
-                                        <a href="{{ route('agama') }}" class="btn btn-secondary waves-effect">Batal</a>
+                                        <a href="{{ route('setting.index') }}"
+                                            class="btn btn-secondary waves-effect">Batal</a>
                                         <button class="btn btn-primary" type="submit" style="float: right"
                                             id="submit">Simpan</button>
                                     </div>

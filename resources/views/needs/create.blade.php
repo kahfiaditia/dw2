@@ -35,8 +35,8 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Nama Kebutuhan
                                                 Khusus</label>
-                                            <input type="text" class="form-control" value="{{ old('nama') }}" id="nama"
-                                                name="nama" required placeholder="Nama Kebutuhan Khusus">
+                                            <input type="text" class="form-control" value="{{ old('nama') }}"
+                                                id="nama" name="nama" required placeholder="Nama Kebutuhan Khusus">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
@@ -47,7 +47,7 @@
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
                                         <a href="{{ route('needs.index') }}"
-                                            class="btn btn-secondary waves-effect">Kembali</a>
+                                            class="btn btn-secondary waves-effect">Batal</a>
                                         <button class="btn btn-primary" type="submit" style="float: right"
                                             id="submit">Simpan</button>
                                     </div>

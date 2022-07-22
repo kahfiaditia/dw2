@@ -21,7 +21,13 @@ class LoginController extends Controller
     public function index()
     {
         $setting = Setting::first();
-        if ($setting->maintenance) {
+        if ($setting == null) {
+            $data = [
+                'title' => $this->title,
+                'submenu' => 'Maintenance',
+            ];
+            return view('login.maintenance')->with($data);
+        } else if ($setting->maintenance == 1) {
             $data = [
                 'title' => $this->title,
                 'submenu' => 'Maintenance',

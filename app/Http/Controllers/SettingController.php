@@ -14,46 +14,47 @@ class SettingController extends Controller
     protected $menu = 'setting';
     protected $submenu = 'setting website';
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $settings = Setting::orderBy('id', 'DESC')->get();
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => $this->submenu,
+            'label' => 'data ' . $this->submenu,
+            'settings' => $settings
+        ];
+        return view('setting.index')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => $this->submenu,
+            'label' => 'tambah ' . $this->submenu,
+        ];
+        return view('setting.create')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        DB::beginTransaction();
+        try {
+            $setting = new Setting();
+            $setting->maintenance = isset($request->maintenance) ? 1 : null;
+            $setting->save();
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return redirect('setting');
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::addAlert(false);
+            return back();
+        }
     }
 
     /**
@@ -92,7 +93,7 @@ class SettingController extends Controller
             $setting->save();
             DB::commit();
             AlertHelper::updateAlert(true);
-            return back();
+            return redirect('setting');
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::updateAlert(false);

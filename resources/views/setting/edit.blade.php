@@ -32,16 +32,15 @@
                                                 <input type="checkbox" id="switch1" switch="none" name="maintenance"
                                                     {{ $setting->maintenance == '1' ? 'checked' : '' }} />
                                                 <label for="switch1" data-on-label="On" data-off-label="Off"></label>
-                                                <div class="invalid-feedback">
-                                                    Data wajib diisi.
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
-                                        <button class="btn btn-primary" type="submit" {{-- style="float: right" --}}
+                                        <a href="{{ route('setting.index') }}"
+                                            class="btn btn-secondary waves-effect">Batal</a>
+                                        <button class="btn btn-primary" type="submit" style="float: right"
                                             id="submit">Simpan</button>
                                     </div>
                                 </div>
