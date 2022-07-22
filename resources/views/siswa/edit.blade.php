@@ -57,7 +57,8 @@
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Email <code>*</code></label>
                                                     <input type="email" class="form-control" name="email" required
-                                                        placeholder="Email" value="{{ old('email', $student->email) }}">
+                                                        readonly placeholder="Email"
+                                                        value="{{ old('email', $student->email) }}">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -259,7 +260,7 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mb-3">
                                                     <label for="">Nama Negara <code>*</code></label>
                                                     <input type="text" class="form-control" name="nama_negara"
                                                         required placeholder="Nama Negara"
@@ -283,7 +284,8 @@
                                                                 <option value="{{ $special_need->id }}"
                                                                     @if ($student->kebutuhan_khusus_id == $special_need->id) selected @endif
                                                                     {{ old('kebutuhan_khusus') == $special_need->id ? 'selected' : '' }}>
-                                                                    {{ $special_need->nama }}</option>
+                                                                    {{ $special_need->kode . ') ' . $special_need->nama }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                         <div class="invalid-feedback">
@@ -331,7 +333,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="validationCustom02" class="form-label">RT
                                                                 <code>*</code></label>
                                                             <input type="text" min="0"
@@ -345,7 +347,7 @@
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">RW <code>*</code></label>
                                                             <input type="text" class="number-only form-control"
                                                                 name="rw" required placeholder="RW"
@@ -360,9 +362,9 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="formFile" class="form-label">Dusun
                                                                 <code>*</code></label>
                                                             <input class="form-control" type="text" name="nama_dusun"
@@ -375,7 +377,7 @@
                                                                 Data wajib diisi.
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kecamatan <code>*</code></label>
                                                             <select name="kecamatan" id="kecamatan"
                                                                 class="form-control select2" required>
@@ -400,9 +402,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kelurahan <code>*</code></label>
                                                             <select name="kelurahan" id="kelurahan"
                                                                 class="form-control select2" required>
@@ -415,7 +417,7 @@
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kode Pos <code>*</code></label>
                                                             <select name="kode_pos" id="kode_pos"
                                                                 class="form-control select2" required>
@@ -432,7 +434,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Moda Transportasi <code>*</code></label>
                                                             <input type="text" class="form-control"
                                                                 name="moda_transportasi" placeholder="Moda Transportasi"
@@ -445,7 +447,7 @@
                                                                 <small>{{ $mesasge }}</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Anak keberapa <code>*</code></label>
                                                             <input required type="text"
                                                                 class="number-only form-control" name="anak_keberapa"
@@ -462,7 +464,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Apakah Punya KIP <code>*</code></label>
                                                             <select name="is_have_kip" class="form-control select select2"
                                                                 required>
@@ -481,7 +483,7 @@
                                                                 <small class="text-danger">Data wajib diisi</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Tetap Menerima KIP <code>*</code></label>
                                                             <select name="is_receive_kip"
                                                                 class="form-control select select2" required>
@@ -498,7 +500,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 mt-3">
+                                                <div class="col-md-6">
                                                     <label for="">Alasan Menolak KIP</label>
                                                     <select name="reason_reject_kip" class="form-control select select2">
                                                         <option value="">-- Pilih Salah Satu --</option>
@@ -520,9 +522,9 @@
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('siswa.index') }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Kembali</a>
-                                                    <button class="btn btn-primary btn-sm" type="submit"
-                                                        style="float: right" id="submit">Simpan</button>
+                                                        class="btn btn-secondary waves-effect">Kembali</a>
+                                                    <button class="btn btn-primary" type="submit" style="float: right"
+                                                        id="submit">Simpan</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -547,57 +549,59 @@
             let district = $("#kecamatan :selected").val()
             url = url.replace(':district', district)
 
-            $.ajax({
-                type: 'GET',
-                url: url,
-                success: response => {
-                    $("#kelurahan option").remove()
-                    $("#kelurahan").append(`<option value="">-- Pilih Kelurahan --</option>`)
-                    $.each(response.data, function(index, item) {
-                        if (item.kelurahan == old_district) {
-                            oldVillage = item.kelurahan
-                            urlPostalCode = urlPostalCode.replace(':oldVillage', oldVillage)
-                            next()
-                            $("#kelurahan").append(
-                                `<option value="${item.kelurahan}" selected>${item.kelurahan}</option>`
-                            )
-                        } else {
-                            $("#kelurahan").append(
-                                `<option value="${item.kelurahan}">${item.kelurahan}</option>`
-                            )
-                        }
-                    })
-                },
-                error: err => console.log(err)
-            })
-
-            function next() {
+            if (district) {
                 $.ajax({
                     type: 'GET',
-                    url: urlPostalCode,
+                    url: url,
                     success: response => {
-                        $("#kode_pos option").remove()
-                        $("#kode_pos").append(`<option value="">-- Pilih Kode Pos --</option>`)
+                        $("#kelurahan option").remove()
+                        $("#kelurahan").append(`<option value="">-- Pilih Kelurahan --</option>`)
                         $.each(response.data, function(index, item) {
-                            if (item.kodepos == oldPostalCode) {
-                                $("#kode_pos").append(
-                                    `<option value="${item.kodepos}" selected>${item.kodepos}</option>`
+                            if (item.kelurahan == old_district) {
+                                oldVillage = item.kelurahan
+                                urlPostalCode = urlPostalCode.replace(':oldVillage', oldVillage)
+                                next()
+                                $("#kelurahan").append(
+                                    `<option value="${item.kelurahan}" selected>${item.kelurahan}</option>`
                                 )
                             } else {
-                                $("#kode_pos").append(
-                                    `<option value="${item.kodepos}">${item.kodepos}</option>`
+                                $("#kelurahan").append(
+                                    `<option value="${item.kelurahan}">${item.kelurahan}</option>`
                                 )
                             }
                         })
                     },
                     error: err => console.log(err)
                 })
+
+                function next() {
+                    $.ajax({
+                        type: 'GET',
+                        url: urlPostalCode,
+                        success: response => {
+                            $("#kode_pos option").remove()
+                            $("#kode_pos").append(`<option value="">-- Pilih Kode Pos --</option>`)
+                            $.each(response.data, function(index, item) {
+                                if (item.kodepos == oldPostalCode) {
+                                    $("#kode_pos").append(
+                                        `<option value="${item.kodepos}" selected>${item.kodepos}</option>`
+                                    )
+                                } else {
+                                    $("#kode_pos").append(
+                                        `<option value="${item.kodepos}">${item.kodepos}</option>`
+                                    )
+                                }
+                            })
+                        },
+                        error: err => console.log(err)
+                    })
+                }
             }
 
             $("#kecamatan").bind('change', function() {
                 let district = $(this).val()
+                let url = '{{ route('kodepos.get_villages_by_district', ':district') }}'
                 url = url.replace(':district', district)
-
                 $.ajax({
                     type: "GET",
                     url: url,

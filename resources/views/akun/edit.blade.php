@@ -42,18 +42,17 @@
                                                 required>
                                                 @if ($akun->roles === 'Admin')
                                                     <option value="">--Pilih Roles--</option>
-                                                    <option value="Admin"
-                                                        {{ $akun->roles === 'Admin' ? 'selected' : '' }}>Admin</option>
+                                                    <option value="Admin" {{ $akun->roles === 'Admin' ? 'selected' : '' }}>
+                                                        Admin</option>
                                                     <option value="Karyawan"
                                                         {{ $akun->roles === 'Karyawan' ? 'selected' : '' }}>Karyawan
                                                     </option>
-                                                    <option value="Siswa"
-                                                        {{ $akun->roles === 'Siswa' ? 'selected' : '' }}>
+                                                    <option value="Siswa" {{ $akun->roles === 'Siswa' ? 'selected' : '' }}>
                                                         Siswa</option>
                                                     <option value="Alumni"
                                                         {{ $akun->roles === 'Alumni' ? 'selected' : '' }}>Alumni</option>
-                                                    <option value="Ortu"
-                                                        {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>Orang Tua
+                                                    <option value="Ortu" {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>
+                                                        Orang Tua
                                                     </option>
                                                 @else
                                                     <option value="{{ $akun->roles }}" selected>{{ $akun->roles }}
@@ -70,6 +69,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Email <code>*</code></label>
+                                            <input type="hidden" name="email_old" value="{{ $akun->email }}">
                                             <input type="text" class="form-control" id="email" name="email"
                                                 value="{{ $akun->email }}" required placeholder="Email">
                                             <div class="invalid-feedback">
@@ -129,10 +129,10 @@
                                     <div class="col-sm-6">
                                         @if (Auth::user()->roles === 'Admin')
                                             <a href="{{ route('akun.index') }}"
-                                                class="btn btn-secondary waves-effect">Cancel</a>
+                                                class="btn btn-secondary waves-effect">Batal</a>
                                         @else
                                             <a href="{{ URL::previous() }}"
-                                                class="btn btn-secondary waves-effect">Cancel</a>
+                                                class="btn btn-secondary waves-effect">Batal</a>
                                         @endif
                                     </div>
                                     <div class="col-sm-6">

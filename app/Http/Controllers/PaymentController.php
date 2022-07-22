@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Bills;
-use App\Models\Classes;
 use App\Models\Payment;
 use App\Models\School_class;
 use App\Models\School_level;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class PaymentController extends Controller
 {
@@ -34,6 +36,30 @@ class PaymentController extends Controller
             'payment' => $payment
         ];
         return view('payment.index')->with($data);
+    }
+
+    public function list_payment(Request $request)
+    {
+        $payment = Payment::orderBy('id', 'DESC')->get();
+        return DataTables::of($payment)
+            ->addColumn('tahun', function ($payment) {
+                return $payment->year . '/' . $payment->year_end;
+            })
+            ->addColumn('level', function ($payment) {
+                return  $payment->schools_level->level;
+            })
+            ->addColumn('classes', function ($payment) {
+                return $payment->schools_class ? $payment->schools_class->classes : '';
+            })
+            ->addColumn('bills', function ($payment) {
+                return $payment->bills->bills;
+            })
+            ->addColumn('amount', function ($payment) {
+                return $payment->amount;
+            })
+            ->addColumn('action', 'payment.button')
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
@@ -86,6 +112,7 @@ class PaymentController extends Controller
                 'school_class_id' => $request->class_id,
                 'bills_id' => $validated['bills_id'],
                 'amount' => str_replace(".", "", $validated['amount']),
+                'user_created' => Auth::user()->id,
             ]);
             DB::commit();
             AlertHelper::addAlert(true);
@@ -118,12 +145,11 @@ class PaymentController extends Controller
     public function edit($id)
     {
         $payment = Payment::findOrFail(Crypt::decryptString($id));
-        // dd($payment->school_class_id);
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'tambah ' . $this->submenu,
+            'label' => 'Ubah ' . $this->submenu,
             'classes' => School_level::all(),
             'kelas' => School_class::where('school_level_id', $payment->school_level_id)->get(),
             'bills' => Bills::orderByRaw("FIELD(bills, 'SPP', 'Uang Kegiatan', 'Uang Pangkal', 'Uang Formulir')")->get(),
@@ -157,6 +183,7 @@ class PaymentController extends Controller
             $payment->school_class_id = $request->class_id;
             $payment->bills_id = $validated['bills_id'];
             $payment->amount = str_replace(".", "", $validated['amount']);
+            $payment->user_updated = Auth::user()->id;
             $payment->save();
             DB::commit();
             AlertHelper::updateAlert(true);
@@ -179,7 +206,9 @@ class PaymentController extends Controller
         DB::beginTransaction();
         try {
             $delete = Payment::findOrFail(Crypt::decryptString($id));
-            $delete->delete();
+            $delete->user_deleted = Auth::user()->id;
+            $delete->deleted_at = Carbon::now();
+            $delete->save();
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();

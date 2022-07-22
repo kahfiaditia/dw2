@@ -9,6 +9,7 @@ use App\Models\School_level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class ClassesController extends Controller
 {
@@ -33,6 +34,27 @@ class ClassesController extends Controller
         ];
 
         return view('classes.index')->with($data);
+    }
+
+    public function list_classes(Request $request)
+    {
+        $item = Classes::orderBy('id', 'DESC')->get();
+        return DataTables::of($item)
+            ->addColumn('level', function ($item) {
+                return $item->school_level ? $item->school_level->level : '';
+            })
+            ->addColumn('classes', function ($item) {
+                return  $item->school_class ? $item->school_class->classes : '';
+            })
+            ->addColumn('jurusan', function ($item) {
+                return $item->jurusan;
+            })
+            ->addColumn('type', function ($item) {
+                return $item->type;
+            })
+            ->addColumn('action', 'classes.button')
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
@@ -106,7 +128,7 @@ class ClassesController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'Edit ' . $this->submenu,
+            'label' => 'Ubah ' . $this->submenu,
             'classes' => $classes,
             'jurusan' => School_level::all(),
             'kelas' => School_class::where('school_level_id', $classes->id_school_level)->get(),

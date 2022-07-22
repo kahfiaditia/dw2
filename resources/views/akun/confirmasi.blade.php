@@ -107,7 +107,7 @@
                                 <div class="row mt-4">
                                     <div class="col-sm-6">
                                         <a href="{{ route('akun.index') }}"
-                                            class="btn btn-secondary waves-effect">Cancel</a>
+                                            class="btn btn-secondary waves-effect">Batal</a>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="text-sm-end mt-2 mt-sm-0">

@@ -77,7 +77,7 @@ class NeedsController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'Edit kebutuhan khusus',
+            'label' => 'Ubah kebutuhan khusus',
             'special_need' => $special_need
         ];
 

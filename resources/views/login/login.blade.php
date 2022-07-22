@@ -53,10 +53,17 @@
                                     </div>
                                 </div>
                             @endif
+                            @if (session()->has('Error'))
+                                <div class="p-2">
+                                    <div class="alert alert-danger" role="alert">
+                                        Verifikasi Fail!
+                                    </div>
+                                </div>
+                            @endif
                             @if (session()->has('loginError'))
                                 <div class="p-2">
                                     <div class="alert alert-danger" role="alert">
-                                        Login Fail!
+                                        {{ session('loginError') }}
                                     </div>
                                 </div>
                             @endif
@@ -88,7 +95,7 @@
                                             <button class="btn btn-light" type="button" id="password-addon"><i
                                                     class="mdi mdi-eye-outline"></i></button>
                                             <div class="invalid-feedback">
-                                                Please Enter Password and It should have 6 characters or more.
+                                                Please Enter Password and It should have 5 characters or more.
                                             </div>
                                         </div>
                                     </div>

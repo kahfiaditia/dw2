@@ -42,16 +42,7 @@
                                             <div class="col-12">
                                                 <div
                                                     class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                                    <div class="page-title-left">
-                                                        <h4 class="mb-sm-0 font-size-18">{{ $label }}
-                                                        </h4>
-                                                        <ol class="breadcrumb m-0">
-                                                            <li class="breadcrumb-item">{{ ucwords($menu) }}
-                                                            </li>
-                                                            <li class="breadcrumb-item">
-                                                                {{ ucwords($submenu) }}</li>
-                                                        </ol>
-                                                    </div>
+                                                    <div class="page-title-left"></div>
                                                     <div class="page-title-right">
                                                         <ol class="breadcrumb m-0">
                                                             <a id="modal_trigger" data-toggle="modal"
@@ -68,7 +59,7 @@
                                             <div class="col-12">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <table id="mydata"
+                                                        <table id="datatable"
                                                             class="table table-striped dt-responsive nowrap w-100">
                                                             <thead>
                                                                 <tr>
@@ -121,6 +112,14 @@
                                                         </table>
                                                     </div>
                                                 </div>
+                                                <div class="row mt-4">
+                                                    <div class="col-sm-12">
+                                                        <a href="{{ route('siswa.list_performance_students', \Crypt::encryptString($student->id)) }}"
+                                                            class="btn btn-secondary waves-effect">Kembali</a>
+                                                        <a href="{{ route('siswa.index_kesejahteraan_siswa', Crypt::encryptString($student->id)) }}"
+                                                            style="float: right" class="btn btn-primary">Selanjutnya</a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -138,9 +137,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Tambah Beasiswa</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="POST" action="{{ route('siswa.store_beasiswa') }}">
                         <div class="modal-body">
@@ -183,9 +180,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="cancel" class="btn btn-secondary btn-sm"
+                            <button type="button" id="cancel" class="btn btn-secondary"
                                 data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
                 </div>

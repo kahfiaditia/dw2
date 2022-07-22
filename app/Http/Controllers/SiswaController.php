@@ -10,22 +10,23 @@ use Illuminate\Support\Facades\DB;
 use App\Helper\AlertHelper;
 use App\Imports\StudentImport;
 use App\Models\Beasiswa;
+use App\Models\Classes;
 use App\Models\Kesejahteraan_siswa;
 use Yajra\DataTables\DataTables;
 use App\Models\Kodepos;
 use App\Models\Parents;
+use App\Models\Payment;
 use App\Models\Priodik_siswa;
 use App\Models\Prestasi;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Storage;
 
 class SiswaController extends Controller
 {
     protected $title = 'dharmawidya';
-    protected $menu = 'setting';
+    protected $menu = 'siswa';
 
     public function index(Request $request)
     {
@@ -45,6 +46,9 @@ class SiswaController extends Controller
         if ($request->ajax()) {
             return DataTables::of($students)
                 ->addIndexColumn()
+                ->addColumn('kelas', function ($students) {
+                    return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                })
                 ->addColumn('Opsi', function (Siswa $students) {
                     return \view('siswa.button', compact('students'));
                 })
@@ -66,13 +70,13 @@ class SiswaController extends Controller
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'siswa',
+            'submenu' => 'Data Pribadi',
             'label' => 'tambah siswa',
             'student' => Auth::user()->student,
             'users' => $students,
-            'religions' => Agama::orderBy('id', 'DESC')->get(),
-            'districts' => Kodepos::select('kecamatan')->groupBy('kecamatan')->get(),
-            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get()
+            'religions' => Agama::orderBy('agama', 'ASC')->get(),
+            'districts' => Kodepos::select('kecamatan')->where('provinsi', 'BANTEN')->groupBy('kecamatan')->get(),
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
         ];
 
         return view('siswa.create')->with($data);
@@ -176,8 +180,8 @@ class SiswaController extends Controller
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'siswa',
-            'label' => 'tambah siswa',
+            'submenu' => 'Data Pribadi',
+            'label' => ' siswa',
             'student' => $student,
             'father' => $father,
             'mother' => $mother,
@@ -248,12 +252,12 @@ class SiswaController extends Controller
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
-            'submenu' => 'siswa',
-            'label' => 'edit siswa',
+            'submenu' => 'Data Pribadi',
+            'label' => 'siswa',
             'student' => $student,
-            'religions' => Agama::orderBy('id', 'DESC')->get(),
-            'districts' => Kodepos::select('kecamatan')->groupBy('kecamatan')->get(),
-            'special_needs' => Kebutuhan_khusus::orderBy('id', 'DESC')->get(),
+            'religions' => Agama::orderBy('agama', 'ASC')->get(),
+            'districts' => Kodepos::select('kecamatan')->where('provinsi', 'BANTEN')->groupBy('kecamatan')->get(),
+            'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
             'blood_types' => $blood_types,
             'residences' => $residences,
             'reject_kip' => $reject_kip
@@ -307,7 +311,7 @@ class SiswaController extends Controller
             $student->no_registrasi_akta_lahir = $validated['akta_lahir'];
             $student->agama_id = $validated['agama'];
             $student->alamat = $validated['alamat_jalan'];
-            $student->email = $validated['email'];
+            // $student->email = $validated['email'];
             $student->no_handphone = $validated['no_handphone'];
             $student->kewarganegaraan = $validated['kewarganegaraan'];
             $student->nama_negara = $validated['nama_negara'];
@@ -327,11 +331,7 @@ class SiswaController extends Controller
             $student->save();
             DB::commit();
             AlertHelper::updateAlert(true);
-            if (Auth::user()->roles == 'Siswa') {
-                return back();
-            } else {
-                return redirect('siswa');
-            }
+            return redirect('show_parents/' . Crypt::encryptString($student->id));
         } catch (\Throwable $err) {
             DB::rollback();
             throw $err;
@@ -939,7 +939,22 @@ class SiswaController extends Controller
 
         DB::beginTransaction();
         try {
-            Excel::import(new StudentImport, $request->file('student_csv'));
+
+            $import = Excel::toArray(new StudentImport(), $request->file('student_csv'));
+            $classes = Classes::where('id', $import[0][0][4])->count();
+            $formulir = Payment::where('id', $import[0][0][5])->count();
+            $uang_pangkal = Payment::where('id', $import[0][0][6])->count();
+            $spp = Payment::where('id', $import[0][0][7])->count();
+            $kegiatan = Payment::where('id', $import[0][0][8])->count();
+
+            if ($classes + $formulir + $uang_pangkal + $spp + $kegiatan >= 5) {
+                // proses import
+                Excel::import(new StudentImport, $request->file('student_csv'));
+            } else {
+                AlertHelper::settingPayment(false);
+                return back();
+            }
+
             DB::commit();
             AlertHelper::import(true);
             return back();
@@ -953,6 +968,7 @@ class SiswaController extends Controller
 
     public function csv_download()
     {
-        return Storage::download('public/student/import_student.xls');
+        $files = public_path('assets' . '\\' . 'files' . '\\' . 'import_student.xls');
+        return response()->download($files);
     }
 }

@@ -71,7 +71,7 @@
                         data: null,
                         sortable: false,
                         searchable: false,
-                        className: 'text-center',
+                        // className: 'text-center',
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
@@ -91,12 +91,10 @@
                     {
                         data: 'verifikasi',
                         name: 'verifikasi',
-                        className: 'text-center'
                     },
                     {
                         data: 'status',
                         name: 'status',
-                        className: 'text-center'
                     },
                     {
                         data: 'action',

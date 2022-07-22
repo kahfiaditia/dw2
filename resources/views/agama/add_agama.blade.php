@@ -25,8 +25,8 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Agama</label>
-                                            <input type="text" class="form-control" id="agama" name="agama" required
-                                                placeholder="Agama" value="{{ old('agama') }}">
+                                            <input type="text" class="form-control" id="agama" name="agama"
+                                                required placeholder="Agama" value="{{ old('agama') }}">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
-                                        <a href="{{ route('agama') }}" class="btn btn-secondary waves-effect">Back</a>
+                                        <a href="{{ route('agama') }}" class="btn btn-secondary waves-effect">Batal</a>
                                         <button class="btn btn-primary" type="submit" style="float: right"
                                             id="submit">Simpan</button>
                                     </div>

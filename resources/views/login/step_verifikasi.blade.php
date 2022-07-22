@@ -17,11 +17,11 @@
 <body>
     <div class="account-pages my-5 pt-sm-5">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
                     <div class="text-center mb-5 text-muted">
-                        <a href="index.html" class="d-block auth-logo">
-                            <img src="{{ URL::asset('assets/images/logo-dark.png') }}" alt="" height="20"
+                        <a href="{{ route('login') }}" class="d-block auth-logo">
+                            <img src="{{ URL::asset('assets/images/logo/sid.png') }}" alt="" width="100%"
                                 class="auth-logo-dark mx-auto">
                         </a>
                     </div>

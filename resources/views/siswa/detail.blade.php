@@ -1,5 +1,19 @@
 @extends('layouts.main')
 @section('container')
+    <?php
+    function hitung_umur($tanggal_lahir)
+    {
+        $birthDate = new DateTime($tanggal_lahir);
+        $today = new DateTime('today');
+        if ($birthDate > $today) {
+            exit('0 Tahun 0 Bulan 0 Hari');
+        }
+        $y = $today->diff($birthDate)->y;
+        $m = $today->diff($birthDate)->m;
+        $d = $today->diff($birthDate)->d;
+        return $y . ' Tahun ' . $m . ' Bulan ' . $d . ' Hari';
+    }
+    ?>
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
@@ -64,37 +78,6 @@
                             </a>
                         </div>
                     </div>
-                    {{-- <div class="col-xl-2 col-sm-3" <?php echo $device; ?>>
-                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link @if ($submenu == 'siswa') active @endif">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Data Pribadi</p>
-                            </a>
-                            <a class="nav-link @if ($submenu == 'orang tua') active @endif">
-                                <i class="bx bx-group d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Orang Tua / Wali</p>
-                            </a>
-                            <a class="nav-link @if ($submenu == 'priodik') active @endif">
-                                <i class="bx bx-user d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Data Priodik</p>
-                            </a>
-                            <a
-                                class="
-                                nav-link @if ($submenu == 'prestasi') active @endif">
-                                <i class="bx bx-chart d-block check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Prestasi</p>
-                            </a>
-                            <a class="nav-link @if ($submenu == 'beasiswa') active @endif">
-                                <i class="bx bx-star check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Beasiswa</p>
-                            </a>
-                            <a class="nav-link @if ($submenu == 'kesejahteraan') active @endif">
-                                <i class="bx bx-plus-medical check-nav-icon mt-2"></i>
-                                <p class="fw-bold mb-4">Kesejahteraan Siswa</p>
-                            </a>
-                        </div>
-                    </div> --}}
-
                     <div class="col-lg-10">
                         <div class="card">
                             <div class="card-body">
@@ -104,14 +87,14 @@
                                         <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
-                                                    <h5 class="font-size-14">NIK</h5>
-                                                    <p class="text-muted mb-0">{{ $student->nik }}</p>
+                                                    <h5 class="font-size-14">NISN</h5>
+                                                    <p class="text-muted mb-0">{{ $student->nisn }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
-                                                    <h5 class="font-size-14">NISN</h5>
-                                                    <p class="text-muted mb-0">{{ $student->nisn }}</p>
+                                                    <h5 class="font-size-14">NIK</h5>
+                                                    <p class="text-muted mb-0">{{ $student->nik }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
@@ -119,7 +102,7 @@
                                                     <h5 class="font-size-14">Kelas</h5>
                                                     <p class="text-muted mb-0">
                                                         @if ($student->classes_student)
-                                                            {{ $student->classes_student->jenjang . ' - [ ' . $student->classes_student->class . ' ]' }}
+                                                            {{ $student->classes_student->school_level->level . ' ' . $student->classes_student->school_class->classes . ' ' . $student->classes_student->jurusan . '.' . $student->classes_student->type }}
                                                         @else
                                                             -
                                                         @endif
@@ -150,7 +133,12 @@
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Tempat, Tanggal Lahir</h5>
                                                     <p class="text-muted mb-0">
-                                                        {{ $student->tempat_lahir . ', ' . \Carbon\Carbon::parse($student->tanggal_lahir)->format('d F Y') }}
+                                                        @if ($student->tempat_lahir)
+                                                            {{ $student->tempat_lahir . ', ' }}
+                                                        @endif
+                                                        @if ($student->tanggal_lahir)
+                                                            {{ \Carbon\Carbon::parse($student->tanggal_lahir)->format('d F Y') . ' (' . hitung_umur($student->tanggal_lahir) . ')' }}
+                                                        @endif
                                                     </p>
                                                     <a href="javascript:void(0)" data-id="" id="get_data"
                                                         data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
@@ -162,7 +150,8 @@
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Agama</h5>
-                                                    <p class="text-muted mb-0">{{ $student->religion->agama }}</p>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $student->religion ? $student->religion->agama : '' }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
@@ -224,7 +213,9 @@
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Berkebutuhan Khusus</h5>
-                                                    <p class="text-muted mb-0">{{ $student->special_need->nama }}</p>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $student->special_need ? $student->special_need->kode . ') ' . $student->special_need->nama : '' }}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -306,7 +297,7 @@
                                                 </div>
                                             @endif
                                             <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
+                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-orang-tua" role="tabpanel"
@@ -355,8 +346,10 @@
                                                     </p>
                                                 </div>
                                             @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <a class="alert-link">Tidak Ada Ayah Kandung</a>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <a class="alert-link">Tidak Ada Ayah Kandung</a>
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>
@@ -405,8 +398,10 @@
                                                     </p>
                                                 </div>
                                             @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <a class="alert-link">Tidak Ada Ibu Kandung</a>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <a class="alert-link">Tidak Ada Ibu Kandung</a>
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>
@@ -455,13 +450,17 @@
                                                     </p>
                                                 </div>
                                             @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <a class="alert-link">Tidak Ada Wali</a>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <a class="alert-link">Tidak Ada Wali</a>
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>
-                                        <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                            class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
+                                        <div class="row">
+                                            <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
+                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-sk" role="tabpanel"
                                         aria-labelledby="v-pills-sk-tab">
@@ -507,13 +506,17 @@
                                                         {{ $student->periodic_student->jumlah_saudara_kandung }}</p>
                                                 </div>
                                             @else
-                                                <div class="alert alert-danger" role="alert">
-                                                    <a class="alert-link">Tidak Data Periodic</a>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <a class="alert-link">Tidak Data Periodic</a>
+                                                    </div>
                                                 </div>
                                             @endif
                                         </div>
-                                        <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                            class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
+                                        <div class="row">
+                                            <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
+                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-anak" role="tabpanel"
                                         aria-labelledby="v-pills-anak-tab">
@@ -521,7 +524,6 @@
                                             <div class="col-12">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h3>Data Prestasi</h3>
                                                         <table id="mydata"
                                                             class="table table-striped dt-responsive nowrap w-100">
                                                             <thead>
@@ -557,8 +559,11 @@
                                                                 @endforeach
                                                             </tbody>
                                                         </table>
-                                                        <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                                            class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
+                                                        <div class="row">
+                                                            <a href="{{ route('siswa.index') }}"
+                                                                style="margin-left: 10px;"
+                                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -598,41 +603,56 @@
                                                                 @endforeach
                                                             </tbody>
                                                         </table>
+                                                        <div class="row">
+                                                            <a href="{{ route('siswa.index') }}"
+                                                                style="margin-left: 10px;"
+                                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                        </div>
                                                     </div>
-                                                    <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                                        class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-kesejahteraan" role="tabpanel"
                                         aria-labelledby="v-pills-kesejahteraan-tab">
-                                        <table id="mydata" class="table table-striped dt-responsive nowrap w-100">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">No</th>
-                                                    <th class="text-center">Jenis Kesejahteraan</th>
-                                                    <th class="text-center">Nomor Kartu</th>
-                                                    <th class="text-center">Nama Di Kartu</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($student->kesejahteraan as $item)
-                                                    <tr>
-                                                        <td class="text-center">{{ $loop->iteration }}
-                                                        </td>
-                                                        <td class="text-center">
-                                                            {{ $item->jenis_kesejahteraan }}</td>
-                                                        <td class="text-center">
-                                                            {{ $item->nomor_kartu }}</td>
-                                                        <td class="text-center">
-                                                            {{ $item->nama_kartu }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                        <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                            class="col-md-1 mt-3 btn btn-secondary btn-sm">Kembali</a>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <table id="mydata"
+                                                            class="table table-striped dt-responsive nowrap w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center">No</th>
+                                                                    <th class="text-center">Jenis Kesejahteraan</th>
+                                                                    <th class="text-center">Nomor Kartu</th>
+                                                                    <th class="text-center">Nama Di Kartu</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($student->kesejahteraan as $item)
+                                                                    <tr>
+                                                                        <td class="text-center">{{ $loop->iteration }}
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            {{ $item->jenis_kesejahteraan }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $item->nomor_kartu }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ $item->nama_kartu }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="row">
+                                                            <a href="{{ route('siswa.index') }}"
+                                                                style="margin-left: 10px;"
+                                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

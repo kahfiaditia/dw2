@@ -103,7 +103,7 @@ class BillController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'Edit Tagihan',
+            'label' => 'Ubah Tagihan',
             'bills' => $bills
         ];
         return view('bills.edit')->with($data);

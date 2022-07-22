@@ -152,30 +152,35 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
-                                                    <label for="">Waktu Tempuh <code>*</code></label>
                                                     <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="input-group">
-                                                                <input type="text" class="number-only form-control"
-                                                                    placeholder="Jam" name="jam"
-                                                                    value="{{ old('jam', $periodic->waktu_tempuh_jam) }}"
-                                                                    required>
-                                                                <span class="input-group-text">Jam</span>
+                                                        <div class="col-lg-6">
+                                                            <div class="md-3">
+                                                                <label for="">Waktu Tempuh <code>*</code></label>
+                                                                <div class="input-group">
+                                                                    <input type="text" class="number-only form-control"
+                                                                        placeholder="Jam" name="jam"
+                                                                        value="{{ old('jam', $periodic->waktu_tempuh_jam) }}"
+                                                                        required>
+                                                                    <span class="input-group-text">Jam</span>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
+                                                            <div class="invalid-feedback">
+                                                                Data wajib diisi.
+                                                            </div>
                                                         </div>
                                                         @error('in_hour')
                                                             <small class="text-danger">{{ $message }}</small>
                                                         @enderror
-                                                        <div class="col-md-6">
-                                                            <div class="input-group">
-                                                                <input type="text" class="number-only form-control"
-                                                                    placeholder="Menit" name="menit"
-                                                                    value="{{ old('menit', $periodic->waktu_tempuh_menit) }}"
-                                                                    required>
-                                                                <span class="input-group-text">Menit</span>
+                                                        <div class="col-lg-6">
+                                                            <div class="md-3">
+                                                                <label for="">&nbsp;</label>
+                                                                <div class="input-group">
+                                                                    <input type="text" class="number-only form-control"
+                                                                        placeholder="Menit" name="menit"
+                                                                        value="{{ old('menit', $periodic->waktu_tempuh_menit) }}"
+                                                                        required>
+                                                                    <span class="input-group-text">Menit</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="invalid-feedback">
@@ -202,9 +207,9 @@
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('siswa.show_periodic', \Crypt::encryptString($student->id)) }}"
-                                                        class="btn btn-secondary waves-effect btn-sm">Batal</a>
-                                                    <button class="btn btn-primary btn-sm" type="submit"
-                                                        style="float: right" id="submit">Simpan</button>
+                                                        class="btn btn-secondary waves-effect">Batal</a>
+                                                    <button class="btn btn-primary" type="submit" style="float: right"
+                                                        id="submit">Simpan</button>
                                                 </div>
                                             </div>
                                         </div>

@@ -48,12 +48,15 @@
                             @if (session()->has('Error'))
                                 <div class="p-2">
                                     <div class="alert alert-danger" role="alert">
-                                        Email Not Found!
+                                        {{ session('Error') }}
                                     </div>
                                 </div>
                             @endif
                             @if ($errors->any())
-                                {!! $errors->first('email', '<div class="p-2"><div class="alert alert-danger" role="alert">:message</div></div>') !!}
+                                {!! $errors->first(
+                                    'email',
+                                    '<div class="p-2"><div class="alert alert-danger" role="alert">:message</div></div>',
+                                ) !!}
                             @endif
                             <div class="p-2">
                                 @if ($type === 'reverify')
@@ -73,9 +76,6 @@
                                         Please Enter Email
                                     </div>
                                 </div>
-                                {{-- @if (Request::segment(1) === 'recovery')
-                                            <p>Verification't Accepted ? <a href="{{ route('reverify') }}" class="fw-medium text-primary">Resend Verifikasi</a> </p>
-                                        @endif --}}
                                 <div class="text-end">
                                     <button class="btn btn-primary w-md waves-effect waves-light" type="submit"
                                         value="{{ $submit }}">{{ $submit }}</button>
