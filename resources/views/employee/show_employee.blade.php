@@ -33,8 +33,8 @@
                                 <i class="bx bx-book-content d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">Ijazah + Sertifikat</p>
                             </a>
-                            <a class="nav-link" id="v-pills-sk-tab" data-bs-toggle="pill" href="#v-pills-sk"
-                                role="tab" aria-controls="v-pills-sk" aria-selected="false">
+                            <a class="nav-link" id="v-pills-sk-tab" data-bs-toggle="pill" href="#v-pills-sk" role="tab"
+                                aria-controls="v-pills-sk" aria-selected="false">
                                 <i class="bx bx-food-menu d-block check-nav-icon mt-2"></i>
                                 <p class="fw-bold mb-4">SK Pengangkatan</p>
                             </a>
@@ -133,8 +133,9 @@
                                                     <p class="text-muted mb-0">{{ $item->kk }}</p>
                                                     @if ($item->dok_kk)
                                                         <a href="javascript:void(0)"
-                                                            data-id="{{ $item->dok_kk . '|kk|karyawan' }}" id="get_data"
-                                                            data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
+                                                            data-id="{{ $item->dok_kk . '|kk|karyawan' }}"
+                                                            id="get_data" data-bs-toggle="modal"
+                                                            data-bs-target=".bs-example-modal-lg">
                                                             <i
                                                                 class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat
                                                             Dokumen
@@ -241,7 +242,6 @@
                                                     <h5 class="font-size-14">Tanggal Masuk Kerja</h5>
                                                     <p class="text-muted mb-0">
                                                         {{ date('d F Y', strtotime($item->masuk_kerja)) }}
-                                                        <br>
                                                         ({{ hitung_umur($item->masuk_kerja) }})
                                                     </p>
                                                 </div>
@@ -249,9 +249,10 @@
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Status Aktif</h5>
-                                                    <input type="checkbox" id="switch1" switch="none" name="aktif" disabled
-                                                        {{ $item->aktif === '1' ? 'checked' : '' }} />
-                                                    <label for="switch1" data-on-label="On" data-off-label="Off"></label>
+                                                    <input type="checkbox" id="switch1" switch="none" name="aktif"
+                                                        disabled {{ $item->aktif === '1' ? 'checked' : '' }} />
+                                                    <label for="switch1" data-on-label="On"
+                                                        data-off-label="Off"></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -393,8 +394,9 @@
                                                     <div class="accordion-item">
                                                         <h2 class="accordion-header" id="headingOneAnak">
                                                             <button class="accordion-button fw-medium" type="button"
-                                                                data-bs-toggle="collapse" data-bs-target="#collapseOneAnak"
-                                                                aria-expanded="true" aria-controls="collapseOneAnak">
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseOneAnak" aria-expanded="true"
+                                                                aria-controls="collapseOneAnak">
                                                                 Anak Karyawan
                                                             </button>
                                                         </h2>
@@ -431,8 +433,9 @@
                                                     <div class="accordion-item">
                                                         <h2 class="accordion-header" id="headingTwoAnak">
                                                             <button class="accordion-button fw-medium" type="button"
-                                                                data-bs-toggle="collapse" data-bs-target="#collapseTwoAnak"
-                                                                aria-expanded="false" aria-controls="collapseTwoAnak">
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseTwoAnak" aria-expanded="false"
+                                                                aria-controls="collapseTwoAnak">
                                                                 Anak Karyawan Sekolah di Dharmawidya
                                                             </button>
                                                         </h2>

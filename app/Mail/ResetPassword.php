@@ -28,6 +28,6 @@ class ResetPassword extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->details['subject'])->view('email.template_reset');
+        return $this->from('info@sekolah-dharmawidya.sch.id', 'DHARMAWIDYA')->subject($this->details['subject'])->view('email.template_reset');
     }
 }

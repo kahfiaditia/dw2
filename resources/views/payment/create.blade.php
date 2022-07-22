@@ -142,7 +142,6 @@
             let rupiahInput = document.getElementById('rupiah')
             let rupiahReplace = rupiahInput.value.replaceAll('.', '')
             let rupiahValue = new Intl.NumberFormat('id-ID').format(rupiahReplace)
-
             return rupiahInput.value = rupiahValue
         }
 

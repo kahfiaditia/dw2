@@ -53,10 +53,17 @@
                                     </div>
                                 </div>
                             @endif
+                            @if (session()->has('Error'))
+                                <div class="p-2">
+                                    <div class="alert alert-danger" role="alert">
+                                        Verifikasi Fail!
+                                    </div>
+                                </div>
+                            @endif
                             @if (session()->has('loginError'))
                                 <div class="p-2">
                                     <div class="alert alert-danger" role="alert">
-                                        Login Fail!
+                                        {{ session('loginError') }}
                                     </div>
                                 </div>
                             @endif

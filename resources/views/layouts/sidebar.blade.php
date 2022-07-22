@@ -53,5 +53,13 @@
                 @endif
             @endif
         @endforeach
+        @if (Auth::user()->roles == 'Administrator')
+            <li>
+                <a href="{{ route('setting.edit', Crypt::encryptString('1')) }}" class="waves-effect">
+                    <i class="bx bxl-jsfiddle text-info"></i>
+                    <span>Setting Website</span>
+                </a>
+            </li>
+        @endif
     </ul>
 </div>

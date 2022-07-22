@@ -8,7 +8,9 @@ use App\Models\Classes;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Siswa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -240,6 +242,7 @@ class InvoiceController extends Controller
                     'bills_id' => $payment->bills_id,
                     'siswa_id' => Crypt::decryptString($request->studentsId),
                     'class_id' => Crypt::decryptString($request->classId),
+                    'user_created' => Auth::user()->id,
                 ]);
             }
             // pembayaran uang pangkal
@@ -258,6 +261,7 @@ class InvoiceController extends Controller
                     'bills_id' => $payment->bills_id,
                     'siswa_id' => Crypt::decryptString($request->studentsId),
                     'class_id' => Crypt::decryptString($request->classId),
+                    'user_created' => Auth::user()->id,
                 ]);
             }
             // pembayaran bulanan
@@ -273,6 +277,7 @@ class InvoiceController extends Controller
                         'bills_id' => $spp->bills_id,
                         'siswa_id' => Crypt::decryptString($request->studentsId),
                         'class_id' => Crypt::decryptString($request->classId),
+                        'user_created' => Auth::user()->id,
                     ]);
                     $kegiatan = Payment::findorfail($request->Kegiatan_id);
                     Invoice::create([
@@ -284,6 +289,7 @@ class InvoiceController extends Controller
                         'bills_id' => $kegiatan->bills_id,
                         'siswa_id' => Crypt::decryptString($request->studentsId),
                         'class_id' => Crypt::decryptString($request->classId),
+                        'user_created' => Auth::user()->id,
                     ]);
                 }
             }
@@ -309,7 +315,9 @@ class InvoiceController extends Controller
         DB::beginTransaction();
         try {
             $delete = Invoice::findOrFail(Crypt::decryptString($id));
-            $delete->delete();
+            $delete->user_deleted = Auth::user()->id;
+            $delete->deleted_at = Carbon::now();
+            $delete->save();
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();

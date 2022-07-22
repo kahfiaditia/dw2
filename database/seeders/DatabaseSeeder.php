@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SubMenuSeeder::class,
             BillsSeeder::class,
             KebutuhanKhususSeeder::class,
+            SeederSetting::class,
         ]);
     }
 }

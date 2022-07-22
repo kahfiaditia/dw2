@@ -70,6 +70,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Email <code>*</code></label>
+                                            <input type="hidden" name="email_old" value="{{ $akun->email }}">
                                             <input type="text" class="form-control" id="email" name="email"
                                                 value="{{ $akun->email }}" required placeholder="Email">
                                             <div class="invalid-feedback">

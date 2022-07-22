@@ -57,7 +57,8 @@
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Email <code>*</code></label>
                                                     <input type="email" class="form-control" name="email" required
-                                                        placeholder="Email" value="{{ old('email', $student->email) }}">
+                                                        readonly placeholder="Email"
+                                                        value="{{ old('email', $student->email) }}">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>

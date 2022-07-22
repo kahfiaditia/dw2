@@ -15,9 +15,11 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
+Route::get('/login_backend', [LoginController::class, 'login_backend'])->name('login_backend');
 Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::get('/notifikasi', [LoginController::class, 'notifikasi'])->name('notifikasi');
 Route::get('/verifikasi/{id}', [LoginController::class, 'verifikasi'])->name('verifikasi');
@@ -195,5 +197,6 @@ Route::group(
         Route::resource('/payment', PaymentController::class);
         Route::get('/list_payment', [PaymentController::class, 'list_payment'])->name('payment.list_payment');
         Route::post('/get_class_payment', [PaymentController::class, 'get_class_payment'])->name('payment.get_class_payment');
+        Route::resource('/setting', SettingController::class);
     }
 );

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\AlertHelper;
 use App\Models\Employee;
 use App\Models\School_level;
+use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -190,7 +191,7 @@ class AkunController extends Controller
         $request->validate([
             'username' => 'required',
             'roles' => 'required',
-            'email' => 'required|email:dns|unique:users,email,' . $id,
+            'email' => "required|email:dns|unique:users,email,$id,id,deleted_at,NULL",
             'password' => 'required',
         ]);
         DB::beginTransaction();
@@ -224,6 +225,12 @@ class AkunController extends Controller
             // update class
             if ($request->roles === 'Siswa') {
                 $user->id_school_level = $request->id_school_level;
+                if ($request->email_old != $request->email) {
+                    $siswa = Siswa::findorfail($user->student->id);
+                    $siswa->email = $request->email;
+                    // $siswa->user_updated = Auth::user()->id;
+                    $siswa->save();
+                }
             } else {
                 $user->id_school_level = null;
             }

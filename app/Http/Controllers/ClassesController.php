@@ -128,7 +128,7 @@ class ClassesController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'Edit ' . $this->submenu,
+            'label' => 'Ubah ' . $this->submenu,
             'classes' => $classes,
             'jurusan' => School_level::all(),
             'kelas' => School_class::where('school_level_id', $classes->id_school_level)->get(),

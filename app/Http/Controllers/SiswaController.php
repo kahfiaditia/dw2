@@ -312,7 +312,7 @@ class SiswaController extends Controller
             $student->no_registrasi_akta_lahir = $validated['akta_lahir'];
             $student->agama_id = $validated['agama'];
             $student->alamat = $validated['alamat_jalan'];
-            $student->email = $validated['email'];
+            // $student->email = $validated['email'];
             $student->no_handphone = $validated['no_handphone'];
             $student->kewarganegaraan = $validated['kewarganegaraan'];
             $student->nama_negara = $validated['nama_negara'];
@@ -332,11 +332,6 @@ class SiswaController extends Controller
             $student->save();
             DB::commit();
             AlertHelper::updateAlert(true);
-            // if (Auth::user()->roles == 'Siswa') {
-            //     return back();
-            // } else {
-            //     return redirect('siswa');
-            // }
             return redirect('show_parents/' . Crypt::encryptString($student->id));
         } catch (\Throwable $err) {
             DB::rollback();

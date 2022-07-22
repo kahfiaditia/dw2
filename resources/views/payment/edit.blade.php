@@ -153,11 +153,17 @@
             let rupiahInput = document.getElementById('rupiah')
             let rupiahReplace = rupiahInput.value.replaceAll('.', '')
             let rupiahValue = new Intl.NumberFormat('id-ID').format(rupiahReplace)
-
             return rupiahInput.value = rupiahValue
         }
 
         $(document).ready(function() {
+            data_jenjang = $('#school_level_id option:selected').attr('data-id');
+            if (data_jenjang == 'KB' || data_jenjang == 'TK') {
+                document.getElementById("class_id").required = false;
+            } else {
+                document.getElementById("class_id").required = true;
+            }
+
             $(".school_level_id").change(function() {
                 let school_level_id = $(this).val();
                 data_id_jenjang = this.querySelector(':checked').getAttribute('data-id');
