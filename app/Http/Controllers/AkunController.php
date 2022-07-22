@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
 
 class AkunController extends Controller
 {
@@ -51,25 +51,28 @@ class AkunController extends Controller
             ->rawColumns(['status', 'action', 'verifikasi'])
             ->filter(function ($instance) use ($request) {
                 if (!empty($request->get('search'))) {
-                    $instance->where(function ($w) use ($request) {
+                    $instance->Where(function ($w) use ($request) {
                         $search = strtolower($request->get('search'));
-                        if ($search === 'aktif') {
-                            $w->Where('aktif', '=', "1");
-                        } elseif ($search === 'sudah' or $search === 'verifikasi' or $search === 'sudah verifikasi') {
-                            $w->Wherenotnull('email_verified_at');
-                        } elseif ($search === 'belum' or $search === 'belum verifikasi') {
-                            $w->Wherenull('email_verified_at');
-                        } elseif ($search === 'non' or $search === 'non aktif') {
-                            $w->orWhere('aktif', '=', null)
-                                ->orWhere('aktif', '=', '0')
-                                ->orWhere('name', 'LIKE', "%$search%")
-                                ->orWhere('email', 'LIKE', "%$search%")
-                                ->orWhere('roles', 'LIKE', "%$search%");
-                        } else {
-                            $w->orWhere('name', 'LIKE', "%$search%")
-                                ->orWhere('email', 'LIKE', "%$search%")
-                                ->orWhere('roles', 'LIKE', "%$search%");
-                        }
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('email', 'LIKE', "%$search%")
+                            ->orWhere('roles', 'LIKE', "%$search%");
+                        // if ($search === 'aktif') {
+                        //     $w->Where('aktif', '=', "1");
+                        // } elseif ($search === 'sudah' or $search === 'verifikasi' or $search === 'sudah verifikasi') {
+                        //     $w->Wherenotnull('email_verified_at');
+                        // } elseif ($search === 'belum' or $search === 'belum verifikasi') {
+                        //     $w->Wherenull('email_verified_at');
+                        // } elseif ($search === 'non' or $search === 'non aktif') {
+                        //     $w->orWhere('aktif', '=', null)
+                        //         ->orWhere('aktif', '=', '0')
+                        //         ->orWhere('name', 'LIKE', "%$search%")
+                        //         ->orWhere('email', 'LIKE', "%$search%")
+                        //         ->orWhere('roles', 'LIKE', "%$search%");
+                        // } else {
+                        //     $w->orWhere('name', 'LIKE', "%$search%")
+                        //         ->orWhere('email', 'LIKE', "%$search%")
+                        //         ->orWhere('roles', 'LIKE', "%$search%");
+                        // }
                     });
                 }
             })
