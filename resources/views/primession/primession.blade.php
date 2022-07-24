@@ -101,14 +101,11 @@
                                     </div>
                                 </div>
                                 <div class="row mt-4">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <a href="{{ route('primession.index') }}"
                                             class="btn btn-secondary waves-effect">Batal</a>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="text-sm-end mt-2 mt-sm-0">
-                                            <button class="btn btn-primary" type="submit" id="submit">Simpan</button>
-                                        </div>
+                                        <button class="btn btn-primary" type="submit" style="float: right"
+                                            id="submit">Simpan</button>
                                     </div>
                                 </div>
                             </div>

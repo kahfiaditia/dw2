@@ -42,16 +42,19 @@
                                                 required>
                                                 @if ($akun->roles === 'Admin')
                                                     <option value="">--Pilih Roles--</option>
-                                                    <option value="Admin" {{ $akun->roles === 'Admin' ? 'selected' : '' }}>
+                                                    <option value="Admin"
+                                                        {{ $akun->roles === 'Admin' ? 'selected' : '' }}>
                                                         Admin</option>
                                                     <option value="Karyawan"
                                                         {{ $akun->roles === 'Karyawan' ? 'selected' : '' }}>Karyawan
                                                     </option>
-                                                    <option value="Siswa" {{ $akun->roles === 'Siswa' ? 'selected' : '' }}>
+                                                    <option value="Siswa"
+                                                        {{ $akun->roles === 'Siswa' ? 'selected' : '' }}>
                                                         Siswa</option>
                                                     <option value="Alumni"
                                                         {{ $akun->roles === 'Alumni' ? 'selected' : '' }}>Alumni</option>
-                                                    <option value="Ortu" {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>
+                                                    <option value="Ortu"
+                                                        {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>
                                                         Orang Tua
                                                     </option>
                                                 @else
@@ -126,7 +129,7 @@
                                     </div>
                                 </div>
                                 <div class="row mt-4">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         @if (Auth::user()->roles === 'Admin')
                                             <a href="{{ route('akun.index') }}"
                                                 class="btn btn-secondary waves-effect">Batal</a>
@@ -134,11 +137,8 @@
                                             <a href="{{ URL::previous() }}"
                                                 class="btn btn-secondary waves-effect">Batal</a>
                                         @endif
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="text-sm-end mt-2 mt-sm-0">
-                                            <button class="btn btn-primary" type="submit" id="submit">Simpan</button>
-                                        </div>
+                                        <button class="btn btn-primary" type="submit" style="float: right"
+                                            id="submit">Simpan</button>
                                     </div>
                                 </div>
                             </div>
