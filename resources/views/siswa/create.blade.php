@@ -74,18 +74,30 @@
                                     aria-labelledby="v-pills-shipping-tab">
                                     <div class="card shadow-none border mb-0">
                                         <div class="card-body">
-                                            @if (Auth::user()->roles == 'Admin')
+                                            @if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator')
                                                 <div class="row">
-                                                    <div class="col-md-12 mb-3 form-group">
+                                                    <div class="col-md-6 mb-3 form-group">
                                                         <label for="">Pilih User Siswa</label>
                                                         <select name="user_id" id=""
-                                                            class="form-control mb-3 select select2">
+                                                            class="form-control mb-3 select select2 User_siswa">
                                                             <option value="">-- Pilih User Siswa --</option>
                                                             @foreach ($users as $user)
                                                                 <option value="{{ $user->id }}">
                                                                     {{ $user->name . ' - ' . $user->email }}</option>
                                                             @endforeach
                                                         </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3 form-group">
+                                                        <label for="">Roles</label>
+                                                        <input type="text" class="form-control Roles_siswa"
+                                                            name="roles" required placeholder="Roles" value=""
+                                                            readonly>
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                        @error('roles')
+                                                            <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                             @endif
@@ -107,8 +119,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3 form-group">
                                                     <label for="">Email <code>*</code></label>
-                                                    <input type="email" class="form-control" name="email" required
-                                                        placeholder="Email"
+                                                    <input type="email" class="form-control Email_siswa" name="email"
+                                                        required placeholder="Email"
                                                         value="{{ old('email', Auth::user()->email) }}" readonly>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
@@ -594,6 +606,42 @@
     </div>
     <script>
         $(document).ready(function() {
+            $(".User_siswa").change(function() {
+                let user_id = $(this).val();
+                if (user_id) {
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ route('siswa.get_email_siswa') }}',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            user_id
+                        },
+                        success: response => {
+                            if (response.code === 404) {
+                                Swal.fire(
+                                    'Gagal',
+                                    `${response.message}`,
+                                    'error'
+                                ).then(function() {})
+                                $(".Roles_siswa").val('');
+                                $(".Email_siswa").val('');
+                                document.getElementById("submit").disabled = true;
+                            } else {
+                                $(".Roles_siswa").val(response.user);
+                                $(".Email_siswa").val(response.email);
+                                document.getElementById("submit").disabled = false;
+                            }
+                        },
+                        error: (err) => {
+                            console.log(err);
+                        },
+                    });
+                } else {
+                    $(".Roles_siswa").val('');
+                    $(".Email_siswa").val('');
+                }
+            });
+
             $("#nationality").bind('change', function() {
                 if ($(this).val() == 'WNI') {
                     $("#national_name").val('Indonesia')
@@ -638,6 +686,7 @@
                 let village = $(this).val()
                 let url = '{{ route('kodepos.get_postal_code_by_village', ':village') }}'
                 url = url.replace(':village', village)
+
                 $.ajax({
                     type: "GET",
                     url: url,

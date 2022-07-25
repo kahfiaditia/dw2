@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
 
 class AkunController extends Controller
 {
@@ -35,7 +35,7 @@ class AkunController extends Controller
 
     public function data_ajax(Request $request)
     {
-        $user = User::select(['*'])->orderBy('id', 'DESC')->get();
+        $user = User::select(['*'])->orderBy('id', 'DESC');
         return DataTables::of($user)
             ->addColumn('status', function ($model) {
                 $model->aktif === '1' ? $flag = 'success' : $flag = 'danger';
@@ -51,7 +51,7 @@ class AkunController extends Controller
             ->rawColumns(['status', 'action', 'verifikasi'])
             ->filter(function ($instance) use ($request) {
                 if (!empty($request->get('search'))) {
-                    $instance->where(function ($w) use ($request) {
+                    $instance->Where(function ($w) use ($request) {
                         $search = strtolower($request->get('search'));
                         if ($search === 'aktif') {
                             $w->Where('aktif', '=', "1");

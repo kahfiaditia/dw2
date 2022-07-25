@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
+use App\Models\Kodepos;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -35,16 +36,21 @@ class SettingController extends Controller
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'tambah ' . $this->submenu,
+            'provinsi' => Kodepos::orderBy('provinsi', 'ASC')->groupBy('provinsi')->get()
         ];
         return view('setting.create')->with($data);
     }
 
     public function store(Request $request)
     {
+        $request->validate([
+            'provinsi_sekolah' => 'required',
+        ]);
         DB::beginTransaction();
         try {
             $setting = new Setting();
             $setting->maintenance = isset($request->maintenance) ? 1 : null;
+            $setting->provinsi_sekolah = $request->provinsi_sekolah;
             $setting->save();
             DB::commit();
             AlertHelper::addAlert(true);
@@ -70,8 +76,9 @@ class SettingController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => $this->submenu,
-            'setting' => $setting
+            'label' => 'ubah ' . $this->submenu,
+            'setting' => $setting,
+            'provinsi' => Kodepos::orderBy('provinsi', 'ASC')->groupBy('provinsi')->get()
         ];
         return view('setting.edit')->with($data);
     }
@@ -90,6 +97,7 @@ class SettingController extends Controller
         try {
             $setting = Setting::findOrFail($decrypted_id);
             $setting->maintenance = isset($request->maintenance) ? 1 : 0;
+            $setting->provinsi_sekolah = $request->provinsi_sekolah;
             $setting->save();
             DB::commit();
             AlertHelper::updateAlert(true);

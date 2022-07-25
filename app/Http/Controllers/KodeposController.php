@@ -52,12 +52,14 @@ class KodeposController extends Controller
                                 ->orWhere('provinsi', 'LIKE', "%$search%")
                                 ->orWhere('kabupaten', 'LIKE', "%$search%")
                                 ->orWhere('kecamatan', 'LIKE', "%$search%")
-                                ->orWhere('kelurahan', 'LIKE', "%$search%");
+                                ->orWhere('kelurahan', 'LIKE', "%$search%")
+                                ->orWhere('kodepos', 'LIKE', "%$search%");
                         } else {
                             $w->orWhere('provinsi', 'LIKE', "%$search%")
                                 ->orWhere('kabupaten', 'LIKE', "%$search%")
                                 ->orWhere('kecamatan', 'LIKE', "%$search%")
-                                ->orWhere('kelurahan', 'LIKE', "%$search%");
+                                ->orWhere('kelurahan', 'LIKE', "%$search%")
+                                ->orWhere('kodepos', 'LIKE', "%$search%");
                         }
                     });
                 }

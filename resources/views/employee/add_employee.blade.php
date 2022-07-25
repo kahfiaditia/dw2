@@ -65,7 +65,7 @@
                                     aria-labelledby="v-pills-shipping-tab">
                                     <div class="card shadow-none border mb-0">
                                         <div class="card-body">
-                                            @if (Auth::user()->roles === 'Admin')
+                                            @if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator')
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
@@ -139,8 +139,8 @@
                                                         <label for="validationCustom02" class="form-label">Tempat Lahir
                                                             <code>*</code></label>
                                                         <input type="text" class="form-control" id="tempat_lahir"
-                                                            name="tempat_lahir" value="{{ old('tempat_lahir') }}"
-                                                            required placeholder="Tempat Lahir">
+                                                            name="tempat_lahir" value="{{ old('tempat_lahir') }}" required
+                                                            placeholder="Tempat Lahir">
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -687,31 +687,35 @@
             });
             $(".Email_admin").change(function() {
                 let user_id = $(this).val();
-                $.ajax({
-                    type: "POST",
-                    url: '{{ route('employee.get_email') }}',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        user_id
-                    },
-                    success: response => {
-                        if (response.code === 404) {
-                            Swal.fire(
-                                'Gagal',
-                                `${response.message}`,
-                                'error'
-                            ).then(function() {})
-                            $(".Roles_admin").val('');
-                            document.getElementById("submit").disabled = true;
-                        } else {
-                            $(".Roles_admin").val(response.user);
-                            document.getElementById("submit").disabled = false;
-                        }
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    },
-                });
+                if (user_id) {
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ route('employee.get_email') }}',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            user_id
+                        },
+                        success: response => {
+                            if (response.code === 404) {
+                                Swal.fire(
+                                    'Gagal',
+                                    `${response.message}`,
+                                    'error'
+                                ).then(function() {})
+                                $(".Roles_admin").val('');
+                                document.getElementById("submit").disabled = true;
+                            } else {
+                                $(".Roles_admin").val(response.user);
+                                document.getElementById("submit").disabled = false;
+                            }
+                        },
+                        error: (err) => {
+                            console.log(err);
+                        },
+                    });
+                } else {
+                    $(".Roles_admin").val('');
+                }
             });
 
             // valdasi extension
