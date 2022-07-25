@@ -35,6 +35,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Maintenance</th>
+                                        <th>Provinsi Sekolah</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -44,9 +45,9 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 <span class="badge badge-pill badge-soft-<?php if ($setting->maintenance == 1) {
-                                                    echo 'info';
+                                                    echo 'success';
                                                 } else {
-                                                    echo 'secondary';
+                                                    echo 'info';
                                                 } ?> font-size-12">
                                                     @if ($setting->maintenance == 1)
                                                         ON
@@ -55,6 +56,7 @@
                                                     @endif
                                                 </span>
                                             </td>
+                                            <td>{{ $setting->provinsi_sekolah }}</td>
                                             <td>
                                                 <a href="{{ route('setting.edit', Crypt::encryptString($setting->id)) }}"
                                                     class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>

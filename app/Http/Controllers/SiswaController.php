@@ -18,6 +18,7 @@ use App\Models\Parents;
 use App\Models\Payment;
 use App\Models\Priodik_siswa;
 use App\Models\Prestasi;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -64,9 +65,10 @@ class SiswaController extends Controller
         if (Auth::user()->roles == 'Admin') {
             $students = User::doesntHave('student')->where('roles', 'Siswa')->orderBy('id', 'DESC')->get();
         } else {
-            $students = '';
+            $students = [];
         }
-
+        // setting website
+        $provinsi_sekolah = Setting::firstorfail();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
@@ -75,7 +77,7 @@ class SiswaController extends Controller
             'student' => Auth::user()->student,
             'users' => $students,
             'religions' => Agama::orderBy('agama', 'ASC')->get(),
-            'districts' => Kodepos::select('kecamatan')->where('provinsi', 'BANTEN')->groupBy('kecamatan')->get(),
+            'districts' => Kodepos::select('kecamatan')->where('provinsi', $provinsi_sekolah->provinsi_sekolah)->groupBy('kecamatan')->get(),
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
         ];
 
@@ -249,6 +251,8 @@ class SiswaController extends Controller
             ]
         ];
 
+        // setting website
+        $provinsi_sekolah = Setting::firstorfail();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
@@ -256,7 +260,7 @@ class SiswaController extends Controller
             'label' => 'siswa',
             'student' => $student,
             'religions' => Agama::orderBy('agama', 'ASC')->get(),
-            'districts' => Kodepos::select('kecamatan')->where('provinsi', 'BANTEN')->groupBy('kecamatan')->get(),
+            'districts' => Kodepos::select('kecamatan')->where('provinsi', $provinsi_sekolah->provinsi_sekolah)->groupBy('kecamatan')->get(),
             'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
             'blood_types' => $blood_types,
             'residences' => $residences,
@@ -970,5 +974,24 @@ class SiswaController extends Controller
     {
         $files = public_path('assets' . '\\' . 'files' . '\\' . 'import_student.xls');
         return response()->download($files);
+    }
+
+    public function get_email_siswa(Request $request)
+    {
+        $data = Siswa::where('user_id', $request->user_id)->where('user_id', '!=', $request->user_id_old)->get();
+        if (count($data) > 0) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'User sudah dipilih',
+            ]);
+        } else {
+            $user = User::findorfail($request->user_id);
+            return response()->json([
+                'code' => 200,
+                'user' => $user->roles,
+                'email' => $user->email,
+                'message' => 'berhasil',
+            ]);
+        }
     }
 }

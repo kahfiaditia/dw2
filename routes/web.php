@@ -160,6 +160,7 @@ Route::group(
         Route::post('/store_periodic_student', [SiswaController::class, 'store_periodic_student'])->name('siswa.store_periodic_student');
         Route::post('/store_parent_student', [SiswaController::class, 'store_parent_student'])->name('siswa.store_parent_student');
         Route::post('/import_student_csv', [SiswaController::class, 'import_csv'])->name('student.import_csv');
+        Route::post('/get_email_siswa', [SiswaController::class, 'get_email_siswa'])->name('siswa.get_email_siswa');
         Route::patch('/update_parent/{id}', [SiswaController::class, 'update_parent'])->name('siswa.update_parent');
         Route::patch('/update_kesejahteraan/{id}', [SiswaController::class, 'update_kesejahteraan'])->name('siswa.update_kesejahteraan');
         Route::patch('/update_scholarship/{id}', [SiswaController::class, 'update_scholarship'])->name('siswa.update_scholarship');

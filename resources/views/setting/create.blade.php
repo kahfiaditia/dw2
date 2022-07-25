@@ -24,6 +24,24 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="">Provinsi Sekolah <code>*</code></label>
+                                            <select name="provinsi_sekolah" required
+                                                class="form-control mb-3 select select2">
+                                                <option value="">-- Provinsi Sekolah --</option>
+                                                @foreach ($provinsi as $item)
+                                                    <option value="{{ $item->provinsi }}">{{ $item->provinsi }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            @error('provinsi_sekolah')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Maintenance Website
                                                 <code>*</code></label>
                                             <div>

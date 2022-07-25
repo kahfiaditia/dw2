@@ -16,6 +16,7 @@ class CreateSettings extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->boolean('maintenance')->nullable();
+            $table->string('provinsi_sekolah');
             $table->timestamps();
         });
     }
