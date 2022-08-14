@@ -119,6 +119,9 @@ class AkunController extends Controller
             if ($request->roles === 'Karyawan') {
                 $user->akses_menu = '1,2';
                 $user->akses_submenu = '1,2,3,4,6';
+            } elseif ($request->roles === 'Tu') {
+                $user->akses_menu = '1,10,14';
+                $user->akses_submenu = '1,35,36,37,38,39,40,41,42';
             } elseif ($request->roles === 'Admin') {
                 $user->akses_menu = '1,2,3,4,5,6,7';
                 $user->akses_submenu = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26';
@@ -207,6 +210,9 @@ class AkunController extends Controller
             if ($request->roles === 'Karyawan') {
                 $user->akses_menu = '1,2';
                 $user->akses_submenu = '1,2,3,4,6';
+            } elseif ($request->roles === 'Tu') {
+                $user->akses_menu = '1,10,14';
+                $user->akses_submenu = '1,35,36,37,38,39,40,41,42';
             } elseif ($request->roles === 'Admin') {
                 $user->akses_menu = '1,2,3,4,5,6,7';
                 $user->akses_submenu = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26';
@@ -239,7 +245,7 @@ class AkunController extends Controller
 
             DB::commit();
             AlertHelper::updateAlert(true);
-            if (Auth::user()->roles === 'Admin') {
+            if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator') {
                 return redirect('akun');
             } else {
                 return back();

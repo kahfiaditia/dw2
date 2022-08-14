@@ -9,7 +9,6 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">{{ ucwords($menu) }}</li>
-                                <li class="breadcrumb-item">{{ ucwords($submenu) }}</li>
                             </ol>
                         </div>
                     </div>
@@ -80,18 +79,26 @@
                                                 <div class="accordion-body">
                                                     <div class="text-muted">
                                                         <div class="row">
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-4">
+                                                                <div class="mb-3">
+                                                                    <label for="">NIS</label>
+                                                                    <input type="text" class="form-control input-mask"
+                                                                        data-inputmask="'mask': 'AA-99-99999'"
+                                                                        name="nis" placeholder="NIS">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
                                                                 <div class="mb-3">
                                                                     <label for="">NISN</label>
                                                                     <input type="text" class="form-control"
                                                                         name="nisn" placeholder="NISN">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-4">
                                                                 <div class="mb-3">
-                                                                    <label for="">NIK/NIS</label>
+                                                                    <label for="">NIK</label>
                                                                     <input type="text" class="form-control"
-                                                                        name="nik" placeholder="NIK/NIS">
+                                                                        name="nik" placeholder="NIK">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -142,8 +149,14 @@
                 },
                 success: response => {
                     $.each(response.data, function(i, item) {
+                        if (item.jurusan) {
+                            jurusan = item.jurusan;
+                        } else {
+                            jurusan = '';
+                        }
+
                         $('.classes').append(
-                            `<option value="${item.id}">${item.level+' '+item.classes+' '+item.jurusan+' '+item.type}</option>`
+                            `<option value="${item.id}">${item.level+' '+item.classes+' '+jurusan+' '+item.type}</option>`
                         )
                     })
                 },

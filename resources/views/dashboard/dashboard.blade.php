@@ -147,11 +147,11 @@
                                 </div>
                             </div>
                         @endif
-                        @if (Auth::user()->roles == 'Siswa')
-                            <div class="col-md-12">
-                                <div class="card mini-stats-wid">
-                                    <div class="card-body">
-                                        @if (Auth::user()->student != null)
+                        @if (Auth::user()->roles == 'Orang Tua')
+                            @if (Auth::user()->student != null)
+                                <div class="col-md-12">
+                                    <div class="card mini-stats-wid">
+                                        <div class="card-body">
                                             <?php
                                             $spp = $siswa->spp->amount * 12;
                                             $kegiatan = $siswa->kegiatan->amount * 12;
@@ -206,10 +206,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
                     </div>
                 </div>

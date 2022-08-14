@@ -10,14 +10,15 @@
                             <h4 class="mb-sm-0 font-size-18">{{ $label }}</h4>
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">{{ ucwords($menu) }}</li>
+                                <li class="breadcrumb-item">{{ ucwords($submenu) }}</li>
                             </ol>
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('36', $session_menu))
-                                    <a href="{{ route('invoice.create') }}" type="button"
+                                @if (in_array('49', $session_menu))
+                                    <a href="{{ route('diskon.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="mdi mdi-plus me-1"></i> Tambah Pembayaran
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Setting Diskon
                                     </a>
                                 @endif
                             </ol>
@@ -33,14 +34,12 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>No Pembayaran</th>
-                                        <th>Tanggal</th>
-                                        <th>NIS</th>
-                                        <th>Siswa</th>
-                                        <th class="text-center">Biaya</th>
-                                        <th class="text-center">Diskon Pembayaran</th>
-                                        <th class="text-center">Diskon Prestasi</th>
-                                        <th>Total</th>
+                                        <th>Diskon</th>
+                                        <th>Keterangan</th>
+                                        <th>Type Diskon</th>
+                                        <th>Jumlah Pembayaran</th>
+                                        <th>Diskon Bulan</th>
+                                        <th>Diskon Persentase (%)</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -55,11 +54,6 @@
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
-    <style>
-        .right {
-            text-align: right;
-        }
-    </style>
     <script>
         $(document).ready(function() {
             $('#table').DataTable({
@@ -67,8 +61,12 @@
                 serverSide: true,
                 responsive: true,
                 ajax: {
-                    url: "{{ route('invoice.list_invoice') }}",
+                    url: "{{ route('diskon.list_diskon') }}",
+                    data: function(d) {
+                        d.search = $('input[type="search"]').val()
+                    }
                 },
+                autoWidth: false,
                 columns: [{
                         data: null,
                         sortable: false,
@@ -78,44 +76,28 @@
                         },
                     },
                     {
-                        data: 'no_invoice',
-                        name: 'no_invoice',
+                        data: 'diskon',
+                        name: 'diskon',
                     },
                     {
-                        data: 'tanggal',
-                        name: 'tanggal',
+                        data: 'keterangan',
+                        name: 'keterangan',
                     },
                     {
-                        data: 'nik',
-                        name: 'nik',
+                        data: 'type_diskon',
+                        name: 'type_diskon',
                     },
                     {
-                        data: 'siswa',
-                        name: 'siswa',
+                        data: 'jml_bln_byr',
+                        name: 'jml_bln_byr',
                     },
                     {
-                        data: 'pembayaran',
-                        name: 'pembayaran',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
+                        data: 'diskon_bln',
+                        name: 'diskon_bln',
                     },
                     {
-                        data: 'diskon_pembayaran',
-                        name: 'diskon_pembayaran',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
-                    },
-                    {
-                        data: 'diskon_prestasi',
-                        name: 'diskon_prestasi',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
-                    },
-                    {
-                        data: 'grand_total',
-                        name: 'grand_total',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
+                        data: 'diskon_persentase',
+                        name: 'diskon_persentase',
                     },
                     {
                         data: 'action',

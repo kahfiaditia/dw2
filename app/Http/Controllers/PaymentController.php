@@ -27,13 +27,11 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payment = Payment::orderBy('id', 'DESC')->get();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'data ' . $this->submenu,
-            'payment' => $payment
         ];
         return view('payment.index')->with($data);
     }

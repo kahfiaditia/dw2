@@ -1,6 +1,5 @@
 @extends('layouts.main')
 @section('container')
-    <?php $session_menu = explode(',', Auth::user()->akses_submenu); ?>
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">

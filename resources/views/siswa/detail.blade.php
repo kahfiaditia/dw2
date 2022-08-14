@@ -87,6 +87,13 @@
                                         <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
+                                                    <h5 class="font-size-14">NIS (No Induk Sekolah)</h5>
+                                                    <p class="text-muted mb-0 input-mask"
+                                                        data-inputmask="'mask': 'AA-99-99999'">{{ $student->nis }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
                                                     <h5 class="font-size-14">NISN</h5>
                                                     <p class="text-muted mb-0">{{ $student->nisn }}</p>
                                                 </div>
@@ -95,18 +102,6 @@
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">NIK</h5>
                                                     <p class="text-muted mb-0">{{ $student->nik }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4 col-6">
-                                                <div class="mt-4">
-                                                    <h5 class="font-size-14">Kelas</h5>
-                                                    <p class="text-muted mb-0">
-                                                        @if ($student->classes_student)
-                                                            {{ $student->classes_student->school_level->level . ' ' . $student->classes_student->school_class->classes . ' ' . $student->classes_student->jurusan . '.' . $student->classes_student->type }}
-                                                        @else
-                                                            -
-                                                        @endif
-                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,6 +117,18 @@
                                             </div>
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
+                                                    <h5 class="font-size-14">Kelas</h5>
+                                                    <p class="text-muted mb-0">
+                                                        @if ($student->classes_student)
+                                                            {{ $student->classes_student->school_level->level . ' ' . $student->classes_student->school_class->classes . ' ' . $student->classes_student->jurusan . '.' . $student->classes_student->type }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
                                                     <h5 class="font-size-14">Jenis Kelamin</h5>
                                                     <p class="text-muted mb-0">{{ $student->jenis_kelamin }}</p>
                                                     <a href="javascript:void(0)" data-id="" id="get_data"
@@ -129,6 +136,8 @@
                                                     </a>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Tempat, Tanggal Lahir</h5>
@@ -145,8 +154,6 @@
                                                     </a>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Agama</h5>
@@ -160,6 +167,8 @@
                                                     <p class="text-muted mb-0">{{ $student->golongan_darah }}</p>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Nomor Akta Lahir</h5>
@@ -168,8 +177,6 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Nomor Kartu Keluarga</h5>
@@ -182,14 +189,14 @@
                                                     <p class="text-muted mb-0">{{ $student->email }}</p>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Nomor Handphone</h5>
                                                     <p class="text-muted mb-0">{{ $student->no_handphone }}</p>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Kewarganegaraan</h5>
@@ -202,12 +209,6 @@
                                                     <p class="text-muted mb-0">{{ $student->nama_negara }}</p>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4 col-6">
-                                                <div class="mt-4">
-                                                    <h5 class="font-size-14">Tempat Tinggal</h5>
-                                                    <p class="text-muted mb-0">{{ $student->tempat_tinggal }}</p>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
@@ -218,45 +219,13 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row task-dates">
-                                            <div class="col-sm-2 col-6">
+                                            <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
-                                                    <h5 class="font-size-14">Dusun</h5>
-                                                    <p class="text-muted mb-0">{{ $student->dusun }}</p>
+                                                    <h5 class="font-size-14">Tempat Tinggal</h5>
+                                                    <p class="text-muted mb-0">{{ $student->tempat_tinggal }}</p>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-2 col-6">
-                                                <div class="mt-4">
-                                                    <h5 class="font-size-14">Kecamatan</h5>
-                                                    <p class="text-muted mb-0">{{ $student->village }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2 col-6">
-                                                <div class="mt-4">
-                                                    <h5 class="font-size-14">Kelurahan</h5>
-                                                    <p class="text-muted mb-0">{{ $student->district }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2 col-6">
-                                                <div class="mt-4">
-                                                    <h5 class="font-size-14">RT</h5>
-                                                    <p class="text-muted mb-0">{{ $student->rt }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2 col-6">
-                                                <div class="mt-4">
-                                                    <h5 class="font-size-14">RW</h5>
-                                                    <p class="text-muted mb-0">{{ $student->rw }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2 col-6">
-                                                <div class="mt-4">
-                                                    <h5 class="font-size-14">Kode Pos</h5>
-                                                    <p class="text-muted mb-0">{{ $student->postal_code }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-5 col-6">
+                                            <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Alamat Jalan</h5>
                                                     <p class="text-muted mb-0">{{ $student->alamat }}</p>
@@ -264,38 +233,80 @@
                                             </div>
                                         </div>
                                         <div class="row task-dates">
-                                            <div class="col-sm-3 col-6">
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Dusun</h5>
+                                                    <p class="text-muted mb-0">{{ $student->dusun }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Kecamatan</h5>
+                                                    <p class="text-muted mb-0">{{ $student->village }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Kelurahan</h5>
+                                                    <p class="text-muted mb-0">{{ $student->district }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row task-dates">
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">RT</h5>
+                                                    <p class="text-muted mb-0">{{ $student->rt }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">RW</h5>
+                                                    <p class="text-muted mb-0">{{ $student->rw }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Kode Pos</h5>
+                                                    <p class="text-muted mb-0">{{ $student->postal_code }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row task-dates">
+                                            <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Moda Transportasi</h5>
                                                     <p class="text-muted mb-0">{{ $student->transportation }}</p>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3 col-6">
+                                            <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Anak Keberapa</h5>
                                                     <p class="text-muted mb-0">{{ $student->child_order }}</p>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3 col-6">
+                                            <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Sudah Punya KIP</h5>
                                                     <p class="text-muted mb-0">{{ $student->is_have_kip }}</p>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3 col-6">
+                                            <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Tetap Menerima KIP</h5>
                                                     <p class="text-muted mb-0">{{ $student->is_receive_kip }}</p>
                                                 </div>
                                             </div>
                                             @if ($student->is_receive_kip == 'Tidak')
-                                                <div class="col-sm-3 col-6">
+                                                <div class="col-sm-4 col-6">
                                                     <div class="mt-4">
                                                         <h5 class="font-size-14">Alasan Menolak KIP</h5>
                                                         <p class="text-muted mb-0">{{ $student->reason_reject_kip }}</p>
                                                     </div>
                                                 </div>
                                             @endif
+                                        </div>
+                                        <div class="row task-dates">
                                             <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
                                                 class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
                                         </div>

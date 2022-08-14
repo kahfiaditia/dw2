@@ -48,7 +48,11 @@ class SiswaController extends Controller
             return DataTables::of($students)
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($students) {
-                    return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                    if ($students->classes_student) {
+                        return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                    } else {
+                        return null;
+                    }
                 })
                 ->addColumn('Opsi', function (Siswa $students) {
                     return \view('siswa.button', compact('students'));
@@ -62,7 +66,7 @@ class SiswaController extends Controller
 
     public function create()
     {
-        if (Auth::user()->roles == 'Admin') {
+        if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator') {
             $students = User::doesntHave('student')->where('roles', 'Siswa')->orderBy('id', 'DESC')->get();
         } else {
             $students = [];
@@ -87,6 +91,7 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'nis' => 'required|unique:siswa',
             'nisn' => 'required|unique:siswa',
             'nik' => 'required|unique:siswa',
             'no_kk' => 'required|unique:siswa',
@@ -113,10 +118,10 @@ class SiswaController extends Controller
             'moda_transportasi' => 'required',
             'anak_keberapa' => 'required'
         ]);
-
         DB::beginTransaction();
         try {
             Siswa::create([
+                'nis' => $validated['nis'],
                 'nisn' => $validated['nisn'],
                 'nik' => $validated['nik'],
                 'no_kk' => $validated['no_kk'],
@@ -274,6 +279,7 @@ class SiswaController extends Controller
     {
         $id = Crypt::decryptString($id);
         $validated = $request->validate([
+            'nis' => "required|unique:siswa,nis,$id,id,deleted_at,NULL",
             'nisn' => "required|unique:siswa,nisn,$id,id,deleted_at,NULL",
             'nik' => "required|unique:siswa,nik,$id,id,deleted_at,NULL",
             'no_kk' => "required|unique:siswa,no_kk,$id,id,deleted_at,NULL",
@@ -304,6 +310,7 @@ class SiswaController extends Controller
         DB::beginTransaction();
         $student = Siswa::findOrFail($id);
         try {
+            $student->nis = $validated['nis'];
             $student->nisn = $validated['nisn'];
             $student->nik = $validated['nik'];
             $student->no_kk = $validated['no_kk'];
@@ -993,5 +1000,23 @@ class SiswaController extends Controller
                 'message' => 'berhasil',
             ]);
         }
+    }
+
+    public function dropdown_siswa(Request $request)
+    {
+        $data = Siswa::all();
+        return response()->json([
+            'code' => 200,
+            'data' => $data,
+        ]);
+    }
+
+    public function get_siswa_by_nis(Request $request)
+    {
+        $data = Siswa::where('nis', $request->nis)->get();
+        return response()->json([
+            'code' => 200,
+            'data' => $data,
+        ]);
     }
 }

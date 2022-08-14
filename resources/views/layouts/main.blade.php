@@ -86,6 +86,9 @@
     <script src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
     <script src="{{ asset('assets/libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
     <script src="{{ asset('assets/numeral.js') }}"></script>
+    <script src="{{ asset('assets/libs/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/form-mask.init.js') }}"></script>
+
     {{-- loading --}}
     <script type="text/javascript">
         var $loading = $('#loader').hide();

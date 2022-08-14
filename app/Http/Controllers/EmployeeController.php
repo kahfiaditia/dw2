@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
-use App\Models\Agama;
 use App\Models\Anak_karyawan;
 use App\Models\Anak_karyawan_sekolah_dw;
 use App\Models\Employee;
@@ -87,6 +86,7 @@ class EmployeeController extends Controller
             'jabatan' => 'required',
             'masuk_kerja' => 'required',
             'nik' => 'required|max:20',
+            'niks' => 'required|max:20|unique:karyawan,niks,NULL,id,deleted_at,NULL',
             'kk' => 'required|max:20',
             'dok_nik' => 'mimes:png,jpeg,jpg,pdf|max:2048',
             'dok_npwp' => 'mimes:png,jpeg,jpg,pdf|max:2048',
@@ -100,6 +100,8 @@ class EmployeeController extends Controller
             $employee->no_hp = $request->no_hp;
             $employee->tempat_lahir = $request->tempat_lahir;
             $employee->tgl_lahir = $request->tgl_lahir;
+            // niks (no induk karyawan sekolah)
+            $employee->niks = $request->niks;
             // dokumen nik
             $employee->nik = $request->nik;
             if ($request->dok_nik) {
@@ -223,6 +225,7 @@ class EmployeeController extends Controller
 
     public function update(Request $request)
     {
+        $id = Crypt::decryptString($request->id);
         $request->validate([
             'nama_lengkap' => 'required|max:128',
             'tempat_lahir' => 'required|max:64',
@@ -231,16 +234,18 @@ class EmployeeController extends Controller
             'masuk_kerja' => 'required',
             'agama' => 'required',
             'nik' => 'required|max:20',
+            'niks' => "required|max:20|unique:karyawan,niks,$id,id,deleted_at,NULL",
             'kk' => 'required|max:20',
         ]);
         DB::beginTransaction();
         try {
-            $id = Crypt::decryptString($request->id);
             $employee = Employee::findorfail($id);
             $employee->nama_lengkap = $request->nama_lengkap;
             $employee->no_hp = $request->no_hp;
             $employee->tempat_lahir = $request->tempat_lahir;
             $employee->tgl_lahir = $request->tgl_lahir;
+            // niks (no induk karyawan sekolah)
+            $employee->niks = $request->niks;
             // dokumen nik
             $employee->nik = $request->nik;
             if ($request->dok_nik) {

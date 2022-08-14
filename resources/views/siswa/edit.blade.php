@@ -120,11 +120,28 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-6">
+                                                    <label for="validationCustom02" class="form-label">NIS (No Induk
+                                                        Sekolah)
+                                                        <code>*</code></label>
+                                                    <input type="text" class="form-control input-mask" name=""
+                                                        id="nis_mask" maxlength="20" onkeyup="replaceNis()" required
+                                                        value="{{ old('nis', $student->nis) }}"
+                                                        data-inputmask="'mask': 'AA-99-99999'" placeholder="NIS">
+                                                    <input type="hidden" name="nis" id="nis"
+                                                        value="{{ str_replace('-', '', $student->nis) }}">
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                    @error('nis')
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-6">
                                                     <label for="validationCustom02" class="form-label">NISN
                                                         <code>*</code></label>
-                                                    <input type="text" class="form-control number-only" name="nisn"
-                                                        placeholder="NISN" value="{{ old('nisn', $student->nisn) }}"
-                                                        maxlength="20" required>
+                                                    <input type="text" class="form-control number-only nisn"
+                                                        name="nisn" placeholder="NISN"
+                                                        value="{{ old('nisn', $student->nisn) }}" maxlength="20" required>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -383,7 +400,7 @@
                                                                 class="form-control select2" required>
                                                                 <option value="">-- Pilih Kecamatan --</option>
                                                                 @foreach ($districts as $district)
-                                                                    @if ($district->kecamatan == $student->village)
+                                                                    @if ($district->kecamatan == $student->district)
                                                                         <option value="{{ $district->kecamatan }}"
                                                                             selected>
                                                                             {{ $district->kecamatan }}</option>
@@ -516,6 +533,7 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <input type="hidden" id="old_village" value="{{ $student->village }}">
                                             <input type="hidden" id="old_district" value="{{ $student->district }}">
                                             <input type="hidden" id="old_postal_code"
                                                 value="{{ $student->postal_code }}">
@@ -544,11 +562,11 @@
         let old_district = $("#old_district").val()
         let oldVillage = ''
         let oldPostalCode = $("#old_postal_code").val()
+        let old_village = document.getElementById("old_village").value;
 
         $(document).ready(function() {
             let district = $("#kecamatan :selected").val()
             url = url.replace(':district', district)
-
             if (district) {
                 $.ajax({
                     type: 'GET',
@@ -557,7 +575,7 @@
                         $("#kelurahan option").remove()
                         $("#kelurahan").append(`<option value="">-- Pilih Kelurahan --</option>`)
                         $.each(response.data, function(index, item) {
-                            if (item.kelurahan == old_district) {
+                            if (item.kelurahan == old_village) {
                                 oldVillage = item.kelurahan
                                 urlPostalCode = urlPostalCode.replace(':oldVillage', oldVillage)
                                 next()
@@ -598,6 +616,7 @@
                 }
             }
 
+            let old_district = document.getElementById("old_district").value;
             $("#kecamatan").bind('change', function() {
                 let district = $(this).val()
                 let url = '{{ route('kodepos.get_villages_by_district', ':district') }}'
@@ -652,5 +671,11 @@
                 });
             });
         })
+
+        function replaceNis() {
+            nis = document.getElementById("nis_mask").value;
+            strBaru = nis.replace(/-/g, '');
+            document.getElementById("nis").value = strBaru;
+        }
     </script>
 @endsection

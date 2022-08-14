@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
@@ -25,5 +26,10 @@ class Invoice extends Model
     public function siswa()
     {
         return $this->belongsTo(Siswa::class, 'siswa_id')->withTrashed();
+    }
+
+    public function invoice_header()
+    {
+        return $this->belongsTo(Invoice_header::class, 'invoice_header_id');
     }
 }

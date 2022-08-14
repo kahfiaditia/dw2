@@ -10,14 +10,15 @@
                             <h4 class="mb-sm-0 font-size-18">{{ $label }}</h4>
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">{{ ucwords($menu) }}</li>
+                                <li class="breadcrumb-item">{{ ucwords($submenu) }}</li>
                             </ol>
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('36', $session_menu))
-                                    <a href="{{ route('invoice.create') }}" type="button"
+                                @if (in_array('53', $session_menu))
+                                    <a href="{{ route('prestasi.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="mdi mdi-plus me-1"></i> Tambah Pembayaran
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Setting Diskon Prestasi
                                     </a>
                                 @endif
                             </ol>
@@ -33,14 +34,11 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>No Pembayaran</th>
-                                        <th>Tanggal</th>
+                                        <th>Diskon</th>
                                         <th>NIS</th>
                                         <th>Siswa</th>
-                                        <th class="text-center">Biaya</th>
-                                        <th class="text-center">Diskon Pembayaran</th>
-                                        <th class="text-center">Diskon Prestasi</th>
-                                        <th>Total</th>
+                                        <th>stard Date</th>
+                                        <th>End Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -55,11 +53,6 @@
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
-    <style>
-        .right {
-            text-align: right;
-        }
-    </style>
     <script>
         $(document).ready(function() {
             $('#table').DataTable({
@@ -67,8 +60,12 @@
                 serverSide: true,
                 responsive: true,
                 ajax: {
-                    url: "{{ route('invoice.list_invoice') }}",
+                    url: "{{ route('prestasi.list_prestasi') }}",
+                    // data: function(d) {
+                    //     d.search = $('input[type="search"]').val()
+                    // }
                 },
+                autoWidth: false,
                 columns: [{
                         data: null,
                         sortable: false,
@@ -78,44 +75,24 @@
                         },
                     },
                     {
-                        data: 'no_invoice',
-                        name: 'no_invoice',
+                        data: 'diskon',
+                        name: 'diskon',
                     },
                     {
-                        data: 'tanggal',
-                        name: 'tanggal',
-                    },
-                    {
-                        data: 'nik',
-                        name: 'nik',
+                        data: 'nis',
+                        name: 'nis',
                     },
                     {
                         data: 'siswa',
                         name: 'siswa',
                     },
                     {
-                        data: 'pembayaran',
-                        name: 'pembayaran',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
+                        data: 'start_date',
+                        name: 'start_date',
                     },
                     {
-                        data: 'diskon_pembayaran',
-                        name: 'diskon_pembayaran',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
-                    },
-                    {
-                        data: 'diskon_prestasi',
-                        name: 'diskon_prestasi',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
-                    },
-                    {
-                        data: 'grand_total',
-                        name: 'grand_total',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
+                        data: 'end_date',
+                        name: 'end_date',
                     },
                     {
                         data: 'action',

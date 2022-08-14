@@ -40,27 +40,33 @@
                                             <label for="validationCustom02" class="form-label">Roles <code>*</code></label>
                                             <select class="form-control select select2" name="roles" id="roles"
                                                 required>
-                                                @if ($akun->roles === 'Admin')
+                                                @if (Auth::user()->roles == 'Administrator')
                                                     <option value="">--Pilih Roles--</option>
-                                                    <option value="Admin"
-                                                        {{ $akun->roles === 'Admin' ? 'selected' : '' }}>
+                                                    <option value="Administrator"
+                                                        {{ $akun->roles === 'Administrator' ? 'selected' : '' }}>
+                                                        Administrator</option>
+                                                    <option value="Admin" {{ $akun->roles === 'Admin' ? 'selected' : '' }}>
                                                         Admin</option>
                                                     <option value="Karyawan"
                                                         {{ $akun->roles === 'Karyawan' ? 'selected' : '' }}>Karyawan
+                                                    </option>
+                                                    <option value="Tu" {{ $akun->roles === 'Tu' ? 'selected' : '' }}>
+                                                        Tata Usaha
                                                     </option>
                                                     <option value="Siswa"
                                                         {{ $akun->roles === 'Siswa' ? 'selected' : '' }}>
                                                         Siswa</option>
                                                     <option value="Alumni"
-                                                        {{ $akun->roles === 'Alumni' ? 'selected' : '' }}>Alumni</option>
-                                                    <option value="Ortu"
-                                                        {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>
+                                                        {{ $akun->roles === 'Alumni' ? 'selected' : '' }}>Alumni
+                                                    </option>
+                                                    <option value="Ortu" {{ $akun->roles === 'Ortu' ? 'selected' : '' }}>
                                                         Orang Tua
                                                     </option>
                                                 @else
                                                     <option value="{{ $akun->roles }}" selected>{{ $akun->roles }}
                                                     </option>
                                                 @endif
+
                                             </select>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.

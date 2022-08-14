@@ -52,6 +52,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>NIS</th>
                                         <th>NISN</th>
                                         <th>NIK</th>
                                         <th>Nama Lengkap</th>
@@ -119,6 +120,9 @@
                 // }],
                 columns: [{
                         data: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'nis'
                     },
                     {
                         data: 'nisn'

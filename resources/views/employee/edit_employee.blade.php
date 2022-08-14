@@ -120,8 +120,8 @@
                                                         <label for="validationCustom02" class="form-label">Nama Lengkap
                                                             <code>*</code></label>
                                                         <input type="text" class="form-control" id="nama_lengkap"
-                                                            name="nama_lengkap" value="{{ $item->nama_lengkap }}"
-                                                            required autofocus placeholder="Nama Lengkap">
+                                                            name="nama_lengkap" value="{{ $item->nama_lengkap }}" required
+                                                            autofocus placeholder="Nama Lengkap">
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -174,6 +174,22 @@
                                                             </div>
                                                         </div>
                                                         {!! $errors->first('tgl_lahir', '<div class="invalid-validasi">:message</div>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="validationCustom02" class="form-label">NIKS (No
+                                                            Induk Karyawan Sekolah)
+                                                            <code>*</code></label>
+                                                        <input type="number" min="0" class="form-control"
+                                                            id="niks" name="niks" value="{{ $item->niks }}"
+                                                            required placeholder="No NIKS">
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                        {!! $errors->first('niks', '<div class="invalid-validasi">:message</div>') !!}
                                                     </div>
                                                 </div>
                                             </div>

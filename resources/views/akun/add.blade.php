@@ -40,6 +40,7 @@
                                                 required>
                                                 <option value="">--Pilih Roles--</option>
                                                 <option value="Admin">Admin</option>
+                                                <option value="Tu">Tata Usaha</option>
                                                 <option value="Karyawan">Karyawan</option>
                                                 <option value="Siswa">Siswa</option>
                                                 <option value="Alumni">Alumni</option>
@@ -95,8 +96,7 @@
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
-                                        <a href="{{ route('akun.index') }}"
-                                            class="btn btn-secondary waves-effect">Batal</a>
+                                        <a href="{{ route('akun.index') }}" class="btn btn-secondary waves-effect">Batal</a>
                                         <button class="btn btn-primary" type="submit" style="float: right"
                                             id="submit">Simpan</button>
                                     </div>
