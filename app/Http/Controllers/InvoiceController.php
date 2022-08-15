@@ -20,6 +20,7 @@ use Yajra\DataTables\DataTables;
 class InvoiceController extends Controller
 {
     protected $title = 'dharmawidya';
+    protected $sid = 'SID';
     protected $menu = 'pembayaran';
 
     /**
@@ -32,7 +33,8 @@ class InvoiceController extends Controller
         $invoice = Invoice::orderBy('id', 'DESC')->get();
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'data ' . $this->menu,
             'invoice' => $invoice
         ];
@@ -69,7 +71,8 @@ class InvoiceController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'tambah ' . $this->menu,
             'bills' => Bills::orderBY('bills', 'ASC')->get(),
         ];
@@ -204,7 +207,8 @@ class InvoiceController extends Controller
         }
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'tambah ' . $this->menu,
             'students' => $student,
             'invoice_tahunan' => $invoice_tahunan,
@@ -428,7 +432,8 @@ class InvoiceController extends Controller
 
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => $this->menu,
             'invoice' => $invHeader,
             'students' => $student,

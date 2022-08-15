@@ -10,6 +10,7 @@
                             <h4 class="mb-sm-0 font-size-18">{{ $label }}</h4>
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">{{ ucwords($menu) }}</li>
+                                <li class="breadcrumb-item">{{ ucwords($submenu) }}</li>
                             </ol>
                         </div>
                         <div class="page-title-right">

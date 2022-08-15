@@ -27,14 +27,15 @@ use Maatwebsite\Excel\Facades\Excel;
 class SiswaController extends Controller
 {
     protected $title = 'dharmawidya';
+    protected $sid = 'SID';
     protected $menu = 'siswa';
 
     public function index(Request $request)
     {
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'siswa',
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'data siswa'
         ];
 

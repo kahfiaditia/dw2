@@ -17,7 +17,7 @@ class PrestasiController extends Controller
 {
     protected $title = 'dharmawidya';
     protected $menu = 'setting';
-    protected $submenu = 'setting prestasi';
+    protected $submenu = 'diskon prestasi';
 
     /**
      * Display a listing of the resource.

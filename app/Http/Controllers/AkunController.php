@@ -16,7 +16,8 @@ use Yajra\DataTables\DataTables;
 class AkunController extends Controller
 {
     protected $title = 'dharmawidya';
-    protected $menu = 'setting';
+    protected $sid = 'SID';
+    protected $menu = 'akun';
     /**
      * Display a listing of the resource.
      *
@@ -26,8 +27,8 @@ class AkunController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'akun',
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'data akun',
         ];
         return view('akun.list')->with($data);
@@ -85,8 +86,8 @@ class AkunController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'akun',
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'data akun',
             'school_level' => School_level::all(),
         ];
@@ -173,8 +174,8 @@ class AkunController extends Controller
         $id_decrypted = Crypt::decryptString($id);
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'akun',
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'ubah akun',
             'school_level' => School_level::all(),
             'akun' => User::findorfail($id_decrypted)
@@ -289,8 +290,8 @@ class AkunController extends Controller
         $id_decrypted = Crypt::decryptString($id);
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'akun',
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'ubah akun',
             'school_level' => School_level::all(),
             'akun' => User::findorfail($id_decrypted)

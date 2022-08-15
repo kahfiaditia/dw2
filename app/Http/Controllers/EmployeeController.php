@@ -23,14 +23,15 @@ use Yajra\DataTables\DataTables;
 class EmployeeController extends Controller
 {
     protected $title = 'dharmawidya';
+    protected $sid = 'SID';
     protected $menu = 'karyawan';
 
     public function index(Request $request)
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
-            'submenu' => 'karyawan',
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'list karyawan',
         ];
 
@@ -69,7 +70,7 @@ class EmployeeController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
         ];
@@ -191,7 +192,7 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($id_karyawan);
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => $employee,
@@ -215,7 +216,7 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($result);
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => $employee,
@@ -350,7 +351,7 @@ class EmployeeController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
@@ -363,7 +364,7 @@ class EmployeeController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
@@ -376,7 +377,7 @@ class EmployeeController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data.',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
@@ -673,7 +674,7 @@ class EmployeeController extends Controller
             ];
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan',
             'item' => Employee::findorfail(Crypt::decryptString($id)),
@@ -852,7 +853,7 @@ class EmployeeController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
             'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
@@ -941,7 +942,7 @@ class EmployeeController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
             'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],
@@ -955,7 +956,7 @@ class EmployeeController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'data',
+            'menu' => $this->sid,
             'submenu' => $this->menu,
             'label' => 'karyawan baru',
             'jurusan' => ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'],

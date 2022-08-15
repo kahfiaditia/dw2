@@ -114,10 +114,6 @@
                 ajax: {
                     url: '{{ route('siswa.index') }}',
                 },
-                // columnDefs: [{
-                //     "className": "text-center",
-                //     "targets": "_all"
-                // }],
                 columns: [{
                         data: 'DT_RowIndex'
                     },
