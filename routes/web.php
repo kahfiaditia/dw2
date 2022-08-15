@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiskonController;
@@ -215,5 +216,7 @@ Route::group(
         // prestasi
         Route::resource('/prestasi', PrestasiController::class);
         Route::get('/list_prestasi', [PrestasiController::class, 'list_prestasi'])->name('prestasi.list_prestasi');
+        // chat
+        Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     }
 );
