@@ -18,7 +18,6 @@ class UpdateClassSchoolPayment extends Migration
             $table->dropColumn('class_id');
             $table->unsignedBigInteger('school_class_id')->nullable()->after('school_level_id');
             $table->foreign('school_class_id')->references('id')->on('school_class');
-            //
         });
     }
 
