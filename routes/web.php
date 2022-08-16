@@ -182,6 +182,8 @@ Route::group(
         Route::delete('/destroy_parent/{parent_id}', [SiswaController::class, 'destroy_parent'])->name('siswa.destroy_parent');
         Route::post('/dropdown_siswa', [SiswaController::class, 'dropdown_siswa'])->name('siswa.dropdown_siswa');
         Route::post('/get_siswa_by_nis', [SiswaController::class, 'get_siswa_by_nis'])->name('siswa.get_siswa_by_nis');
+        Route::get('/edit_pembayaran/{id}', [SiswaController::class, 'edit_pembayaran'])->name('siswa.edit_pembayaran');
+        Route::patch('/update_pembayaran/{id}', [SiswaController::class, 'update_pembayaran'])->name('siswa.update_pembayaran');
         // akun
         Route::resource('/akun', AkunController::class);
         Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');

@@ -15,6 +15,11 @@
             <a href="#" class="text-danger delete-confirm" data-toggle="tooltip" data-placement="top"
                 title="hapus"><i class="mdi mdi-delete font-size-18"></i></a>
         @endif
+        @if (in_array('56', $session_menu))
+            <a href="{{ route('siswa.edit_pembayaran', \Crypt::encryptString($students->id)) }}" class="text-success"
+                data-toggle="tooltip" data-placement="top" title="edit Pembayaran"><i
+                    class="mdi mdi-credit-card-check-outline font-size-18"></i></a>
+        @endif
     </div>
 </form>
 

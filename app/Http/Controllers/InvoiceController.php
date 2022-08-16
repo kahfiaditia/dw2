@@ -169,10 +169,15 @@ class InvoiceController extends Controller
             ->first();
         $diskon = Diskon::where('type_diskon', '=', 1)->get();
         $prestasi = Diskon_prestasi::where('siswa_id', $siswaId)->where('end_date', '>=', Carbon::now()->format('Y-m-d'))->orderBy('id', 'DESC')->first();
-        if ($prestasi != null and $prestasi->invoice_prestasi != null) {
-            if ($prestasi->diskon->diskon_bln == $prestasi->invoice_prestasi->wherenotnull('prestasi_id')->count()) {
-                $prestasi = [];
+
+        if ($prestasi->id != null) {
+            // dd($prestasi->invoice_prestasi);
+            if ($prestasi->invoice_prestasi != null) {
+                if ($prestasi->diskon->diskon_bln == $prestasi->invoice_prestasi->wherenotnull('prestasi_id')->count()) {
+                    $prestasi = [];
+                }
             }
+            // dd($prestasi);
         }
         if ($student->spp) {
             // cek histori uang spp

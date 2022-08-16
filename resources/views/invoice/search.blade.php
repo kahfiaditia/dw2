@@ -161,9 +161,13 @@
                                                         <td class="text-center">
                                                             @if ($students->uang_pangkal)
                                                                 @if ($invoice_tahunan->pangkal == $students->uang_pangkal->amount)
-                                                                    <?php $readonly = 'readonly'; ?>
+                                                                    <?php
+                                                                    $readonly = 'readonly';
+                                                                    $placeholder = 'Lunas'; ?>
                                                                 @else
-                                                                    <?php $readonly = ''; ?>
+                                                                    <?php
+                                                                    $readonly = '';
+                                                                    $placeholder = 'Bayar'; ?>
                                                                 @endif
                                                             @else
                                                                 <?php
@@ -174,7 +178,7 @@
                                                             <input type="text" class="form-control rupiah"
                                                                 {{ $readonly }} maxlength="10" id="rupiah1"
                                                                 oninput="numberFormat(1);rupiahFormat(1);"
-                                                                placeholder="Bayar">
+                                                                placeholder="{{ $placeholder }}">
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -655,6 +659,10 @@
                         .format(
                             diskonPrestasi);
                     document.getElementsByClassName("checkAll")[0].style.display = 'none';
+
+                    $('input:radio').each(function() {
+                        $(this).attr("disabled", true);
+                    });
                 }
             }
             grandTotal()

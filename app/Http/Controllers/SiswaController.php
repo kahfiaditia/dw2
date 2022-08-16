@@ -1020,4 +1020,99 @@ class SiswaController extends Controller
             'data' => $data,
         ]);
     }
+
+    public function edit_pembayaran($id)
+    {
+        $student = Siswa::findOrFail(Crypt::decryptString($id));
+        $formulir = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->Join('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Formulir')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $pangkal = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->Join('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Pangkal')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $spp = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->Join('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'SPP')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $kegiatan = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->Join('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Kegiatan')
+            ->whereNull('payment.deleted_at')
+            ->get();
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'Pembayaran Siswa',
+            'label' => 'Edit Pembayaran Siswa',
+            'student' => $student,
+            'formulir' => $formulir,
+            'pangkal' => $pangkal,
+            'spp' => $spp,
+            'kegiatan' => $kegiatan,
+        ];
+
+        return view('siswa.edit_pembayaran')->with($data);
+    }
+
+    public function update_pembayaran(Request $request, $id)
+    {
+        $decrypted_id = Crypt::decryptString($id);
+        $validated = $request->validate([
+            'formulir' => 'required',
+            'pangkal' => 'required',
+            'spp' => 'required',
+            'kegiatan' => 'required',
+        ]);
+        DB::beginTransaction();
+        try {
+            $siswa = Siswa::findOrFail($decrypted_id);
+            $siswa->formulir_id = $validated['formulir'];
+            $siswa->pangkal_id = $validated['pangkal'];
+            $siswa->spp_id = $validated['spp'];
+            $siswa->kegiatan_id = $validated['kegiatan'];
+            $siswa->save();
+
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('siswa');
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
+        }
+    }
 }
