@@ -5345,21 +5345,352 @@ var staticRenderFns = [function () {
       _c = _vm._self._c;
 
   return _c("div", {
-    staticClass: "container"
-  }, [_c("div", [_c("div", [_c("div", {
-    staticClass: "chat-conversation p-3 scrollHeight",
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-xl-4"
+  }, [_c("div", {
+    staticClass: "card"
+  }, [_c("div", {
+    staticClass: "card-body"
+  }, [_c("div", {}, [_c("div", {
+    staticClass: "py-4 border-bottom"
+  }, [_c("div", {
+    staticClass: "d-flex"
+  }, [_c("div", {
+    staticClass: "flex-shrink-0 align-self-center me-3"
+  }, [_c("img", {
+    staticClass: "avatar-xs rounded-circle",
+    attrs: {
+      src: "assets/images/users/avatar-1.jpg",
+      alt: ""
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "flex-grow-1"
+  }, [_c("h5", {
+    staticClass: "font-size-15 mb-1"
+  }, [_vm._v("Henry Wells")]), _vm._v(" "), _c("p", {
+    staticClass: "text-muted mb-0"
+  }, [_c("i", {
+    staticClass: "mdi mdi-circle text-success align-middle me-1"
+  }), _vm._v("\n                  Active\n                ")])]), _vm._v(" "), _c("div", [_c("div", {
+    staticClass: "dropdown chat-noti-dropdown active"
+  }, [_c("button", {
+    staticClass: "btn dropdown-toggle",
+    attrs: {
+      type: "button",
+      "aria-haspopup": "true",
+      "aria-expanded": "false"
+    }
+  }, [_c("i", {
+    staticClass: "bx bx-bell bx-tada"
+  })])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "search-box chat-search-box py-4"
+  }, [_c("div", {
+    staticClass: "position-relative"
+  }, [_c("input", {
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Search..."
+    }
+  }), _vm._v(" "), _c("i", {
+    staticClass: "bx bx-search-alt search-icon"
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "chat-leftsidebar-nav"
+  }, [_c("ul", {
+    staticClass: "nav nav-pills nav-justified"
+  }, [_c("li", {
+    staticClass: "nav-item"
+  }, [_c("a", {
+    staticClass: "nav-link active",
+    attrs: {
+      href: "#chat",
+      "data-bs-toggle": "tab",
+      "aria-expanded": "true"
+    }
+  }, [_c("i", {
+    staticClass: "bx bx-chat font-size-20 d-sm-none"
+  }), _vm._v(" "), _c("span", {
+    staticClass: "d-none d-sm-block"
+  }, [_vm._v("Chat")])])]), _vm._v(" "), _c("li", {
+    staticClass: "nav-item"
+  }, [_c("a", {
+    staticClass: "nav-link",
+    attrs: {
+      href: "#groups",
+      "data-bs-toggle": "tab",
+      "aria-expanded": "false"
+    }
+  }, [_c("i", {
+    staticClass: "bx bx-group font-size-20 d-sm-none"
+  }), _vm._v(" "), _c("span", {
+    staticClass: "d-none d-sm-block"
+  }, [_vm._v("Groups")])])]), _vm._v(" "), _c("li", {
+    staticClass: "nav-item"
+  }, [_c("a", {
+    staticClass: "nav-link",
+    attrs: {
+      href: "#contacts",
+      "data-bs-toggle": "tab",
+      "aria-expanded": "false"
+    }
+  }, [_c("i", {
+    staticClass: "bx bx-book-content font-size-20 d-sm-none"
+  }), _vm._v(" "), _c("span", {
+    staticClass: "d-none d-sm-block"
+  }, [_vm._v("Contacts")])])])]), _vm._v(" "), _c("div", {
+    staticClass: "tab-content py-4"
+  }, [_c("div", {
+    staticClass: "tab-pane show active",
+    attrs: {
+      id: "chat"
+    }
+  }, [_c("div", [_c("h5", {
+    staticClass: "font-size-14 mb-3"
+  }, [_vm._v("Recent")]), _vm._v(" "), _c("ul", {
+    staticClass: "list-unstyled chat-list",
+    staticStyle: {
+      "max-height": "410px"
+    },
+    attrs: {
+      "data-simplebar": ""
+    }
+  }, [_c("li", {
+    staticClass: "active"
+  }, [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("div", {
+    staticClass: "d-flex"
+  }, [_c("div", {
+    staticClass: "flex-shrink-0 align-self-center me-3"
+  }, [_c("i", {
+    staticClass: "mdi mdi-circle font-size-10"
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "flex-shrink-0 align-self-center me-3"
+  }, [_c("img", {
+    staticClass: "rounded-circle avatar-xs",
+    attrs: {
+      src: "assets/images/users/avatar-2.jpg",
+      alt: ""
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "flex-grow-1 overflow-hidden"
+  }, [_c("h5", {
+    staticClass: "text-truncate font-size-14 mb-1"
+  }, [_vm._v("\n                              Steven Franklin\n                            ")]), _vm._v(" "), _c("p", {
+    staticClass: "text-truncate mb-0"
+  }, [_vm._v("\n                              Hey! there I'm available\n                            ")])]), _vm._v(" "), _c("div", {
+    staticClass: "font-size-11"
+  }, [_vm._v("05 min")])])])]), _vm._v(" "), _c("li", [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("div", {
+    staticClass: "d-flex"
+  }, [_c("div", {
+    staticClass: "flex-shrink-0 align-self-center me-3"
+  }, [_c("i", {
+    staticClass: "mdi mdi-circle text-success font-size-10"
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "flex-shrink-0 align-self-center me-3"
+  }, [_c("img", {
+    staticClass: "rounded-circle avatar-xs",
+    attrs: {
+      src: "assets/images/users/avatar-3.jpg",
+      alt: ""
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "flex-grow-1 overflow-hidden"
+  }, [_c("h5", {
+    staticClass: "text-truncate font-size-14 mb-1"
+  }, [_vm._v("\n                              Adam Miller\n                            ")]), _vm._v(" "), _c("p", {
+    staticClass: "text-truncate mb-0"
+  }, [_vm._v("\n                              I've finished it! See you so\n                            ")])]), _vm._v(" "), _c("div", {
+    staticClass: "font-size-11"
+  }, [_vm._v("12 min")])])])]), _vm._v(" "), _c("li", [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("div", {
+    staticClass: "d-flex"
+  }, [_c("div", {
+    staticClass: "flex-shrink-0 align-self-center me-3"
+  }, [_c("i", {
+    staticClass: "mdi mdi-circle text-success font-size-10"
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "avatar-xs align-self-center me-3"
+  }, [_c("span", {
+    staticClass: "avatar-title rounded-circle bg-primary bg-soft text-primary"
+  }, [_vm._v("\n                              K\n                            ")])]), _vm._v(" "), _c("div", {
+    staticClass: "flex-grow-1 overflow-hidden"
+  }, [_c("h5", {
+    staticClass: "text-truncate font-size-14 mb-1"
+  }, [_vm._v("\n                              Keith Gonzales\n                            ")]), _vm._v(" "), _c("p", {
+    staticClass: "text-truncate mb-0"
+  }, [_vm._v("\n                              This theme is awesome!\n                            ")])]), _vm._v(" "), _c("div", {
+    staticClass: "font-size-11"
+  }, [_vm._v("24 min")])])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "tab-pane",
+    attrs: {
+      id: "groups"
+    }
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-3"
+  }, [_vm._v("Groups")]), _vm._v(" "), _c("ul", {
+    staticClass: "list-unstyled chat-list",
+    staticStyle: {
+      "max-height": "410px"
+    },
+    attrs: {
+      "data-simplebar": ""
+    }
+  }, [_c("li", [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("div", {
+    staticClass: "d-flex align-items-center"
+  }, [_c("div", {
+    staticClass: "flex-shrink-0 me-3"
+  }, [_c("div", {
+    staticClass: "avatar-xs"
+  }, [_c("span", {
+    staticClass: "avatar-title rounded-circle bg-primary bg-soft text-primary"
+  }, [_vm._v("\n                              G\n                            ")])])]), _vm._v(" "), _c("div", {
+    staticClass: "flex-grow-1"
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-0"
+  }, [_vm._v("General")])])])])]), _vm._v(" "), _c("li", [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("div", {
+    staticClass: "d-flex align-items-center"
+  }, [_c("div", {
+    staticClass: "flex-shrink-0 me-3"
+  }, [_c("div", {
+    staticClass: "avatar-xs"
+  }, [_c("span", {
+    staticClass: "avatar-title rounded-circle bg-primary bg-soft text-primary"
+  }, [_vm._v("\n                              R\n                            ")])])]), _vm._v(" "), _c("div", {
+    staticClass: "flex-grow-1"
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-0"
+  }, [_vm._v("Reporting")])])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "tab-pane",
+    attrs: {
+      id: "contacts"
+    }
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-3"
+  }, [_vm._v("Contacts")]), _vm._v(" "), _c("div", {
+    staticStyle: {
+      "max-height": "410px"
+    },
+    attrs: {
+      "data-simplebar": ""
+    }
+  }, [_c("div", [_c("div", {
+    staticClass: "avatar-xs mb-3"
+  }, [_c("span", {
+    staticClass: "avatar-title rounded-circle bg-primary bg-soft text-primary"
+  }, [_vm._v("\n                        A\n                      ")])]), _vm._v(" "), _c("ul", {
+    staticClass: "list-unstyled chat-list"
+  }, [_c("li", [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-0"
+  }, [_vm._v("Adam Miller")])])]), _vm._v(" "), _c("li", [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-0"
+  }, [_vm._v("Alfonso Fisher")])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "mt-4"
+  }, [_c("div", {
+    staticClass: "avatar-xs mb-3"
+  }, [_c("span", {
+    staticClass: "avatar-title rounded-circle bg-primary bg-soft text-primary"
+  }, [_vm._v("\n                        B\n                      ")])]), _vm._v(" "), _c("ul", {
+    staticClass: "list-unstyled chat-list"
+  }, [_c("li", [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-0"
+  }, [_vm._v("Bonnie Harney")])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "mt-4"
+  }, [_c("div", {
+    staticClass: "avatar-xs mb-3"
+  }, [_c("span", {
+    staticClass: "avatar-title rounded-circle bg-primary bg-soft text-primary"
+  }, [_vm._v("\n                        C\n                      ")])]), _vm._v(" "), _c("ul", {
+    staticClass: "list-unstyled chat-list"
+  }, [_c("li", [_c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-0"
+  }, [_vm._v("Charles Brown")])]), _vm._v(" "), _c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-0"
+  }, [_vm._v("Carmella Jones")])]), _vm._v(" "), _c("a", {
+    attrs: {
+      href: "javascript: void(0);"
+    }
+  }, [_c("h5", {
+    staticClass: "font-size-14 mb-0"
+  }, [_vm._v("Carrie Williams")])])])])])])])])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-xl-8"
+  }, [_c("div", {
+    staticClass: "card"
+  }, [_c("div", {
+    staticClass: "p-4 border-bottom"
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-md-4 col-9"
+  }, [_c("h5", {
+    staticClass: "font-size-15 mb-1"
+  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", {
+    staticClass: "text-muted mb-0"
+  }, [_c("i", {
+    staticClass: "mdi mdi-circle text-success align-middle me-1"
+  }), _vm._v("\n              Active now\n            ")])])])]), _vm._v(" "), _c("div", [_c("div", {
+    staticClass: "chat-conversation p-3"
+  }, [_c("ul", {
+    staticClass: "list-unstyled mb-0",
     staticStyle: {
       "max-height": "486px"
     },
     attrs: {
       "data-simplebar": ""
     }
-  }, [_c("ul", {
-    staticClass: "list-unstyled mb-0 last",
-    attrs: {
-      id: "last"
-    }
-  }, [_c("li", {}, [_c("div", {
+  }, [_c("li", [_c("div", {
+    staticClass: "chat-day-title"
+  }, [_c("span", {
+    staticClass: "title"
+  }, [_vm._v("Today")])])]), _vm._v(" "), _c("li", [_c("div", {
+    staticClass: "conversation-list"
+  }, [_c("div", {
+    staticClass: "ctext-wrap"
+  }, [_c("div", {
+    staticClass: "conversation-name"
+  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", [_vm._v("Hello!")]), _vm._v(" "), _c("p", {
+    staticClass: "chat-time mb-0"
+  }, [_c("i", {
+    staticClass: "bx bx-time-five align-middle me-1"
+  }), _vm._v(" 10:00\n                  ")])])])]), _vm._v(" "), _c("li", [_c("div", {
     staticClass: "conversation-list"
   }, [_c("div", {
     staticClass: "dropdown"
@@ -5368,35 +5699,12 @@ var staticRenderFns = [function () {
     attrs: {
       href: "#",
       role: "button",
-      "data-bs-toggle": "dropdown",
       "aria-haspopup": "true",
       "aria-expanded": "false"
     }
   }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
+    staticClass: "bx bx-trash text-danger"
+  })])]), _vm._v(" "), _c("div", {
     staticClass: "ctext-wrap"
   }, [_c("div", {
     staticClass: "conversation-name"
@@ -5404,7 +5712,7 @@ var staticRenderFns = [function () {
     staticClass: "chat-time mb-0"
   }, [_c("i", {
     staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:06\n                ")])])])]), _vm._v(" "), _c("li", {
+  }), _vm._v(" 10:06\n                  ")])])])]), _vm._v(" "), _c("li", {
     staticClass: "right"
   }, [_c("div", {
     staticClass: "conversation-list"
@@ -5415,35 +5723,12 @@ var staticRenderFns = [function () {
     attrs: {
       href: "#",
       role: "button",
-      "data-bs-toggle": "dropdown",
       "aria-haspopup": "true",
       "aria-expanded": "false"
     }
   }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
+    staticClass: "bx bx-trash text-danger"
+  })])]), _vm._v(" "), _c("div", {
     staticClass: "ctext-wrap"
   }, [_c("div", {
     staticClass: "conversation-name"
@@ -5451,463 +5736,7 @@ var staticRenderFns = [function () {
     staticClass: "chat-time mb-0"
   }, [_c("i", {
     staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:07\n                ")])])])]), _vm._v(" "), _c("li", {}, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", [_vm._v("& Next meeting tomorrow 10.00AM")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:06\n                ")])])])]), _vm._v(" "), _c("li", {}, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", [_vm._v("& Next meeting tomorrow 10.00AM")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:06\n                ")])])])]), _vm._v(" "), _c("li", {
-    staticClass: "right"
-  }, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Henry Wells")]), _vm._v(" "), _c("p", [_vm._v("Wow that's great")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:07\n                ")])])])]), _vm._v(" "), _c("li", {}, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", [_vm._v("& Next meeting tomorrow 10.00AM")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:06\n                ")])])])]), _vm._v(" "), _c("li", {}, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", [_vm._v("& Next meeting tomorrow 10.00AM")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:06\n                ")])])])]), _vm._v(" "), _c("li", {
-    staticClass: "right"
-  }, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Henry Wells")]), _vm._v(" "), _c("p", [_vm._v("Wow that's great")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:07\n                ")])])])]), _vm._v(" "), _c("li", {}, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", [_vm._v("& Next meeting tomorrow 10.00AM")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:06\n                ")])])])]), _vm._v(" "), _c("li", {}, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", [_vm._v("& Next meeting tomorrow 10.00AM")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:06\n                ")])])])]), _vm._v(" "), _c("li", {
-    staticClass: "right"
-  }, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Henry Wells")]), _vm._v(" "), _c("p", [_vm._v("Wow that's great")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:07\n                ")])])])]), _vm._v(" "), _c("li", {}, [_c("div", {
-    staticClass: "conversation-list"
-  }, [_c("div", {
-    staticClass: "dropdown"
-  }, [_c("a", {
-    staticClass: "dropdown-toggle",
-    attrs: {
-      href: "#",
-      role: "button",
-      "data-bs-toggle": "dropdown",
-      "aria-haspopup": "true",
-      "aria-expanded": "false"
-    }
-  }, [_c("i", {
-    staticClass: "bx bx-dots-vertical-rounded"
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-menu"
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Copy")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Save")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Forward")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Delete")])])]), _vm._v(" "), _c("div", {
-    staticClass: "ctext-wrap"
-  }, [_c("div", {
-    staticClass: "conversation-name"
-  }, [_vm._v("Steven Franklin")]), _vm._v(" "), _c("p", [_vm._v("& Next meeting tomorrow 10.00AM")]), _vm._v(" "), _c("p", {
-    staticClass: "chat-time mb-0"
-  }, [_c("i", {
-    staticClass: "bx bx-time-five align-middle me-1"
-  }), _vm._v(" 10:06\n                ")])])])])])]), _vm._v(" "), _c("div", {
+  }), _vm._v(" 10:07\n                  ")])])])])])]), _vm._v(" "), _c("div", {
     staticClass: "p-3 chat-input-section"
   }, [_c("div", {
     staticClass: "row"
@@ -5960,14 +5789,13 @@ var staticRenderFns = [function () {
   }, [_c("button", {
     staticClass: "btn btn-primary btn-rounded chat-send w-md waves-effect waves-light",
     attrs: {
-      type: "submit",
-      id: "submit"
+      type: "submit"
     }
   }, [_c("span", {
     staticClass: "d-none d-sm-inline-block me-2"
   }, [_vm._v("Send")]), _vm._v(" "), _c("i", {
     staticClass: "mdi mdi-send"
-  })])])])])])])]);
+  })])])])])])])])]);
 }];
 render._withStripped = true;
 
