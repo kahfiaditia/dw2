@@ -21,7 +21,7 @@
             </div>
             <!-- end page title -->
 
-            <div class="d-lg-flex">
+            <div class="d-lg-flex" id="app">
                 <div class="chat-leftsidebar me-lg-4">
                     <div class="">
                         <div class="py-4 border-bottom">
@@ -491,191 +491,7 @@
                         </div>
 
                         {{-- chat --}}
-                        <div>
-                            <div class="chat-conversation p-3 scrollHeight" data-simplebar style="max-height: 486px;">
-                                <ul class="list-unstyled mb-0 last">
-                                    <li class="">
-                                        <div class="conversation-list">
-                                            <div class="dropdown">
-
-                                                <a class="dropdown-toggle" href="#" role="button"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Copy</a>
-                                                    <a class="dropdown-item" href="#">Save</a>
-                                                    <a class="dropdown-item" href="#">Forward</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                            <div class="ctext-wrap">
-                                                <div class="conversation-name">Steven Franklin</div>
-                                                <p>& Next meeting tomorrow 10.00AM</p>
-                                                <p class="chat-time mb-0"><i
-                                                        class="bx bx-time-five align-middle me-1"></i> 10:06</p>
-                                            </div>
-
-                                        </div>
-                                    </li>
-                                    <li class="right">
-                                        <div class="conversation-list">
-                                            <div class="dropdown">
-
-                                                <a class="dropdown-toggle" href="#" role="button"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Copy</a>
-                                                    <a class="dropdown-item" href="#">Save</a>
-                                                    <a class="dropdown-item" href="#">Forward</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                            <div class="ctext-wrap">
-                                                <div class="conversation-name">Henry Wells</div>
-                                                <p>
-                                                    Wow that's great
-                                                </p>
-
-                                                <p class="chat-time mb-0"><i
-                                                        class="bx bx-time-five align-middle me-1"></i> 10:07</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="">
-                                        <div class="conversation-list">
-                                            <div class="dropdown">
-
-                                                <a class="dropdown-toggle" href="#" role="button"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Copy</a>
-                                                    <a class="dropdown-item" href="#">Save</a>
-                                                    <a class="dropdown-item" href="#">Forward</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                            <div class="ctext-wrap">
-                                                <div class="conversation-name">Steven Franklin</div>
-                                                <p>& Next meeting tomorrow 10.00AM</p>
-                                                <p class="chat-time mb-0"><i
-                                                        class="bx bx-time-five align-middle me-1"></i> 10:06</p>
-                                            </div>
-
-                                        </div>
-                                    </li>
-
-
-                                    <li class="">
-                                        <div class="conversation-list">
-                                            <div class="dropdown">
-
-                                                <a class="dropdown-toggle" href="#" role="button"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Copy</a>
-                                                    <a class="dropdown-item" href="#">Save</a>
-                                                    <a class="dropdown-item" href="#">Forward</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                            <div class="ctext-wrap">
-                                                <div class="conversation-name">Steven Franklin</div>
-                                                <p>& Next meeting tomorrow 10.00AM</p>
-                                                <p class="chat-time mb-0"><i
-                                                        class="bx bx-time-five align-middle me-1"></i> 10:06</p>
-                                            </div>
-
-                                        </div>
-                                    </li>
-                                    <li class="right">
-                                        <div class="conversation-list">
-                                            <div class="dropdown">
-
-                                                <a class="dropdown-toggle" href="#" role="button"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Copy</a>
-                                                    <a class="dropdown-item" href="#">Save</a>
-                                                    <a class="dropdown-item" href="#">Forward</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                            <div class="ctext-wrap">
-                                                <div class="conversation-name">Henry Wells</div>
-                                                <p>
-                                                    Wow that's great
-                                                </p>
-
-                                                <p class="chat-time mb-0"><i
-                                                        class="bx bx-time-five align-middle me-1"></i> 10:07</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="">
-                                        <div class="conversation-list">
-                                            <div class="dropdown">
-
-                                                <a class="dropdown-toggle" href="#" role="button"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Copy</a>
-                                                    <a class="dropdown-item" href="#">Save</a>
-                                                    <a class="dropdown-item" href="#">Forward</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                            <div class="ctext-wrap">
-                                                <div class="conversation-name">Steven Franklin</div>
-                                                <p>& Next meeting tomorrow 10.00AM</p>
-                                                <p class="chat-time mb-0"><i
-                                                        class="bx bx-time-five align-middle me-1"></i> 10:06</p>
-                                            </div>
-
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="p-3 chat-input-section">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="position-relative">
-                                            <input type="text" class="form-control chat-input"
-                                                placeholder="Enter Message...">
-                                            <div class="chat-input-links" id="tooltip-container">
-                                                <ul class="list-inline mb-0">
-                                                    <li class="list-inline-item"><a href="javascript: void(0);"
-                                                            title="Emoji"><i
-                                                                class="mdi mdi-emoticon-happy-outline"></i></a></li>
-                                                    <li class="list-inline-item"><a href="javascript: void(0);"
-                                                            title="Images"><i class="mdi mdi-file-image-outline"></i></a>
-                                                    </li>
-                                                    <li class="list-inline-item"><a href="javascript: void(0);"
-                                                            title="Add Files"><i
-                                                                class="mdi mdi-file-document-outline"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="submit" id="submit"
-                                            class="btn btn-primary btn-rounded chat-send w-md waves-effect waves-light"><span
-                                                class="d-none d-sm-inline-block me-2">Send</span> <i
-                                                class="mdi mdi-send"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <example-component></example-component>
                     </div>
                 </div>
             </div>
@@ -683,62 +499,11 @@
     </div>
     <script>
         $(document).ready(function() {
-            $("button").click(function() {
-                $("html, body").animate({
-                    scrollTop: $(
-                        'html, body').get(0).scrollHeight
-                }, 1000);
+            document.getElementById('last').scrollIntoView({
+                // behavior: 'auto', // otomatis langsung ke bawah chat
+                behavior: 'smooth', // ada animasi untuk ke bawah chat
+                block: 'end',
             });
         });
-    </script>
-    <style>
-        h1 {
-            color: green;
-        }
-    </style>
-
-    <body>
-        <center>
-            <div>
-                <button>Click Here!</button>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-                <h1>GeeksforGeeks</h1>
-            </div>
-        </center>
-    </body>
-    <script>
-        $(document).ready(function() {
-            console.log('x')
-            // $(".scrollHeight").stop().animate({
-            //     scrollTop: $(".scrollHeight")[0].scrollHeight
-            // }, 1000);
-
-
-            // var $div = $("#scrollHeight");
-            // $("#scrollHeight").on("click", function() {
-            //     $div.scrollTop($div[0].scrollHeight);
-            // });
-
-
-
-        });
-
-        // $("#submit").click(function() {
-        //     console.log('x123')
-        //     var data = $("#btn-input").val();
-        //     $(".last_chat").stop().animate({
-        //         scrollTop: $(".last_chat")[0].scrollHeight
-        //     }, 1000);
-        // });
     </script>
 @endsection
