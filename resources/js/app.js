@@ -1,32 +1,52 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
 
 window.Vue = require('vue').default;
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+import { Form, HasError, AlertError, AlertSuccess } from 'vform';
+window.Form = Form
+// Vue.component(HasError.name, HasError)
+// Vue.component(AlertError.name, AlertError)
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+let Fire = new Vue()
+window.Fire = Fire
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+import Swal from 'sweetalert2'
+window.Swal = Swal
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+})
+window.Toast = Toast
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+import Vue from 'vue';
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+// load awal di laravel
+Vue.component('header-component', require('./components/Header.vue').default);
+Vue.component('contact-component', require('./components/Contact.vue').default);
+
+// content dinamis
+const Profile = require('./components/Profile.vue').default;
+const Chat = require('./components/Chat.vue').default;
+const routes = [
+    {
+        path: '/contact/:id?', name: 'contact', component: Profile, props: true
+    },
+    {
+        path: '/converstation/:id?', name: 'converstation', component: Chat, props: true
+    }
+]
+
+const router = new VueRouter({
+    mode: 'history',
+    routes
+})
 
 const app = new Vue({
     el: '#app',
+    router,
 });
+

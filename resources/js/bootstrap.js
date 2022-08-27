@@ -30,9 +30,3 @@ window.Echo = new Echo({
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     forceTLS: true
 });
-
-
-window.Echo.channel('messages').listen('MessageCreated', (event) => {
-    console.log("berhasil listen ke puser");
-    console.log(event);
-});

@@ -50,11 +50,11 @@ class User extends Authenticatable
 
     public function student()
     {
-        return $this->hasOne(Siswa::class, 'user_id');
+        return $this->hasOne(Siswa::class, 'user_id')->withTrashed();
     }
 
     public function employee()
     {
-        return $this->hasOne(Employee::class, 'user_id');
+        return $this->hasOne(Employee::class, 'user_id')->withTrashed();
     }
 }

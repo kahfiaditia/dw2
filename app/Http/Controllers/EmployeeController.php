@@ -175,6 +175,10 @@ class EmployeeController extends Controller
             $employee->save();
             $last_id = $employee->id;
 
+            // update avatar untuk chat 
+            User::where("id", Auth::user()->id)
+                ->update(["avatar" => $fileNameFoto]);
+
             DB::commit();
             AlertHelper::addAlert(true);
             return redirect('employee/ijazah/' . Crypt::encryptString($last_id));
@@ -326,6 +330,10 @@ class EmployeeController extends Controller
             }
             $employee->aktif = $aktif;
             $employee->save();
+
+            // update avatar untuk chat 
+            User::where("id", $employee->user_id)
+                ->update(["avatar" => $fileNameFoto]);
 
             DB::commit();
             AlertHelper::updateAlert(true);

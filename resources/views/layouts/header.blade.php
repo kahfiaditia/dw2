@@ -20,7 +20,7 @@
                 <i class="bx bx-fullscreen"></i>
             </button>
         </div>
-        <div class="dropdown d-inline-block">
+        {{-- <div class="dropdown d-inline-block">
             <button type="button" class="btn header-item noti-icon waves-effect"
                 id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
@@ -95,27 +95,29 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="dropdown d-inline-block">
-            <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <?php
-                $avatar = DB::table('karyawan')
-                    ->select('foto')
-                    ->where('user_id', Auth::user()->id)
-                    ->get();
-                ?>
-                @if (count($avatar) > 0 and $avatar[0]->foto != null)
-                    <img class="rounded-circle header-profile-user"
-                        src="{{ Storage::url('karyawan/foto/' . $avatar[0]->foto) }}" alt="Header Avatar">
-                @else
-                    <img class="rounded-circle header-profile-user"
-                        src="{{ URL::asset('assets/images/users/avatar.png') }}" alt="Header Avatar">
-                @endif
-                <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ Auth::user()->name }}</span>
-                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end">
+            <form method="GET" action="{{ route('akun.profile', Crypt::encryptString(Auth::user()->id)) }}">
+                @csrf
+                <button class="btn header-item waves-effect">
+                    <?php
+                    $avatar = DB::table('karyawan')
+                        ->select('foto')
+                        ->where('user_id', Auth::user()->id)
+                        ->get();
+                    ?>
+                    @if (count($avatar) > 0 and $avatar[0]->foto != null)
+                        <img class="rounded-circle header-profile-user"
+                            src="{{ Storage::url('karyawan/foto/' . $avatar[0]->foto) }}" alt="Header Avatar">
+                    @else
+                        <img class="rounded-circle header-profile-user"
+                            src="{{ URL::asset('assets/images/users/avatar.png') }}" alt="Header Avatar">
+                    @endif
+                    <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ Auth::user()->name }}</span>
+                    {{-- <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i> --}}
+                </button>
+            </form>
+            {{-- <div class="dropdown-menu dropdown-menu-end">
                 <a class="dropdown-item" href="{{ route('akun.edit', Crypt::encryptString(Auth::user()->id)) }}"><i
                         class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Akun</span></a>
                 <div class="dropdown-divider"></div>
@@ -126,7 +128,34 @@
                         <span key="t-logout">Keluar</span>
                     </button>
                 </form>
-            </div>
+            </div> --}}
+        </div>
+        <div class="dropdown d-inline-block">
+            <form method="POST" action="{{ route('login.logout') }}">
+                @csrf
+                <button class="btn header-item noti-icon right-bar-toggle waves-effect logout_confirm">
+                    <i class="mdi mdi-logout text-danger"></i>
+                </button>
+            </form>
         </div>
     </div>
 </div>
+
+<script>
+    $('.logout_confirm').on('click', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: 'Keluar Aplikasi',
+            text: 'Ingin keluar aplikasi?',
+            icon: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+            cancelButtonText: "Batal",
+            focusConfirm: false,
+        }).then((value) => {
+            if (value.isConfirmed) {
+                $(this).closest("form").submit()
+            }
+        });
+    });
+</script>

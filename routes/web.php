@@ -188,6 +188,7 @@ Route::group(
         Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
         Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
+        Route::get('/profile/{id}', [AkunController::class, 'profile'])->name('akun.profile');
         // classes
         Route::resource('/classes', ClassesController::class);
         Route::get('/list_classes', [ClassesController::class, 'list_classes'])->name('classes.list_classes');
@@ -216,7 +217,11 @@ Route::group(
         // prestasi
         Route::resource('/prestasi', PrestasiController::class);
         Route::get('/list_prestasi', [PrestasiController::class, 'list_prestasi'])->name('prestasi.list_prestasi');
-        // chat
-        Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+        // chat vue js akal biar di refresh ga error pake any jika fitur not found jadi direct ke chat index
+        Route::get('/converstation/{id}', [ChatController::class, 'index'])->name('chat.index');
+        Route::get('/contact/{id}', [ChatController::class, 'index'])->name('chat.index');
+        Route::get('/chat/{id}', [ChatController::class, 'index'])->name('chat.index');
     }
 );
+
+// Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

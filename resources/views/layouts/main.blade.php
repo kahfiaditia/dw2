@@ -155,9 +155,6 @@
             }
         });
     </script>
-
-    <!-- Pusher -->
-    <script src="/js/app.js"></script>
 </body>
 
 </html>
