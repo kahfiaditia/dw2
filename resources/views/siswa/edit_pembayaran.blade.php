@@ -136,6 +136,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="">Kelas <code>*</code></label>
+                                            <select class="form-control select select2" name="kelas" id="kelas"
+                                                required>
+                                                <option value="">--Pilih Kelas --</option>
+                                                @foreach ($kelas as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ $student->class_id == $item->id ? 'selected' : '' }}>
+                                                        {{ $item->level . ' ' }}{{ $item->classes }}{{ $item->jurusan ? ' ' . $item->jurusan . ' ' : ' ' }}{{ $item->type ? $item->type : '' }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('kegiatan', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
                                         <a href="{{ route('siswa.index') }}"

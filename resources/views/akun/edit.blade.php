@@ -103,9 +103,9 @@
                                 <div class="row">
                                     <div class="col-md-6" id="kelas_class">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Kelas
+                                            <label for="validationCustom02" class="form-label">Jenjang Pendidikan
                                                 <code>*</code></label>
-                                            <select class="form-control select select2" name="id_school_level"
+                                            <select class="form-control select select2" name="id_school_level" disabled
                                                 id="id_school_level">
                                                 <option value="">--Pilih Kelas--</option>
                                                 @foreach ($school_level as $itm)

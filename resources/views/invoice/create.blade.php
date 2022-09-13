@@ -84,8 +84,8 @@
                                                                 <div class="mb-3">
                                                                     <label for="">NIS</label>
                                                                     <input type="text" class="form-control input-mask"
-                                                                        data-inputmask="'mask': 'AA-99-99999'"
-                                                                        name="nis" placeholder="NIS">
+                                                                        {{-- data-inputmask="'mask': 'AA-99-99999'" --}} name="nis"
+                                                                        placeholder="NIS">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">

@@ -36,7 +36,7 @@ class AkunController extends Controller
 
     public function data_ajax(Request $request)
     {
-        $user = User::select(['*'])->orderBy('id', 'DESC');
+        $user = User::select(['*']);
         return DataTables::of($user)
             ->addColumn('status', function ($model) {
                 $model->aktif === '1' ? $flag = 'success' : $flag = 'danger';
@@ -231,15 +231,15 @@ class AkunController extends Controller
             }
             // update class
             if ($request->roles === 'Siswa') {
-                $user->id_school_level = $request->id_school_level;
+                // $user->id_school_level = $request->id_school_level;
                 if ($request->email_old != $request->email) {
                     $siswa = Siswa::findorfail($user->student->id);
                     $siswa->email = $request->email;
                     // $siswa->user_updated = Auth::user()->id;
                     $siswa->save();
                 }
-            } else {
-                $user->id_school_level = null;
+                // } else {
+                //     $user->id_school_level = null;
             }
             $user->aktif = isset($request->aktif) ? 1 : 0;
             $user->save();

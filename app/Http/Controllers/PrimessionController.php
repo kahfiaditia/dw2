@@ -28,7 +28,7 @@ class PrimessionController extends Controller
 
     public function data_primession(Request $request)
     {
-        $user = User::select(['*'])->where('aktif', '=', '1')->whereNotNull('email_verified_at')->orderBy('id', 'DESC');
+        $user = User::select(['*'])->where('aktif', '=', '1')->whereNotNull('email_verified_at');
         return DataTables::of($user)
             ->addColumn('status', function ($model) {
                 $model->aktif === '1' ? $flag = 'success' : $flag = 'danger';

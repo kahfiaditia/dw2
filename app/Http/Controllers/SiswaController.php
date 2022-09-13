@@ -953,13 +953,13 @@ class SiswaController extends Controller
         try {
 
             $import = Excel::toArray(new StudentImport(), $request->file('student_csv'));
-            $classes = Classes::where('id', $import[0][0][4])->count();
-            $formulir = Payment::where('id', $import[0][0][5])->count();
-            $uang_pangkal = Payment::where('id', $import[0][0][6])->count();
-            $spp = Payment::where('id', $import[0][0][7])->count();
-            $kegiatan = Payment::where('id', $import[0][0][8])->count();
+            $classes = Classes::where('id', $import[0][0][5])->count();
+            $formulir = Payment::where('id', $import[0][0][6])->count();
+            $uang_pangkal = Payment::where('id', $import[0][0][7])->count();
+            $spp = Payment::where('id', $import[0][0][8])->count();
+            $kegiatan = Payment::where('id', $import[0][0][9])->count();
 
-            if ($classes + $formulir + $uang_pangkal + $spp + $kegiatan >= 5) {
+            if ($classes + $formulir + $uang_pangkal + $spp + $kegiatan >= 1) {
                 // proses import
                 Excel::import(new StudentImport, $request->file('student_csv'));
             } else {
@@ -1072,6 +1072,16 @@ class SiswaController extends Controller
             ->where('bills.bills', '=', 'Uang Kegiatan')
             ->whereNull('payment.deleted_at')
             ->get();
+        $kelas = DB::table('classes')
+            ->select(
+                'classes.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('school_level', 'school_level.id', 'classes.id_school_level')
+            ->Join('school_class', 'school_class.school_level_id', 'school_level.id')
+            ->whereNull('classes.deleted_at')
+            ->get();
 
         $data = [
             'title' => $this->title,
@@ -1083,6 +1093,7 @@ class SiswaController extends Controller
             'pangkal' => $pangkal,
             'spp' => $spp,
             'kegiatan' => $kegiatan,
+            'kelas' => $kelas,
         ];
 
         return view('siswa.edit_pembayaran')->with($data);
@@ -1096,6 +1107,7 @@ class SiswaController extends Controller
             'pangkal' => 'required',
             'spp' => 'required',
             'kegiatan' => 'required',
+            'kelas' => 'required',
         ]);
         DB::beginTransaction();
         try {
@@ -1104,6 +1116,7 @@ class SiswaController extends Controller
             $siswa->pangkal_id = $validated['pangkal'];
             $siswa->spp_id = $validated['spp'];
             $siswa->kegiatan_id = $validated['kegiatan'];
+            $siswa->class_id = $validated['kelas'];
             $siswa->save();
 
             DB::commit();

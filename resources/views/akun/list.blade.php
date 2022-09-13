@@ -36,7 +36,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Name</th>
+                                        <th>Nama</th>
                                         <th>Email</th>
                                         <th>Roles</th>
                                         <th>Verifikasi Email</th>
