@@ -87,18 +87,20 @@ class StudentImport implements ToModel, WithStartRow, WithCustomCsvSettings, Wit
         $user_id = $user->id;
 
         // validasi jika null
+        $sVal = array("-", " ");
+        $rVal = array("", "");
         if ($row[2]) {
-            $nik = $row[2];
+            $nik = str_replace($sVal, $rVal, $row[2]);
         } else {
             $nik = 'DUMMY-NIK-' . $user_id;
         }
         if ($row[3]) {
-            $nisn = $row[3];
+            $nisn = str_replace($sVal, $rVal, $row[3]);
         } else {
             $nisn = 'DUMMY-NISN-' . $user_id;
         }
         if ($row[4]) {
-            $nis = $row[4];
+            $nis = str_replace($sVal, $rVal, $row[4]);
         } else {
             $nis = 'DUMMY-NIS-' . $user_id;
         }
