@@ -50,7 +50,11 @@ class SiswaController extends Controller
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($students) {
                     if ($students->classes_student) {
-                        return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                        if ($students->classes_student->school_class) {
+                            return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                        } else {
+                            return $students->classes_student->school_level->level . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                        }
                     } else {
                         return null;
                     }
@@ -403,7 +407,6 @@ class SiswaController extends Controller
 
     public function add_parent_student($student_id, $data)
     {
-
         $student = Siswa::findOrFail(Crypt::decryptString($student_id));
 
         $data = [
@@ -1032,7 +1035,7 @@ class SiswaController extends Controller
             )
             ->Join('bills', 'bills.id', 'payment.bills_id')
             ->Join('school_level', 'school_level.id', 'payment.school_level_id')
-            ->Join('school_class', 'school_class.id', 'payment.school_class_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
             ->where('bills.bills', '=', 'Uang Formulir')
             ->whereNull('payment.deleted_at')
             ->get();
@@ -1044,7 +1047,7 @@ class SiswaController extends Controller
             )
             ->Join('bills', 'bills.id', 'payment.bills_id')
             ->Join('school_level', 'school_level.id', 'payment.school_level_id')
-            ->Join('school_class', 'school_class.id', 'payment.school_class_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
             ->where('bills.bills', '=', 'Uang Pangkal')
             ->whereNull('payment.deleted_at')
             ->get();
@@ -1056,7 +1059,7 @@ class SiswaController extends Controller
             )
             ->Join('bills', 'bills.id', 'payment.bills_id')
             ->Join('school_level', 'school_level.id', 'payment.school_level_id')
-            ->Join('school_class', 'school_class.id', 'payment.school_class_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
             ->where('bills.bills', '=', 'SPP')
             ->whereNull('payment.deleted_at')
             ->get();
@@ -1068,7 +1071,7 @@ class SiswaController extends Controller
             )
             ->Join('bills', 'bills.id', 'payment.bills_id')
             ->Join('school_level', 'school_level.id', 'payment.school_level_id')
-            ->Join('school_class', 'school_class.id', 'payment.school_class_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
             ->where('bills.bills', '=', 'Uang Kegiatan')
             ->whereNull('payment.deleted_at')
             ->get();
@@ -1079,7 +1082,7 @@ class SiswaController extends Controller
                 'school_level.level',
             )
             ->Join('school_level', 'school_level.id', 'classes.id_school_level')
-            ->Join('school_class', 'school_class.school_level_id', 'school_level.id')
+            ->leftJoin('school_class', 'school_class.school_level_id', 'school_level.id')
             ->whereNull('classes.deleted_at')
             ->get();
 

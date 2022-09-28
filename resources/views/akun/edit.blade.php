@@ -136,11 +136,11 @@
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
-                                        @if (Auth::user()->roles === 'Admin')
+                                        @if (Auth::user()->roles === 'Admin' or Auth::user()->roles === 'Administrator')
                                             <a href="{{ route('akun.index') }}"
                                                 class="btn btn-secondary waves-effect">Batal</a>
                                         @else
-                                            <a href="{{ URL::previous() }}"
+                                            <a href="{{ route('dashboard') }}"
                                                 class="btn btn-secondary waves-effect">Batal</a>
                                         @endif
                                         <button class="btn btn-primary" type="submit" style="float: right"

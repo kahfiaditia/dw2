@@ -120,7 +120,12 @@
                                                     <h5 class="font-size-14">Kelas</h5>
                                                     <p class="text-muted mb-0">
                                                         @if ($student->classes_student)
-                                                            {{ $student->classes_student->school_level->level . ' ' . $student->classes_student->school_class->classes . ' ' . $student->classes_student->jurusan . '.' . $student->classes_student->type }}
+                                                            @if ($student->classes_student->school_class)
+                                                                <?php $class = $student->classes_student->school_class->classes; ?>
+                                                            @else
+                                                                <?php $class = ''; ?>
+                                                            @endif
+                                                            {{ $student->classes_student->school_level->level . ' ' . $class . ' ' . $student->classes_student->jurusan . '.' . $student->classes_student->type }}
                                                         @else
                                                             -
                                                         @endif
