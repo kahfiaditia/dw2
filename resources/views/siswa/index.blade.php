@@ -84,12 +84,12 @@
                     </div>
                     <div class="modal-body">
                         <label for="">Upload File CSV <code>*</code></label>
-                        <input type="file" required class="form-control" name="student_csv">
+                        <input type="file" required class="form-control" name="student_csv" id="student_csv">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"
                             id="cancel">Close</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                        <button type="submit" id="submit_excel" class="btn btn-primary btn-sm">Simpan</button>
                     </div>
                 </div>
             </form>
@@ -101,8 +101,15 @@
             $("#csvModal").modal('show')
         })
 
+        $("#submit_excel").on('click', function() {
+            if (document.getElementById("student_csv").value) {
+                $('#loader').show();
+            }
+        })
+
         $("#cancel").on('click', function() {
             $("#csvModal").modal('toggle')
+            $('#loader').hide();
         })
 
         $(function() {

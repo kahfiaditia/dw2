@@ -20,7 +20,7 @@ class StudentImport implements ToModel, WithStartRow, WithCustomCsvSettings, Wit
     public function rules(): array
     {
         return [
-            '1' => 'required|unique:siswa,email',
+            '1' => 'unique:siswa,email',
             // '2' => 'required|unique:siswa,nik|min:16',
             // '3' => 'required|unique:siswa,nisn|min:10',
             // '4' => 'required',
@@ -87,7 +87,7 @@ class StudentImport implements ToModel, WithStartRow, WithCustomCsvSettings, Wit
         $user_id = $user->id;
 
         // validasi jika null
-        $sVal = array("-", " ");
+        $sVal = array(" ", ":");
         $rVal = array("", "");
         if ($row[2]) {
             $nik = str_replace($sVal, $rVal, $row[2]);
