@@ -172,6 +172,22 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
+                                                        <label for="validationCustom02" class="form-label">NIKS (No
+                                                            Induk Karyawan Sekolah)
+                                                            <code>*</code></label>
+                                                        <input type="number" min="0" class="form-control"
+                                                            id="niks" name="niks" value="{{ old('niks') }}"
+                                                            required placeholder="No NIKS">
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                        {!! $errors->first('niks', '<div class="invalid-validasi">:message</div>') !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">No KTP
                                                             <code>*</code></label>
                                                         <input type="number" min="0" class="form-control"

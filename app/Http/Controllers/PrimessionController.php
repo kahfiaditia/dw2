@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\AlertHelper;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -27,7 +28,7 @@ class PrimessionController extends Controller
 
     public function data_primession(Request $request)
     {
-        $user = User::select(['*'])->where('aktif', '=', '1')->whereNotNull('email_verified_at')->orderBy('id', 'DESC');
+        $user = User::select(['*'])->where('aktif', '=', '1')->whereNotNull('email_verified_at');
         return DataTables::of($user)
             ->addColumn('status', function ($model) {
                 $model->aktif === '1' ? $flag = 'success' : $flag = 'danger';
@@ -67,6 +68,13 @@ class PrimessionController extends Controller
     {
         $id_decrypted = Crypt::decryptString($id);
         $user = User::where(['id' => $id_decrypted])->firstOrFail();
+
+        if (Auth::user()->roles == 'Administrator') {
+            $where =  ['menu.id', '>', '0'];
+        } else {
+            $where =  ['menu.id', '!=', '13'];
+        }
+
         $primession = DB::table('submenu')
             ->select(
                 'submenu',
@@ -77,6 +85,7 @@ class PrimessionController extends Controller
                 DB::raw("MAX(CASE WHEN type_menu like '%approve%' THEN submenu.id ELSE NULL END) AS approves"),
             )
             ->Join('menu', 'menu.id', 'submenu.menu_id')
+            ->where([$where])
             ->groupBy('menu_id')
             ->groupBy('submenu.submenu')
             ->get();

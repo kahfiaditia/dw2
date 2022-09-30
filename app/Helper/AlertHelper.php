@@ -88,4 +88,13 @@ class AlertHelper
             Alert::error('Gagal', 'Wajib setting pembayaran terlebih dahulu');
         }
     }
+
+    public static function alertDinamis($info, $message)
+    {
+        if ($info) {
+            Alert::success('Berhasil', $message);
+        } else {
+            Alert::error('Gagal', $message);
+        }
+    }
 }

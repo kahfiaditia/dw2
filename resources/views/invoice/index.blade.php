@@ -34,14 +34,14 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Tahun Ajaran</th>
-                                        <th>Bulan</th>
-                                        <th>Pembayaran</th>
-                                        <th class="text-center">Biaya</th>
-                                        <th>NISN/NIK</th>
-                                        <th>Siswa</th>
-                                        <th>Jenjang</th>
+                                        <th>No Pembayaran</th>
                                         <th>Tanggal</th>
+                                        <th>NIS</th>
+                                        <th>Siswa</th>
+                                        <th class="text-center">Biaya</th>
+                                        <th class="text-center">Diskon Pembayaran</th>
+                                        <th class="text-center">Diskon Prestasi</th>
+                                        <th>Total</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -79,22 +79,12 @@
                         },
                     },
                     {
-                        data: 'tahun',
-                        name: 'tahun',
+                        data: 'no_invoice',
+                        name: 'no_invoice',
                     },
                     {
-                        data: 'bulan',
-                        name: 'bulan',
-                    },
-                    {
-                        data: 'pembayaran',
-                        name: 'pembayaran',
-                    },
-                    {
-                        data: 'biaya',
-                        name: 'biaya',
-                        render: $.fn.dataTable.render.number(',', '.'),
-                        className: "right"
+                        data: 'tanggal',
+                        name: 'tanggal',
                     },
                     {
                         data: 'nik',
@@ -105,12 +95,28 @@
                         name: 'siswa',
                     },
                     {
-                        data: 'jenjang',
-                        name: 'jenjang',
+                        data: 'pembayaran',
+                        name: 'pembayaran',
+                        render: $.fn.dataTable.render.number(',', '.'),
+                        className: "right"
                     },
                     {
-                        data: 'tanggal',
-                        name: 'tanggal',
+                        data: 'diskon_pembayaran',
+                        name: 'diskon_pembayaran',
+                        render: $.fn.dataTable.render.number(',', '.'),
+                        className: "right"
+                    },
+                    {
+                        data: 'diskon_prestasi',
+                        name: 'diskon_prestasi',
+                        render: $.fn.dataTable.render.number(',', '.'),
+                        className: "right"
+                    },
+                    {
+                        data: 'grand_total',
+                        name: 'grand_total',
+                        render: $.fn.dataTable.render.number(',', '.'),
+                        className: "right"
                     },
                     {
                         data: 'action',

@@ -64,7 +64,7 @@
                                                     </div>
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-group">
-                                                            <label for="exampleInputPassword1">nomor_kartu</label>
+                                                            <label for="exampleInputPassword1">Nomor Kartu</label>
                                                             <input type="text" name="nomor_kartu" class="form-control"
                                                                 value="{{ old('nomor_kartu', $result->nomor_kartu) }}"
                                                                 placeholder="Nomor Kartu" required>

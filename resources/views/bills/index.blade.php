@@ -50,7 +50,7 @@
                                                 <span class="badge badge-pill badge-soft-<?php if ($bill->looping == 1) {
                                                     echo 'success';
                                                 } else {
-                                                    echo 'danger';
+                                                    echo 'info';
                                                 } ?> font-size-12">
                                                     @if ($bill->looping == 1)
                                                         Tagihan Berulang

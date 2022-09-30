@@ -110,6 +110,7 @@
                                                             @elseif($invoice_tahunan->formulir > 0)
                                                                 <span
                                                                     class="badge badge-pill badge-soft-danger font-size-12">
+                                                                    <i class="bx bx bx-money"></i>
                                                                     {{ number_format($invoice_tahunan->formulir) }}
                                                                 </span>
                                                             @endif
@@ -136,7 +137,7 @@
                                                             @elseif($invoice_tahunan->pangkal > 0)
                                                                 <span
                                                                     class="badge badge-pill badge-soft-danger font-size-12">
-                                                                    <i class="bx bx bx-minus-circle"></i>
+                                                                    <i class="bx bx bx-money"></i>
                                                                     {{ number_format($invoice_tahunan->pangkal) }}
                                                                 </span>
                                                             @endif
@@ -166,7 +167,7 @@
                                                             @elseif($invoice_bulanan->uang_spp > 0)
                                                                 <span
                                                                     class="badge badge-pill badge-soft-danger font-size-12">
-                                                                    <i class="bx bx bx-minus-circle"></i>
+                                                                    <i class="bx bx bx-money"></i>
                                                                     {{ number_format($invoice_bulanan->uang_spp) }}
                                                                 </span>
                                                             @endif
@@ -196,7 +197,7 @@
                                                             @elseif($invoice_bulanan->uang_kegiatan > 0)
                                                                 <span
                                                                     class="badge badge-pill badge-soft-danger font-size-12">
-                                                                    <i class="bx bx bx-minus-circle"></i>
+                                                                    <i class="bx bx bx-money"></i>
                                                                     {{ number_format($invoice_bulanan->uang_kegiatan) }}
                                                                 </span>
                                                             @endif
@@ -234,7 +235,7 @@
                                                 <tbody>
                                                     <?php $array_bulan = explode(',', $invoice_bulanan->bulan); ?>
                                                     <?php $no = 1;
-                                                    $bulan = ['6', '7', '8', '9', '10', '11', '12', '1', '2', '3', '4', '5']; ?>
+                                                    $bulan = ['7', '8', '9', '10', '11', '12', '1', '2', '3', '4', '5', '6']; ?>
                                                     @foreach ($bulan as $item)
                                                         <tr>
                                                             <td class="text-center">{{ $no++ }}</td>

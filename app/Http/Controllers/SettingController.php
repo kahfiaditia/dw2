@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\DB;
 class SettingController extends Controller
 {
     protected $title = 'dharmawidya';
-    protected $menu = 'setting';
-    protected $submenu = 'setting website';
+    protected $menu = 'setting website';
+    protected $submenu = 'maintenance';
 
 
     public function index()

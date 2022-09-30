@@ -83,7 +83,8 @@
                                                 </div>
                                             @endif
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="text-truncate font-size-15">{{ $item->nama_lengkap }}</h5>
+                                                <h5 class="text-truncate font-size-15">{{ $item->nama_lengkap }}
+                                                    - {{ $item->user->roles }}</h5>
                                                 <p class="text-muted">
                                                     {{ $item->tempat_lahir . ', ' . date('d F Y', strtotime($item->tgl_lahir)) }}
                                                     ({{ hitung_umur($item->tgl_lahir) }})
@@ -99,14 +100,14 @@
                                             </div>
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
-                                                    <h5 class="font-size-14">Roles</h5>
-                                                    <p class="text-muted mb-0">{{ $item->user->roles }}</p>
+                                                    <h5 class="font-size-14">No Kontak dan Whatsapp</h5>
+                                                    <p class="text-muted mb-0">{{ $item->npwp }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
-                                                    <h5 class="font-size-14">No Kontak dan Whatsapp</h5>
-                                                    <p class="text-muted mb-0">{{ $item->npwp }}</p>
+                                                    <h5 class="font-size-14">NIKS (No Induk Karyawan Sekolah)</h5>
+                                                    <p class="text-muted mb-0">{{ $item->niks }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -133,9 +134,8 @@
                                                     <p class="text-muted mb-0">{{ $item->kk }}</p>
                                                     @if ($item->dok_kk)
                                                         <a href="javascript:void(0)"
-                                                            data-id="{{ $item->dok_kk . '|kk|karyawan' }}"
-                                                            id="get_data" data-bs-toggle="modal"
-                                                            data-bs-target=".bs-example-modal-lg">
+                                                            data-id="{{ $item->dok_kk . '|kk|karyawan' }}" id="get_data"
+                                                            data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">
                                                             <i
                                                                 class="mdi mdi-file-document font-size-16 align-middle text-primary me-2"></i>Lihat
                                                             Dokumen

@@ -27,14 +27,15 @@ use Maatwebsite\Excel\Facades\Excel;
 class SiswaController extends Controller
 {
     protected $title = 'dharmawidya';
+    protected $sid = 'SID';
     protected $menu = 'siswa';
 
     public function index(Request $request)
     {
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'siswa',
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
             'label' => 'data siswa'
         ];
 
@@ -48,7 +49,15 @@ class SiswaController extends Controller
             return DataTables::of($students)
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($students) {
-                    return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                    if ($students->classes_student) {
+                        if ($students->classes_student->school_class) {
+                            return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                        } else {
+                            return $students->classes_student->school_level->level . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
+                        }
+                    } else {
+                        return null;
+                    }
                 })
                 ->addColumn('Opsi', function (Siswa $students) {
                     return \view('siswa.button', compact('students'));
@@ -62,7 +71,7 @@ class SiswaController extends Controller
 
     public function create()
     {
-        if (Auth::user()->roles == 'Admin') {
+        if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator') {
             $students = User::doesntHave('student')->where('roles', 'Siswa')->orderBy('id', 'DESC')->get();
         } else {
             $students = [];
@@ -87,6 +96,7 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'nis' => 'required|unique:siswa',
             'nisn' => 'required|unique:siswa',
             'nik' => 'required|unique:siswa',
             'no_kk' => 'required|unique:siswa',
@@ -113,10 +123,10 @@ class SiswaController extends Controller
             'moda_transportasi' => 'required',
             'anak_keberapa' => 'required'
         ]);
-
         DB::beginTransaction();
         try {
             Siswa::create([
+                'nis' => $validated['nis'],
                 'nisn' => $validated['nisn'],
                 'nik' => $validated['nik'],
                 'no_kk' => $validated['no_kk'],
@@ -274,6 +284,7 @@ class SiswaController extends Controller
     {
         $id = Crypt::decryptString($id);
         $validated = $request->validate([
+            'nis' => "required|unique:siswa,nis,$id,id,deleted_at,NULL",
             'nisn' => "required|unique:siswa,nisn,$id,id,deleted_at,NULL",
             'nik' => "required|unique:siswa,nik,$id,id,deleted_at,NULL",
             'no_kk' => "required|unique:siswa,no_kk,$id,id,deleted_at,NULL",
@@ -304,6 +315,7 @@ class SiswaController extends Controller
         DB::beginTransaction();
         $student = Siswa::findOrFail($id);
         try {
+            $student->nis = $validated['nis'];
             $student->nisn = $validated['nisn'];
             $student->nik = $validated['nik'];
             $student->no_kk = $validated['no_kk'];
@@ -395,7 +407,6 @@ class SiswaController extends Controller
 
     public function add_parent_student($student_id, $data)
     {
-
         $student = Siswa::findOrFail(Crypt::decryptString($student_id));
 
         $data = [
@@ -945,13 +956,13 @@ class SiswaController extends Controller
         try {
 
             $import = Excel::toArray(new StudentImport(), $request->file('student_csv'));
-            $classes = Classes::where('id', $import[0][0][4])->count();
-            $formulir = Payment::where('id', $import[0][0][5])->count();
-            $uang_pangkal = Payment::where('id', $import[0][0][6])->count();
-            $spp = Payment::where('id', $import[0][0][7])->count();
-            $kegiatan = Payment::where('id', $import[0][0][8])->count();
+            $classes = Classes::where('id', $import[0][0][5])->count();
+            $formulir = Payment::where('id', $import[0][0][6])->count();
+            $uang_pangkal = Payment::where('id', $import[0][0][7])->count();
+            $spp = Payment::where('id', $import[0][0][8])->count();
+            $kegiatan = Payment::where('id', $import[0][0][9])->count();
 
-            if ($classes + $formulir + $uang_pangkal + $spp + $kegiatan >= 5) {
+            if ($classes + $formulir + $uang_pangkal + $spp + $kegiatan >= 1) {
                 // proses import
                 Excel::import(new StudentImport, $request->file('student_csv'));
             } else {
@@ -992,6 +1003,132 @@ class SiswaController extends Controller
                 'email' => $user->email,
                 'message' => 'berhasil',
             ]);
+        }
+    }
+
+    public function dropdown_siswa(Request $request)
+    {
+        $data = Siswa::all();
+        return response()->json([
+            'code' => 200,
+            'data' => $data,
+        ]);
+    }
+
+    public function get_siswa_by_nis(Request $request)
+    {
+        $data = Siswa::where('nis', $request->nis)->get();
+        return response()->json([
+            'code' => 200,
+            'data' => $data,
+        ]);
+    }
+
+    public function edit_pembayaran($id)
+    {
+        $student = Siswa::findOrFail(Crypt::decryptString($id));
+        $formulir = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Formulir')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $pangkal = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Pangkal')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $spp = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'SPP')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $kegiatan = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Kegiatan')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $kelas = DB::table('classes')
+            ->select(
+                'classes.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('school_level', 'school_level.id', 'classes.id_school_level')
+            ->leftJoin('school_class', 'school_class.school_level_id', 'school_level.id')
+            ->whereNull('classes.deleted_at')
+            ->get();
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'Pembayaran Siswa',
+            'label' => 'Edit Pembayaran Siswa',
+            'student' => $student,
+            'formulir' => $formulir,
+            'pangkal' => $pangkal,
+            'spp' => $spp,
+            'kegiatan' => $kegiatan,
+            'kelas' => $kelas,
+        ];
+
+        return view('siswa.edit_pembayaran')->with($data);
+    }
+
+    public function update_pembayaran(Request $request, $id)
+    {
+        $decrypted_id = Crypt::decryptString($id);
+        $validated = $request->validate([
+            'formulir' => 'required',
+            'pangkal' => 'required',
+            'spp' => 'required',
+            'kegiatan' => 'required',
+            'kelas' => 'required',
+        ]);
+        DB::beginTransaction();
+        try {
+            $siswa = Siswa::findOrFail($decrypted_id);
+            $siswa->formulir_id = $validated['formulir'];
+            $siswa->pangkal_id = $validated['pangkal'];
+            $siswa->spp_id = $validated['spp'];
+            $siswa->kegiatan_id = $validated['kegiatan'];
+            $siswa->class_id = $validated['kelas'];
+            $siswa->save();
+
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('siswa');
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
         }
     }
 }

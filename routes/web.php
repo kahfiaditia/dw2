@@ -5,6 +5,7 @@ use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InvoiceController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NeedsController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
 use App\Http\Controllers\SettingController;
@@ -26,6 +28,8 @@ Route::get('/verifikasi/{id}', [LoginController::class, 'verifikasi'])->name('ve
 Route::get('/recovery', [LoginController::class, 'recovery'])->name('recovery');
 Route::get('/reverify', [LoginController::class, 'reverify'])->name('reverify');
 Route::get('/reset/{id}', [LoginController::class, 'reset'])->name('reset');
+
+Route::get('/phpinfo', [DashboardController::class, 'phpinfo'])->name('phpinfo');
 
 Route::group(
     [
@@ -42,10 +46,6 @@ Route::group(
         Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
     }
 );
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
-Route::get('/history_payment/{student_id}', [DashboardController::class, 'history_payment'])->middleware('auth')->name('history_payment');
-Route::get('/phpinfo', [DashboardController::class, 'phpinfo'])->name('phpinfo');
 
 Route::group(
     [
@@ -140,6 +140,15 @@ Route::group(
         'middleware' => 'auth'
     ],
     function () {
+        Route::resource('/priodik', PriodikSiswaController::class);
+        Route::resource('/setting', SettingController::class);
+        Route::resource('/parents', ParentController::class);
+        Route::resource('/needs', NeedsController::class);
+        Route::resource('/bills', BillController::class);
+        // dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/history_payment/{student_id}', [DashboardController::class, 'history_payment'])->name('history_payment');
+        // siswa
         Route::resource('/siswa', SiswaController::class);
         Route::get('/edit_kesejahteraan/{id}', [SiswaController::class, 'edit_kesejahteraan'])->name('siswa.edit_kesejahteraan');
         Route::get('/index_kesejahteraan_siswa/{id}', [SiswaController::class, 'index_kesejahteraan_siswa'])->name('siswa.index_kesejahteraan_siswa');
@@ -171,33 +180,42 @@ Route::group(
         Route::delete('/destroy_performance_student/{id}', [SiswaController::class, 'destroy_performance_student'])->name('siswa.destroy_performance_student');
         Route::delete('/destroy_periodic_student/{periodic_id}', [SiswaController::class, 'destroy_periodic_student'])->name('siswa.destroy_periodic_student');
         Route::delete('/destroy_parent/{parent_id}', [SiswaController::class, 'destroy_parent'])->name('siswa.destroy_parent');
-        Route::resource('/priodik', PriodikSiswaController::class);
-        Route::resource('/parents', ParentController::class);
-        Route::resource('/needs', NeedsController::class);
+        Route::post('/dropdown_siswa', [SiswaController::class, 'dropdown_siswa'])->name('siswa.dropdown_siswa');
+        Route::post('/get_siswa_by_nis', [SiswaController::class, 'get_siswa_by_nis'])->name('siswa.get_siswa_by_nis');
+        Route::get('/edit_pembayaran/{id}', [SiswaController::class, 'edit_pembayaran'])->name('siswa.edit_pembayaran');
+        Route::patch('/update_pembayaran/{id}', [SiswaController::class, 'update_pembayaran'])->name('siswa.update_pembayaran');
+        // akun
         Route::resource('/akun', AkunController::class);
         Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
         Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
-        Route::resource('/bills', BillController::class);
+        // classes
         Route::resource('/classes', ClassesController::class);
         Route::get('/list_classes', [ClassesController::class, 'list_classes'])->name('classes.list_classes');
         Route::post('/get_school_class', [ClassesController::class, 'get_school_class'])->name('classes.get_school_class');
+        // invoice
         Route::resource('/invoice', InvoiceController::class);
         Route::post('/get_jenjang', [InvoiceController::class, 'get_jenjang'])->name('invoice.get_jenjang');
-        Route::post('/get_siswa', [InvoiceController::class, 'get_siswa'])->name('invoice.get_siswa');
         Route::post('/pencarian_siswa', [InvoiceController::class, 'pencarian_siswa'])->name('invoice.pencarian_siswa');
         Route::get('/search/{id}', [InvoiceController::class, 'search'])->name('invoice.search');
         Route::get('/list_invoice', [InvoiceController::class, 'list_invoice'])->name('invoice.list_invoice');
-        Route::post('/get_jenjang', [InvoiceController::class, 'get_jenjang'])->name('invoice.get_jenjang');
         Route::post('/get_siswa', [InvoiceController::class, 'get_siswa'])->name('invoice.get_siswa');
         Route::post('/get_class', [InvoiceController::class, 'get_class'])->name('invoice.get_class');
         Route::post('/get_payment', [InvoiceController::class, 'get_payment'])->name('invoice.get_payment');
         Route::post('/cek_payment', [InvoiceController::class, 'cek_payment'])->name('invoice.cek_payment');
+        // primession
         Route::resource('/primession', PrimessionController::class);
         Route::get('/data_primession', [PrimessionController::class, 'data_primession'])->name('primession.data_primession');
+        // payment
         Route::resource('/payment', PaymentController::class);
         Route::get('/list_payment', [PaymentController::class, 'list_payment'])->name('payment.list_payment');
         Route::post('/get_class_payment', [PaymentController::class, 'get_class_payment'])->name('payment.get_class_payment');
-        Route::resource('/setting', SettingController::class);
+        // diskon
+        Route::resource('/diskon', DiskonController::class);
+        Route::get('/list_diskon', [DiskonController::class, 'list_diskon'])->name('diskon.list_diskon');
+        Route::post('/get_diskon', [DiskonController::class, 'get_diskon'])->name('diskon.get_diskon');
+        // prestasi
+        Route::resource('/prestasi', PrestasiController::class);
+        Route::get('/list_prestasi', [PrestasiController::class, 'list_prestasi'])->name('prestasi.list_prestasi');
     }
 );

@@ -64,9 +64,9 @@ class KodeposController extends Controller
                     });
                 }
             })
-            ->order(function ($query) {
-                $query->orderBy('provinsi', 'asc');
-            })
+            // ->order(function ($query) {
+            //     $query->orderBy('provinsi', 'asc');
+            // })
             ->make(true);
     }
 

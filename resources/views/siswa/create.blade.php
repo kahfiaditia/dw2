@@ -186,6 +186,25 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
+                                                        <label for="validationCustom02" class="form-label">NIS (No Induk
+                                                            Sekolah)
+                                                            <code>*</code></label>
+                                                        <input type="text" class="form-control input-mask"
+                                                            name="nis" id="nis_mask" value="{{ old('nis') }}"
+                                                            maxlength="20" onkeyup="replaceNis()" required
+                                                            data-inputmask="'mask': 'AA-99-99999'" placeholder="NIS">
+                                                        <input type="hidden" name="nis" id="nis"
+                                                            value="{{ old('nis') }}">
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                        @error('nis')
+                                                            <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">NISN
                                                             <code>*</code></label>
                                                         <input type="text" class="form-control number-only"
@@ -253,6 +272,7 @@
                                                             <input type="text" class="form-control"
                                                                 placeholder="yyyy-mm-dd" name="tanggal_lahir"
                                                                 value="{{ old('tanggal_lahir') }}"
+                                                                data-date-end-date="{{ date('Y-m-d') }}"
                                                                 data-date-format="yyyy-mm-dd"
                                                                 data-date-container='#datepicker2'
                                                                 data-provide="datepicker" required
@@ -306,7 +326,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="mb-4">
+                                                    <div class="mb-3">
                                                         <label>Kewarganegaraan <code>*</code></label>
                                                         <select id="nationality" name="kewarganegaraan"
                                                             class="form-control select select2" required>
@@ -364,19 +384,6 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="formFile" class="form-label">Alamat Jalan
-                                                            <code>*</code></label>
-                                                        <textarea name="alamat_jalan" class="form-control" cols="5" placeholder="Alamat Jalan" required>{{ old('alamat_jalan') }}</textarea>
-                                                        <div class="invalid-feedback">
-                                                            Data wajib diisi.
-                                                        </div>
-                                                        @error('alamat_jalan')
-                                                            <small class="text-center">{{ $message }}</small>
-                                                        @enderror
-                                                    </div>
-                                                </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="">Tempat Tinggal <code>*</code></label>
                                                     <select name="tempat_tinggal" required
@@ -406,6 +413,19 @@
                                                     @error('tempat_tinggal')
                                                         <small class="text-danger">{{ $message }}</small>
                                                     @enderror
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="formFile" class="form-label">Alamat Jalan
+                                                            <code>*</code></label>
+                                                        <textarea name="alamat_jalan" class="form-control" cols="5" placeholder="Alamat Jalan" required>{{ old('alamat_jalan') }}</textarea>
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                        @error('alamat_jalan')
+                                                            <small class="text-center">{{ $message }}</small>
+                                                        @enderror
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="row">
@@ -454,7 +474,7 @@
                                                                 Data wajib diisi.
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kecamatan <code>*</code></label>
                                                             <select name="kecamatan" id="kecamatan"
                                                                 class="form-control select2" required>
@@ -488,7 +508,7 @@
                                                                 <small class="text-danger">{{ $message }}</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Kode Pos <code>*</code></label>
                                                             <select name="kode_pos" id="kode_pos"
                                                                 class="form-control select2" required>
@@ -518,7 +538,7 @@
                                                                 <small>{{ $mesasge }}</small>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-3">
                                                             <label for="">Anak keberapa <code>*</code></label>
                                                             <input required type="text"
                                                                 class="number-only form-control" name="anak_keberapa"
@@ -704,5 +724,11 @@
                 });
             });
         })
+
+        function replaceNis() {
+            nis = document.getElementById("nis_mask").value;
+            strBaru = nis.replace(/-/g, '');
+            document.getElementById("nis").value = strBaru;
+        }
     </script>
 @endsection

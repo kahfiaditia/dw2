@@ -23,27 +23,36 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->student != null) {
-            $siswa = Siswa::findorfail(Auth::user()->student->id);
-            $invoice = Invoice::where('siswa_id', Auth::user()->student->id)->get();
-            $invoice_tahunan = Invoice::where('siswa_id', Auth::user()->student->id)
-                ->where(function ($query) use ($siswa) {
-                    $query->where('payment_id', $siswa->uang_formulir->id)
-                        ->orWhere('payment_id', '=', $siswa->uang_pangkal->id);
-                })
-                ->orderBY('id', 'desc')
-                ->sum('amount');
+        if (Auth::user()->roles == 'Orang Tua') {
+        } elseif (Auth::user()->roles == 'Siswa') {
+            if (Auth::user()->student != null) {
+                $siswa = Siswa::findorfail(Auth::user()->student->id);
+                if ($siswa->uang_formulir) {
+                    $invoice = Invoice::where('siswa_id', Auth::user()->student->id)->get();
+                    $invoice_tahunan = Invoice::where('siswa_id', Auth::user()->student->id)
+                        ->where(function ($query) use ($siswa) {
+                            $query->where('payment_id', $siswa->uang_formulir->id)
+                                ->orWhere('payment_id', '=', $siswa->uang_pangkal->id);
+                        })
+                        ->orderBY('id', 'desc')
+                        ->sum('amount');
 
-            $invoice_bulan = Invoice::where('siswa_id', Auth::user()->student->id)
-                ->where(function ($query) use ($siswa) {
-                    $query->where('payment_id', $siswa->spp->id)
-                        ->orWhere('payment_id', '=', $siswa->kegiatan->id);
-                })
-                ->orderBY('id', 'desc')
-                ->sum('amount');
-            $count_karyawan = null;
-            $count_guru = null;
-            $count_siswa = null;
+                    $invoice_bulan = Invoice::where('siswa_id', Auth::user()->student->id)
+                        ->where(function ($query) use ($siswa) {
+                            $query->where('payment_id', $siswa->spp->id)
+                                ->orWhere('payment_id', '=', $siswa->kegiatan->id);
+                        })
+                        ->orderBY('id', 'desc')
+                        ->sum('amount');
+                } else {
+                    $invoice = [];
+                    $invoice_tahunan = [];
+                    $invoice_bulan = [];
+                }
+                $count_karyawan = null;
+                $count_guru = null;
+                $count_siswa = null;
+            }
         } else {
             $siswa = [];
             $invoice = [];
