@@ -1141,7 +1141,7 @@ class SiswaController extends Controller
                 'school_level.level',
             )
             ->Join('school_level', 'school_level.id', 'classes.id_school_level')
-            ->leftJoin('school_class', 'school_class.school_level_id', 'school_level.id')
+            ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
             ->whereNull('classes.deleted_at')
             ->get();
 
@@ -1165,21 +1165,34 @@ class SiswaController extends Controller
     {
         $decrypted_id = Crypt::decryptString($id);
         $validated = $request->validate([
-            'formulir' => 'required',
-            'pangkal' => 'required',
-            'spp' => 'required',
-            'kegiatan' => 'required',
+            // 'formulir' => 'required',
+            // 'pangkal' => 'required',
+            // 'spp' => 'required',
+            // 'kegiatan' => 'required',
             'kelas' => 'required',
+            'email' => "required|email|unique:siswa,email,$decrypted_id,id,deleted_at,NULL",
+            'nis' => "required|unique:siswa,nis,$decrypted_id,id,deleted_at,NULL",
+            'nisn' => "required|unique:siswa,nisn,$decrypted_id,id,deleted_at,NULL",
+            'nik' => "required|unique:siswa,nik,$decrypted_id,id,deleted_at,NULL",
         ]);
         DB::beginTransaction();
         try {
             $siswa = Siswa::findOrFail($decrypted_id);
-            $siswa->formulir_id = $validated['formulir'];
-            $siswa->pangkal_id = $validated['pangkal'];
-            $siswa->spp_id = $validated['spp'];
-            $siswa->kegiatan_id = $validated['kegiatan'];
+            $siswa->formulir_id = $request->formulir;
+            $siswa->pangkal_id = $request->pangkal;
+            $siswa->spp_id = $request->spp;
+            $siswa->kegiatan_id = $request->kegiatan;
             $siswa->class_id = $validated['kelas'];
+            $siswa->email = $validated['email'];
+            $siswa->nis = $validated['nis'];
+            $siswa->nisn = $validated['nisn'];
+            $siswa->nik = $validated['nik'];
             $siswa->save();
+
+            $user_id = $request->user_id;
+            $user = User::findOrFail($user_id);
+            $user->email = $validated['email'];
+            $user->save();
 
             DB::commit();
             AlertHelper::updateAlert(true);
