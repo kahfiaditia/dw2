@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StudentExport;
 use App\Models\Agama;
 use App\Models\Kebutuhan_khusus;
 use App\Models\Siswa;
@@ -23,6 +24,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class SiswaController extends Controller
 {
@@ -40,28 +42,85 @@ class SiswaController extends Controller
         ];
 
         if (Auth::user()->roles == 'Siswa') {
-            $students = Siswa::where('user_id', Auth::user()->id)->get();
+            $students = DB::table('siswa')
+                ->select(
+                    'siswa.id',
+                    'nis',
+                    'nisn',
+                    'nik',
+                    'nama_lengkap',
+                    'email',
+                )
+                ->selectRaw("CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) as kelas")
+                ->leftJoin('classes', 'classes.id', 'siswa.class_id')
+                ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
+                ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
+                ->where('siswa.user_id', Auth::user()->id)
+                ->whereNull('siswa.deleted_at');
         } else {
-            $students = Siswa::orderBy('id', 'DESC')->get();
+            $students = DB::table('siswa')
+                ->select(
+                    'siswa.id',
+                    'nis',
+                    'nisn',
+                    'nik',
+                    'nama_lengkap',
+                    'email',
+                )
+                ->selectRaw("CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) as kelas")
+                ->leftJoin('classes', 'classes.id', 'siswa.class_id')
+                ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
+                ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
+                ->whereNull('siswa.deleted_at');
+            if ($request->get('search') != null) {
+                $search = $request->get('search');
+                $students->where(function ($where) use ($search) {
+                    $where
+                        ->orWhere('nis', 'like', '%' . $search . '%')
+                        ->orWhere('nisn', 'like', '%' . $search . '%')
+                        ->orWhere('nik', 'like', '%' . $search . '%')
+                        ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%')
+                        ->orwhereRaw(
+                            "CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) like ?",
+                            '%' . $search . '%'
+                        );
+                });
+            } else {
+                if ($request->get('nis') != null) {
+                    $nis = $request->get('nis');
+                    $students->where('nis', '=', $nis);
+                }
+                if ($request->get('nisn') != null) {
+                    $nisn = $request->get('nisn');
+                    $students->where('nisn', '=', $nisn);
+                }
+                if ($request->get('nik') != null) {
+                    $nik = $request->get('nik');
+                    $students->where('nik', '=', $nik);
+                }
+                if ($request->get('nama') != null) {
+                    $nama = $request->get('nama');
+                    $students->where('nama_lengkap', '=', $nama);
+                }
+                if ($request->get('email') != null) {
+                    $email = $request->get('email');
+                    $students->where('email', '=', $email);
+                }
+                if ($request->get('kelas') != null) {
+                    $kelas = $request->get('kelas');
+                    $students->whereRaw(
+                        "CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) like ?",
+                        '%' . $kelas . '%'
+                    );
+                }
+            }
         }
 
         if ($request->ajax()) {
             return DataTables::of($students)
                 ->addIndexColumn()
-                ->addColumn('kelas', function ($students) {
-                    if ($students->classes_student) {
-                        if ($students->classes_student->school_class) {
-                            return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
-                        } else {
-                            return $students->classes_student->school_level->level . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
-                        }
-                    } else {
-                        return null;
-                    }
-                })
-                ->addColumn('Opsi', function (Siswa $students) {
-                    return \view('siswa.button', compact('students'));
-                })
+                ->addColumn('Opsi', 'siswa.button')
                 ->rawColumns(['Opsi', 'status'])
                 ->make(true);
         } else {
@@ -1130,5 +1189,20 @@ class SiswaController extends Controller
             AlertHelper::updateAlert(false);
             return back();
         }
+    }
+
+    public function export_siswa(Request $request)
+    {
+        $data = [
+            'nis' => $request->nis,
+            'nisn' => $request->nisn,
+            'nik' => $request->nik,
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'kelas' => $request->kelas,
+            'search' => $request->search,
+            'like' => $request->like,
+        ];
+        return Excel::download(new StudentExport($data), 'siswa.xlsx');
     }
 }
