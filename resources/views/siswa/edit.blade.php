@@ -124,9 +124,8 @@
                                                         Sekolah)
                                                         <code>*</code></label>
                                                     <input type="text" class="form-control input-mask" name=""
-                                                        id="nis_mask" maxlength="20" onkeyup="replaceNis()" required
-                                                        value="{{ old('nis', $student->nis) }}"
-                                                        data-inputmask="'mask': 'AA-99-99999'" placeholder="NIS">
+                                                        id="nis_mask" maxlength="20" required
+                                                        value="{{ old('nis', $student->nis) }}" placeholder="NIS">
                                                     <input type="hidden" name="nis" id="nis"
                                                         value="{{ str_replace('-', '', $student->nis) }}">
                                                     <div class="invalid-feedback">
@@ -671,11 +670,5 @@
                 });
             });
         })
-
-        function replaceNis() {
-            nis = document.getElementById("nis_mask").value;
-            strBaru = nis.replace(/-/g, '');
-            document.getElementById("nis").value = strBaru;
-        }
     </script>
 @endsection
