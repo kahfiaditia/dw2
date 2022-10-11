@@ -134,7 +134,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Tempat Lahir
                                                             <code>*</code></label>
@@ -147,7 +147,7 @@
                                                         {!! $errors->first('tempat_lahir', '<div class="invalid-validasi">:message</div>') !!}
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <div class="mb-4">
                                                         <label>Tanggal Lahir <code>*</code></label>
                                                         <div class="input-group" id="datepicker2">
@@ -168,8 +168,6 @@
                                                         {!! $errors->first('tgl_lahir', '<div class="invalid-validasi">:message</div>') !!}
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">NIKS (No

@@ -93,6 +93,7 @@ Route::group(
         Route::post('/dropdown_email', [EmployeeController::class, 'dropdown_email'])->name('employee.dropdown_email');
         Route::post('/get_email', [EmployeeController::class, 'get_email'])->name('employee.get_email');
         Route::post('/cek_ijazah', [EmployeeController::class, 'cek_ijazah'])->name('employee.cek_ijazah');
+        Route::get('export_employee', [EmployeeController::class, 'export_employee'])->name('employee.export_employee');
     }
 );
 
@@ -184,6 +185,8 @@ Route::group(
         Route::post('/get_siswa_by_nis', [SiswaController::class, 'get_siswa_by_nis'])->name('siswa.get_siswa_by_nis');
         Route::get('/edit_pembayaran/{id}', [SiswaController::class, 'edit_pembayaran'])->name('siswa.edit_pembayaran');
         Route::patch('/update_pembayaran/{id}', [SiswaController::class, 'update_pembayaran'])->name('siswa.update_pembayaran');
+        Route::get('export_siswa', [SiswaController::class, 'export_siswa'])->name('siswa.export_siswa');
+        // Route::get('/search_siswa', [SiswaController::class, 'search_siswa'])->name('siswa.search_siswa');
         // akun
         Route::resource('/akun', AkunController::class);
         Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');

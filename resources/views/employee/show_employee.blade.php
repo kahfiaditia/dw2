@@ -101,7 +101,7 @@
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">No Kontak dan Whatsapp</h5>
-                                                    <p class="text-muted mb-0">{{ $item->npwp }}</p>
+                                                    <p class="text-muted mb-0">{{ $item->no_hp }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
@@ -256,6 +256,10 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row task-dates">
+                                            <a href="{{ route('employee') }}" style="margin-left: 10px;"
+                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-ijazah" role="tabpanel"
                                         aria-labelledby="v-pills-ijazah-tab">
@@ -343,6 +347,10 @@
                                                 <a class="alert-link">Belum isi Ijazah</a>
                                             </div>
                                         @endif
+                                        <div class="row task-dates">
+                                            <a href="{{ route('employee') }}" style="margin-left: 10px;"
+                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-sk" role="tabpanel"
                                         aria-labelledby="v-pills-sk-tab">
@@ -385,6 +393,10 @@
                                                 <a class="alert-link">Belum isi SK Pengangkatan</a>
                                             </div>
                                         @endif
+                                        <div class="row task-dates">
+                                            <a href="{{ route('employee') }}" style="margin-left: 10px;"
+                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-anak" role="tabpanel"
                                         aria-labelledby="v-pills-anak-tab">
@@ -475,6 +487,10 @@
                                                 <a class="alert-link">Belum isi Jumlah Anak</a>
                                             </div>
                                         @endif
+                                        <div class="row task-dates">
+                                            <a href="{{ route('employee') }}" style="margin-left: 10px;"
+                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-riwayat" role="tabpanel"
                                         aria-labelledby="v-pills-riwayat-tab">
@@ -620,6 +636,10 @@
                                                 <a class="alert-link">Belum isi Riwayat dan Kontak</a>
                                             </div>
                                         @endif
+                                        <div class="row task-dates">
+                                            <a href="{{ route('employee') }}" style="margin-left: 10px;"
+                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
