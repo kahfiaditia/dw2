@@ -1170,7 +1170,7 @@ class SiswaController extends Controller
             // 'spp' => 'required',
             // 'kegiatan' => 'required',
             'kelas' => 'required',
-            'email' => "required|email|unique:siswa,email,$decrypted_id,id,deleted_at,NULL",
+            'email' => "required|email|unique:users,email,$decrypted_id,id,deleted_at,NULL",
             'nis' => "required|unique:siswa,nis,$decrypted_id,id,deleted_at,NULL",
             'nisn' => "required|unique:siswa,nisn,$decrypted_id,id,deleted_at,NULL",
             'nik' => "required|unique:siswa,nik,$decrypted_id,id,deleted_at,NULL",
@@ -1183,7 +1183,7 @@ class SiswaController extends Controller
             $siswa->spp_id = $request->spp;
             $siswa->kegiatan_id = $request->kegiatan;
             $siswa->class_id = $validated['kelas'];
-            $siswa->email = $validated['email'];
+            $siswa->email = strtolower($validated['email']);
             $siswa->nis = $validated['nis'];
             $siswa->nisn = $validated['nisn'];
             $siswa->nik = $validated['nik'];
@@ -1191,7 +1191,7 @@ class SiswaController extends Controller
 
             $user_id = $request->user_id;
             $user = User::findOrFail($user_id);
-            $user->email = $validated['email'];
+            $user->email = strtolower($validated['email']);
             $user->save();
 
             DB::commit();
