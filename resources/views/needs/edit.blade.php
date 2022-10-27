@@ -26,7 +26,7 @@
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label for="">Kode</label> <small>(2 digit)</small>
-                                        <input type="text" class="form-control number-only" name="kode"
+                                        <input type="text" class="form-control number-only" name="kode" autofocus
                                             placeholder="Kode Kebutuhan Khusus" maxlength="2" minlength="2"
                                             value="{{ old('kode', $special_need->kode) }}">
                                         @error('kode')

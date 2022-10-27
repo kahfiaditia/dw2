@@ -21,6 +21,7 @@ use App\Models\Priodik_siswa;
 use App\Models\Prestasi;
 use App\Models\Setting;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
@@ -82,7 +83,7 @@ class SiswaController extends Controller
                         ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
                         ->orWhere('email', 'like', '%' . $search . '%')
                         ->orwhereRaw(
-                            "CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) like ?",
+                            "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
                             '%' . $search . '%'
                         );
                 });
@@ -101,7 +102,8 @@ class SiswaController extends Controller
                 }
                 if ($request->get('nama') != null) {
                     $nama = $request->get('nama');
-                    $students->where('nama_lengkap', '=', $nama);
+                    // $students->where('nama_lengkap', '=', $nama);
+                    $students->Where('nama_lengkap', 'like', '%' . $nama . '%');
                 }
                 if ($request->get('email') != null) {
                     $email = $request->get('email');
@@ -109,8 +111,9 @@ class SiswaController extends Controller
                 }
                 if ($request->get('kelas') != null) {
                     $kelas = $request->get('kelas');
+                    $kelas = str_replace(' ', '', $kelas);
                     $students->whereRaw(
-                        "CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) like ?",
+                        "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
                         '%' . $kelas . '%'
                     );
                 }
@@ -158,7 +161,7 @@ class SiswaController extends Controller
             'nis' => 'required|unique:siswa',
             'nisn' => 'required|unique:siswa',
             'nik' => 'required|unique:siswa',
-            'no_kk' => 'required|unique:siswa',
+            'no_kk' => 'required',
             'nama_lengkap' => 'required',
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
@@ -214,7 +217,8 @@ class SiswaController extends Controller
                 'is_have_kip' => $request->is_have_kip,
                 'is_receive_kip' => $request->is_receive_kip,
                 'reason_reject_kip' => $request->reason_reject_kip,
-                'user_id' => Auth::user()->id
+                'user_id' => Auth::user()->id,
+                'user_created' => Auth::user()->id,
             ]);
             DB::commit();
             AlertHelper::addAlert(true);
@@ -346,7 +350,7 @@ class SiswaController extends Controller
             'nis' => "required|unique:siswa,nis,$id,id,deleted_at,NULL",
             'nisn' => "required|unique:siswa,nisn,$id,id,deleted_at,NULL",
             'nik' => "required|unique:siswa,nik,$id,id,deleted_at,NULL",
-            'no_kk' => "required|unique:siswa,no_kk,$id,id,deleted_at,NULL",
+            'no_kk' => "required",
             'nama_lengkap' => 'required',
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
@@ -403,6 +407,7 @@ class SiswaController extends Controller
             $student->is_have_kip = $request->is_have_kip;
             $student->is_receive_kip = $request->is_receive_kip;
             $student->reason_reject_kip = $request->reason_reject_kip;
+            $student->user_updated = Auth::user()->id;
             $student->save();
             DB::commit();
             AlertHelper::updateAlert(true);
@@ -419,8 +424,19 @@ class SiswaController extends Controller
     {
         DB::beginTransaction();
         try {
+            $date = Carbon::now();
+            // siswa
             $student = Siswa::findOrFail($id);
-            $student->delete();
+            $student->user_deleted = Auth::user()->id;
+            $student->deleted_at = $date;
+            $student->save();
+
+            // user
+            $user = User::findorfail($student->user_id);
+            $user->user_deleted = Auth::user()->id;
+            $user->deleted_at = $date;
+            $user->save();
+
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();
@@ -1164,13 +1180,15 @@ class SiswaController extends Controller
     public function update_pembayaran(Request $request, $id)
     {
         $decrypted_id = Crypt::decryptString($id);
+        $cek_user = Siswa::findOrFail($decrypted_id);
+
         $validated = $request->validate([
             // 'formulir' => 'required',
             // 'pangkal' => 'required',
             // 'spp' => 'required',
             // 'kegiatan' => 'required',
             'kelas' => 'required',
-            'email' => "required|email|unique:siswa,email,$decrypted_id,id,deleted_at,NULL",
+            'email' => 'required|email|unique:users,email,' . $cek_user->user_id,
             'nis' => "required|unique:siswa,nis,$decrypted_id,id,deleted_at,NULL",
             'nisn' => "required|unique:siswa,nisn,$decrypted_id,id,deleted_at,NULL",
             'nik' => "required|unique:siswa,nik,$decrypted_id,id,deleted_at,NULL",
@@ -1183,15 +1201,17 @@ class SiswaController extends Controller
             $siswa->spp_id = $request->spp;
             $siswa->kegiatan_id = $request->kegiatan;
             $siswa->class_id = $validated['kelas'];
-            $siswa->email = $validated['email'];
+            $siswa->email = strtolower($request->email);
             $siswa->nis = $validated['nis'];
             $siswa->nisn = $validated['nisn'];
             $siswa->nik = $validated['nik'];
+            $siswa->user_updated = Auth::user()->id;
             $siswa->save();
 
             $user_id = $request->user_id;
             $user = User::findOrFail($user_id);
-            $user->email = $validated['email'];
+            $user->email = strtolower($request->email);
+            $user->user_updated = Auth::user()->id;
             $user->save();
 
             DB::commit();

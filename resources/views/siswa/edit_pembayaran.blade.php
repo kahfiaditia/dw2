@@ -27,7 +27,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label for="">Nama <code>*</code></label>
+                                            <label for="">Nama</label>
                                             <input type="text" class="form-control" name="nama" readonly
                                                 placeholder="Nama" value="{{ $student->nama_lengkap }}">
                                             <input type="hidden" name="user_id" value="{{ $student->user_id }}">

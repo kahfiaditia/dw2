@@ -24,13 +24,11 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        $classes = Classes::orderBy('id', 'DESC')->get();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'data Kelas',
-            'classes' => $classes
         ];
 
         return view('classes.index')->with($data);

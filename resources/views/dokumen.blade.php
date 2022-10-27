@@ -11,6 +11,8 @@ if ($type === 'nik') {
     $path = 'sk/' . $file;
 } elseif ($type === 'ijazah') {
     $path = 'ijazah/' . $file;
+} elseif ($type === 'buku') {
+    $path = 'buku/' . $file;
 } else {
     $path = '';
 }

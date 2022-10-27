@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\School_level;
 use App\Models\Siswa;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -34,7 +35,7 @@ class AkunController extends Controller
         return view('akun.list')->with($data);
     }
 
-    public function data_ajax(Request $request)
+    public function data_ajax_akun(Request $request)
     {
         $user = User::select(['*']);
         return DataTables::of($user)
@@ -139,6 +140,7 @@ class AkunController extends Controller
                 $user->akses_submenu = '1';
             } elseif ($request->roles === 'Ortu') {
             }
+            $user->user_created = Auth::user()->id;
             $user->save();
 
             DB::commit();
@@ -229,19 +231,24 @@ class AkunController extends Controller
                 $user->akses_submenu = '1';
             } elseif ($request->roles === 'Ortu') {
             }
-            // update class
+            // update siswa
             if ($request->roles === 'Siswa') {
-                // $user->id_school_level = $request->id_school_level;
                 if ($request->email_old != $request->email) {
                     $siswa = Siswa::findorfail($user->student->id);
                     $siswa->email = $request->email;
-                    // $siswa->user_updated = Auth::user()->id;
+                    $siswa->user_updated = Auth::user()->id;
                     $siswa->save();
                 }
-                // } else {
-                //     $user->id_school_level = null;
+            }
+            // update karyawan
+            if ($request->roles === 'Karyawan') {
+                $employee = Employee::findorfail($user->employee->id);
+                $employee->aktif = isset($request->aktif) ? 1 : 0;
+                $employee->user_updated = Auth::user()->id;
+                $employee->save();
             }
             $user->aktif = isset($request->aktif) ? 1 : 0;
+            $user->user_updated = Auth::user()->id;
             $user->save();
 
             DB::commit();
@@ -270,10 +277,17 @@ class AkunController extends Controller
         $id_decrypted = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
+            $date = Carbon::now();
             $user = User::findorfail($id_decrypted);
-            $user->delete();
-
-            $karyawan = Employee::where('user_id', $id_decrypted)->delete();
+            if ($user->roles == 'Karyawan') {
+                $employee = Employee::findorfail($user->employee->id);
+                $employee->user_deleted = Auth::user()->id;
+                $employee->deleted_at = $date;
+                $employee->save();
+            }
+            $user->user_deleted = Auth::user()->id;
+            $user->deleted_at = $date;
+            $user->save();
 
             DB::commit();
             AlertHelper::deleteAlert(true);
@@ -305,6 +319,7 @@ class AkunController extends Controller
         try {
             $user = User::findorfail($id);
             $user->aktif = isset($request->aktif) ? 1 : null;
+            $user->user_updated = Auth::user()->id;
             $user->save();
 
             DB::commit();

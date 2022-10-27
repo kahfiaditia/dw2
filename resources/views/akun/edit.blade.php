@@ -119,7 +119,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6" {{ Auth::user()->roles == 'Admin' ? '' : 'hidden' }}>
+                                    <div class="col-md-6"
+                                        {{ Auth::user()->roles == 'Admin' or (Auth::user()->roles == 'Administrator' ? '' : 'hidden') }}>
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Status Aktif
                                                 <code>*</code></label>

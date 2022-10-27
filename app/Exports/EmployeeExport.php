@@ -51,8 +51,10 @@ class EmployeeExport implements WithColumnFormatting, FromQuery, WithHeadings, W
                 if ($search) {
                     if (strtolower($search) == 'aktif') {
                         $status = 1;
-                    } else {
+                        $where->orWhere('karyawan.aktif', '=', $status);
+                    } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
                         $status = 0;
+                        $where->orWhere('karyawan.aktif', '=', $status);
                     }
                 }
                 $where
@@ -61,12 +63,12 @@ class EmployeeExport implements WithColumnFormatting, FromQuery, WithHeadings, W
                     ->orWhere('nik', 'like', '%' . $search . '%')
                     ->orWhere('npwp', 'like', '%' . $search . '%')
                     ->orWhere('no_hp', 'like', '%' . $search . '%')
-                    ->orWhere('jabatan', 'like', '%' . $search . '%')
-                    ->orWhere('karyawan.aktif', '=', $status);
+                    ->orWhere('jabatan', 'like', '%' . $search . '%');
             });
         } else {
             if ($nama != null) {
-                $employee->where('nama_lengkap', '=', $nama);
+                // $employee->where('nama_lengkap', '=', $nama);
+                $employee->Where('nama_lengkap', 'like', '%' . $nama . '%');
             }
             if ($email != null) {
                 $employee->where('email', '=', $email);
