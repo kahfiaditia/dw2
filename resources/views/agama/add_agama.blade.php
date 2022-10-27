@@ -26,7 +26,7 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Agama</label>
                                             <input type="text" class="form-control" id="agama" name="agama"
-                                                required placeholder="Agama" value="{{ old('agama') }}">
+                                                autofocus required placeholder="Agama" value="{{ old('agama') }}">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>

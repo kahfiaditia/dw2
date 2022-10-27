@@ -72,8 +72,10 @@ class EmployeeController extends Controller
                     if ($search) {
                         if (strtolower($search) == 'aktif') {
                             $status = 1;
-                        } else {
+                            $where->orWhere('karyawan.aktif', '=', $status);
+                        } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
                             $status = 0;
+                            $where->orWhere('karyawan.aktif', '=', $status);
                         }
                     }
                     $where
@@ -82,13 +84,13 @@ class EmployeeController extends Controller
                         ->orWhere('nik', 'like', '%' . $search . '%')
                         ->orWhere('npwp', 'like', '%' . $search . '%')
                         ->orWhere('no_hp', 'like', '%' . $search . '%')
-                        ->orWhere('jabatan', 'like', '%' . $search . '%')
-                        ->orWhere('karyawan.aktif', '=', $status);
+                        ->orWhere('jabatan', 'like', '%' . $search . '%');
                 });
             } else {
                 if ($request->get('nama') != null) {
                     $nama = $request->get('nama');
-                    $employee->where('nama_lengkap', '=', $nama);
+                    // $employee->where('nama_lengkap', '=', $nama);
+                    $employee->Where('nama_lengkap', 'like', '%' . $nama . '%');
                 }
                 if ($request->get('email') != null) {
                     $email = $request->get('email');
@@ -244,6 +246,7 @@ class EmployeeController extends Controller
             $employee->masuk_kerja = $request->masuk_kerja;
             $employee->aktif = '1';
             $employee->user_id = $request->user_id;
+            $employee->user_created = Auth::user()->id;
             $employee->save();
             $last_id = $employee->id;
 
@@ -314,6 +317,12 @@ class EmployeeController extends Controller
         try {
             $employee = Employee::findorfail($id);
             $employee->nama_lengkap = $request->nama_lengkap;
+            if ($request->nama_lengkap_old != $request->nama_lengkap) {
+                $user = User::findorfail($employee->user_id);
+                $user->name = $request->nama_lengkap;
+                $user->user_updated = Auth::user()->id;
+                $user->save();
+            }
             $employee->no_hp = $request->no_hp;
             $employee->tempat_lahir = $request->tempat_lahir;
             $employee->tgl_lahir = $request->tgl_lahir;
@@ -394,9 +403,11 @@ class EmployeeController extends Controller
             if ($request->aktif_old != $aktif) {
                 $user = User::findorfail($employee->user_id);
                 $user->aktif = $aktif;
+                $user->user_updated = Auth::user()->id;
                 $user->save();
             }
             $employee->aktif = $aktif;
+            $employee->user_updated = Auth::user()->id;
             $employee->save();
 
             DB::commit();
@@ -412,9 +423,20 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee, $id)
     {
+        $date = Carbon::now();
         $employee_id = Crypt::decryptString($id);
+        // karyawan
         $employee = Employee::findOrFail($employee_id);
-        $employee->delete();
+        $employee->user_deleted = Auth::user()->id;
+        $employee->deleted_at = $date;
+        $employee->save();
+
+        // user
+        $user = User::findorfail($employee->user_id);
+        $user->user_deleted = Auth::user()->id;
+        $user->deleted_at = $date;
+        $user->save();
+
         AlertHelper::deleteAlert(true);
         return back();
     }
@@ -1253,5 +1275,13 @@ class EmployeeController extends Controller
             'stat' => $request->stat,
         ];
         return Excel::download(new EmployeeExport($data), 'karyawan.xlsx');
+    }
+
+    public function dropdown_karyawan(Request $request)
+    {
+        if ($request->value_peminjam) {
+            $employee = Employee::select('*')->where('jabatan', $request->value_peminjam)->where('aktif', '1')->wherenull('deleted_at')->get();
+            return $employee;
+        }
     }
 }

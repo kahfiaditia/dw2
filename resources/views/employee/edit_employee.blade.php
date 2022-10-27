@@ -119,9 +119,11 @@
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Nama Lengkap
                                                             <code>*</code></label>
+                                                        <input type="hidden" name="nama_lengkap_old"
+                                                            value="{{ $item->nama_lengkap }}">
                                                         <input type="text" class="form-control" id="nama_lengkap"
-                                                            name="nama_lengkap" value="{{ $item->nama_lengkap }}" required
-                                                            autofocus placeholder="Nama Lengkap">
+                                                            name="nama_lengkap" value="{{ $item->nama_lengkap }}"
+                                                            required autofocus placeholder="Nama Lengkap">
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
                                                         </div>
@@ -744,7 +746,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6"
-                                                    {{ Auth::user()->roles === 'Admin' ? '' : 'hidden' }}>
+                                                    {{ Auth::user()->roles === 'Admin' or (Auth::user()->roles === 'Administrator' ? '' : 'hidden') }}>
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Status
                                                             Aktif</label>

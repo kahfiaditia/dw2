@@ -171,6 +171,7 @@
                                                                             <label>Tahun Pendidikan <code>*</code></label>
                                                                             <div class="input-daterange input-group">
                                                                                 <input type="text"
+                                                                                    style="padding: 7px;"
                                                                                     class="form-control datepicker"
                                                                                     name="tahun_masuk" maxlength="4"
                                                                                     placeholder="Tahun Masuk"
@@ -363,12 +364,6 @@
                         document.getElementById('dok_ijazah').value = null;
                     }
                 }
-            });
-
-            $(".datepicker").datepicker({
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years",
             });
 
             $(".datepicker").change(function() {
