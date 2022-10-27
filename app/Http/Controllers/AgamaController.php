@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\AlertHelper;
 use App\Models\Agama;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +23,12 @@ class AgamaController extends Controller
             'label' => 'data agama',
             'lists' => Agama::orderBy('id', 'DESC')->get()
         ];
-        return view('agama.list_agama')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('11', $session_menu)) {
+            return view('agama.list_agama')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function create()
@@ -33,7 +39,13 @@ class AgamaController extends Controller
             'submenu' => 'agama',
             'label' => 'tambah agama',
         ];
-        return view('agama.add_agama')->with($data);
+
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('12', $session_menu)) {
+            return view('agama.add_agama')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function store(Request $request)
@@ -41,21 +53,27 @@ class AgamaController extends Controller
         $request->validate([
             'agama' => 'required|unique:agama,agama,NULL,id,deleted_at,NULL|max:64',
         ]);
-        DB::beginTransaction();
-        try {
-            $agama = new Agama();
-            $agama->agama = $request['agama'];
-            $agama->aktif = '1';
-            $agama->save();
 
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('agama');
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('12', $session_menu)) {
+            DB::beginTransaction();
+            try {
+                $agama = new Agama();
+                $agama->agama = $request['agama'];
+                $agama->aktif = '1';
+                $agama->save();
+
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('agama');
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -74,7 +92,13 @@ class AgamaController extends Controller
             'label' => 'ubah agama',
             'agama' => Agama::findorfail($id_decrypted)
         ];
-        return view('agama.edit_agama')->with($data);
+
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('13', $session_menu)) {
+            return view('agama.edit_agama')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function update(Request $request, Agama $agama, $id)
@@ -101,19 +125,24 @@ class AgamaController extends Controller
 
     public function destroy(Request $request)
     {
-        $id_decrypted = Crypt::decryptString($request->id);
-        DB::beginTransaction();
-        try {
-            $agama = Agama::findorfail($id_decrypted);
-            $agama->delete();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('14', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($request->id);
+            DB::beginTransaction();
+            try {
+                $agama = Agama::findorfail($id_decrypted);
+                $agama->delete();
 
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
