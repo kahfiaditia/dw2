@@ -37,7 +37,6 @@ class StudentExport implements WithColumnFormatting, FromQuery, WithHeadings, Wi
             ->whereNull('siswa.deleted_at')
             ->orderBy('siswa.id', 'asc');
 
-        $like = $this->data['like'];
         $search = $this->data['search'];
         if ($search != null) {
             $students->where(function ($where) use ($search) {
@@ -70,7 +69,8 @@ class StudentExport implements WithColumnFormatting, FromQuery, WithHeadings, Wi
                 $students->where('nik', '=', $nik);
             }
             if ($nama != null) {
-                $students->where('nama_lengkap', '=', $nama);
+                // $students->where('nama_lengkap', '=', $nama);
+                $students->Where('nama_lengkap', 'like', '%' . $nama . '%');
             }
             if ($email != null) {
                 $students->where('email', '=', $email);

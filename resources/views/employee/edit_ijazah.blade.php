@@ -22,8 +22,8 @@
             {{-- cek device moblie atau bukan --}}
             <?php preg_match('/(chrome|firefox|avantgo|blackberry|android|blazer|elaine|hiptop|iphone|ipod|kindle|midp|mmp|mobile|o2|opera mini|palm|palm os|pda|plucker|pocket|psp|smartphone|symbian|treo|up.browser|up.link|vodafone|wap|windows ce; iemobile|windows ce; ppc;|windows ce; smartphone;|xiino)/i', $_SERVER['HTTP_USER_AGENT'], $version); ?>
             <div class="checkout-tabs">
-                <form class="needs-validation" action="{{ route('employee.update_ijazah') }}"
-                    enctype="multipart/form-data" method="POST" novalidate>
+                <form class="needs-validation" action="{{ route('employee.update_ijazah') }}" enctype="multipart/form-data"
+                    method="POST" novalidate>
                     @csrf
                     <?php $id = Crypt::encryptString($item->id); ?>
                     <?php $karyawan_id = Crypt::encryptString($item->karyawan_id); ?>
@@ -74,8 +74,8 @@
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Jenis
                                                             <code>*</code></label>
-                                                        <select class="form-control select select2" name="type" id="type"
-                                                            required>
+                                                        <select class="form-control select select2" name="type"
+                                                            id="type" required>
                                                             <option value="">--Pilih Jenis--</option>
                                                             <option value="Akademik"
                                                                 {{ $item->type === 'Akademik' ? 'selected' : '' }}>
@@ -94,8 +94,8 @@
                                                     <div class="mb-3">
                                                         <label for="formFile" class="form-label">Dokumen
                                                             Sertifikat/Ijazah (Max 2 Mb) <code>*</code></label>
-                                                        <input class="form-control dok_ijazah" type="file" name="dok_ijazah"
-                                                            id="dok_ijazah">
+                                                        <input class="form-control dok_ijazah" type="file"
+                                                            name="dok_ijazah" id="dok_ijazah">
                                                         @if ($item->dok_ijazah)
                                                             <a href="javascript:void(0)"
                                                                 data-id="{{ $item->dok_ijazah . '|ijazah|ijazah' }}"
@@ -135,7 +135,8 @@
                                                                                 class="form-label">Nama
                                                                                 Sekolah/Universitas <code>*</code></label>
                                                                             <input type="text" class="form-control"
-                                                                                id="nama_pendidikan" name="nama_pendidikan"
+                                                                                id="nama_pendidikan"
+                                                                                name="nama_pendidikan"
                                                                                 value="{{ $item->nama_pendidikan }}"
                                                                                 required autofocus
                                                                                 placeholder="Nama Sekolah/Universitas">
@@ -153,7 +154,8 @@
                                                                             <select class="form-control select select2"
                                                                                 name="gelar_ijazah" id="gelar_ijazah"
                                                                                 required>
-                                                                                <option value="">--Pilih Gelar--</option>
+                                                                                <option value="">--Pilih Gelar--
+                                                                                </option>
                                                                                 @foreach ($jurusan as $jurusan)
                                                                                     <option value="{{ $jurusan }}"
                                                                                         {{ $item->gelar_ijazah === $jurusan ? 'selected' : '' }}>
@@ -188,16 +190,19 @@
                                                                             <label>Tahun Pendidikan <code>*</code></label>
                                                                             <div class="input-daterange input-group">
                                                                                 <input type="text"
+                                                                                    style="padding: 7px;"
                                                                                     class="form-control datepicker"
                                                                                     name="tahun_masuk"
                                                                                     value="{{ $item->tahun_masuk }}"
-                                                                                    maxlength="4" placeholder="Tahun Masuk"
+                                                                                    maxlength="4"
+                                                                                    placeholder="Tahun Masuk"
                                                                                     id="tahun_masuk" required>
                                                                                 <input type="text"
                                                                                     class="form-control datepicker"
                                                                                     name="tahun_lulus"
                                                                                     value="{{ $item->tahun_lulus }}"
-                                                                                    maxlength="4" placeholder="Tahun Lulus"
+                                                                                    maxlength="4"
+                                                                                    placeholder="Tahun Lulus"
                                                                                     id="tahun_lulus" required>
                                                                                 <div class="invalid-feedback">
                                                                                     Data wajib diisi.
@@ -283,7 +288,8 @@
                                                                             <select class="form-control select select2"
                                                                                 name="gelar_ijazah_non"
                                                                                 id="gelar_ijazah_non" required>
-                                                                                <option value="">--Pilih Gelar--</option>
+                                                                                <option value="">--Pilih Gelar--
+                                                                                </option>
                                                                                 @foreach ($jurusan_non as $jurusan)
                                                                                     <option value="{{ $jurusan }}"
                                                                                         {{ $item->gelar_ijazah === $jurusan ? 'selected' : '' }}>
@@ -354,8 +360,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade bs-example-modal-lg-dok" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
-        aria-hidden="true">
+    <div class="modal fade bs-example-modal-lg-dok" tabindex="-1" role="dialog"
+        aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -396,12 +402,6 @@
                         document.getElementById('dok_ijazah').value = null;
                     }
                 }
-            });
-
-            $(".datepicker").datepicker({
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years",
             });
 
             $(".datepicker").change(function() {

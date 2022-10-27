@@ -82,13 +82,17 @@
                                                     </a>
                                                 </div>
                                             @endif
-                                            <div class="flex-grow-1 overflow-hidden">
+                                            <div class="overflow-hidden me-4">
                                                 <h5 class="text-truncate font-size-15">{{ $item->nama_lengkap }}
                                                     - {{ $item->user->roles }}</h5>
                                                 <p class="text-muted">
                                                     {{ $item->tempat_lahir . ', ' . date('d F Y', strtotime($item->tgl_lahir)) }}
                                                     ({{ hitung_umur($item->tgl_lahir) }})
                                                 </p>
+                                            </div>
+                                            <div class="col-sm-6 col-6">
+                                                {!! DNS1D::getBarcodeHTML($item->niks, 'C128') !!}
+                                                {{ $item->niks }}
                                             </div>
                                         </div>
                                         <div class="row task-dates">

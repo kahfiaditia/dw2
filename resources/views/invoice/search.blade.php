@@ -26,8 +26,7 @@
                                         <div class="mb-3">
                                             <label for="">NIS</label>
                                             <input type="text" class="form-control input-mask" name="nis"
-                                                data-inputmask="'mask': 'AA-99-99999'" value="{{ $students->nis }}"
-                                                id="nisn" readonly placeholder="NIS">
+                                                value="{{ $students->nis }}" id="nisn" readonly placeholder="NIS">
                                         </div>
                                     </div>
                                     <div class="col-md-2">

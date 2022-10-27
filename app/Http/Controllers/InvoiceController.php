@@ -83,8 +83,8 @@ class InvoiceController extends Controller
     {
         $kelas = DB::table('classes')
             ->select('classes.id', 'level', 'school_class.classes', 'jurusan', 'type')
-            ->join('school_class', 'school_class.id', '=', 'classes.class_id')
-            ->join('school_level', 'school_level.id', '=', 'school_class.school_level_id')
+            ->leftjoin('school_class', 'school_class.id', '=', 'classes.class_id')
+            ->leftjoin('school_level', 'school_level.id', '=', 'classes.id_school_level')
             ->get();
         if (count($kelas) > 0) {
             return response()->json([
@@ -237,16 +237,15 @@ class InvoiceController extends Controller
             'tahun_ajaran_start' => 'required',
             'tahun_ajaran_end' => 'required',
         ]);
-        // dd($request);
         $registration_number = Invoice_header::pluck('no_invoice')->last();
         $no_date = Carbon::now()->format('ymd');
         if (!$registration_number) {
             $no_invoice = "INV" . $no_date . sprintf('%04d', 1);
         } else {
             $last_number = (int)substr($registration_number, 9);
-            $day = (int)substr($registration_number, 7, 2);
-            $day_now = Carbon::now()->format('d');
-            if ($day != $day_now) {
+            $moon = (int)substr($registration_number, 5, 2);
+            $moon_now = Carbon::now()->format('m');
+            if ($moon != $moon_now) {
                 $no_invoice = "INV" . $no_date . sprintf('%04d', 1);
             } else {
                 $no_invoice = "INV" . $no_date . sprintf('%04d', $last_number + 1);

@@ -62,7 +62,7 @@
                 serverSide: true,
                 responsive: true,
                 ajax: {
-                    url: "{{ route('akun.data_ajax') }}",
+                    url: "{{ route('akun.data_ajax_akun') }}",
                     data: function(d) {
                         d.search = $('input[type="search"]').val()
                     }
