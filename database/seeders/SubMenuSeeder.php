@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Cache\NullStore;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -55,7 +56,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Kodepos', 'route_submenu' => 'kodepos', 'type_menu' => 'delete', 'menu_id' => '14', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Siswa', 'route_submenu' => 'siswa.index', 'type_menu' => 'view', 'menu_id' => '6', 'display_submenu' => '1', 'order_submenu' => '1',
+                'submenu' => 'Siswa', 'route_submenu' => 'siswa.index', 'type_menu' => 'view', 'menu_id' => '6', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Siswa', 'route_submenu' => 'siswa.index', 'type_menu' => 'insert', 'menu_id' => '6', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
@@ -103,7 +104,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Setting Pembayaran', 'route_submenu' => 'payment.index', 'type_menu' => 'delete', 'menu_id' => '14', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Hak Akses', 'route_submenu' => 'primession.index', 'type_menu' => 'view', 'menu_id' => '14', 'display_submenu' => '1', 'order_submenu' => '15',
+                'submenu' => 'Hak Akses', 'route_submenu' => 'primession.index', 'type_menu' => 'view', 'menu_id' => '14', 'display_submenu' => '1', 'order_submenu' => '9',
             ], [
                 'submenu' => 'Hak Akses', 'route_submenu' => 'primession.index', 'type_menu' => 'insert', 'menu_id' => '14', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
@@ -129,7 +130,53 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Siswa Prestasi', 'route_submenu' => 'prestasi.index', 'type_menu' => 'delete', 'menu_id' => '14', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Rubah Pembayaran Siswa', 'route_submenu' => 'siswa.index', 'type_menu' => 'edit', 'menu_id' => '6', 'display_submenu' => '1', 'order_submenu' => null,
+                'submenu' => 'Rubah Pembayaran Siswa', 'route_submenu' => 'siswa.index', 'type_menu' => 'edit', 'menu_id' => '6', 'display_submenu' => '0', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Chat', 'route_submenu' => 'chat.index', 'type_menu' => 'view', 'menu_id' => '15', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Kategori', 'route_submenu' => 'kategori.index', 'type_menu' => 'view', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => '2',
+            ], [
+                'submenu' => 'Kategori', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Kategori', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Kategori', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Rak', 'route_submenu' => 'rak.index', 'type_menu' => 'view', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => '1',
+            ], [
+                'submenu' => 'Rak', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Rak', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Rak', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Penerbit', 'route_submenu' => 'penerbit.index', 'type_menu' => 'view', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => '3',
+            ], [
+                'submenu' => 'Penerbit', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Penerbit', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Penerbit', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Buku', 'route_submenu' => 'buku.index', 'type_menu' => 'view', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => '4',
+            ], [
+                'submenu' => 'Buku', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Buku', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Buku', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Pinjaman', 'route_submenu' => 'pinjaman.index', 'type_menu' => 'view', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => '5',
+            ], [
+                'submenu' => 'Pinjaman', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Pinjaman', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Pinjaman', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Pinjaman Approve', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Pinjaman Approve', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '16', 'display_submenu' => '0', 'order_submenu' => null,
             ]
         ];
         DB::table('submenu')->insert($sub_menus);

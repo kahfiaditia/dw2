@@ -16,15 +16,16 @@ class AgamaController extends Controller
 
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'agama',
-            'label' => 'data agama',
-            'lists' => Agama::orderBy('id', 'DESC')->get()
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('11', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'agama',
+                'label' => 'data agama',
+                'lists' => Agama::orderBy('id', 'DESC')->get()
+            ];
+
             return view('agama.list_agama')->with($data);
         } else {
             return view('not_found');
@@ -33,15 +34,14 @@ class AgamaController extends Controller
 
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'agama',
-            'label' => 'tambah agama',
-        ];
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('12', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'agama',
+                'label' => 'tambah agama',
+            ];
             return view('agama.add_agama')->with($data);
         } else {
             return view('not_found');
@@ -84,17 +84,17 @@ class AgamaController extends Controller
 
     public function edit(Request $request)
     {
-        $id_decrypted = Crypt::decryptString($request->id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'agama',
-            'label' => 'ubah agama',
-            'agama' => Agama::findorfail($id_decrypted)
-        ];
 
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('13', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($request->id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'agama',
+                'label' => 'ubah agama',
+                'agama' => Agama::findorfail($id_decrypted)
+            ];
             return view('agama.edit_agama')->with($data);
         } else {
             return view('not_found');
@@ -106,20 +106,26 @@ class AgamaController extends Controller
         $request->validate([
             'agama' => "required|max:64|unique:agama,agama,$id,id,deleted_at,NULL"
         ]);
-        DB::beginTransaction();
-        try {
-            $agama = Agama::findOrFail($id);
-            $agama->agama = $request['agama'];
-            $agama->aktif = isset($request->aktif) ? 1 : 0;
-            $agama->save();
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('agama');
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            return back();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('13', $session_menu)) {
+            DB::beginTransaction();
+            try {
+                $agama = Agama::findOrFail($id);
+                $agama->agama = $request['agama'];
+                $agama->aktif = isset($request->aktif) ? 1 : 0;
+                $agama->save();
+
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('agama');
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 

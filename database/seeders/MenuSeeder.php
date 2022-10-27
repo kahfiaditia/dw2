@@ -34,7 +34,7 @@ class MenuSeeder extends Seeder
                 'menu' => 'Akun',
                 'icon' => 'bx bx-user-circle',
                 'sub_menu' => '0',
-                'order_menu' => '4',
+                'order_menu' => '12',
                 'display' => '1',
             ], [
                 'menu' => 'Agama',
@@ -76,13 +76,13 @@ class MenuSeeder extends Seeder
                 'menu' => 'Pembayaran',
                 'icon' => 'bx bx-wallet',
                 'sub_menu' => '0',
-                'order_menu' => '5',
+                'order_menu' => '4',
                 'display' => '1',
             ], [
                 'menu' => 'Setting Pembayaran',
                 'icon' => 'bx bx-wallet-alt',
                 'sub_menu' => '0',
-                'order_menu' => '7',
+                'order_menu' => null,
                 'display' => '1',
             ], [
                 'menu' => 'Hak Akses',
@@ -94,13 +94,25 @@ class MenuSeeder extends Seeder
                 'menu' => 'Setting Website',
                 'icon' => 'bx bxl-jsfiddle text-info',
                 'sub_menu' => '1',
-                'order_menu' => '8',
+                'order_menu' => '14',
                 'display' => '1',
             ], [
                 'menu' => 'Setting',
                 'icon' => 'bx bx-cog text-info',
                 'sub_menu' => '1',
-                'order_menu' => '6',
+                'order_menu' => '13',
+                'display' => '1',
+            ], [
+                'menu' => 'Chat',
+                'icon' => 'bx bx-chat',
+                'sub_menu' => '1',
+                'order_menu' => '15',
+                'display' => '0',
+            ], [
+                'menu' => 'Perpustakaan',
+                'icon' => 'bx bx-boox',
+                'sub_menu' => '1',
+                'order_menu' => '5',
                 'display' => '1',
             ]
         ];

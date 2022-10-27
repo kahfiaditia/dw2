@@ -14,7 +14,7 @@ class UpdateUserIdDiUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_created')->nullable()->after('date_logout');
+            $table->unsignedBigInteger('user_created')->nullable()->after('remember_token');
             $table->foreign('user_created')->references('id')->on('users');
             $table->unsignedBigInteger('user_updated')->nullable()->after('user_created');
             $table->foreign('user_updated')->references('id')->on('users');
