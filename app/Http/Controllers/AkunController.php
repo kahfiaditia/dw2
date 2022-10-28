@@ -26,15 +26,14 @@ class AkunController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->sid,
-            'submenu' => $this->menu,
-            'label' => 'data akun',
-        ];
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('7', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->sid,
+                'submenu' => $this->menu,
+                'label' => 'data akun',
+            ];
             return view('akun.list')->with($data);
         } else {
             return view('not_found');
