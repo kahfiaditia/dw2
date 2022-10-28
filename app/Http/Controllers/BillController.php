@@ -24,7 +24,6 @@ class BillController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('27', $session_menu)) {
-
             $bills = Bills::orderBy('id', 'ASC')->get();
             $data = [
                 'title' => $this->title,
@@ -68,13 +67,12 @@ class BillController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'bills' => 'required|unique:bills,bills,NULL,id,deleted_at,NULL',
-            'notes' => 'required'
-        ]);
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('28', $session_menu)) {
-
+            $validated = $request->validate([
+                'bills' => 'required|unique:bills,bills,NULL,id,deleted_at,NULL',
+                'notes' => 'required'
+            ]);
             DB::beginTransaction();
             try {
                 Bills::create([
@@ -177,7 +175,7 @@ class BillController extends Controller
     public function destroy($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('29', $session_menu)) {
+        if (in_array('30', $session_menu)) {
             DB::beginTransaction();
             try {
                 $bills = Bills::findOrFail(Crypt::decryptString($id));

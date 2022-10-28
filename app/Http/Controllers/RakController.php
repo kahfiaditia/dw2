@@ -16,15 +16,15 @@ class RakController extends Controller
 
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'rak',
-            'label' => 'data rak',
-            'lists' => Rak::orderBy('id', 'ASC')->get()
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('62', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'rak',
+                'label' => 'data rak',
+                'lists' => Rak::orderBy('id', 'ASC')->get()
+            ];
             return view('rak.list_rak')->with($data);
         } else {
             return view('not_found');
@@ -33,14 +33,14 @@ class RakController extends Controller
 
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'rak',
-            'label' => 'tambah rak',
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('63', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'rak',
+                'label' => 'tambah rak',
+            ];
             return view('rak.add_rak')->with($data);
         } else {
             return view('not_found');
@@ -49,25 +49,30 @@ class RakController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'no_rak' => 'required|max:64',
-            'rak' => 'required|max:64',
-        ]);
-        DB::beginTransaction();
-        try {
-            $rak = new Rak();
-            $rak->no_rak = $request['no_rak'];
-            $rak->rak = $request['rak'];
-            $rak->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('63', $session_menu)) {
+            $request->validate([
+                'no_rak' => 'required|max:64',
+                'rak' => 'required|max:64',
+            ]);
+            DB::beginTransaction();
+            try {
+                $rak = new Rak();
+                $rak->no_rak = $request['no_rak'];
+                $rak->rak = $request['rak'];
+                $rak->save();
 
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('rak');
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('rak');
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -78,16 +83,16 @@ class RakController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'rak',
-            'label' => 'ubah rak',
-            'rak' => Rak::findorfail($id_decrypted)
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('64', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'rak',
+                'label' => 'ubah rak',
+                'rak' => Rak::findorfail($id_decrypted)
+            ];
             return view('rak.edit_rak')->with($data);
         } else {
             return view('not_found');
@@ -96,25 +101,30 @@ class RakController extends Controller
 
     public function update(Request $request, $id)
     {
-        $id = Crypt::decryptString($id);
-        $request->validate([
-            'no_rak' => 'required|max:64',
-            'rak' => 'required|max:64',
-        ]);
-        DB::beginTransaction();
-        try {
-            $rak = Rak::findOrFail($id);
-            $rak->no_rak = $request['no_rak'];
-            $rak->rak = $request['rak'];
-            $rak->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('64', $session_menu)) {
+            $id = Crypt::decryptString($id);
+            $request->validate([
+                'no_rak' => 'required|max:64',
+                'rak' => 'required|max:64',
+            ]);
+            DB::beginTransaction();
+            try {
+                $rak = Rak::findOrFail($id);
+                $rak->no_rak = $request['no_rak'];
+                $rak->rak = $request['rak'];
+                $rak->save();
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('rak');
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            return back();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('rak');
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 

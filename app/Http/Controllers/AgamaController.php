@@ -50,12 +50,11 @@ class AgamaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'agama' => 'required|unique:agama,agama,NULL,id,deleted_at,NULL|max:64',
-        ]);
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('12', $session_menu)) {
+            $request->validate([
+                'agama' => 'required|unique:agama,agama,NULL,id,deleted_at,NULL|max:64',
+            ]);
             DB::beginTransaction();
             try {
                 $agama = new Agama();
@@ -84,7 +83,6 @@ class AgamaController extends Controller
 
     public function edit(Request $request)
     {
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('13', $session_menu)) {
             $id_decrypted = Crypt::decryptString($request->id);
@@ -103,12 +101,11 @@ class AgamaController extends Controller
 
     public function update(Request $request, Agama $agama, $id)
     {
-        $request->validate([
-            'agama' => "required|max:64|unique:agama,agama,$id,id,deleted_at,NULL"
-        ]);
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('13', $session_menu)) {
+            $request->validate([
+                'agama' => "required|max:64|unique:agama,agama,$id,id,deleted_at,NULL"
+            ]);
             DB::beginTransaction();
             try {
                 $agama = Agama::findOrFail($id);
