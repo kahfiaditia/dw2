@@ -181,17 +181,6 @@ class AkunController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -372,5 +361,19 @@ class AkunController extends Controller
             AlertHelper::addAlert(false);
             return back();
         }
+    }
+
+    public function profile($id)
+    {
+        $id_decrypted = Crypt::decryptString($id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
+            'label' => 'ubah akun',
+            'school_level' => School_level::all(),
+            'akun' => User::findorfail($id_decrypted)
+        ];
+        return view('akun.edit')->with($data);
     }
 }

@@ -51,10 +51,18 @@
                         @foreach ($sub_menu as $sub_item)
                             @if ($item->display > 0)
                                 <li>
-                                    <a href="{{ route($sub_item->route_submenu) }}" class="waves-effect">
-                                        <i class="{{ $item->icon_menu }}"></i>
-                                        <span>{{ $item->menu }}</span>
-                                    </a>
+                                    @if ($item->menu == 'Chat')
+                                        <a href="{{ route($sub_item->route_submenu, Crypt::encryptString(Auth::user()->id)) }}"
+                                            class="waves-effect">
+                                            <i class="{{ $item->icon_menu }}"></i>
+                                            <span>{{ $item->menu }}</span>
+                                        </a>
+                                    @else
+                                        <a href="{{ route($sub_item->route_submenu) }}" class="waves-effect">
+                                            <i class="{{ $item->icon_menu }}"></i>
+                                            <span>{{ $item->menu }}</span>
+                                        </a>
+                                    @endif
                                 </li>
                             @endif
                         @endforeach

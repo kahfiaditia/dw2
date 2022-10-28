@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
@@ -197,6 +198,7 @@ Route::group(
         Route::get('/data_ajax_akun', [AkunController::class, 'data_ajax_akun'])->name('akun.data_ajax_akun');
         Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
+        Route::get('/profile/{id}', [AkunController::class, 'profile'])->name('akun.profile');
         // classes
         Route::resource('/classes', ClassesController::class);
         Route::get('/list_classes', [ClassesController::class, 'list_classes'])->name('classes.list_classes');
@@ -226,6 +228,11 @@ Route::group(
         Route::resource('/prestasi', PrestasiController::class);
         Route::get('/list_prestasi', [PrestasiController::class, 'list_prestasi'])->name('prestasi.list_prestasi');
 
+        // chat vue js akal biar di refresh ga error pake any jika fitur not found jadi direct ke chat index
+        Route::get('/converstation/{id}', [ChatController::class, 'index'])->name('chat.index');
+        Route::get('/contact/{id}', [ChatController::class, 'index'])->name('chat.index');
+        Route::get('/chat/{id}', [ChatController::class, 'index'])->name('chat.index');
+
         // perpustakaan
         Route::resource('/rak', RakController::class);
         Route::post('/dropdown', [RakController::class, 'dropdown'])->name('rak.dropdown');
@@ -250,3 +257,5 @@ Route::group(
         Route::get('export_pinjaman_buku', [PinjamanController::class, 'export_pinjaman_buku'])->name('pinjaman.export_pinjaman_buku');
     }
 );
+
+// Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');
