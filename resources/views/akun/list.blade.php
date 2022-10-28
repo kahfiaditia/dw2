@@ -36,7 +36,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Name</th>
+                                        <th>Nama</th>
                                         <th>Email</th>
                                         <th>Roles</th>
                                         <th>Verifikasi Email</th>
@@ -62,7 +62,7 @@
                 serverSide: true,
                 responsive: true,
                 ajax: {
-                    url: "{{ route('akun.data_ajax') }}",
+                    url: "{{ route('akun.data_ajax_akun') }}",
                     data: function(d) {
                         d.search = $('input[type="search"]').val()
                     }

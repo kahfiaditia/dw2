@@ -4,20 +4,25 @@ use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\BukuController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NeedsController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PenerbitController;
+use App\Http\Controllers\PinjamanController;
 use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
+use App\Http\Controllers\RakController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
@@ -94,6 +99,8 @@ Route::group(
         Route::post('/dropdown_email', [EmployeeController::class, 'dropdown_email'])->name('employee.dropdown_email');
         Route::post('/get_email', [EmployeeController::class, 'get_email'])->name('employee.get_email');
         Route::post('/cek_ijazah', [EmployeeController::class, 'cek_ijazah'])->name('employee.cek_ijazah');
+        Route::get('export_employee', [EmployeeController::class, 'export_employee'])->name('employee.export_employee');
+        Route::post('/dropdown_karyawan', [EmployeeController::class, 'dropdown_karyawan'])->name('employee.dropdown_karyawan');
     }
 );
 
@@ -183,9 +190,12 @@ Route::group(
         Route::delete('/destroy_parent/{parent_id}', [SiswaController::class, 'destroy_parent'])->name('siswa.destroy_parent');
         Route::post('/dropdown_siswa', [SiswaController::class, 'dropdown_siswa'])->name('siswa.dropdown_siswa');
         Route::post('/get_siswa_by_nis', [SiswaController::class, 'get_siswa_by_nis'])->name('siswa.get_siswa_by_nis');
+        Route::get('/edit_pembayaran/{id}', [SiswaController::class, 'edit_pembayaran'])->name('siswa.edit_pembayaran');
+        Route::patch('/update_pembayaran/{id}', [SiswaController::class, 'update_pembayaran'])->name('siswa.update_pembayaran');
+        Route::get('export_siswa', [SiswaController::class, 'export_siswa'])->name('siswa.export_siswa');
         // akun
         Route::resource('/akun', AkunController::class);
-        Route::get('/data_ajax', [AkunController::class, 'data_ajax'])->name('akun.data_ajax');
+        Route::get('/data_ajax_akun', [AkunController::class, 'data_ajax_akun'])->name('akun.data_ajax_akun');
         Route::get('/confirmasi/{id}', [AkunController::class, 'confirmasi'])->name('akun.confirmasi');
         Route::patch('/save_confirmasi/{id}', [AkunController::class, 'save_confirmasi'])->name('akun.save_confirmasi');
         Route::get('/profile/{id}', [AkunController::class, 'profile'])->name('akun.profile');
@@ -217,10 +227,34 @@ Route::group(
         // prestasi
         Route::resource('/prestasi', PrestasiController::class);
         Route::get('/list_prestasi', [PrestasiController::class, 'list_prestasi'])->name('prestasi.list_prestasi');
+
         // chat vue js akal biar di refresh ga error pake any jika fitur not found jadi direct ke chat index
         Route::get('/converstation/{id}', [ChatController::class, 'index'])->name('chat.index');
         Route::get('/contact/{id}', [ChatController::class, 'index'])->name('chat.index');
         Route::get('/chat/{id}', [ChatController::class, 'index'])->name('chat.index');
+
+        // perpustakaan
+        Route::resource('/rak', RakController::class);
+        Route::post('/dropdown', [RakController::class, 'dropdown'])->name('rak.dropdown');
+        Route::resource('/kategori', KategoriController::class);
+        Route::post('/dropdown', [KategoriController::class, 'dropdown'])->name('kategori.dropdown');
+        Route::post('/get_kode', [KategoriController::class, 'get_kode'])->name('kategori.get_kode');
+        Route::resource('/penerbit', PenerbitController::class);
+        Route::post('/dropdown', [PenerbitController::class, 'dropdown'])->name('kategori.dropdown');
+        Route::resource('/buku', BukuController::class);
+        Route::get('/data_ajax', [BukuController::class, 'data_ajax'])->name('buku.data_ajax');
+        // pinjaman
+        Route::resource('/pinjaman', PinjamanController::class);
+        Route::post('/store_edit', [PinjamanController::class, 'store_edit'])->name('pinjaman.store_edit');
+        Route::post('/scanBarcode', [PinjamanController::class, 'scanBarcode'])->name('pinjaman.scanBarcode');
+        Route::get('/pinjaman_ajax', [PinjamanController::class, 'pinjaman_ajax'])->name('pinjaman.pinjaman_ajax');
+        Route::post('/scanBarcodeManual', [PinjamanController::class, 'scanBarcodeManual'])->name('pinjaman.scanBarcodeManual');
+        Route::delete('/destroy_id/{id}', [PinjamanController::class, 'destroy_id'])->name('pinjaman.destroy_id');
+        Route::post('/edit_buku', [PinjamanController::class, 'edit_buku'])->name('pinjaman.edit_buku');
+        Route::post('/update_jml/{id}', [PinjamanController::class, 'update_jml'])->name('pinjaman.update_jml');
+        Route::post('/post_update', [PinjamanController::class, 'post_update'])->name('pinjaman.post_update');
+        Route::get('/approve/{id}', [PinjamanController::class, 'approve'])->name('pinjaman.approve');
+        Route::get('export_pinjaman_buku', [PinjamanController::class, 'export_pinjaman_buku'])->name('pinjaman.export_pinjaman_buku');
     }
 );
 

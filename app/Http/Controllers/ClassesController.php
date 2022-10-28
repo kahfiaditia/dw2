@@ -7,6 +7,7 @@ use App\Models\Classes;
 use App\Models\School_class;
 use App\Models\School_level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -24,16 +25,19 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        $classes = Classes::orderBy('id', 'DESC')->get();
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'data Kelas',
-            'classes' => $classes
-        ];
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('31', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'data Kelas',
+            ];
 
-        return view('classes.index')->with($data);
+            return view('classes.index')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function list_classes(Request $request)
@@ -64,14 +68,19 @@ class ClassesController extends Controller
      */
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'tambah Kelas',
-            'jurusan' => School_level::all(),
-        ];
-        return view('classes.create')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('32', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'tambah Kelas',
+                'jurusan' => School_level::all(),
+            ];
+            return view('classes.create')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -82,25 +91,30 @@ class ClassesController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'jenjang' => 'required',
-        ]);
-        DB::beginTransaction();
-        try {
-            Classes::create([
-                'id_school_level' => $validated['jenjang'],
-                'jurusan' => $request->jurusan,
-                'class_id' => $request->kelas,
-                'type' => $request->type
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('32', $session_menu)) {
+            $validated = $request->validate([
+                'jenjang' => 'required',
             ]);
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('classes');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+            DB::beginTransaction();
+            try {
+                Classes::create([
+                    'id_school_level' => $validated['jenjang'],
+                    'jurusan' => $request->jurusan,
+                    'class_id' => $request->kelas,
+                    'type' => $request->type
+                ]);
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('classes');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -123,17 +137,22 @@ class ClassesController extends Controller
      */
     public function edit($id)
     {
-        $classes = Classes::findOrFail(Crypt::decryptString($id));
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'Ubah ' . $this->submenu,
-            'classes' => $classes,
-            'jurusan' => School_level::all(),
-            'kelas' => School_class::where('school_level_id', $classes->id_school_level)->get(),
-        ];
-        return view('classes.edit')->with($data);
+        $session_menu = explode(',', Auth::User()->akses_submenu);
+        if (in_array('33', $session_menu)) {
+            $classes = Classes::findOrFail(Crypt::decryptString($id));
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'Ubah ' . $this->submenu,
+                'classes' => $classes,
+                'jurusan' => School_level::all(),
+                'kelas' => School_class::where('school_level_id', $classes->id_school_level)->get(),
+            ];
+            return view('classes.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -145,25 +164,30 @@ class ClassesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $decrypted_id = Crypt::decryptString($id);
-        $validated = $request->validate([
-            'jenjang' => 'required',
-        ]);
-        DB::beginTransaction();
-        try {
-            $classes = Classes::findOrFail($decrypted_id);
-            $classes->id_school_level = $validated['jenjang'];
-            $classes->jurusan = $request->jurusan;
-            $classes->class_id = $request->kelas;
-            $classes->type = $request->type;
-            $classes->save();
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('classes');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::updateAlert(false);
-            return back();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('33', $session_menu)) {
+            $decrypted_id = Crypt::decryptString($id);
+            $validated = $request->validate([
+                'jenjang' => 'required',
+            ]);
+            DB::beginTransaction();
+            try {
+                $classes = Classes::findOrFail($decrypted_id);
+                $classes->id_school_level = $validated['jenjang'];
+                $classes->jurusan = $request->jurusan;
+                $classes->class_id = $request->kelas;
+                $classes->type = $request->type;
+                $classes->save();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('classes');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::updateAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -175,17 +199,22 @@ class ClassesController extends Controller
      */
     public function destroy($id)
     {
-        DB::beginTransaction();
-        try {
-            $delete = Classes::findOrFail(Crypt::decryptString($id));
-            $delete->delete();
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('34', $session_menu)) {
+            DB::beginTransaction();
+            try {
+                $delete = Classes::findOrFail(Crypt::decryptString($id));
+                $delete->delete();
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 

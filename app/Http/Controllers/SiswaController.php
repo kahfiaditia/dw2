@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StudentExport;
 use App\Models\Agama;
 use App\Models\Kebutuhan_khusus;
 use App\Models\Siswa;
@@ -20,9 +21,11 @@ use App\Models\Priodik_siswa;
 use App\Models\Prestasi;
 use App\Models\Setting;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class SiswaController extends Controller
 {
@@ -40,24 +43,87 @@ class SiswaController extends Controller
         ];
 
         if (Auth::user()->roles == 'Siswa') {
-            $students = Siswa::where('user_id', Auth::user()->id)->get();
+            $students = DB::table('siswa')
+                ->select(
+                    'siswa.id',
+                    'nis',
+                    'nisn',
+                    'nik',
+                    'nama_lengkap',
+                    'email',
+                )
+                ->selectRaw("CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) as kelas")
+                ->leftJoin('classes', 'classes.id', 'siswa.class_id')
+                ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
+                ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
+                ->where('siswa.user_id', Auth::user()->id)
+                ->whereNull('siswa.deleted_at');
         } else {
-            $students = Siswa::orderBy('id', 'DESC')->get();
+            $students = DB::table('siswa')
+                ->select(
+                    'siswa.id',
+                    'nis',
+                    'nisn',
+                    'nik',
+                    'nama_lengkap',
+                    'email',
+                )
+                ->selectRaw("CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) as kelas")
+                ->leftJoin('classes', 'classes.id', 'siswa.class_id')
+                ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
+                ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
+                ->whereNull('siswa.deleted_at');
+            if ($request->get('search') != null) {
+                $search = $request->get('search');
+                $students->where(function ($where) use ($search) {
+                    $where
+                        ->orWhere('nis', 'like', '%' . $search . '%')
+                        ->orWhere('nisn', 'like', '%' . $search . '%')
+                        ->orWhere('nik', 'like', '%' . $search . '%')
+                        ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%')
+                        ->orwhereRaw(
+                            "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                            '%' . $search . '%'
+                        );
+                });
+            } else {
+                if ($request->get('nis') != null) {
+                    $nis = $request->get('nis');
+                    $students->where('nis', '=', $nis);
+                }
+                if ($request->get('nisn') != null) {
+                    $nisn = $request->get('nisn');
+                    $students->where('nisn', '=', $nisn);
+                }
+                if ($request->get('nik') != null) {
+                    $nik = $request->get('nik');
+                    $students->where('nik', '=', $nik);
+                }
+                if ($request->get('nama') != null) {
+                    $nama = $request->get('nama');
+                    // $students->where('nama_lengkap', '=', $nama);
+                    $students->Where('nama_lengkap', 'like', '%' . $nama . '%');
+                }
+                if ($request->get('email') != null) {
+                    $email = $request->get('email');
+                    $students->where('email', '=', $email);
+                }
+                if ($request->get('kelas') != null) {
+                    $kelas = $request->get('kelas');
+                    $kelas = str_replace(' ', '', $kelas);
+                    $students->whereRaw(
+                        "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                        '%' . $kelas . '%'
+                    );
+                }
+            }
         }
 
         if ($request->ajax()) {
             return DataTables::of($students)
                 ->addIndexColumn()
-                ->addColumn('kelas', function ($students) {
-                    if ($students->classes_student) {
-                        return $students->classes_student->school_level->level . ' ' . $students->classes_student->school_class->classes . ' ' . $students->classes_student->jurusan . ' ' . $students->classes_student->type;
-                    } else {
-                        return null;
-                    }
-                })
-                ->addColumn('Opsi', function (Siswa $students) {
-                    return \view('siswa.button', compact('students'));
-                })
+                ->addColumn('Opsi', 'siswa.button')
                 ->rawColumns(['Opsi', 'status'])
                 ->make(true);
         } else {
@@ -95,7 +161,7 @@ class SiswaController extends Controller
             'nis' => 'required|unique:siswa',
             'nisn' => 'required|unique:siswa',
             'nik' => 'required|unique:siswa',
-            'no_kk' => 'required|unique:siswa',
+            'no_kk' => 'required',
             'nama_lengkap' => 'required',
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
@@ -151,7 +217,8 @@ class SiswaController extends Controller
                 'is_have_kip' => $request->is_have_kip,
                 'is_receive_kip' => $request->is_receive_kip,
                 'reason_reject_kip' => $request->reason_reject_kip,
-                'user_id' => Auth::user()->id
+                'user_id' => Auth::user()->id,
+                'user_created' => Auth::user()->id,
             ]);
             DB::commit();
             AlertHelper::addAlert(true);
@@ -283,7 +350,7 @@ class SiswaController extends Controller
             'nis' => "required|unique:siswa,nis,$id,id,deleted_at,NULL",
             'nisn' => "required|unique:siswa,nisn,$id,id,deleted_at,NULL",
             'nik' => "required|unique:siswa,nik,$id,id,deleted_at,NULL",
-            'no_kk' => "required|unique:siswa,no_kk,$id,id,deleted_at,NULL",
+            'no_kk' => "required",
             'nama_lengkap' => 'required',
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
@@ -340,6 +407,7 @@ class SiswaController extends Controller
             $student->is_have_kip = $request->is_have_kip;
             $student->is_receive_kip = $request->is_receive_kip;
             $student->reason_reject_kip = $request->reason_reject_kip;
+            $student->user_updated = Auth::user()->id;
             $student->save();
             DB::commit();
             AlertHelper::updateAlert(true);
@@ -356,8 +424,19 @@ class SiswaController extends Controller
     {
         DB::beginTransaction();
         try {
+            $date = Carbon::now();
+            // siswa
             $student = Siswa::findOrFail($id);
-            $student->delete();
+            $student->user_deleted = Auth::user()->id;
+            $student->deleted_at = $date;
+            $student->save();
+
+            // user
+            $user = User::findorfail($student->user_id);
+            $user->user_deleted = Auth::user()->id;
+            $user->deleted_at = $date;
+            $user->save();
+
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();
@@ -403,7 +482,6 @@ class SiswaController extends Controller
 
     public function add_parent_student($student_id, $data)
     {
-
         $student = Siswa::findOrFail(Crypt::decryptString($student_id));
 
         $data = [
@@ -953,13 +1031,13 @@ class SiswaController extends Controller
         try {
 
             $import = Excel::toArray(new StudentImport(), $request->file('student_csv'));
-            $classes = Classes::where('id', $import[0][0][4])->count();
-            $formulir = Payment::where('id', $import[0][0][5])->count();
-            $uang_pangkal = Payment::where('id', $import[0][0][6])->count();
-            $spp = Payment::where('id', $import[0][0][7])->count();
-            $kegiatan = Payment::where('id', $import[0][0][8])->count();
+            $classes = Classes::where('id', $import[0][0][5])->count();
+            $formulir = Payment::where('id', $import[0][0][6])->count();
+            $uang_pangkal = Payment::where('id', $import[0][0][7])->count();
+            $spp = Payment::where('id', $import[0][0][8])->count();
+            $kegiatan = Payment::where('id', $import[0][0][9])->count();
 
-            if ($classes + $formulir + $uang_pangkal + $spp + $kegiatan >= 5) {
+            if ($classes + $formulir + $uang_pangkal + $spp + $kegiatan >= 1) {
                 // proses import
                 Excel::import(new StudentImport, $request->file('student_csv'));
             } else {
@@ -1019,5 +1097,145 @@ class SiswaController extends Controller
             'code' => 200,
             'data' => $data,
         ]);
+    }
+
+    public function edit_pembayaran($id)
+    {
+        $student = Siswa::findOrFail(Crypt::decryptString($id));
+        $formulir = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Formulir')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $pangkal = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Pangkal')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $spp = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'SPP')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $kegiatan = DB::table('payment')
+            ->select(
+                'payment.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('bills', 'bills.id', 'payment.bills_id')
+            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+            ->where('bills.bills', '=', 'Uang Kegiatan')
+            ->whereNull('payment.deleted_at')
+            ->get();
+        $kelas = DB::table('classes')
+            ->select(
+                'classes.*',
+                'school_class.classes',
+                'school_level.level',
+            )
+            ->Join('school_level', 'school_level.id', 'classes.id_school_level')
+            ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
+            ->whereNull('classes.deleted_at')
+            ->get();
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'Pembayaran Siswa',
+            'label' => 'Edit Pembayaran Siswa',
+            'student' => $student,
+            'formulir' => $formulir,
+            'pangkal' => $pangkal,
+            'spp' => $spp,
+            'kegiatan' => $kegiatan,
+            'kelas' => $kelas,
+        ];
+
+        return view('siswa.edit_pembayaran')->with($data);
+    }
+
+    public function update_pembayaran(Request $request, $id)
+    {
+        $decrypted_id = Crypt::decryptString($id);
+        $cek_user = Siswa::findOrFail($decrypted_id);
+
+        $validated = $request->validate([
+            // 'formulir' => 'required',
+            // 'pangkal' => 'required',
+            // 'spp' => 'required',
+            // 'kegiatan' => 'required',
+            'kelas' => 'required',
+            'email' => 'required|email|unique:users,email,' . $cek_user->user_id,
+            'nis' => "required|unique:siswa,nis,$decrypted_id,id,deleted_at,NULL",
+            'nisn' => "required|unique:siswa,nisn,$decrypted_id,id,deleted_at,NULL",
+            'nik' => "required|unique:siswa,nik,$decrypted_id,id,deleted_at,NULL",
+        ]);
+        DB::beginTransaction();
+        try {
+            $siswa = Siswa::findOrFail($decrypted_id);
+            $siswa->formulir_id = $request->formulir;
+            $siswa->pangkal_id = $request->pangkal;
+            $siswa->spp_id = $request->spp;
+            $siswa->kegiatan_id = $request->kegiatan;
+            $siswa->class_id = $validated['kelas'];
+            $siswa->email = strtolower($request->email);
+            $siswa->nis = $validated['nis'];
+            $siswa->nisn = $validated['nisn'];
+            $siswa->nik = $validated['nik'];
+            $siswa->user_updated = Auth::user()->id;
+            $siswa->save();
+
+            $user_id = $request->user_id;
+            $user = User::findOrFail($user_id);
+            $user->email = strtolower($request->email);
+            $user->user_updated = Auth::user()->id;
+            $user->save();
+
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('siswa');
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::updateAlert(false);
+            return back();
+        }
+    }
+
+    public function export_siswa(Request $request)
+    {
+        $data = [
+            'nis' => $request->nis,
+            'nisn' => $request->nisn,
+            'nik' => $request->nik,
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'kelas' => $request->kelas,
+            'search' => $request->search,
+            'like' => $request->like,
+        ];
+        return Excel::download(new StudentExport($data), 'siswa.xlsx');
     }
 }

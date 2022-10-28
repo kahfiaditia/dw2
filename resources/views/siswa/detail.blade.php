@@ -84,12 +84,23 @@
                                 <div class="tab-content" id="v-pills-tabContent">
                                     <div class="tab-pane fade show active" id="v-pills-data" role="tabpanel"
                                         aria-labelledby="v-pills-data-tab">
+
+                                        <div class="row task-dates">
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Barcode</h5>
+                                                    <p class="text-muted">
+                                                        {!! DNS1D::getBarcodeHTML($student->nis, 'C128') !!}
+                                                        {{ $student->nis }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row task-dates">
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">NIS (No Induk Sekolah)</h5>
-                                                    <p class="text-muted mb-0 input-mask"
-                                                        data-inputmask="'mask': 'AA-99-99999'">{{ $student->nis }}</p>
+                                                    <p class="text-muted">{{ $student->nis }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
@@ -120,7 +131,12 @@
                                                     <h5 class="font-size-14">Kelas</h5>
                                                     <p class="text-muted mb-0">
                                                         @if ($student->classes_student)
-                                                            {{ $student->classes_student->school_level->level . ' ' . $student->classes_student->school_class->classes . ' ' . $student->classes_student->jurusan . '.' . $student->classes_student->type }}
+                                                            @if ($student->classes_student->school_class)
+                                                                <?php $class = $student->classes_student->school_class->classes; ?>
+                                                            @else
+                                                                <?php $class = ''; ?>
+                                                            @endif
+                                                            {{ $student->classes_student->school_level->level . ' ' . $class . ' ' . $student->classes_student->jurusan . '.' . $student->classes_student->type }}
                                                         @else
                                                             -
                                                         @endif

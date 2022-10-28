@@ -110,7 +110,7 @@
                                                 <div class="input-group">
                                                     <input type="number" class="form-control" name="diskon_persentase"
                                                         maxlength="3" min="0" max="100" step="0.1"
-                                                        placeholder="Diskon Persentasi"
+                                                        id="diskon_persentase" placeholder="Diskon Persentasi"
                                                         value="{{ $diskon->diskon_persentase }}">
                                                     <span class="input-group-text"><b>%</b></span>
                                                     <div class="invalid-feedback">
@@ -146,9 +146,13 @@
                 if (type_diskon == 1) {
                     document.getElementById("jml_bln_byr").required = true;
                     document.getElementById("jml_bln_byr").readOnly = false;
+                    document.getElementById("diskon_persentase").required = true;
+                    document.getElementById("diskon_persentase").readOnly = false;
                 } else {
                     document.getElementById("jml_bln_byr").required = false;
                     document.getElementById("jml_bln_byr").readOnly = true;
+                    document.getElementById("diskon_persentase").required = false;
+                    document.getElementById("diskon_persentase").readOnly = true;
                 }
             });
         });
@@ -157,9 +161,13 @@
         if (type_diskon == 1) {
             document.getElementById("jml_bln_byr").required = true;
             document.getElementById("jml_bln_byr").readOnly = false;
+            document.getElementById("diskon_persentase").required = true;
+            document.getElementById("diskon_persentase").readOnly = false;
         } else {
             document.getElementById("jml_bln_byr").required = false;
             document.getElementById("jml_bln_byr").readOnly = true;
+            document.getElementById("diskon_persentase").required = false;
+            document.getElementById("diskon_persentase").readOnly = true;
         }
     </script>
 @endsection

@@ -25,7 +25,7 @@
                                     <div class="col-md-6 form-group">
                                         <label for="">Tagihan <code>*</code></label>
                                         <input type="text" class="form-control" name="bills" placeholder="Tagihan"
-                                            required value="{{ old('bills') }}">
+                                            autofocus required value="{{ old('bills') }}">
                                         <div class="invalid-feedback">
                                             Data wajib diisi.
                                         </div>

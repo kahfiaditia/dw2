@@ -103,14 +103,14 @@
                                 <div class="row">
                                     <div class="col-md-6" id="kelas_class">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Kelas
+                                            <label for="validationCustom02" class="form-label">Jenjang Pendidikan
                                                 <code>*</code></label>
-                                            <select class="form-control select select2" name="id_school_level"
+                                            <select class="form-control select select2" name="id_school_level" disabled
                                                 id="id_school_level">
                                                 <option value="">--Pilih Kelas--</option>
                                                 @foreach ($school_level as $itm)
                                                     <option value="{{ $itm->id }}"
-                                                        {{ $itm->id === $akun->id_school_level ? 'selected' : '' }}>
+                                                        {{ $itm->id == $akun->id_school_level ? 'selected' : '' }}>
                                                         {{ $itm->level }}</option>
                                                 @endforeach
                                             </select>
@@ -119,13 +119,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6" {{ Auth::user()->roles === 'Admin' ? '' : 'hidden' }}>
+                                    <div class="col-md-6"
+                                        {{ Auth::user()->roles == 'Admin' or (Auth::user()->roles == 'Administrator' ? '' : 'hidden') }}>
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Status Aktif
                                                 <code>*</code></label>
                                             <div>
                                                 <input type="checkbox" id="switch1" switch="none" name="aktif"
-                                                    {{ $akun->aktif === '1' ? 'checked' : '' }} />
+                                                    {{ $akun->aktif == '1' ? 'checked' : '' }} />
                                                 <label for="switch1" data-on-label="On" data-off-label="Off"></label>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
@@ -136,11 +137,11 @@
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
-                                        @if (Auth::user()->roles === 'Admin')
+                                        @if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator')
                                             <a href="{{ route('akun.index') }}"
                                                 class="btn btn-secondary waves-effect">Batal</a>
                                         @else
-                                            <a href="{{ URL::previous() }}"
+                                            <a href="{{ route('dashboard') }}"
                                                 class="btn btn-secondary waves-effect">Batal</a>
                                         @endif
                                         <button class="btn btn-primary" type="submit" style="float: right"

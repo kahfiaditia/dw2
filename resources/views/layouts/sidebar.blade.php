@@ -21,6 +21,7 @@
                     <?php $sub_menu = DB::table('submenu')
                         ->select('*')
                         ->where('menu_id', $item->id)
+                        ->where('display_submenu', 1)
                         ->where('type_menu', 'view')
                         ->orderby('order_submenu', 'ASC')
                         ->get(); ?>

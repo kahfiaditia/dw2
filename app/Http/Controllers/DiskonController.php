@@ -35,7 +35,7 @@ class DiskonController extends Controller
 
     public function list_diskon(Request $request)
     {
-        $diskon = Diskon::orderBy('id', 'DESC');
+        $diskon = Diskon::select(['*']);
         return DataTables::of($diskon)
             ->addColumn('type_diskon', function ($model) {
                 $model->type_diskon ? $flag = 'success' : $flag = 'info';

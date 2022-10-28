@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EmployeeExport;
 use App\Helper\AlertHelper;
 use App\Models\Anak_karyawan;
 use App\Models\Anak_karyawan_sekolah_dw;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class EmployeeController extends Controller
@@ -36,28 +38,100 @@ class EmployeeController extends Controller
         ];
 
         if (Auth::user()->roles !== 'Admin' and Auth::user()->roles !== 'Administrator') {
-            $employee = Employee::where('user_id', Auth::user()->id)->orderBy("nama_lengkap", 'ASC')->get();
+            $employee = DB::table('karyawan')
+                ->select(
+                    'karyawan.id',
+                    'nama_lengkap',
+                    'email',
+                    'nik',
+                    'npwp',
+                    'no_hp',
+                    'jabatan',
+                    'karyawan.aktif',
+                )
+                ->Join('users', 'users.id', 'karyawan.user_id')
+                ->where('karyawan.user_id', Auth::user()->id)
+                ->whereNull('karyawan.deleted_at');
         } else {
-            $employee = Employee::all()->sortBy("nama_lengkap");
+            $employee = DB::table('karyawan')
+                ->select(
+                    'karyawan.id',
+                    'nama_lengkap',
+                    'email',
+                    'nik',
+                    'npwp',
+                    'no_hp',
+                    'jabatan',
+                    'karyawan.aktif',
+                )
+                ->Join('users', 'users.id', 'karyawan.user_id')
+                ->whereNull('karyawan.deleted_at');
+            if ($request->get('search') != null) {
+                $search = $request->get('search');
+                $employee->where(function ($where) use ($search) {
+                    if ($search) {
+                        if (strtolower($search) == 'aktif') {
+                            $status = 1;
+                            $where->orWhere('karyawan.aktif', '=', $status);
+                        } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
+                            $status = 0;
+                            $where->orWhere('karyawan.aktif', '=', $status);
+                        }
+                    }
+                    $where
+                        ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%')
+                        ->orWhere('nik', 'like', '%' . $search . '%')
+                        ->orWhere('npwp', 'like', '%' . $search . '%')
+                        ->orWhere('no_hp', 'like', '%' . $search . '%')
+                        ->orWhere('jabatan', 'like', '%' . $search . '%');
+                });
+            } else {
+                if ($request->get('nama') != null) {
+                    $nama = $request->get('nama');
+                    // $employee->where('nama_lengkap', '=', $nama);
+                    $employee->Where('nama_lengkap', 'like', '%' . $nama . '%');
+                }
+                if ($request->get('email') != null) {
+                    $email = $request->get('email');
+                    $employee->where('email', '=', $email);
+                }
+                if ($request->get('nik') != null) {
+                    $nik = $request->get('nik');
+                    $employee->where('nik', '=', $nik);
+                }
+                if ($request->get('npwp') != null) {
+                    $npwp = $request->get('npwp');
+                    $employee->where('npwp', '=', $npwp);
+                }
+                if ($request->get('kontak') != null) {
+                    $kontak = $request->get('kontak');
+                    $employee->where('no_hp', '=', $kontak);
+                }
+                if ($request->get('jabatan') != null) {
+                    $jabatan = $request->get('jabatan');
+                    $employee->where('jabatan', '=', $jabatan);
+                }
+                if ($request->get('stat') != null) {
+                    $stat = $request->get('stat');
+                    if (strtolower($stat) == 'aktif') {
+                        $stat = 1;
+                    } else {
+                        $stat = 0;
+                    }
+                    $employee->where('karyawan.aktif', '=', $stat);
+                }
+            }
         }
 
         if ($request->ajax()) {
             return DataTables::of($employee)
                 ->addIndexColumn()
-                ->addColumn('email', function ($employee) {
-                    return $employee->user->email;
-                })
-                ->addColumn('Opsi', function (Employee $employee) {
-                    return \view('employee._form', compact('employee'));
-                })
+                ->addColumn('Opsi', 'employee._form')
                 ->addColumn('status', function ($employee) {
                     $employee->aktif === '1' ? $flag = 'success' : $flag = 'danger';
                     $employee->aktif === '1' ? $status = 'Aktif' : $status = 'Non Aktif';
                     return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
-                })
-                ->editColumn('created_at', function ($employee) {
-                    $formatedDate = Carbon::createFromFormat('Y-m-d H:i:s', $employee->created_at)->format('d-m-Y');
-                    return $formatedDate;
                 })
                 ->rawColumns(['Opsi', 'status'])
                 ->make(true);
@@ -172,6 +246,7 @@ class EmployeeController extends Controller
             $employee->masuk_kerja = $request->masuk_kerja;
             $employee->aktif = '1';
             $employee->user_id = $request->user_id;
+            $employee->user_created = Auth::user()->id;
             $employee->save();
             $last_id = $employee->id;
 
@@ -246,6 +321,12 @@ class EmployeeController extends Controller
         try {
             $employee = Employee::findorfail($id);
             $employee->nama_lengkap = $request->nama_lengkap;
+            if ($request->nama_lengkap_old != $request->nama_lengkap) {
+                $user = User::findorfail($employee->user_id);
+                $user->name = $request->nama_lengkap;
+                $user->user_updated = Auth::user()->id;
+                $user->save();
+            }
             $employee->no_hp = $request->no_hp;
             $employee->tempat_lahir = $request->tempat_lahir;
             $employee->tgl_lahir = $request->tgl_lahir;
@@ -326,9 +407,11 @@ class EmployeeController extends Controller
             if ($request->aktif_old != $aktif) {
                 $user = User::findorfail($employee->user_id);
                 $user->aktif = $aktif;
+                $user->user_updated = Auth::user()->id;
                 $user->save();
             }
             $employee->aktif = $aktif;
+            $employee->user_updated = Auth::user()->id;
             $employee->save();
 
             // update avatar untuk chat 
@@ -348,9 +431,20 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee, $id)
     {
+        $date = Carbon::now();
         $employee_id = Crypt::decryptString($id);
+        // karyawan
         $employee = Employee::findOrFail($employee_id);
-        $employee->delete();
+        $employee->user_deleted = Auth::user()->id;
+        $employee->deleted_at = $date;
+        $employee->save();
+
+        // user
+        $user = User::findorfail($employee->user_id);
+        $user->user_deleted = Auth::user()->id;
+        $user->deleted_at = $date;
+        $user->save();
+
         AlertHelper::deleteAlert(true);
         return back();
     }
@@ -1173,5 +1267,29 @@ class EmployeeController extends Controller
             'code_kontak' => $code_kontak,
             'message' => $message,
         ]);
+    }
+
+    public function export_employee(Request $request)
+    {
+        $data = [
+            'like' => $request->like,
+            'search' => $request->search,
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'nik' => $request->nik,
+            'npwp' => $request->npwp,
+            'kontak' => $request->kontak,
+            'jabatan' => $request->jabatan,
+            'stat' => $request->stat,
+        ];
+        return Excel::download(new EmployeeExport($data), 'karyawan.xlsx');
+    }
+
+    public function dropdown_karyawan(Request $request)
+    {
+        if ($request->value_peminjam) {
+            $employee = Employee::select('*')->where('jabatan', $request->value_peminjam)->where('aktif', '1')->wherenull('deleted_at')->get();
+            return $employee;
+        }
     }
 }
