@@ -150,14 +150,29 @@
                 },
                 success: response => {
                     $.each(response.data, function(i, item) {
+                        if (item.level) {
+                            level = item.level;
+                        } else {
+                            level = '';
+                        }
+                        if (item.classes) {
+                            classes = item.classes;
+                        } else {
+                            classes = '';
+                        }
                         if (item.jurusan) {
                             jurusan = item.jurusan;
                         } else {
                             jurusan = '';
                         }
+                        if (item.type) {
+                            type = item.type;
+                        } else {
+                            type = '';
+                        }
 
                         $('.classes').append(
-                            `<option value="${item.id}">${item.level+' '+item.classes+' '+jurusan+' '+item.type}</option>`
+                            `<option value="${item.id}">${level+' '+classes+' '+jurusan+' '+type}</option>`
                         )
                     })
                 },

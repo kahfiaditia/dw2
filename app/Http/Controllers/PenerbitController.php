@@ -21,15 +21,15 @@ class PenerbitController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'penerbit',
-            'label' => 'data penerbit',
-            'lists' => Penerbit::orderBy('id', 'ASC')->get()
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('66', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'penerbit',
+                'label' => 'data penerbit',
+                'lists' => Penerbit::orderBy('id', 'ASC')->get()
+            ];
             return view('penerbit.list_penerbit')->with($data);
         } else {
             return view('not_found');
@@ -43,14 +43,14 @@ class PenerbitController extends Controller
      */
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'penerbit',
-            'label' => 'tambah penerbit',
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('67', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'penerbit',
+                'label' => 'tambah penerbit',
+            ];
             return view('penerbit.add_penerbit')->with($data);
         } else {
             return view('not_found');
@@ -65,23 +65,28 @@ class PenerbitController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_penerbit' => 'required|unique:perpus_penerbit,nama_penerbit,NULL,id,deleted_at,NULL|max:64',
-        ]);
-        DB::beginTransaction();
-        try {
-            $penerbit = new Penerbit();
-            $penerbit->nama_penerbit = $request['nama_penerbit'];
-            $penerbit->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('67', $session_menu)) {
+            $request->validate([
+                'nama_penerbit' => 'required|unique:perpus_penerbit,nama_penerbit,NULL,id,deleted_at,NULL|max:64',
+            ]);
+            DB::beginTransaction();
+            try {
+                $penerbit = new Penerbit();
+                $penerbit->nama_penerbit = $request['nama_penerbit'];
+                $penerbit->save();
 
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('penerbit');
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('penerbit');
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -104,16 +109,16 @@ class PenerbitController extends Controller
      */
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'penerbit',
-            'label' => 'ubah penerbit',
-            'penerbit' => Penerbit::findorfail($id_decrypted)
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('68', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'penerbit',
+                'label' => 'ubah penerbit',
+                'penerbit' => Penerbit::findorfail($id_decrypted)
+            ];
             return view('penerbit.edit_penerbit')->with($data);
         } else {
             return view('not_found');
@@ -129,23 +134,28 @@ class PenerbitController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id = Crypt::decryptString($id);
-        $request->validate([
-            'nama_penerbit' => "required|max:64|unique:perpus_penerbit,nama_penerbit,$id,id,deleted_at,NULL",
-        ]);
-        DB::beginTransaction();
-        try {
-            $penerbit = Penerbit::findOrFail($id);
-            $penerbit->nama_penerbit = $request['nama_penerbit'];
-            $penerbit->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('68', $session_menu)) {
+            $id = Crypt::decryptString($id);
+            $request->validate([
+                'nama_penerbit' => "required|max:64|unique:perpus_penerbit,nama_penerbit,$id,id,deleted_at,NULL",
+            ]);
+            DB::beginTransaction();
+            try {
+                $penerbit = Penerbit::findOrFail($id);
+                $penerbit->nama_penerbit = $request['nama_penerbit'];
+                $penerbit->save();
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('penerbit');
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            return back();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('penerbit');
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 

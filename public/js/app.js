@@ -5833,7 +5833,7 @@ var render = function render() {
   }, [_vm.message.length > 0 ? _c("div", _vm._l(_vm.message, function (item) {
     return _c("div", {
       key: item.id
-    }, [item.user.id != _vm.userId ? _c("li", [_c("div", {
+    }, [item.user_encrypt != _vm.userId ? _c("li", [_c("div", {
       staticClass: "conversation-list"
     }, [_c("div", {
       staticClass: "dropdown"
@@ -5845,7 +5845,7 @@ var render = function render() {
       staticClass: "chat-time mb-0"
     }, [_c("i", {
       staticClass: "bx bx-time-five align-middle me-1"
-    }), _vm._v("\n                      " + _vm._s(new Date(item.created_at).toLocaleString("en-GB")) + "\n                    ")])])])]) : item.user.id == _vm.userId ? _c("li", {
+    }), _vm._v("\n                      " + _vm._s(new Date(item.created_at).toLocaleString("en-GB")) + "\n                    ")])])])]) : item.user_encrypt == _vm.userId ? _c("li", {
       staticClass: "right"
     }, [_c("div", {
       staticClass: "conversation-list"

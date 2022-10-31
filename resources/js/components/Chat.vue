@@ -29,7 +29,7 @@
           >
             <div v-if="message.length > 0">
               <div v-for="item in message" :key="item.id">
-                <li v-if="item.user.id != userId">
+                <li v-if="item.user_encrypt != userId">
                   <div class="conversation-list">
                     <div class="dropdown"></div>
                     <div class="ctext-wrap">
@@ -44,7 +44,7 @@
                     </div>
                   </div>
                 </li>
-                <li v-else-if="item.user.id == userId" class="right">
+                <li v-else-if="item.user_encrypt == userId" class="right">
                   <div class="conversation-list">
                     <div class="dropdown">
                       <a

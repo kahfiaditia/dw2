@@ -27,13 +27,18 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'data ' . $this->submenu,
-        ];
-        return view('payment.index')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('39', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'data ' . $this->submenu,
+            ];
+            return view('payment.index')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function list_payment(Request $request)
@@ -67,15 +72,20 @@ class PaymentController extends Controller
      */
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'tambah ' . $this->submenu,
-            'classes' => School_level::all(),
-            'bills' => Bills::orderByRaw("FIELD(bills, 'SPP', 'Uang Kegiatan', 'Uang Pangkal', 'Uang Formulir')")->get(),
-        ];
-        return view('payment.create')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('40', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'tambah ' . $this->submenu,
+                'classes' => School_level::all(),
+                'bills' => Bills::orderByRaw("FIELD(bills, 'SPP', 'Uang Kegiatan', 'Uang Pangkal', 'Uang Formulir')")->get(),
+            ];
+            return view('payment.create')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -86,40 +96,45 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'tahun' => 'required',
-            'school_level_id' => 'required',
-            'bills_id' => 'required',
-            'amount' => 'required',
-        ]);
-        DB::beginTransaction();
-        try {
-            $cek = Payment::where('year', $request->tahun)
-                ->where('school_level_id', $request->school_level_id)
-                ->where('school_class_id', $request->class_id)
-                ->where('bills_id', $request->bills_id)
-                ->count();
-            if ($cek > 0) {
-                AlertHelper::addDuplicate(false);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('40', $session_menu)) {
+            $validated = $request->validate([
+                'tahun' => 'required',
+                'school_level_id' => 'required',
+                'bills_id' => 'required',
+                'amount' => 'required',
+            ]);
+            DB::beginTransaction();
+            try {
+                $cek = Payment::where('year', $request->tahun)
+                    ->where('school_level_id', $request->school_level_id)
+                    ->where('school_class_id', $request->class_id)
+                    ->where('bills_id', $request->bills_id)
+                    ->count();
+                if ($cek > 0) {
+                    AlertHelper::addDuplicate(false);
+                    return back();
+                }
+                Payment::create([
+                    'year' => $validated['tahun'],
+                    'year_end' => $validated['tahun'] + 1,
+                    'school_level_id' => $validated['school_level_id'],
+                    'school_class_id' => $request->class_id,
+                    'bills_id' => $validated['bills_id'],
+                    'amount' => str_replace(".", "", $validated['amount']),
+                    'user_created' => Auth::user()->id,
+                ]);
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('payment');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                AlertHelper::addAlert(false);
                 return back();
             }
-            Payment::create([
-                'year' => $validated['tahun'],
-                'year_end' => $validated['tahun'] + 1,
-                'school_level_id' => $validated['school_level_id'],
-                'school_class_id' => $request->class_id,
-                'bills_id' => $validated['bills_id'],
-                'amount' => str_replace(".", "", $validated['amount']),
-                'user_created' => Auth::user()->id,
-            ]);
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('payment');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+        } else {
+            return view('not_found');
         }
     }
 
@@ -142,18 +157,23 @@ class PaymentController extends Controller
      */
     public function edit($id)
     {
-        $payment = Payment::findOrFail(Crypt::decryptString($id));
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'Ubah ' . $this->submenu,
-            'classes' => School_level::all(),
-            'kelas' => School_class::where('school_level_id', $payment->school_level_id)->get(),
-            'bills' => Bills::orderByRaw("FIELD(bills, 'SPP', 'Uang Kegiatan', 'Uang Pangkal', 'Uang Formulir')")->get(),
-            'payment' => $payment,
-        ];
-        return view('payment.edit')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('41', $session_menu)) {
+            $payment = Payment::findOrFail(Crypt::decryptString($id));
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'Ubah ' . $this->submenu,
+                'classes' => School_level::all(),
+                'kelas' => School_class::where('school_level_id', $payment->school_level_id)->get(),
+                'bills' => Bills::orderByRaw("FIELD(bills, 'SPP', 'Uang Kegiatan', 'Uang Pangkal', 'Uang Formulir')")->get(),
+                'payment' => $payment,
+            ];
+            return view('payment.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -165,31 +185,36 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $decrypted_id = Crypt::decryptString($id);
-        $validated = $request->validate([
-            'tahun' => 'required',
-            'school_level_id' => 'required',
-            'bills_id' => 'required',
-            'amount' => 'required',
-        ]);
-        DB::beginTransaction();
-        try {
-            $payment = Payment::findOrFail($decrypted_id);
-            $payment->year = $validated['tahun'];
-            $payment->year_end = $validated['tahun'] + 1;
-            $payment->school_level_id = $validated['school_level_id'];
-            $payment->school_class_id = $request->class_id;
-            $payment->bills_id = $validated['bills_id'];
-            $payment->amount = str_replace(".", "", $validated['amount']);
-            $payment->user_updated = Auth::user()->id;
-            $payment->save();
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('payment');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::updateAlert(false);
-            return back();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('41', $session_menu)) {
+            $decrypted_id = Crypt::decryptString($id);
+            $validated = $request->validate([
+                'tahun' => 'required',
+                'school_level_id' => 'required',
+                'bills_id' => 'required',
+                'amount' => 'required',
+            ]);
+            DB::beginTransaction();
+            try {
+                $payment = Payment::findOrFail($decrypted_id);
+                $payment->year = $validated['tahun'];
+                $payment->year_end = $validated['tahun'] + 1;
+                $payment->school_level_id = $validated['school_level_id'];
+                $payment->school_class_id = $request->class_id;
+                $payment->bills_id = $validated['bills_id'];
+                $payment->amount = str_replace(".", "", $validated['amount']);
+                $payment->user_updated = Auth::user()->id;
+                $payment->save();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('payment');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::updateAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -201,19 +226,24 @@ class PaymentController extends Controller
      */
     public function destroy($id)
     {
-        DB::beginTransaction();
-        try {
-            $delete = Payment::findOrFail(Crypt::decryptString($id));
-            $delete->user_deleted = Auth::user()->id;
-            $delete->deleted_at = Carbon::now();
-            $delete->save();
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('42', $session_menu)) {
+            DB::beginTransaction();
+            try {
+                $delete = Payment::findOrFail(Crypt::decryptString($id));
+                $delete->user_deleted = Auth::user()->id;
+                $delete->deleted_at = Carbon::now();
+                $delete->save();
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 

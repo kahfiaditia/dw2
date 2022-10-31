@@ -8,6 +8,7 @@ use App\Models\Chat_message;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
@@ -19,26 +20,30 @@ class ChatController extends Controller
 
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'data Tagihan',
-        ];
-
-        return view('chat.index')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('57', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'data Tagihan',
+            ];
+            return view('chat.index')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     // API
     public function contact($userOne)
     {
         $userOne = Crypt::decryptString($userOne);
-        $data = User::with('employee')->where('aktif', 1)->where('id', '!=', $userOne)
+        $data = User::with('employee')->where('aktif', 1)->whereNull('email_verified_at')->where('id', '!=', $userOne)
             ->where(function ($q) {
                 $q->where('roles', 'Admin')
                     ->orWhere('roles', 'Karyawan')
                     ->orWhere('roles', 'Tu')
-                    ->orWhere('roles', 'Siswa')
+                    // ->orWhere('roles', 'Siswa')
                     ->orWhere('roles', 'Administrator');
             })->orderBy('name', 'ASC')->get();
         return response()->json($data);
@@ -91,11 +96,12 @@ class ChatController extends Controller
 
         DB::beginTransaction();
         try {
-            $me = Crypt::decryptString($me);
+            $me_decrypt = Crypt::decryptString($me);
             $message = Chat_message::create([
                 'conversations_id' => $conversations_id,
                 'body' => $request->body,
-                'user_id' => $me,
+                'user_id' => $me_decrypt,
+                'user_encrypt' => $me,
             ]);
 
             Chat_converstations::where("id", $conversations_id)

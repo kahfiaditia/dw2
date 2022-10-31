@@ -26,13 +26,18 @@ class PrestasiController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'data ' . $this->submenu,
-        ];
-        return view('prestasi.index')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('52', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'data ' . $this->submenu,
+            ];
+            return view('prestasi.index')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function list_prestasi(Request $request)
@@ -60,14 +65,19 @@ class PrestasiController extends Controller
      */
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'tambah ' . $this->submenu,
-            'diskon' => Diskon::where('type_diskon', 0)->get()
-        ];
-        return view('prestasi.create')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('53', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'tambah ' . $this->submenu,
+                'diskon' => Diskon::where('type_diskon', 0)->get()
+            ];
+            return view('prestasi.create')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -78,42 +88,47 @@ class PrestasiController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'diskon' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
-        ]);
-        if ($request->nis == '' and $request->siswa == '') {
-            AlertHelper::alertDinamis(false, 'Siswa wajib dipilih');
-            return back();
-        } else if ($request->nis == '' and $request->siswa != '') {
-            $siswa_id = $request->siswa;
-        } else {
-            $siswa = Siswa::where('nis', str_replace("-", "", $request->nis))->firstorfail();
-            if ($siswa) {
-                $siswa_id = $siswa->id;
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('53', $session_menu)) {
+            $validated = $request->validate([
+                'diskon' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+            ]);
+            if ($request->nis == '' and $request->siswa == '') {
+                AlertHelper::alertDinamis(false, 'Siswa wajib dipilih');
+                return back();
+            } else if ($request->nis == '' and $request->siswa != '') {
+                $siswa_id = $request->siswa;
             } else {
-                AlertHelper::alertDinamis(false, 'Siswa tidak terdaftar');
+                $siswa = Siswa::where('nis', str_replace("-", "", $request->nis))->firstorfail();
+                if ($siswa) {
+                    $siswa_id = $siswa->id;
+                } else {
+                    AlertHelper::alertDinamis(false, 'Siswa tidak terdaftar');
+                    return back();
+                }
+            }
+            DB::beginTransaction();
+            try {
+                Diskon_prestasi::create([
+                    'siswa_id' => $siswa_id,
+                    'diskon_id' => $validated['diskon'],
+                    'start_date' => $validated['start_date'],
+                    'end_date' => $validated['end_date'],
+                    'user_created' => Auth::user()->id,
+                ]);
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('prestasi');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                AlertHelper::addAlert(false);
                 return back();
             }
-        }
-        DB::beginTransaction();
-        try {
-            Diskon_prestasi::create([
-                'siswa_id' => $siswa_id,
-                'diskon_id' => $validated['diskon'],
-                'start_date' => $validated['start_date'],
-                'end_date' => $validated['end_date'],
-                'user_created' => Auth::user()->id,
-            ]);
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('prestasi');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+        } else {
+            return view('not_found');
         }
     }
 
@@ -136,16 +151,21 @@ class PrestasiController extends Controller
      */
     public function edit($id)
     {
-        $prestasi = Diskon_prestasi::findOrFail(Crypt::decryptString($id));
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'Ubah ' . $this->submenu,
-            'prestasi' => $prestasi,
-            'diskon' => Diskon::where('type_diskon', 0)->get()
-        ];
-        return view('prestasi.edit')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('54', $session_menu)) {
+            $prestasi = Diskon_prestasi::findOrFail(Crypt::decryptString($id));
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'Ubah ' . $this->submenu,
+                'prestasi' => $prestasi,
+                'diskon' => Diskon::where('type_diskon', 0)->get()
+            ];
+            return view('prestasi.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -157,42 +177,47 @@ class PrestasiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $decrypted_id = Crypt::decryptString($id);
-        $validated = $request->validate([
-            'diskon' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
-        ]);
-        if ($request->nis == '' and $request->siswa == '') {
-            AlertHelper::alertDinamis(false, 'Siswa wajib dipilih');
-            return back();
-        } else if ($request->nis == '' and $request->siswa != '') {
-            $siswa_id = $request->siswa;
-        } else {
-            $siswa = Siswa::where('nis', str_replace("-", "", $request->nis))->firstorfail();
-            if ($siswa) {
-                $siswa_id = $siswa->id;
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('54', $session_menu)) {
+            $decrypted_id = Crypt::decryptString($id);
+            $validated = $request->validate([
+                'diskon' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+            ]);
+            if ($request->nis == '' and $request->siswa == '') {
+                AlertHelper::alertDinamis(false, 'Siswa wajib dipilih');
+                return back();
+            } else if ($request->nis == '' and $request->siswa != '') {
+                $siswa_id = $request->siswa;
             } else {
-                AlertHelper::alertDinamis(false, 'Siswa tidak terdaftar');
+                $siswa = Siswa::where('nis', str_replace("-", "", $request->nis))->firstorfail();
+                if ($siswa) {
+                    $siswa_id = $siswa->id;
+                } else {
+                    AlertHelper::alertDinamis(false, 'Siswa tidak terdaftar');
+                    return back();
+                }
+            }
+            DB::beginTransaction();
+            try {
+                $prestasi = Diskon_prestasi::findOrFail($decrypted_id);
+                $prestasi->siswa_id = $siswa_id;
+                $prestasi->diskon_id = $validated['diskon'];
+                $prestasi->start_date = $validated['start_date'];
+                $prestasi->end_date = $validated['end_date'];
+                $prestasi->user_updated = Auth::user()->id;
+                $prestasi->save();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('prestasi');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::updateAlert(false);
                 return back();
             }
-        }
-        DB::beginTransaction();
-        try {
-            $prestasi = Diskon_prestasi::findOrFail($decrypted_id);
-            $prestasi->siswa_id = $siswa_id;
-            $prestasi->diskon_id = $validated['diskon'];
-            $prestasi->start_date = $validated['start_date'];
-            $prestasi->end_date = $validated['end_date'];
-            $prestasi->user_updated = Auth::user()->id;
-            $prestasi->save();
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('prestasi');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::updateAlert(false);
-            return back();
+        } else {
+            return view('not_found');
         }
     }
 
@@ -204,19 +229,24 @@ class PrestasiController extends Controller
      */
     public function destroy($id)
     {
-        DB::beginTransaction();
-        try {
-            $delete = Diskon_prestasi::findOrFail(Crypt::decryptString($id));
-            $delete->user_deleted = Auth::user()->id;
-            $delete->deleted_at = Carbon::now();
-            $delete->save();
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('55', $session_menu)) {
+            DB::beginTransaction();
+            try {
+                $delete = Diskon_prestasi::findOrFail(Crypt::decryptString($id));
+                $delete->user_deleted = Auth::user()->id;
+                $delete->deleted_at = Carbon::now();
+                $delete->save();
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 }

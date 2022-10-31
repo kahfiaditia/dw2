@@ -24,13 +24,18 @@ class DiskonController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'data ' . $this->submenu,
-        ];
-        return view('diskon.index')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('48', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'data ' . $this->submenu,
+            ];
+            return view('diskon.index')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function list_diskon(Request $request)
@@ -83,13 +88,18 @@ class DiskonController extends Controller
      */
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'tambah ' . $this->submenu,
-        ];
-        return view('diskon.create')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('49', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'tambah ' . $this->submenu,
+            ];
+            return view('diskon.create')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -100,38 +110,43 @@ class DiskonController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'type_diskon' => 'required',
-            'diskon' => 'required',
-            'keterangan' => 'required',
-            'jml_bln_byr' => 'max:3',
-            'diskon_bln' => 'max:3',
-            'diskon_persentase' => 'max:3',
-        ]);
-        DB::beginTransaction();
-        try {
-            if ($validated['type_diskon'] == 0) {
-                $jml_bln_byr = null;
-            } else {
-                $jml_bln_byr = $validated['jml_bln_byr'];
-            }
-            Diskon::create([
-                'diskon' => $validated['diskon'],
-                'keterangan' => $validated['keterangan'],
-                'type_diskon' => $validated['type_diskon'],
-                'jml_bln_byr' => $jml_bln_byr,
-                'diskon_bln' => $validated['diskon_bln'],
-                'diskon_persentase' => $validated['diskon_persentase'],
-                'user_created' => Auth::user()->id,
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('49', $session_menu)) {
+            $validated = $request->validate([
+                'type_diskon' => 'required',
+                'diskon' => 'required',
+                'keterangan' => 'required',
+                'jml_bln_byr' => 'max:3',
+                'diskon_bln' => 'max:3',
+                'diskon_persentase' => 'max:3',
             ]);
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('diskon');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+            DB::beginTransaction();
+            try {
+                if ($validated['type_diskon'] == 0) {
+                    $jml_bln_byr = null;
+                } else {
+                    $jml_bln_byr = $validated['jml_bln_byr'];
+                }
+                Diskon::create([
+                    'diskon' => $validated['diskon'],
+                    'keterangan' => $validated['keterangan'],
+                    'type_diskon' => $validated['type_diskon'],
+                    'jml_bln_byr' => $jml_bln_byr,
+                    'diskon_bln' => $validated['diskon_bln'],
+                    'diskon_persentase' => $validated['diskon_persentase'],
+                    'user_created' => Auth::user()->id,
+                ]);
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('diskon');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -154,15 +169,20 @@ class DiskonController extends Controller
      */
     public function edit($id)
     {
-        $diskon = Diskon::findOrFail(Crypt::decryptString($id));
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'Ubah ' . $this->submenu,
-            'diskon' => $diskon,
-        ];
-        return view('diskon.edit')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('50', $session_menu)) {
+            $diskon = Diskon::findOrFail(Crypt::decryptString($id));
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'Ubah ' . $this->submenu,
+                'diskon' => $diskon,
+            ];
+            return view('diskon.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -174,38 +194,43 @@ class DiskonController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $decrypted_id = Crypt::decryptString($id);
-        $validated = $request->validate([
-            'type_diskon' => 'required',
-            'diskon' => 'required',
-            'keterangan' => 'required',
-            'jml_bln_byr' => 'max:3',
-            'diskon_bln' => 'max:3',
-            'diskon_persentase' => 'max:3',
-        ]);
-        DB::beginTransaction();
-        try {
-            if ($validated['type_diskon'] == 0) {
-                $jml_bln_byr = null;
-            } else {
-                $jml_bln_byr = $validated['jml_bln_byr'];
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('50', $session_menu)) {
+            $decrypted_id = Crypt::decryptString($id);
+            $validated = $request->validate([
+                'type_diskon' => 'required',
+                'diskon' => 'required',
+                'keterangan' => 'required',
+                'jml_bln_byr' => 'max:3',
+                'diskon_bln' => 'max:3',
+                'diskon_persentase' => 'max:3',
+            ]);
+            DB::beginTransaction();
+            try {
+                if ($validated['type_diskon'] == 0) {
+                    $jml_bln_byr = null;
+                } else {
+                    $jml_bln_byr = $validated['jml_bln_byr'];
+                }
+                $diskon = Diskon::findOrFail($decrypted_id);
+                $diskon->diskon = $validated['diskon'];
+                $diskon->keterangan = $validated['keterangan'];
+                $diskon->type_diskon = $validated['type_diskon'];
+                $diskon->jml_bln_byr = $jml_bln_byr;
+                $diskon->diskon_bln = $validated['diskon_bln'];
+                $diskon->diskon_persentase = $validated['diskon_persentase'];
+                $diskon->user_updated = Auth::user()->id;
+                $diskon->save();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('diskon');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::updateAlert(false);
+                return back();
             }
-            $diskon = Diskon::findOrFail($decrypted_id);
-            $diskon->diskon = $validated['diskon'];
-            $diskon->keterangan = $validated['keterangan'];
-            $diskon->type_diskon = $validated['type_diskon'];
-            $diskon->jml_bln_byr = $jml_bln_byr;
-            $diskon->diskon_bln = $validated['diskon_bln'];
-            $diskon->diskon_persentase = $validated['diskon_persentase'];
-            $diskon->user_updated = Auth::user()->id;
-            $diskon->save();
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('diskon');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::updateAlert(false);
-            return back();
+        } else {
+            return view('not_found');
         }
     }
 
@@ -217,6 +242,11 @@ class DiskonController extends Controller
      */
     public function destroy($id)
     {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('51', $session_menu)) {
+        } else {
+            return view('not_found');
+        }
         DB::beginTransaction();
         try {
             $delete = Diskon::findOrFail(Crypt::decryptString($id));

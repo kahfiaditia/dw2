@@ -17,13 +17,18 @@ class PrimessionController extends Controller
 
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'hak akses',
-            'label' => 'data hak akses',
-        ];
-        return view('primession.list')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('43', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'hak akses',
+                'label' => 'data hak akses',
+            ];
+            return view('primession.list')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function data_primession(Request $request)
@@ -66,66 +71,76 @@ class PrimessionController extends Controller
 
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $user = User::where(['id' => $id_decrypted])->firstOrFail();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('44', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $user = User::where(['id' => $id_decrypted])->firstOrFail();
 
-        if (Auth::user()->roles == 'Administrator') {
-            $where =  ['menu.id', '>', '0'];
+            if (Auth::user()->roles == 'Administrator') {
+                $where =  ['menu.id', '>', '0'];
+            } else {
+                $where =  ['menu.id', '!=', '13'];
+            }
+
+            $primession = DB::table('submenu')
+                ->select(
+                    'submenu',
+                    DB::raw("MAX(CASE WHEN type_menu like '%insert%' THEN submenu.id ELSE NULL END) AS inserts"),
+                    DB::raw("MAX(CASE WHEN type_menu like '%edit%' THEN submenu.id ELSE NULL END) AS edits"),
+                    DB::raw("MAX(CASE WHEN type_menu like '%view%' THEN submenu.id ELSE NULL END) AS views"),
+                    DB::raw("MAX(CASE WHEN type_menu like '%delete%' THEN submenu.id ELSE NULL END) AS deletes"),
+                    DB::raw("MAX(CASE WHEN type_menu like '%approve%' THEN submenu.id ELSE NULL END) AS approves"),
+                )
+                ->Join('menu', 'menu.id', 'submenu.menu_id')
+                ->where([$where])
+                ->groupBy('menu_id')
+                ->groupBy('submenu.submenu')
+                ->get();
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'hak akses',
+                'label' => 'data hak akses',
+                'user' => $user,
+                'primession' => $primession,
+            ];
+            return view('primession.primession')->with($data);
         } else {
-            $where =  ['menu.id', '!=', '13'];
+            return view('not_found');
         }
-
-        $primession = DB::table('submenu')
-            ->select(
-                'submenu',
-                DB::raw("MAX(CASE WHEN type_menu like '%insert%' THEN submenu.id ELSE NULL END) AS inserts"),
-                DB::raw("MAX(CASE WHEN type_menu like '%edit%' THEN submenu.id ELSE NULL END) AS edits"),
-                DB::raw("MAX(CASE WHEN type_menu like '%view%' THEN submenu.id ELSE NULL END) AS views"),
-                DB::raw("MAX(CASE WHEN type_menu like '%delete%' THEN submenu.id ELSE NULL END) AS deletes"),
-                DB::raw("MAX(CASE WHEN type_menu like '%approve%' THEN submenu.id ELSE NULL END) AS approves"),
-            )
-            ->Join('menu', 'menu.id', 'submenu.menu_id')
-            ->where([$where])
-            ->groupBy('menu_id')
-            ->groupBy('submenu.submenu')
-            ->get();
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'hak akses',
-            'label' => 'data hak akses',
-            'user' => $user,
-            'primession' => $primession,
-        ];
-        return view('primession.primession')->with($data);
     }
 
     public function update(Request $request, $id)
     {
-        $akses_id = ($request->akses_id > 0) ? implode(',', $request->akses_id) : ' ';
-        DB::beginTransaction();
-        try {
-            $session_submenu = explode(',', $akses_id);
-            $arr = array();
-            foreach ($session_submenu as $item) {
-                $menu = DB::table('submenu')
-                    ->select('menu_id')->where('id', $item)
-                    ->get();
-                array_push($arr, $menu[0]->menu_id);
-            }
-            $user = User::findOrFail(Crypt::decryptString($id));
-            $user->akses_menu = implode(",", array_unique($arr));
-            $user->akses_submenu = $akses_id;
-            $user->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('44', $session_menu)) {
+            $akses_id = ($request->akses_id > 0) ? implode(',', $request->akses_id) : ' ';
+            DB::beginTransaction();
+            try {
+                $session_submenu = explode(',', $akses_id);
+                $arr = array();
+                foreach ($session_submenu as $item) {
+                    $menu = DB::table('submenu')
+                        ->select('menu_id')->where('id', $item)
+                        ->get();
+                    array_push($arr, $menu[0]->menu_id);
+                }
+                $user = User::findOrFail(Crypt::decryptString($id));
+                $user->akses_menu = implode(",", array_unique($arr));
+                $user->akses_submenu = $akses_id;
+                $user->save();
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('/primession');
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            AlertHelper::updateAlert(false);
-            return back();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('/primession');
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                AlertHelper::updateAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 }

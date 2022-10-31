@@ -30,14 +30,14 @@ class PinjamanController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'pinjaman',
-            'label' => 'data pinjaman',
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('74', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'pinjaman',
+                'label' => 'data pinjaman',
+            ];
             return view('pinjaman.list_pinjaman')->with($data);
         } else {
             return view('not_found');
@@ -182,26 +182,26 @@ class PinjamanController extends Controller
      */
     public function create()
     {
-        function timeAndMilliseconds()
-        {
-            $m = explode(' ', microtime());
-            return [$m[1], (int) round($m[0] * 1000, 3)];
-        }
-        [$totalSeconds, $extraMilliseconds] = timeAndMilliseconds();
-        $milisecond = date('YmdHis', $totalSeconds) . "$extraMilliseconds";
-
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'pinjaman',
-            'label' => 'tambah pinjaman',
-            'buku' => Buku::all(),
-            'kategori' => Kategori::all(),
-            'penerbit' => Penerbit::all(),
-            'milisecond' => $milisecond,
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('71', $session_menu)) {
+        if (in_array('75', $session_menu)) {
+            function timeAndMilliseconds()
+            {
+                $m = explode(' ', microtime());
+                return [$m[1], (int) round($m[0] * 1000, 3)];
+            }
+            [$totalSeconds, $extraMilliseconds] = timeAndMilliseconds();
+            $milisecond = date('YmdHis', $totalSeconds) . "$extraMilliseconds";
+
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'pinjaman',
+                'label' => 'tambah pinjaman',
+                'buku' => Buku::all(),
+                'kategori' => Kategori::all(),
+                'penerbit' => Penerbit::all(),
+                'milisecond' => $milisecond,
+            ];
             return view('pinjaman.add_pinjaman')->with($data);
         } else {
             return view('not_found');
@@ -216,69 +216,77 @@ class PinjamanController extends Controller
      */
     public function store(Request $request)
     {
-        $registration_number = Pinjaman::limit(1)->groupBy('kode_transaksi')->orderBy('id', 'desc')->get();
-        if (count($registration_number) > 0) {
-            $thn = substr($registration_number[0]->kode_transaksi, 0, 2);
-            if ($thn == Carbon::now()->format('y')) {
-                $date = $thn . Carbon::now()->format('md');
-                $nomor = (int) substr($registration_number[0]->kode_transaksi, 6, 4) + 1;
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('75', $session_menu)) {
+            $registration_number = Pinjaman::limit(1)->groupBy('kode_transaksi')->orderBy('id', 'desc')->get();
+            if (count($registration_number) > 0) {
+                $thn = substr($registration_number[0]->kode_transaksi, 0, 2);
+                if ($thn == Carbon::now()->format('y')) {
+                    $date = $thn . Carbon::now()->format('md');
+                    $nomor = (int) substr($registration_number[0]->kode_transaksi, 6, 4) + 1;
 
-                $Nol = "";
-                $nilai = 4 - strlen($nomor);
-                for ($i = 1; $i <= $nilai; $i++) {
-                    $Nol = $Nol . "0";
+                    $Nol = "";
+                    $nilai = 4 - strlen($nomor);
+                    for ($i = 1; $i <= $nilai; $i++) {
+                        $Nol = $Nol . "0";
+                    }
+                    $kode_transaksi   = $date . $Nol .  $nomor;
+                } else {
+                    $kode_transaksi   = Carbon::now()->format('ymd') . "0001";
                 }
-                $kode_transaksi   = $date . $Nol .  $nomor;
             } else {
                 $kode_transaksi   = Carbon::now()->format('ymd') . "0001";
             }
-        } else {
-            $kode_transaksi   = Carbon::now()->format('ymd') . "0001";
-        }
 
-        DB::beginTransaction();
-        try {
-            for ($i = 0; $i < count($request->data_post); $i++) {
-                $cek_qty = Buku::findorfail($request->data_post[$i]['buku_id']);
-                if ($request->data_post[$i]['jml_buku'] > $cek_qty->jml_buku) {
-                    return response()->json([
-                        'code' => 404,
-                        'message' => 'Stock Buku <strong>' . $cek_qty->judul . '</strong> hanya <strong>' . $cek_qty->jml_buku . '</strong>',
-                    ]);
+            DB::beginTransaction();
+            try {
+                for ($i = 0; $i < count($request->data_post); $i++) {
+                    $cek_qty = Buku::findorfail($request->data_post[$i]['buku_id']);
+                    if ($request->data_post[$i]['jml_buku'] > $cek_qty->jml_buku) {
+                        return response()->json([
+                            'code' => 404,
+                            'message' => 'Stock Buku <strong>' . $cek_qty->judul . '</strong> hanya <strong>' . $cek_qty->jml_buku . '</strong>',
+                        ]);
+                    }
                 }
+
+                for ($i = 0; $i < count($request->data_post); $i++) {
+                    $pinjaman = new Pinjaman;
+                    $pinjaman->kode_transaksi = $kode_transaksi;
+                    $pinjaman->milisecond = $request->milisecond;
+                    $pinjaman->peminjam = $request->peminjam;
+                    $pinjaman->siswa_id = $request->siswa;
+                    $pinjaman->karyawan_id = $request->karyawan;
+                    $pinjaman->class_id = $request->jenjang;
+                    $pinjaman->buku_id = $request->data_post[$i]['buku_id'];
+                    $pinjaman->jml = $request->data_post[$i]['jml_buku'];
+                    $pinjaman->tgl_pinjam = $request->tgl_pinjam;
+                    $pinjaman->tgl_perkiraan_kembali = Carbon::parse($request->tgl_pinjam)->addDay('7');
+                    $pinjaman->user_created =  Auth::user()->id;
+                    $pinjaman->save();
+
+                    $stock = Buku::findorfail($request->data_post[$i]['buku_id']);
+                    Buku::where('id', $request->data_post[$i]['buku_id'])->update(['jml_buku' => $stock->jml_buku - $request->data_post[$i]['jml_buku']]);
+                }
+
+                DB::commit();
+
+                return response()->json([
+                    'code' => 200,
+                    'message' => 'Berhasil Peminjaman Buku',
+                ]);
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                return response()->json([
+                    'code' => 404,
+                    'message' => 'Gagal Peminjaman Buku',
+                ]);
             }
-
-            for ($i = 0; $i < count($request->data_post); $i++) {
-                $pinjaman = new Pinjaman;
-                $pinjaman->kode_transaksi = $kode_transaksi;
-                $pinjaman->milisecond = $request->milisecond;
-                $pinjaman->peminjam = $request->peminjam;
-                $pinjaman->siswa_id = $request->siswa;
-                $pinjaman->karyawan_id = $request->karyawan;
-                $pinjaman->class_id = $request->jenjang;
-                $pinjaman->buku_id = $request->data_post[$i]['buku_id'];
-                $pinjaman->jml = $request->data_post[$i]['jml_buku'];
-                $pinjaman->tgl_pinjam = $request->tgl_pinjam;
-                $pinjaman->tgl_perkiraan_kembali = Carbon::parse($request->tgl_pinjam)->addDay('7');
-                $pinjaman->user_created =  Auth::user()->id;
-                $pinjaman->save();
-
-                $stock = Buku::findorfail($request->data_post[$i]['buku_id']);
-                Buku::where('id', $request->data_post[$i]['buku_id'])->update(['jml_buku' => $stock->jml_buku - $request->data_post[$i]['jml_buku']]);
-            }
-
-            DB::commit();
-
-            return response()->json([
-                'code' => 200,
-                'message' => 'Berhasil Peminjaman Buku',
-            ]);
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
+        } else {
             return response()->json([
                 'code' => 404,
-                'message' => 'Gagal Peminjaman Buku',
+                'message' => 'Sorry, page not found',
             ]);
         }
     }
@@ -291,19 +299,19 @@ class PinjamanController extends Controller
      */
     public function show($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'pinjaman',
-            'label' => ' pinjaman',
-            'buku' => Buku::all(),
-            'kategori' => Kategori::all(),
-            'penerbit' => Penerbit::all(),
-            'pinjaman' => Pinjaman::where('kode_transaksi', $id_decrypted)->get(),
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('76', $session_menu)) {
+        if (in_array('74', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'pinjaman',
+                'label' => ' pinjaman',
+                'buku' => Buku::all(),
+                'kategori' => Kategori::all(),
+                'penerbit' => Penerbit::all(),
+                'pinjaman' => Pinjaman::where('kode_transaksi', $id_decrypted)->get(),
+            ];
             return view('pinjaman.show')->with($data);
         } else {
             return view('not_found');
@@ -318,19 +326,19 @@ class PinjamanController extends Controller
      */
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'pinjaman',
-            'label' => 'ubah pinjaman',
-            'buku' => Buku::all(),
-            'kategori' => Kategori::all(),
-            'penerbit' => Penerbit::all(),
-            'pinjaman' => Pinjaman::where('kode_transaksi', $id_decrypted)->get(),
-        ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('76', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'pinjaman',
+                'label' => 'ubah pinjaman',
+                'buku' => Buku::all(),
+                'kategori' => Kategori::all(),
+                'penerbit' => Penerbit::all(),
+                'pinjaman' => Pinjaman::where('kode_transaksi', $id_decrypted)->get(),
+            ];
             return view('pinjaman.edit_pinjaman')->with($data);
         } else {
             return view('not_found');
@@ -346,18 +354,23 @@ class PinjamanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id = Crypt::decryptString($id);
-        DB::beginTransaction();
-        try {
-            Pinjaman::where('kode_transaksi', $id)->update(['tgl_kembali' => Carbon::now()]);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('76', $session_menu)) {
+            $id = Crypt::decryptString($id);
+            DB::beginTransaction();
+            try {
+                Pinjaman::where('kode_transaksi', $id)->update(['tgl_kembali' => Carbon::now()]);
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            return back();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 

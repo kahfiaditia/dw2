@@ -59,7 +59,6 @@
         var edit_no_hp_kontak = document.getElementById("edit_no_hp_kontak").value;
         var edit_keterangan_kontak = document.getElementById("edit_keterangan_kontak").value;
 
-        console.log(edit_keterangan_kontak);
         if (edit_nama_kontak === '' || edit_no_hp_kontak === '' || edit_keterangan_kontak === '') {
             Swal.fire(
                 'Gagal',
@@ -71,9 +70,3 @@
         return ok;
     }
 </script>
-
-{{-- <link href="{{ URL::asset('assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-<script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
-<link href="{{ URL::asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet"
-    type="text/css" /> --}}
