@@ -10,7 +10,7 @@ use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InventarisController;
-use App\Http\Controllers\Inv_ruanganController;
+use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SiswaController;
@@ -253,6 +253,6 @@ Route::group(
 
         //inventaris
         Route::resource('inventaris', InventarisController::class);
-        Route::resource('ruangan', Inv_RuanganController::class);
+        Route::resource('ruangan', RuanganController::class);
     }
 );

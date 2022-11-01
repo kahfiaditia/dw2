@@ -1,4 +1,3 @@
-data ruangan
 @extends('layouts.main')
 @section('container')
     <?php $session_menu = explode(',', Auth::user()->akses_submenu); ?>
@@ -17,7 +16,7 @@ data ruangan
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 @if (in_array('12', $session_menu))
-                                    <a href="{{ route('agama.create') }}" type="button"
+                                    <a href="{{ route('ruangan.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="mdi mdi-plus me-1"></i> Tambah Ruangan
                                     </a>
@@ -40,41 +39,16 @@ data ruangan
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($lists as $list)
+                                    @foreach ($ruangan as $inv)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $list->agama }}</td>
+                                            <td>{{ $inv->nama }}</td>
                                             <td>
-                                                <span class="badge badge-pill badge-soft-<?php if ($list->aktif == 1) {
-                                                    echo 'success';
-                                                } else {
-                                                    echo 'danger';
-                                                } ?> font-size-12">
-                                                    @if ($list->aktif == 1)
-                                                        Aktif
-                                                    @else
-                                                        Non Aktif
-                                                    @endif
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <?php $id = Crypt::encryptString($list->id); ?>
-                                                <form class="delete-form"
-                                                    action="{{ route('agama.destroy', ['id' => $id]) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <div class="d-flex gap-3">
-                                                        @if (in_array('13', $session_menu))
-                                                            <a href="{{ route('agama.edit', ['id' => $id]) }}"
-                                                                class="text-success"><i
-                                                                    class="mdi mdi-pencil font-size-18"></i></a>
-                                                        @endif
-                                                        @if (in_array('14', $session_menu))
-                                                            <a href class="text-danger delete_confirm"><i
-                                                                    class="mdi mdi-delete font-size-18"></i></a>
-                                                        @endif
-                                                    </div>
-                                                </form>
+                                                <a href="{{ url('ruangan/' . $inv->id . '/edit') }}"
+                                                    class="mdi mdi-pencil font-size-18">
+                                                </a>
+                                                <a href="" class="mdi mdi-delete font-size-18">
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
