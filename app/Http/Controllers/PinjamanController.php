@@ -70,9 +70,10 @@ class PinjamanController extends Controller
             ->whereNull('perpus_pinjaman.deleted_at')
             ->orderBy('perpus_pinjaman.id', 'DESC');
 
-        if ($request->get('search') != null) {
-            $search = $request->get('search');
-            $pin->where(function ($where) use ($search) {
+        if ($request->get('search_manual') != null) {
+            $search = $request->get('search_manual');
+            $replaced = str_replace(' ', '', $search);
+            $pin->where(function ($where) use ($search, $replaced) {
                 $where
                     ->orWhere('kode_transaksi', 'like', '%' . $search . '%')
                     ->orWhere('peminjam', 'like', '%' . $search . '%')
@@ -80,17 +81,29 @@ class PinjamanController extends Controller
                     ->orWhere('karyawan.nama_lengkap', 'like', '%' . $search . '%')
                     ->orwhereRaw(
                         "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
-                        '%' . $search . '%'
+                        '%' . $replaced . '%'
                     )
                     ->orWhere('tgl_pinjam', 'like', '%' . $search . '%')
                     ->orWhere('tgl_perkiraan_kembali', 'like', '%' . $search . '%')
                     ->orWhere('tgl_kembali', 'like', '%' . $search . '%');
-
-                $cek  = is_numeric($search);
-                if ($cek == true) {
-                    $where->having(DB::raw('SUM(jml)'), '=', $search);
-                }
             });
+
+            $search = $request->get('search');
+            $pin->where(function ($where) use ($search, $replaced) {
+                $where
+                    ->orWhere('kode_transaksi', 'like', '%' . $search . '%')
+                    ->orWhere('peminjam', 'like', '%' . $search . '%')
+                    ->orWhere('siswa.nama_lengkap', 'like', '%' . $search . '%')
+                    ->orWhere('karyawan.nama_lengkap', 'like', '%' . $search . '%')
+                    ->orwhereRaw(
+                        "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                        '%' . $replaced . '%'
+                    )
+                    ->orWhere('tgl_pinjam', 'like', '%' . $search . '%')
+                    ->orWhere('tgl_perkiraan_kembali', 'like', '%' . $search . '%')
+                    ->orWhere('tgl_kembali', 'like', '%' . $search . '%');
+            });
+            $pin->groupBy('kode_transaksi');
         } else {
             if ($request->get('kode') != null) {
                 $kode = $request->get('kode');
@@ -132,6 +145,24 @@ class PinjamanController extends Controller
                 }
             } else {
                 $pin->groupBy('kode_transaksi');
+            }
+            if ($request->get('search') != null) {
+                $search = $request->get('search');
+                $replaced = str_replace(' ', '', $search);
+                $pin->where(function ($where) use ($search, $replaced) {
+                    $where
+                        ->orWhere('kode_transaksi', 'like', '%' . $search . '%')
+                        ->orWhere('peminjam', 'like', '%' . $search . '%')
+                        ->orWhere('siswa.nama_lengkap', 'like', '%' . $search . '%')
+                        ->orWhere('karyawan.nama_lengkap', 'like', '%' . $search . '%')
+                        ->orwhereRaw(
+                            "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                            '%' . $replaced . '%'
+                        )
+                        ->orWhere('tgl_pinjam', 'like', '%' . $search . '%')
+                        ->orWhere('tgl_perkiraan_kembali', 'like', '%' . $search . '%')
+                        ->orWhere('tgl_kembali', 'like', '%' . $search . '%');
+                });
             }
         }
 
@@ -679,7 +710,7 @@ class PinjamanController extends Controller
             'jml_start' => $request->jml_start,
             'jml_end' => $request->jml_end,
             'type' => $request->type,
-            'search' => $request->search,
+            'search_manual' => $request->search_manual,
             'like' => $request->like,
         ];
         return Excel::download(new PinjamanBuku($data), 'pinjaman_buku.xlsx');

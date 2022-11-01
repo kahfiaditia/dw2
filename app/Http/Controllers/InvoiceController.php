@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoiceExport;
 use App\Helper\AlertHelper;
 use App\Models\Bills;
 use App\Models\Diskon;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class InvoiceController extends Controller
@@ -32,13 +34,11 @@ class InvoiceController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('35', $session_menu)) {
-            $invoice = Invoice::orderBy('id', 'DESC')->get();
             $data = [
                 'title' => $this->title,
                 'menu' => $this->sid,
                 'submenu' => $this->menu,
                 'label' => 'data ' . $this->menu,
-                'invoice' => $invoice
             ];
             return view('invoice.index')->with($data);
         } else {
@@ -48,19 +48,108 @@ class InvoiceController extends Controller
 
     public function list_invoice(Request $request)
     {
-        $invoice = Invoice_header::all();
+        $invoice = DB::table('invoice_header')
+            ->select(
+                'invoice_header.id',
+                'no_invoice',
+                'date_header',
+                'nis',
+                'nama_lengkap as siswa',
+                'uang_formulir',
+                'uang_pangkal',
+                'uang_spp',
+                'uang_kegiatan',
+                'diskon_pembayaran',
+                'diskon_prestasi',
+                'grand_total',
+            )
+            ->leftJoin('siswa', 'siswa.id', 'invoice_header.siswa_id')
+            ->whereNull('invoice_header.deleted_at')
+            ->groupBy('invoice_header.no_invoice');
+
+        if ($request->get('search_manual') != null) {
+            $search = $request->get('search_manual');
+            $invoice->where(function ($where) use ($search) {
+                $where
+                    ->orWhere('no_invoice', 'like', '%' . $search . '%')
+                    ->orWhere('nis', 'like', '%' . $search . '%')
+                    ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                    ->orWhere('diskon_pembayaran', 'like', '%' . $search . '%')
+                    ->orWhere('diskon_prestasi', 'like', '%' . $search . '%')
+                    ->orWhere('grand_total', 'like', '%' . $search . '%');
+            });
+            $search = $request->get('search');
+            $invoice->where(function ($where) use ($search) {
+                $where
+                    ->orWhere('no_invoice', 'like', '%' . $search . '%')
+                    ->orWhere('nis', 'like', '%' . $search . '%')
+                    ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                    ->orWhere('diskon_pembayaran', 'like', '%' . $search . '%')
+                    ->orWhere('diskon_prestasi', 'like', '%' . $search . '%')
+                    ->orWhere('grand_total', 'like', '%' . $search . '%');
+            });
+        } else {
+            if ($request->get('kode') != null) {
+                $kode = $request->get('kode');
+                $invoice->where('no_invoice', '=', $kode);
+            }
+            if ($request->get('tgl_end') != null) {
+                $start = $request->get('tgl_start') . ' 00:00:01';
+                $end = $request->get('tgl_end') . ' 23:59:59';
+                $invoice->where('date_header', '>=', $start);
+                $invoice->where('date_header', '<=', $end);
+            }
+            if ($request->get('nis') != null) {
+                $nis = $request->get('nis');
+                $invoice->where('nis', '=', $nis);
+            }
+            if ($request->get('siswa') != null) {
+                $siswa = $request->get('siswa');
+                $invoice->Where('nama_lengkap', 'like', '%' . $siswa . '%');
+            }
+            if ($request->get('biaya_end') != null) {
+                $biaya_start = $request->get('biaya_start');
+                $biaya_end = $request->get('biaya_end');
+                $invoice->havingRaw("SUM(uang_formulir+uang_pangkal+uang_spp+uang_kegiatan) >= '$biaya_start' and SUM(uang_formulir+uang_pangkal+uang_spp+uang_kegiatan) <= '$biaya_end'");
+            }
+            if ($request->get('disc_end') != null) {
+                $start = $request->get('disc_start');
+                $end = $request->get('disc_end');
+                $invoice->where('diskon_pembayaran', '>=', $start);
+                $invoice->where('diskon_pembayaran', '<=', $end);
+            }
+            if ($request->get('prestasi_end') != null) {
+                $start = $request->get('prestasi_start');
+                $end = $request->get('prestasi_end');
+                $invoice->where('diskon_prestasi', '>=', $start);
+                $invoice->where('diskon_prestasi', '<=', $end);
+            }
+            if ($request->get('total_end') != null) {
+                $start = $request->get('total_start');
+                $end = $request->get('total_end');
+                $invoice->where('grand_total', '>=', $start);
+                $invoice->where('grand_total', '<=', $end);
+            }
+            if ($request->get('search') != null) {
+                $search = $request->get('search');
+                $invoice->where(function ($where) use ($search) {
+                    $where
+                        ->orWhere('no_invoice', 'like', '%' . $search . '%')
+                        ->orWhere('nis', 'like', '%' . $search . '%')
+                        ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                        ->orWhere('diskon_pembayaran', 'like', '%' . $search . '%')
+                        ->orWhere('diskon_prestasi', 'like', '%' . $search . '%')
+                        ->orWhere('grand_total', 'like', '%' . $search . '%');
+                });
+            }
+        }
+
         return DataTables::of($invoice)
-            ->addColumn('nik', function ($invoice) {
-                return $invoice->siswa->nis;
-            })
-            ->addColumn('siswa', function ($invoice) {
-                return $invoice->siswa->nama_lengkap;
-            })
             ->addColumn('tanggal', function ($invoice) {
-                return $invoice->date_header;
+                return date('Y-m-d', strtotime($invoice->date_header));
             })
             ->addColumn('pembayaran', function ($invoice) {
-                return $invoice->formulir + $invoice->uang_pangkal + $invoice->uang_spp + $invoice->uang_kegiatan;
+                return $invoice->uang_formulir + $invoice->uang_pangkal + $invoice->uang_spp + $invoice->uang_kegiatan;
             })
             ->addColumn('action', 'invoice.button')
             ->rawColumns(['action'])
@@ -502,5 +591,27 @@ class InvoiceController extends Controller
         } else {
             return view('not_found');
         }
+    }
+
+    public function export_invoice(Request $request)
+    {
+        $data = [
+            'kode' => $request->kode,
+            'tgl_start' => $request->tgl_start,
+            'tgl_end' => $request->tgl_end,
+            'nis' => $request->nis,
+            'siswa' => $request->siswa,
+            'biaya_start' => $request->biaya_start,
+            'biaya_end' => $request->biaya_end,
+            'disc_start' => $request->disc_start,
+            'disc_end' => $request->disc_end,
+            'prestasi_start' => $request->prestasi_start,
+            'prestasi_end' => $request->prestasi_end,
+            'total_start' => $request->total_start,
+            'total_end' => $request->total_end,
+            'search_manual' => $request->search_manual,
+            'like' => $request->like,
+        ];
+        return Excel::download(new InvoiceExport($data), 'Invoice.xlsx');
     }
 }

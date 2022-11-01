@@ -107,8 +107,8 @@
                                                     </div>
                                                     <div class="row" id="id_like" style="display: none">
                                                         <div class="col-md-2 mb-2">
-                                                            <input type="text" name="search" id="search"
-                                                                value="{{ isset($_GET['search']) ? $_GET['search'] : null }}"
+                                                            <input type="text" name="search_manual" id="search_manual"
+                                                                value="{{ isset($_GET['search_manual']) ? $_GET['search_manual'] : null }}"
                                                                 class="form-control" placeholder="Search">
                                                         </div>
                                                     </div>
@@ -141,7 +141,7 @@
                                                                 $kontak = $_GET['kontak'];
                                                                 $jabatan = $_GET['jabatan'];
                                                                 $stat = $_GET['stat'];
-                                                                $search = $_GET['search'];
+                                                                $search = $_GET['search_manual'];
                                                                 if (isset($_GET['like'])) {
                                                                     $like = $_GET['like'];
                                                                 } else {
@@ -204,7 +204,7 @@
                 document.getElementById("id_where").style.display = 'none';
                 document.getElementById("id_like").style.display = 'block';
             } else {
-                document.getElementById("search").value = null;
+                document.getElementById("search_manual").value = null;
                 document.getElementById("like").checked = false;
                 document.getElementById("id_like").style.display = 'none';
                 document.getElementById("id_where").style.display = 'block';
@@ -224,7 +224,7 @@
                 document.getElementById("id_where").style.display = 'none';
                 document.getElementById("id_like").style.display = 'block';
             } else {
-                document.getElementById("search").value = null;
+                document.getElementById("search_manual").value = null;
                 document.getElementById("like").checked = false;
                 document.getElementById("id_like").style.display = 'none';
                 document.getElementById("id_where").style.display = 'block';
@@ -237,7 +237,7 @@
                 serverSide: true,
                 processing: true,
                 searchDelay: 1000,
-                searching: false,
+                // searching: false,
                 ajax: {
                     url: '{{ route('employee') }}',
                     data: function(d) {
@@ -265,9 +265,11 @@
                         d.like = (document.getElementById("like").value.length != 0) ? document
                             .getElementById(
                                 "like").value : null;
-                        d.search = (document.getElementById("search").value.length != 0) ? document
+                        d.search_manual = (document.getElementById("search_manual").value.length != 0) ?
+                            document
                             .getElementById(
-                                "search").value : null;
+                                "search_manual").value : null;
+                        d.search = $('input[type="search"]').val()
                     }
                 },
                 columnDefs: [{

@@ -218,6 +218,7 @@ Route::group(
         Route::post('/get_class', [InvoiceController::class, 'get_class'])->name('invoice.get_class');
         Route::post('/get_payment', [InvoiceController::class, 'get_payment'])->name('invoice.get_payment');
         Route::post('/cek_payment', [InvoiceController::class, 'cek_payment'])->name('invoice.cek_payment');
+        Route::get('export_invoice', [InvoiceController::class, 'export_invoice'])->name('invoice.export_invoice');
 
         // primession
         Route::resource('/primession', PrimessionController::class);

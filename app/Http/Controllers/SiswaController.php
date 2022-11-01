@@ -75,9 +75,10 @@ class SiswaController extends Controller
                     ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
                     ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
                     ->whereNull('siswa.deleted_at');
-                if ($request->get('search') != null) {
-                    $search = $request->get('search');
-                    $students->where(function ($where) use ($search) {
+                if ($request->get('search_manual') != null) {
+                    $search = $request->get('search_manual');
+                    $replaced = str_replace(' ', '', $search);
+                    $students->where(function ($where) use ($search, $replaced) {
                         $where
                             ->orWhere('nis', 'like', '%' . $search . '%')
                             ->orWhere('nisn', 'like', '%' . $search . '%')
@@ -86,7 +87,22 @@ class SiswaController extends Controller
                             ->orWhere('email', 'like', '%' . $search . '%')
                             ->orwhereRaw(
                                 "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
-                                '%' . $search . '%'
+                                '%' . $replaced . '%'
+                            );
+                    });
+
+                    $search = $request->get('search');
+                    $replaced = str_replace(' ', '', $search);
+                    $students->where(function ($where) use ($search, $replaced) {
+                        $where
+                            ->orWhere('nis', 'like', '%' . $search . '%')
+                            ->orWhere('nisn', 'like', '%' . $search . '%')
+                            ->orWhere('nik', 'like', '%' . $search . '%')
+                            ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%')
+                            ->orwhereRaw(
+                                "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                                '%' . $replaced . '%'
                             );
                     });
                 } else {
@@ -118,6 +134,23 @@ class SiswaController extends Controller
                             "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
                             '%' . $kelas . '%'
                         );
+                    }
+
+                    if ($request->get('search') != null) {
+                        $search = $request->get('search');
+                        $replaced = str_replace(' ', '', $search);
+                        $students->where(function ($where) use ($search, $replaced) {
+                            $where
+                                ->orWhere('nis', 'like', '%' . $search . '%')
+                                ->orWhere('nisn', 'like', '%' . $search . '%')
+                                ->orWhere('nik', 'like', '%' . $search . '%')
+                                ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%')
+                                ->orwhereRaw(
+                                    "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                                    '%' . $replaced . '%'
+                                );
+                        });
                     }
                 }
             }

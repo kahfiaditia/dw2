@@ -68,7 +68,27 @@ class EmployeeController extends Controller
                     )
                     ->Join('users', 'users.id', 'karyawan.user_id')
                     ->whereNull('karyawan.deleted_at');
-                if ($request->get('search') != null) {
+                if ($request->get('search_manual') != null) {
+                    $search = $request->get('search_manual');
+                    $employee->where(function ($where) use ($search) {
+                        if ($search) {
+                            if (strtolower($search) == 'aktif') {
+                                $status = 1;
+                                $where->orWhere('karyawan.aktif', '=', $status);
+                            } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
+                                $status = 0;
+                                $where->orWhere('karyawan.aktif', '=', $status);
+                            }
+                        }
+                        $where
+                            ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%')
+                            ->orWhere('nik', 'like', '%' . $search . '%')
+                            ->orWhere('npwp', 'like', '%' . $search . '%')
+                            ->orWhere('no_hp', 'like', '%' . $search . '%')
+                            ->orWhere('jabatan', 'like', '%' . $search . '%');
+                    });
+
                     $search = $request->get('search');
                     $employee->where(function ($where) use ($search) {
                         if ($search) {
@@ -122,6 +142,27 @@ class EmployeeController extends Controller
                             $stat = 0;
                         }
                         $employee->where('karyawan.aktif', '=', $stat);
+                    }
+                    if ($request->get('search') != null) {
+                        $search = $request->get('search');
+                        $employee->where(function ($where) use ($search) {
+                            if ($search) {
+                                if (strtolower($search) == 'aktif') {
+                                    $status = 1;
+                                    $where->orWhere('karyawan.aktif', '=', $status);
+                                } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
+                                    $status = 0;
+                                    $where->orWhere('karyawan.aktif', '=', $status);
+                                }
+                            }
+                            $where
+                                ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%')
+                                ->orWhere('nik', 'like', '%' . $search . '%')
+                                ->orWhere('npwp', 'like', '%' . $search . '%')
+                                ->orWhere('no_hp', 'like', '%' . $search . '%')
+                                ->orWhere('jabatan', 'like', '%' . $search . '%');
+                        });
                     }
                 }
             }
