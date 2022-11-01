@@ -115,6 +115,8 @@ class RuanganController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ruangan = Inv_Ruangan::find($id);
+        $ruangan->delete($id);
+        return redirect('ruangan');
     }
 }

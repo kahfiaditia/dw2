@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Inventaris extends Model
 {
     use HasFactory;
+    public $table = 'inventaris';
     protected $guarded = [''];
 }

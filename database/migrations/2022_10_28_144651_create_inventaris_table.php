@@ -18,12 +18,13 @@ class CreateInventarisTable extends Migration
             $table->string('nama', 100);
             $table->string('nomor_inventaris', 50);
             $table->string('idbarang', 50);
-            $table->string('ruangan', 50)->nullable();
+            $table->unsignedBigInteger('ruangan', 50);
+            $table->foreign('ruangan')->references('id')->on('inv_ruangan');
             $table->string('indikasi', 50)->nullable();
-            $table->string('pemilik', 100);
-            $table->text('desc')->nullable();
+            $table->enum('pemilik', ['Yayasan', 'TK', 'SD', 'SMP', 'SMK']);
+            $table->text('deskripsi')->nullable();
             $table->double('qty');
-            $table->enum('status', ['Baik', 'Rusak']);
+            $table->enum('status', ['Baik', 'Rusak', 'SPEK TIDAK LAYAK']);
             $table->unsignedBigInteger('user_created');
             $table->foreign('user_created')->references('id')->on('users');
             $table->unsignedBigInteger('user_updated')->nullable();

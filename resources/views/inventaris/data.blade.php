@@ -10,15 +10,13 @@
                             <h4 class="mb-sm-0 font-size-18">{{ $label }}</h4>
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">{{ ucwords($menu) }}</li>
-                                @if ($submenu)
-                                    <li class="breadcrumb-item">{{ ucwords($submenu) }}</li>
-                                @endif
+                                <li class="breadcrumb-item">{{ ucwords($submenu) }}</li>
                             </ol>
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('17', $session_menu))
-                                    <a href="{{ url('inventaris/create') }}" type="button"
+                                @if (in_array('12', $session_menu))
+                                    <a href="{{ route('inventaris.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="mdi mdi-plus me-1"></i> Tambah Inventaris
                                     </a>
@@ -32,16 +30,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="table" class="table table-striped dt-responsive nowrap w-100">
+                            <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Barang</th>
-                                        <th>Pemilik</th>
-                                        <th>Desckripsi</th>
+                                        <th>Nama</th>
+                                        <th>No Inv</th>
+                                        <th>ID Barang</th>
                                         <th>Ruangan</th>
                                         <th>Qty</th>
-                                        <th>Status</th>
+                                        <th>Pemilik</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -54,14 +52,12 @@
                                             <td>{{ $inv->idbarang }}</td>
                                             <td>{{ $inv->ruangan }}</td>
                                             <td>{{ $inv->qty }}</td>
-                                            <td>{{ $inv->status }}</td>
+                                            <td>{{ $inv->pemilik }}</td>
                                             <td>
                                                 <a href="{{ url('inventaris/' . $inv->id . '/edit') }}"
-                                                    class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-edit"></i>
+                                                    class="mdi mdi-pencil font-size-18">
                                                 </a>
-                                                <a href="" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-eye"></i>
+                                                <a href="" class="mdi mdi-delete font-size-18">
                                                 </a>
                                             </td>
                                         </tr>

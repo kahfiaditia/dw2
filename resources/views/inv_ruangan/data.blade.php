@@ -47,8 +47,15 @@
                                                 <a href="{{ url('ruangan/' . $inv->id . '/edit') }}"
                                                     class="mdi mdi-pencil font-size-18">
                                                 </a>
-                                                <a href="" class="mdi mdi-delete font-size-18">
-                                                </a>
+                                                <form action="{{ url('ruangan/' . $inv->id) }}" method="post"
+                                                    class="d-inline" onsubmit="return confirm('Yakin akan di hapus?')">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="mdi mdi-edit font-size-18">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+
                                             </td>
                                         </tr>
                                     @endforeach
