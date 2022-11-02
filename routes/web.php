@@ -10,6 +10,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SiswaController;
@@ -268,6 +270,10 @@ Route::group(
         Route::post('/post_update', [PinjamanController::class, 'post_update'])->name('pinjaman.post_update');
         Route::get('/approve/{id}', [PinjamanController::class, 'approve'])->name('pinjaman.approve');
         Route::get('export_pinjaman_buku', [PinjamanController::class, 'export_pinjaman_buku'])->name('pinjaman.export_pinjaman_buku');
+
+        //inventaris
+        Route::resource('inventaris', InventarisController::class);
+        Route::resource('ruangan', RuanganController::class);
     }
 );
 

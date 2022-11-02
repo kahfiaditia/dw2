@@ -110,7 +110,7 @@ class MenuSeeder extends Seeder
                 'display' => '0',
             ], [
                 'menu' => 'Perpustakaan',
-                'icon' => 'bx bx-boox',
+                'icon' => 'bx bx-book',
                 'sub_menu' => '1',
                 'order_menu' => '5',
                 'display' => '1',
