@@ -51,13 +51,17 @@ class InventarisController extends Controller
     public function store(Request $request)
     {
         $inventaris = new Inventaris([
-            'name' => $request->name,
-            'owner' => $request->owner,
-            'desc' => $request->desc,
-            'qty' => $request->qty,
+            'nama' => $request->name,
+            'nomor_inventaris' => $request->owner,
+            'id_barang' => $request->desc,
+            'indikasi' => $request->qty,
+            'pemilik' => $request->status,
+            'deskripsi' => $request->status,
+            'qty' => $request->status,
             'status' => $request->status,
-            'user_created' => Auth::user()->id,
-            'user_update' => Auth::user()->id,
+            'user_created' => $request->status,
+            'user_updated' => $request->status,
+            'user_deleted' => Auth::user()->id,
         ]);
 
         $inventaris->save();

@@ -15,7 +15,8 @@
                     </div>
                 </div>
             </div>
-            <form class="needs-validation" action="{{ url('ruangan/' . $ruangan->id) }}" method="POST" novalidate>
+            <form class="needs-validation" action="{{ route('ruangan.update', Crypt::encryptString($ruangan->id)) }}"
+                method="POST" novalidate>
                 @method('PUT')
                 @csrf
                 <div class="row">

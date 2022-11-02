@@ -44,16 +44,22 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $inv->nama }}</td>
                                             <td>
-                                                <a href="{{ url('ruangan/' . $inv->id . '/edit') }}"
-                                                    class="mdi mdi-pencil font-size-18">
-                                                </a>
-                                                <form action="{{ url('ruangan/' . $inv->id) }}" method="post"
-                                                    class="d-inline" onsubmit="return confirm('Yakin akan di hapus?')">
-                                                    @method('delete')
+                                                <?php $id = Crypt::encryptString($inv->id); ?>
+                                                <form class="delete-form" action="{{ route('ruangan.destroy', $id) }}"
+                                                    method="POST">
                                                     @csrf
-                                                    <button class="mdi mdi-edit font-size-18">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
+                                                    @method('DELETE')
+                                                    <div class="d-flex gap-3">
+                                                        @if (in_array('86', $session_menu))
+                                                            <a href="{{ route('ruangan.edit', $id) }}"
+                                                                class="text-success"><i
+                                                                    class="mdi mdi-pencil font-size-18"></i></a>
+                                                        @endif
+                                                        @if (in_array('86', $session_menu))
+                                                            <a href class="text-danger delete_confirm"><i
+                                                                    class="mdi mdi-delete font-size-18"></i></a>
+                                                        @endif
+                                                    </div>
                                                 </form>
 
                                             </td>
