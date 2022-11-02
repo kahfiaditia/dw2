@@ -124,6 +124,7 @@ class PaymentController extends Controller
                     'amount' => str_replace(".", "", $validated['amount']),
                     'user_created' => Auth::user()->id,
                 ]);
+
                 DB::commit();
                 AlertHelper::addAlert(true);
                 return redirect('payment');
@@ -205,6 +206,7 @@ class PaymentController extends Controller
                 $payment->amount = str_replace(".", "", $validated['amount']);
                 $payment->user_updated = Auth::user()->id;
                 $payment->save();
+
                 DB::commit();
                 AlertHelper::updateAlert(true);
                 return redirect('payment');
@@ -234,6 +236,7 @@ class PaymentController extends Controller
                 $delete->user_deleted = Auth::user()->id;
                 $delete->deleted_at = Carbon::now();
                 $delete->save();
+
                 DB::commit();
                 AlertHelper::deleteAlert(true);
                 return back();

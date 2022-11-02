@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Kategori;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -76,6 +77,7 @@ class KategoriController extends Controller
                 $kategori = new Kategori();
                 $kategori->kode_kategori = strtoupper($request['kode_kategori']);
                 $kategori->kategori = strtoupper($request['kategori']);
+                $kategori->user_created = Auth::user()->id;
                 $kategori->save();
 
                 DB::commit();
@@ -148,6 +150,7 @@ class KategoriController extends Controller
                 $kategori = Kategori::findOrFail($id);
                 $kategori->kode_kategori = strtoupper($request['kode_kategori']);
                 $kategori->kategori = strtoupper($request['kategori']);
+                $kategori->user_updated = Auth::user()->id;
                 $kategori->save();
 
                 DB::commit();
@@ -177,7 +180,9 @@ class KategoriController extends Controller
             DB::beginTransaction();
             try {
                 $kategori = Kategori::findorfail($id_decrypted);
-                $kategori->delete();
+                $kategori->user_deleted = Auth::user()->id;
+                $kategori->deleted_at = Carbon::now();
+                $kategori->save();
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);

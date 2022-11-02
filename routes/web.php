@@ -115,7 +115,7 @@ Route::group(
         Route::post('/store', [KodeposController::class, 'store'])->name('kodepos.store');
         Route::get('/edit/{id}', [KodeposController::class, 'edit'])->name('kodepos.edit');
         Route::post('/update', [KodeposController::class, 'update'])->name('kodepos.update');
-        Route::get('/destroy', [KodeposController::class, 'destroy'])->name('kodepos.destroy');
+        Route::delete('/destroy', [KodeposController::class, 'destroy'])->name('kodepos.destroy');
         Route::post('/dropdown', [KodeposController::class, 'dropdown'])->name('kodepos.dropdown');
         Route::post('/provinsi', [KodeposController::class, 'provinsi'])->name('kodepos.dropdown.provinsi');
         Route::post('/kota', [KodeposController::class, 'kota'])->name('kodepos.dropdown.kota');
@@ -253,7 +253,7 @@ Route::group(
         Route::post('/dropdown', [PenerbitController::class, 'dropdown'])->name('kategori.dropdown');
         Route::resource('/buku', BukuController::class);
         Route::get('/data_ajax', [BukuController::class, 'data_ajax'])->name('buku.data_ajax');
-        Route::post('/print', [BukuController::class, 'print'])->name('buku.print');
+        Route::get('/print/{id}', [BukuController::class, 'print'])->name('buku.print');
         Route::post('/print_barcode', [BukuController::class, 'print_barcode'])->name('buku.print_barcode');
 
         // pinjaman

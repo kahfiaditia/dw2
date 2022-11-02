@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Kodepos;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -120,6 +121,7 @@ class KodeposController extends Controller
                 $kodepos->kelurahan = $request->kelurahan;
                 $kodepos->kodepos = $request->kodepos;
                 $kodepos->status = '1';
+                $kodepos->user_created = Auth::user()->id;
                 $kodepos->save();
 
                 DB::commit();
@@ -190,6 +192,7 @@ class KodeposController extends Controller
                 $kodepos->kelurahan = $request->kelurahan;
                 $kodepos->kodepos = $request->kodepos;
                 $kodepos->status = isset($request->Status) ? '1' : '0';
+                $kodepos->user_updated = Auth::user()->id;
                 $kodepos->save();
 
                 DB::commit();
@@ -220,10 +223,9 @@ class KodeposController extends Controller
             try {
                 $kodepos = Kodepos::findorfail($id_decrypted);
                 $kodepos->status = 0;
+                $kodepos->user_deleted = Auth::user()->id;
+                $kodepos->deleted_at = Carbon::now();
                 $kodepos->save();
-
-                $kodepos = Kodepos::findorfail($id_decrypted);
-                $kodepos->delete();
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);

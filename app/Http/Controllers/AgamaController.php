@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Agama;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -60,6 +61,7 @@ class AgamaController extends Controller
                 $agama = new Agama();
                 $agama->agama = $request['agama'];
                 $agama->aktif = '1';
+                $agama->user_created = Auth::user()->id;
                 $agama->save();
 
                 DB::commit();
@@ -111,6 +113,7 @@ class AgamaController extends Controller
                 $agama = Agama::findOrFail($id);
                 $agama->agama = $request['agama'];
                 $agama->aktif = isset($request->aktif) ? 1 : 0;
+                $agama->user_updated = Auth::user()->id;
                 $agama->save();
 
                 DB::commit();
@@ -134,7 +137,9 @@ class AgamaController extends Controller
             DB::beginTransaction();
             try {
                 $agama = Agama::findorfail($id_decrypted);
-                $agama->delete();
+                $agama->user_deleted = Auth::user()->id;
+                $agama->deleted_at = Carbon::now();
+                $agama->save();
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);

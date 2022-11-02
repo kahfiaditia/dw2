@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Kebutuhan_khusus;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -61,8 +62,10 @@ class NeedsController extends Controller
             try {
                 Kebutuhan_khusus::create([
                     'kode' => $validated['kode'],
-                    'nama' => $validated['nama']
+                    'nama' => $validated['nama'],
+                    'user_created' =>  Auth::user()->id
                 ]);
+
                 DB::commit();
                 AlertHelper::addAlert(true);
                 return redirect('needs');
@@ -116,7 +119,9 @@ class NeedsController extends Controller
                 $special_need = Kebutuhan_khusus::findOrFail($decrypted_id);
                 $special_need->kode = $validated['kode'];
                 $special_need->nama = $validated['nama'];
+                $special_need->user_updated = Auth::user()->id;
                 $special_need->save();
+
                 DB::commit();
                 AlertHelper::updateAlert(true);
                 return redirect('needs');
@@ -137,7 +142,10 @@ class NeedsController extends Controller
             DB::beginTransaction();
             try {
                 $special_need = Kebutuhan_khusus::findOrFail(Crypt::decryptString($id));
-                $special_need->delete();
+                $special_need->user_deleted = Auth::user()->id;
+                $special_need->deleted_at = Carbon::now();
+                $special_need->save();
+
                 DB::commit();
                 AlertHelper::deleteAlert(true);
                 return back();

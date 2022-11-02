@@ -118,6 +118,7 @@ class PrestasiController extends Controller
                     'end_date' => $validated['end_date'],
                     'user_created' => Auth::user()->id,
                 ]);
+
                 DB::commit();
                 AlertHelper::addAlert(true);
                 return redirect('prestasi');
@@ -208,6 +209,7 @@ class PrestasiController extends Controller
                 $prestasi->end_date = $validated['end_date'];
                 $prestasi->user_updated = Auth::user()->id;
                 $prestasi->save();
+
                 DB::commit();
                 AlertHelper::updateAlert(true);
                 return redirect('prestasi');
@@ -237,6 +239,7 @@ class PrestasiController extends Controller
                 $delete->user_deleted = Auth::user()->id;
                 $delete->deleted_at = Carbon::now();
                 $delete->save();
+
                 DB::commit();
                 AlertHelper::deleteAlert(true);
                 return back();

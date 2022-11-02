@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Bills;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -78,8 +79,10 @@ class BillController extends Controller
                 Bills::create([
                     'bills' => $validated['bills'],
                     'notes' => $validated['notes'],
-                    'looping' => isset($request->looping) ? 1 : 0
+                    'looping' => isset($request->looping) ? 1 : 0,
+                    'user_created' => Auth::user()->id,
                 ]);
+
                 DB::commit();
                 AlertHelper::addAlert(true);
                 return redirect('bills');
@@ -152,7 +155,9 @@ class BillController extends Controller
                 $special_need->bills = $validated['bills'];
                 $special_need->notes = $validated['notes'];
                 $special_need->looping = isset($request->looping) ? 1 : 0;
+                $special_need->user_updated = Auth::user()->id;
                 $special_need->save();
+
                 DB::commit();
                 AlertHelper::updateAlert(true);
                 return redirect('bills');
@@ -179,7 +184,10 @@ class BillController extends Controller
             DB::beginTransaction();
             try {
                 $bills = Bills::findOrFail(Crypt::decryptString($id));
-                $bills->delete();
+                $bills->user_deleted = Auth::user()->id;
+                $bills->deleted_at = Carbon::now();
+                $bills->save();
+
                 DB::commit();
                 AlertHelper::deleteAlert(true);
                 return back();

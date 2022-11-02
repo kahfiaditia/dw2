@@ -136,6 +136,7 @@ class DiskonController extends Controller
                     'diskon_persentase' => $validated['diskon_persentase'],
                     'user_created' => Auth::user()->id,
                 ]);
+
                 DB::commit();
                 AlertHelper::addAlert(true);
                 return redirect('diskon');
@@ -221,6 +222,7 @@ class DiskonController extends Controller
                 $diskon->diskon_persentase = $validated['diskon_persentase'];
                 $diskon->user_updated = Auth::user()->id;
                 $diskon->save();
+
                 DB::commit();
                 AlertHelper::updateAlert(true);
                 return redirect('diskon');
@@ -253,6 +255,7 @@ class DiskonController extends Controller
             $delete->user_deleted = Auth::user()->id;
             $delete->deleted_at = Carbon::now();
             $delete->save();
+
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();

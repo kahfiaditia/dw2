@@ -180,6 +180,7 @@ class BukuController extends Controller
                     $buku->foto = $fileNameFoto;
                     $request->file('foto')->storeAs('public/buku', $fileNameFoto);
                 }
+                $buku->user_created = Auth::user()->id;
                 $buku->save();
 
                 DB::commit();
@@ -308,6 +309,7 @@ class BukuController extends Controller
                     }
                     $buku->barcode = $barcode;
                 }
+                $buku->user_updated = Auth::user()->id;
                 $buku->save();
 
                 DB::commit();
@@ -337,7 +339,9 @@ class BukuController extends Controller
             DB::beginTransaction();
             try {
                 $buku = Buku::findorfail($id_decrypted);
-                $buku->delete();
+                $buku->user_deleted = Auth::user()->id;
+                $buku->deleted_at = Carbon::now();
+                $buku->save();
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);
@@ -358,11 +362,15 @@ class BukuController extends Controller
         return $buku;
     }
 
-    public function print(Request $request)
+    public function print($id)
     {
         $data = [
-            'id' => $request->id,
-            'item' => Buku::findorfail(Crypt::decryptString($request->id)),
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'barcode',
+            'label' => 'print barcode',
+            'item' => Buku::findorfail(Crypt::decryptString($id)),
+            'id' => $id,
         ];
         return view('buku.print_jml')->with($data);
     }

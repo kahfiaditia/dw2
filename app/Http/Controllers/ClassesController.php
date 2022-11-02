@@ -6,6 +6,7 @@ use App\Helper\AlertHelper;
 use App\Models\Classes;
 use App\Models\School_class;
 use App\Models\School_level;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -102,8 +103,10 @@ class ClassesController extends Controller
                     'id_school_level' => $validated['jenjang'],
                     'jurusan' => $request->jurusan,
                     'class_id' => $request->kelas,
-                    'type' => $request->type
+                    'type' => $request->type,
+                    'user_created' => Auth::user()->id,
                 ]);
+
                 DB::commit();
                 AlertHelper::addAlert(true);
                 return redirect('classes');
@@ -177,7 +180,9 @@ class ClassesController extends Controller
                 $classes->jurusan = $request->jurusan;
                 $classes->class_id = $request->kelas;
                 $classes->type = $request->type;
+                $classes->user_updated = Auth::user()->id;
                 $classes->save();
+
                 DB::commit();
                 AlertHelper::updateAlert(true);
                 return redirect('classes');
@@ -204,7 +209,10 @@ class ClassesController extends Controller
             DB::beginTransaction();
             try {
                 $delete = Classes::findOrFail(Crypt::decryptString($id));
-                $delete->delete();
+                $delete->user_deleted = Auth::user()->id;
+                $delete->deleted_at = Carbon::now();
+                $delete->save();
+
                 DB::commit();
                 AlertHelper::deleteAlert(true);
                 return back();

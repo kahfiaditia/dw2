@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Rak;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -60,6 +61,7 @@ class RakController extends Controller
                 $rak = new Rak();
                 $rak->no_rak = $request['no_rak'];
                 $rak->rak = $request['rak'];
+                $rak->user_created = Auth::user()->id;
                 $rak->save();
 
                 DB::commit();
@@ -113,6 +115,7 @@ class RakController extends Controller
                 $rak = Rak::findOrFail($id);
                 $rak->no_rak = $request['no_rak'];
                 $rak->rak = $request['rak'];
+                $rak->user_updated = Auth::user()->id;
                 $rak->save();
 
                 DB::commit();
@@ -136,7 +139,9 @@ class RakController extends Controller
             DB::beginTransaction();
             try {
                 $rak = Rak::findorfail($id_decrypted);
-                $rak->delete();
+                $rak->user_deleted = Auth::user()->id;
+                $rak->deleted_at = Carbon::now();
+                $rak->save();
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);

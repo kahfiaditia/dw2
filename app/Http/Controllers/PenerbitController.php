@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\penerbit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -74,6 +75,7 @@ class PenerbitController extends Controller
             try {
                 $penerbit = new Penerbit();
                 $penerbit->nama_penerbit = $request['nama_penerbit'];
+                $penerbit->user_created = Auth::user()->id;
                 $penerbit->save();
 
                 DB::commit();
@@ -144,6 +146,7 @@ class PenerbitController extends Controller
             try {
                 $penerbit = Penerbit::findOrFail($id);
                 $penerbit->nama_penerbit = $request['nama_penerbit'];
+                $penerbit->user_updated = Auth::user()->id;
                 $penerbit->save();
 
                 DB::commit();
@@ -173,7 +176,10 @@ class PenerbitController extends Controller
             DB::beginTransaction();
             try {
                 $penerbit = Penerbit::findorfail($id_decrypted);
-                $penerbit->delete();
+                $penerbit->user_deleted = Auth::user()->id;
+                $penerbit->deleted_at = Carbon::now();
+                $penerbit->save();
+
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);
