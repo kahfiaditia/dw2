@@ -13,13 +13,11 @@ class CreateInventarisTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventaris', function (Blueprint $table) {
+        Schema::create('inv_inventaris', function (Blueprint $table) {
             $table->id();
             $table->string('nama', 100);
             $table->string('nomor_inventaris', 50);
             $table->string('idbarang', 50);
-            $table->unsignedBigInteger('ruangan', 50);
-            $table->foreign('ruangan')->references('id')->on('inv_ruangan');
             $table->string('indikasi', 50)->nullable();
             $table->enum('pemilik', ['Yayasan', 'TK', 'SD', 'SMP', 'SMK']);
             $table->text('deskripsi')->nullable();

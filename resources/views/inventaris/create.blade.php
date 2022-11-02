@@ -94,11 +94,9 @@
                                             <label class="form-label">Ruangan <code>*</code></label>
                                             <select class="form-control select select2 status" name="status" required>
                                                 <option value="">-- Pilih Ruangan --</option>
-                                                <option value="Baik"> LAB METTA </option>
-                                                <option value="Rusak"> LAB KARUNA </option>
-                                                <option value="Rusak"> LAB MUDITA </option>
-                                                <option value="Rusak"> LAB UPEKHA </option>
-                                                <option value="Rusak"> GUDANG IT </option>
+                                                @foreach ($inv_ruangan as $item)
+                                                    <option value="$item->id"> {{ $item->nama }} </option>
+                                                @endforeach
                                             </select>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.

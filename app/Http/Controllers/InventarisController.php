@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inv_Ruangan;
 use App\Models\Inventaris;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,13 +34,14 @@ class InventarisController extends Controller
      */
     public function create()
     {
+        $inv_ruangan = Inv_Ruangan::all();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'label' => 'Tambah Inventaris',
         ];
 
-        return view('inventaris.create')->with($data);
+        return view('inventaris.create', compact('inv_ruangan'))->with($data);
     }
 
     /**
@@ -50,7 +52,7 @@ class InventarisController extends Controller
      */
     public function store(Request $request)
     {
-        $inventaris = new Inventaris([
+        $inv_ruangan = Inv_Ruangan::$inventaris = new Inventaris([
             'nama' => $request->name,
             'nomor_inventaris' => $request->owner,
             'id_barang' => $request->desc,
@@ -66,7 +68,7 @@ class InventarisController extends Controller
 
         $inventaris->save();
 
-        return redirect('inventaris');
+        return redirect('inventaris', compact('inv_ruangan'));
     }
 
     /**

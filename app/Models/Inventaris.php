@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Inventaris extends Model
 {
     use HasFactory;
-    public $table = 'inventaris';
+    public $table = 'inv_inventaris';
     protected $guarded = [''];
 }
