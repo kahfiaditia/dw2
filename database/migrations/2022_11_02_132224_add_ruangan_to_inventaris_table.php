@@ -26,9 +26,9 @@ class AddRuanganToInventarisTable extends Migration
      */
     public function down()
     {
-        // Schema::table('inv_inventaris', function (Blueprint $table) {
-        //     $table->dropForeign(['id_ruangan']);
-        //     $table->dropColumn('id_ruangan');
-        // });
+        Schema::table('inv_inventaris', function (Blueprint $table) {
+            $table->dropForeign(['id_ruangan']);
+            $table->dropColumn('id_ruangan');
+        });
     }
 }
