@@ -174,7 +174,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Pinjaman', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Pinjaman Approve', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
+                'submenu' => 'Pinjaman', 'route_submenu' => null, 'type_menu' => 'approve', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Data Barang', 'route_submenu' => 'inventaris.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
