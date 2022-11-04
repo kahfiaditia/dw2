@@ -43,7 +43,7 @@
                                         <a href="{{ route('ruangan.index') }}"
                                             class="btn btn-secondary waves-effect">Batal</a>
                                         <button class="btn btn-primary" type="submit" style="float: right"
-                                            id="submit">Update</button>
+                                            id="submit">Simpan</button>
                                     </div>
                                 </div>
                             </div>

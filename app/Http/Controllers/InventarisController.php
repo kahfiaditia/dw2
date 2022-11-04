@@ -6,6 +6,7 @@ use App\Models\Inv_Ruangan;
 use App\Models\Inventaris;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InventarisController extends Controller
 {
@@ -14,7 +15,6 @@ class InventarisController extends Controller
 
     public function index()
     {
-
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
@@ -23,7 +23,6 @@ class InventarisController extends Controller
         ];
         $inventaris = Inventaris::all();
         return view('inventaris.data', compact('inventaris'))->with($data);
-        // dd($inventaris);
     }
 
 
@@ -34,14 +33,23 @@ class InventarisController extends Controller
      */
     public function create()
     {
-        $inv_ruangan = Inv_Ruangan::all();
+        function timeAndMilliseconds()
+        {
+            $m = explode(' ', microtime());
+            return [$m[1], (int) round($m[0] * 1000, 3)];
+        }
+        [$totalSeconds, $extraMilliseconds] = timeAndMilliseconds();
+        $milisecond = date('YmdHis', $totalSeconds) . "$extraMilliseconds";
+
+        $ruangs = Inv_Ruangan::all();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
+            'submenu' => 'Inventaris',
             'label' => 'Tambah Inventaris',
+            'milisecond' => $milisecond,
         ];
-
-        return view('inventaris.create', compact('inv_ruangan'))->with($data);
+        return view('inventaris.create', compact('ruangs'))->with($data);
     }
 
     /**
@@ -52,7 +60,7 @@ class InventarisController extends Controller
      */
     public function store(Request $request)
     {
-        $inv_ruangan = Inv_Ruangan::$inventaris = new Inventaris([
+        $inv_ruangan = Inv_Ruangan::create([
             'nama' => $request->name,
             'nomor_inventaris' => $request->owner,
             'id_barang' => $request->desc,
@@ -65,9 +73,7 @@ class InventarisController extends Controller
             'user_updated' => $request->status,
             'user_deleted' => Auth::user()->id,
         ]);
-
-        $inventaris->save();
-
+        $inv_ruangan->save();
         return redirect('inventaris', compact('inv_ruangan'));
     }
 
@@ -112,7 +118,8 @@ class InventarisController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($id);
+        DB::beginTransaction();
+
         Inventaris::where('id', $id)
             ->update([
                 'nama' => $request->nama,

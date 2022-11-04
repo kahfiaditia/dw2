@@ -204,7 +204,8 @@
                         console.log(response);
                         // initialize header
                         milisecond = document.getElementById("milisecond").value;
-                        peminjam = document.getElementById("peminjam").value;
+                        peminjam = document.getElementById(
+                            "peminjam").value;
                         tgl_pinjam = document.getElementById("tgl_pinjam").value;
                         if (response.type == 'Siswa') {
                             siswa = response.id;

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class RuanganController extends Controller
 {
     protected $title = 'dharmawidya';
-    protected $menu = 'Ruangan';
+    protected $menu = 'Inventaris';
 
     public function index()
     {
@@ -22,8 +22,7 @@ class RuanganController extends Controller
             'submenu' => 'ruangan',
             'label' => 'Data Ruangan',
         ];
-        // $ruangan = DB::table('inv_ruangan')->get();
-        // $ruangan = Inv_Ruangan::onlyTrashed()->get();
+
         $ruangan = Inv_Ruangan::all();
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('83', $session_menu)) {
@@ -52,7 +51,6 @@ class RuanganController extends Controller
         } else {
             return view('not_found');
         }
-        // dd($data);
     }
 
     /**
@@ -63,12 +61,23 @@ class RuanganController extends Controller
      */
     public function store(Request $request)
     {
-        $inv_ruangan = new Inv_ruangan([
-            'nama' => $request->nama,
-            'user_created' => Auth::user()->id,
-        ]);
-        $inv_ruangan->save();
-        return redirect('ruangan');
+        DB::beginTransaction();
+        try {
+            $inv_ruangan = new Inv_ruangan([
+                'nama' => $request->nama,
+                'user_created' => Auth::user()->id,
+            ]);
+            $inv_ruangan->save();
+
+            DB::commit();
+            AlertHelper::addAlert(true);
+            return redirect('ruangan');
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            AlertHelper::addAlert(false);
+            return back();
+        }
     }
 
     /**
@@ -98,7 +107,6 @@ class RuanganController extends Controller
             'label' => 'Edit Data Ruangan',
             'ruangan' => Inv_Ruangan::findOrFail($id_decrypted)
         ];
-        // $ruangan = Inv_Ruangan::find($id);
         return view('inv_ruangan.edit')->with($data);
     }
 
@@ -127,14 +135,6 @@ class RuanganController extends Controller
             throw $err;
             return back();
         }
-        // Inv_Ruangan::where('id', $id)
-        //     ->update([
-        //         'nama' => $request->nama,
-        //         'user_created' => Auth::user()->id,
-        //         'user_updated' => Auth::user()->id,
-        //     ]);
-
-        // return redirect('ruangan');
     }
 
     /**
@@ -145,24 +145,15 @@ class RuanganController extends Controller
      */
     public function destroy($id)
     {
-        // $ruangan = Inv_Ruangan::find($id);
-        // Inv_Ruangan::where('id', $id)
-        //     ->update([
-        //         'user_deleted' => Auth::user()->id,
-        //     ]);
-
-        // $ruangan->delete($id);
-        // return redirect('ruangan');  
-
         $id_decrypted = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
             $ruangan = Inv_Ruangan::where('id', $id_decrypted)->update([
                 'user_deleted' => Auth::user()->id,
-            ]); {
-                $ruangan = Inv_Ruangan::findorfail($id_decrypted);
-                $ruangan->delete();
-            }
+            ]);
+            $ruangan = Inv_Ruangan::findorfail($id_decrypted);
+            $ruangan->delete();
+
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();
