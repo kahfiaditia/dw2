@@ -28,7 +28,7 @@
                         <h4 class="text-uppercase">Sorry, page not found</h4>
                         <div class="mt-5 text-center">
                             <a class="btn btn-primary waves-effect waves-light" href="{{ route('dashboard') }}">Back to
-                                bERANDA</a>
+                                Beranda</a>
                         </div>
                     </div>
                 </div>

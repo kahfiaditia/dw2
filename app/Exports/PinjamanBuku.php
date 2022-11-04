@@ -44,9 +44,10 @@ class PinjamanBuku implements WithColumnFormatting, FromQuery, WithHeadings, Wit
             ->whereNull('perpus_pinjaman.deleted_at')
             ->orderBy('perpus_pinjaman.id', 'DESC');
 
-        $search = $this->data['search'];
+        $search = $this->data['search_manual'];
         if ($search != null) {
-            $pin->where(function ($where) use ($search) {
+            $replaced = str_replace(' ', '', $search);
+            $pin->where(function ($where) use ($search, $replaced) {
                 $where
                     ->orWhere('kode_transaksi', 'like', '%' . $search . '%')
                     ->orWhere('peminjam', 'like', '%' . $search . '%')
@@ -54,17 +55,13 @@ class PinjamanBuku implements WithColumnFormatting, FromQuery, WithHeadings, Wit
                     ->orWhere('karyawan.nama_lengkap', 'like', '%' . $search . '%')
                     ->orwhereRaw(
                         "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
-                        '%' . $search . '%'
+                        '%' . $replaced . '%'
                     )
                     ->orWhere('tgl_pinjam', 'like', '%' . $search . '%')
                     ->orWhere('tgl_perkiraan_kembali', 'like', '%' . $search . '%')
                     ->orWhere('tgl_kembali', 'like', '%' . $search . '%');
-
-                $cek  = is_numeric($search);
-                if ($cek == true) {
-                    $where->having(DB::raw('SUM(jml)'), '=', $search);
-                }
             });
+            $pin->groupBy('kode_transaksi');
         } else {
             $kode = $this->data['kode'];
             $peminjam = $this->data['peminjam'];

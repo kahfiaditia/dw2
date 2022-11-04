@@ -35,415 +35,480 @@ class SiswaController extends Controller
 
     public function index(Request $request)
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->sid,
-            'submenu' => $this->menu,
-            'label' => 'data siswa'
-        ];
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('19', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->sid,
+                'submenu' => $this->menu,
+                'label' => 'data siswa'
+            ];
 
-        if (Auth::user()->roles == 'Siswa') {
-            $students = DB::table('siswa')
-                ->select(
-                    'siswa.id',
-                    'nis',
-                    'nisn',
-                    'nik',
-                    'nama_lengkap',
-                    'email',
-                )
-                ->selectRaw("CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) as kelas")
-                ->leftJoin('classes', 'classes.id', 'siswa.class_id')
-                ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
-                ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
-                ->where('siswa.user_id', Auth::user()->id)
-                ->whereNull('siswa.deleted_at');
-        } else {
-            $students = DB::table('siswa')
-                ->select(
-                    'siswa.id',
-                    'nis',
-                    'nisn',
-                    'nik',
-                    'nama_lengkap',
-                    'email',
-                )
-                ->selectRaw("CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) as kelas")
-                ->leftJoin('classes', 'classes.id', 'siswa.class_id')
-                ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
-                ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
-                ->whereNull('siswa.deleted_at');
-            if ($request->get('search') != null) {
-                $search = $request->get('search');
-                $students->where(function ($where) use ($search) {
-                    $where
-                        ->orWhere('nis', 'like', '%' . $search . '%')
-                        ->orWhere('nisn', 'like', '%' . $search . '%')
-                        ->orWhere('nik', 'like', '%' . $search . '%')
-                        ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
-                        ->orWhere('email', 'like', '%' . $search . '%')
-                        ->orwhereRaw(
-                            "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
-                            '%' . $search . '%'
-                        );
-                });
+            if (Auth::user()->roles == 'Siswa') {
+                $students = DB::table('siswa')
+                    ->select(
+                        'siswa.id',
+                        'nis',
+                        'nisn',
+                        'nik',
+                        'nama_lengkap',
+                        'email',
+                    )
+                    ->selectRaw("CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) as kelas")
+                    ->leftJoin('classes', 'classes.id', 'siswa.class_id')
+                    ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
+                    ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
+                    ->where('siswa.user_id', Auth::user()->id)
+                    ->whereNull('siswa.deleted_at');
             } else {
-                if ($request->get('nis') != null) {
-                    $nis = $request->get('nis');
-                    $students->where('nis', '=', $nis);
-                }
-                if ($request->get('nisn') != null) {
-                    $nisn = $request->get('nisn');
-                    $students->where('nisn', '=', $nisn);
-                }
-                if ($request->get('nik') != null) {
-                    $nik = $request->get('nik');
-                    $students->where('nik', '=', $nik);
-                }
-                if ($request->get('nama') != null) {
-                    $nama = $request->get('nama');
-                    // $students->where('nama_lengkap', '=', $nama);
-                    $students->Where('nama_lengkap', 'like', '%' . $nama . '%');
-                }
-                if ($request->get('email') != null) {
-                    $email = $request->get('email');
-                    $students->where('email', '=', $email);
-                }
-                if ($request->get('kelas') != null) {
-                    $kelas = $request->get('kelas');
-                    $kelas = str_replace(' ', '', $kelas);
-                    $students->whereRaw(
-                        "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
-                        '%' . $kelas . '%'
-                    );
+                $students = DB::table('siswa')
+                    ->select(
+                        'siswa.id',
+                        'nis',
+                        'nisn',
+                        'nik',
+                        'nama_lengkap',
+                        'email',
+                    )
+                    ->selectRaw("CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) as kelas")
+                    ->leftJoin('classes', 'classes.id', 'siswa.class_id')
+                    ->leftJoin('school_level', 'school_level.id', 'classes.id_school_level')
+                    ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
+                    ->whereNull('siswa.deleted_at');
+                if ($request->get('search_manual') != null) {
+                    $search = $request->get('search_manual');
+                    $replaced = str_replace(' ', '', $search);
+                    $students->where(function ($where) use ($search, $replaced) {
+                        $where
+                            ->orWhere('nis', 'like', '%' . $search . '%')
+                            ->orWhere('nisn', 'like', '%' . $search . '%')
+                            ->orWhere('nik', 'like', '%' . $search . '%')
+                            ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%')
+                            ->orwhereRaw(
+                                "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                                '%' . $replaced . '%'
+                            );
+                    });
+
+                    $search = $request->get('search');
+                    $replaced = str_replace(' ', '', $search);
+                    $students->where(function ($where) use ($search, $replaced) {
+                        $where
+                            ->orWhere('nis', 'like', '%' . $search . '%')
+                            ->orWhere('nisn', 'like', '%' . $search . '%')
+                            ->orWhere('nik', 'like', '%' . $search . '%')
+                            ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%')
+                            ->orwhereRaw(
+                                "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                                '%' . $replaced . '%'
+                            );
+                    });
+                } else {
+                    if ($request->get('nis') != null) {
+                        $nis = $request->get('nis');
+                        $students->where('nis', '=', $nis);
+                    }
+                    if ($request->get('nisn') != null) {
+                        $nisn = $request->get('nisn');
+                        $students->where('nisn', '=', $nisn);
+                    }
+                    if ($request->get('nik') != null) {
+                        $nik = $request->get('nik');
+                        $students->where('nik', '=', $nik);
+                    }
+                    if ($request->get('nama') != null) {
+                        $nama = $request->get('nama');
+                        // $students->where('nama_lengkap', '=', $nama);
+                        $students->Where('nama_lengkap', 'like', '%' . $nama . '%');
+                    }
+                    if ($request->get('email') != null) {
+                        $email = $request->get('email');
+                        $students->where('email', '=', $email);
+                    }
+                    if ($request->get('kelas') != null) {
+                        $kelas = $request->get('kelas');
+                        $kelas = str_replace(' ', '', $kelas);
+                        $students->whereRaw(
+                            "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                            '%' . $kelas . '%'
+                        );
+                    }
+
+                    if ($request->get('search') != null) {
+                        $search = $request->get('search');
+                        $replaced = str_replace(' ', '', $search);
+                        $students->where(function ($where) use ($search, $replaced) {
+                            $where
+                                ->orWhere('nis', 'like', '%' . $search . '%')
+                                ->orWhere('nisn', 'like', '%' . $search . '%')
+                                ->orWhere('nik', 'like', '%' . $search . '%')
+                                ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%')
+                                ->orwhereRaw(
+                                    "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                                    '%' . $replaced . '%'
+                                );
+                        });
+                    }
                 }
             }
-        }
 
-        if ($request->ajax()) {
-            return DataTables::of($students)
-                ->addIndexColumn()
-                ->addColumn('Opsi', 'siswa.button')
-                ->rawColumns(['Opsi', 'status'])
-                ->make(true);
+            if ($request->ajax()) {
+                return DataTables::of($students)
+                    ->addIndexColumn()
+                    ->addColumn('Opsi', 'siswa.button')
+                    ->rawColumns(['Opsi', 'status'])
+                    ->make(true);
+            } else {
+                return view('siswa.index')->with($data);
+            }
         } else {
-            return view('siswa.index')->with($data);
+            return view('not_found');
         }
     }
 
     public function create()
     {
-        if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator') {
-            $students = User::doesntHave('student')->where('roles', 'Siswa')->orderBy('id', 'DESC')->get();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('20', $session_menu)) {
+            if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator') {
+                $students = User::doesntHave('student')->where('roles', 'Siswa')->orderBy('id', 'DESC')->get();
+            } else {
+                $students = [];
+            }
+            // setting website
+            $provinsi_sekolah = Setting::firstorfail();
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Data Pribadi',
+                'label' => 'tambah siswa',
+                'student' => Auth::user()->student,
+                'users' => $students,
+                'religions' => Agama::orderBy('agama', 'ASC')->get(),
+                'districts' => Kodepos::select('kecamatan')->where('provinsi', $provinsi_sekolah->provinsi_sekolah)->groupBy('kecamatan')->get(),
+                'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
+            ];
+            return view('siswa.create')->with($data);
         } else {
-            $students = [];
+            return view('not_found');
         }
-        // setting website
-        $provinsi_sekolah = Setting::firstorfail();
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Data Pribadi',
-            'label' => 'tambah siswa',
-            'student' => Auth::user()->student,
-            'users' => $students,
-            'religions' => Agama::orderBy('agama', 'ASC')->get(),
-            'districts' => Kodepos::select('kecamatan')->where('provinsi', $provinsi_sekolah->provinsi_sekolah)->groupBy('kecamatan')->get(),
-            'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
-        ];
-
-        return view('siswa.create')->with($data);
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nis' => 'required|unique:siswa',
-            'nisn' => 'required|unique:siswa',
-            'nik' => 'required|unique:siswa',
-            'no_kk' => 'required',
-            'nama_lengkap' => 'required',
-            'jenis_kelamin' => 'required',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
-            'golongan_darah' => 'required',
-            'akta_lahir' => 'required',
-            'agama' => 'required',
-            'alamat_jalan' => 'required',
-            'email' => 'required|email|unique:siswa,email',
-            'no_handphone' => 'required',
-            'kewarganegaraan' => 'required',
-            'kebutuhan_khusus' => 'required',
-            'nama_negara' => 'required',
-            'tempat_tinggal' => 'required',
-            'rt' => 'required',
-            'rw' => 'required',
-            'nama_dusun' => 'required',
-            'kelurahan' => 'required',
-            'kecamatan' => 'required',
-            'kode_pos' => 'required',
-            'moda_transportasi' => 'required',
-            'anak_keberapa' => 'required'
-        ]);
-        DB::beginTransaction();
-        try {
-            Siswa::create([
-                'nis' => $validated['nis'],
-                'nisn' => $validated['nisn'],
-                'nik' => $validated['nik'],
-                'no_kk' => $validated['no_kk'],
-                'nama_lengkap' => $validated['nama_lengkap'],
-                'jenis_kelamin' => $validated['jenis_kelamin'],
-                'tempat_lahir' => $validated['tempat_lahir'],
-                'tanggal_lahir' => $validated['tanggal_lahir'],
-                'golongan_darah' => $validated['golongan_darah'],
-                'no_registrasi_akta_lahir' => $validated['akta_lahir'],
-                'agama_id' => $validated['agama'],
-                'alamat' => $validated['alamat_jalan'],
-                'email' => $validated['email'],
-                'no_handphone' => $validated['no_handphone'],
-                'kewarganegaraan' => $validated['kewarganegaraan'],
-                'nama_negara' => $validated['nama_negara'],
-                'kebutuhan_khusus_id' => $validated['kebutuhan_khusus'],
-                'tempat_tinggal' => $validated['tempat_tinggal'],
-                'rt' => $validated['rt'],
-                'rw' => $validated['rw'],
-                'dusun' => $validated['nama_dusun'],
-                'district' => $validated['kecamatan'],
-                'village' => $validated['kelurahan'],
-                'postal_code' => $validated['kode_pos'],
-                'transportation' => $validated['moda_transportasi'],
-                'child_order' => $validated['anak_keberapa'],
-                'is_have_kip' => $request->is_have_kip,
-                'is_receive_kip' => $request->is_receive_kip,
-                'reason_reject_kip' => $request->reason_reject_kip,
-                'user_id' => Auth::user()->id,
-                'user_created' => Auth::user()->id,
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('20', $session_menu)) {
+            $validated = $request->validate([
+                'nis' => 'required|unique:siswa',
+                'nisn' => 'required|unique:siswa',
+                'nik' => 'required|unique:siswa',
+                'no_kk' => 'required',
+                'nama_lengkap' => 'required',
+                'jenis_kelamin' => 'required',
+                'tempat_lahir' => 'required',
+                'tanggal_lahir' => 'required',
+                'golongan_darah' => 'required',
+                'akta_lahir' => 'required',
+                'agama' => 'required',
+                'alamat_jalan' => 'required',
+                'email' => 'required|email|unique:siswa,email',
+                'no_handphone' => 'required',
+                'kewarganegaraan' => 'required',
+                'kebutuhan_khusus' => 'required',
+                'nama_negara' => 'required',
+                'tempat_tinggal' => 'required',
+                'rt' => 'required',
+                'rw' => 'required',
+                'nama_dusun' => 'required',
+                'kelurahan' => 'required',
+                'kecamatan' => 'required',
+                'kode_pos' => 'required',
+                'moda_transportasi' => 'required',
+                'anak_keberapa' => 'required'
             ]);
-            DB::commit();
-            AlertHelper::addAlert(true);
-            $siswa = Siswa::orderBy('id', 'DESC')->first();
-            return redirect('show_parents/' . Crypt::encryptString($siswa->id));
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+            DB::beginTransaction();
+            try {
+                Siswa::create([
+                    'nis' => $validated['nis'],
+                    'nisn' => $validated['nisn'],
+                    'nik' => $validated['nik'],
+                    'no_kk' => $validated['no_kk'],
+                    'nama_lengkap' => $validated['nama_lengkap'],
+                    'jenis_kelamin' => $validated['jenis_kelamin'],
+                    'tempat_lahir' => $validated['tempat_lahir'],
+                    'tanggal_lahir' => $validated['tanggal_lahir'],
+                    'golongan_darah' => $validated['golongan_darah'],
+                    'no_registrasi_akta_lahir' => $validated['akta_lahir'],
+                    'agama_id' => $validated['agama'],
+                    'alamat' => $validated['alamat_jalan'],
+                    'email' => $validated['email'],
+                    'no_handphone' => $validated['no_handphone'],
+                    'kewarganegaraan' => $validated['kewarganegaraan'],
+                    'nama_negara' => $validated['nama_negara'],
+                    'kebutuhan_khusus_id' => $validated['kebutuhan_khusus'],
+                    'tempat_tinggal' => $validated['tempat_tinggal'],
+                    'rt' => $validated['rt'],
+                    'rw' => $validated['rw'],
+                    'dusun' => $validated['nama_dusun'],
+                    'district' => $validated['kecamatan'],
+                    'village' => $validated['kelurahan'],
+                    'postal_code' => $validated['kode_pos'],
+                    'transportation' => $validated['moda_transportasi'],
+                    'child_order' => $validated['anak_keberapa'],
+                    'is_have_kip' => $request->is_have_kip,
+                    'is_receive_kip' => $request->is_receive_kip,
+                    'reason_reject_kip' => $request->reason_reject_kip,
+                    'user_id' => Auth::user()->id,
+                    'user_created' => Auth::user()->id,
+                ]);
+                DB::commit();
+                AlertHelper::addAlert(true);
+                $siswa = Siswa::orderBy('id', 'DESC')->first();
+                return redirect('show_parents/' . Crypt::encryptString($siswa->id));
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
     public function show($id)
     {
-        $id = Crypt::decryptString($id);
-        $student = Siswa::with('religion', 'special_need', 'periodic_student', 'beasiswa', 'performances', 'kesejahteraan')->findOrFail($id);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('19', $session_menu)) {
+            $id = Crypt::decryptString($id);
+            $student = Siswa::with('religion', 'special_need', 'periodic_student', 'beasiswa', 'performances', 'kesejahteraan')->findOrFail($id);
 
-        $father = Parents::with('special_need')->where([
-            ['type', '=', 'Ayah'],
-            ['siswa_id', '=', $id]
-        ])->first();
+            $father = Parents::with('special_need')->where([
+                ['type', '=', 'Ayah'],
+                ['siswa_id', '=', $id]
+            ])->first();
 
-        $mother = Parents::with('special_need')->where([
-            ['type', '=', 'Ibu'],
-            ['siswa_id', '=', $id]
-        ])->first();
+            $mother = Parents::with('special_need')->where([
+                ['type', '=', 'Ibu'],
+                ['siswa_id', '=', $id]
+            ])->first();
 
-        $guardian = Parents::with('special_need')->where([
-            ['type', '=', 'Wal'],
-            ['siswa_id', '=', $id]
-        ])->first();
+            $guardian = Parents::with('special_need')->where([
+                ['type', '=', 'Wal'],
+                ['siswa_id', '=', $id]
+            ])->first();
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Data Pribadi',
-            'label' => ' siswa',
-            'student' => $student,
-            'father' => $father,
-            'mother' => $mother,
-            'guardian' => $guardian
-        ];
-
-        return view('siswa.detail')->with($data);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Data Pribadi',
+                'label' => ' siswa',
+                'student' => $student,
+                'father' => $father,
+                'mother' => $mother,
+                'guardian' => $guardian
+            ];
+            return view('siswa.detail')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function edit($id)
     {
-        $student = Siswa::findOrFail(Crypt::decryptString($id));
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('21', $session_menu)) {
+            $student = Siswa::findOrFail(Crypt::decryptString($id));
 
-        $blood_types = [
-            [
-                'name' => 'A',
-                'value' => 'A'
-            ],
-            [
-                'name' => 'B',
-                'value' => 'B'
-            ],
-            [
-                'name' => 'AB',
-                'value' => 'AB'
-            ],
-            [
-                'name' => 'O',
-                'value' => 'O'
-            ]
-        ];
+            $blood_types = [
+                [
+                    'name' => 'A',
+                    'value' => 'A'
+                ],
+                [
+                    'name' => 'B',
+                    'value' => 'B'
+                ],
+                [
+                    'name' => 'AB',
+                    'value' => 'AB'
+                ],
+                [
+                    'name' => 'O',
+                    'value' => 'O'
+                ]
+            ];
 
-        $residences = [
-            [
-                'name' => 'Bersama Orang Tua',
-                'value' => 'Bersama Orang Tua'
-            ],
-            [
-                'name' => 'Wali',
-                'value' => 'Wali'
-            ],
-            [
-                'name' => 'Kos',
-                'value' => 'Kos'
-            ],
-            [
-                'name' => 'Asrama',
-                'value' => 'Asrama'
-            ],
-            [
-                'name' => 'Panti Asuhan',
-                'value' => 'Panti Asuhan'
-            ]
-        ];
+            $residences = [
+                [
+                    'name' => 'Bersama Orang Tua',
+                    'value' => 'Bersama Orang Tua'
+                ],
+                [
+                    'name' => 'Wali',
+                    'value' => 'Wali'
+                ],
+                [
+                    'name' => 'Kos',
+                    'value' => 'Kos'
+                ],
+                [
+                    'name' => 'Asrama',
+                    'value' => 'Asrama'
+                ],
+                [
+                    'name' => 'Panti Asuhan',
+                    'value' => 'Panti Asuhan'
+                ]
+            ];
 
-        $reject_kip = [
-            [
-                'value' => 'Dilarang Pemda Karena Menerima Bantuan Serupa'
-            ],
-            [
-                'value' => 'Menolak'
-            ],
-            [
-                'value' => 'Sudah Mampu'
-            ]
-        ];
+            $reject_kip = [
+                [
+                    'value' => 'Dilarang Pemda Karena Menerima Bantuan Serupa'
+                ],
+                [
+                    'value' => 'Menolak'
+                ],
+                [
+                    'value' => 'Sudah Mampu'
+                ]
+            ];
 
-        // setting website
-        $provinsi_sekolah = Setting::firstorfail();
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Data Pribadi',
-            'label' => 'siswa',
-            'student' => $student,
-            'religions' => Agama::orderBy('agama', 'ASC')->get(),
-            'districts' => Kodepos::select('kecamatan')->where('provinsi', $provinsi_sekolah->provinsi_sekolah)->groupBy('kecamatan')->get(),
-            'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
-            'blood_types' => $blood_types,
-            'residences' => $residences,
-            'reject_kip' => $reject_kip
-        ];
-
-        return view('siswa.edit')->with($data);
+            // setting website
+            $provinsi_sekolah = Setting::firstorfail();
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Data Pribadi',
+                'label' => 'siswa',
+                'student' => $student,
+                'religions' => Agama::orderBy('agama', 'ASC')->get(),
+                'districts' => Kodepos::select('kecamatan')->where('provinsi', $provinsi_sekolah->provinsi_sekolah)->groupBy('kecamatan')->get(),
+                'special_needs' => Kebutuhan_khusus::orderBy('id', 'ASC')->get(),
+                'blood_types' => $blood_types,
+                'residences' => $residences,
+                'reject_kip' => $reject_kip
+            ];
+            return view('siswa.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function update(Request $request, $id)
     {
-        $id = Crypt::decryptString($id);
-        $validated = $request->validate([
-            'nis' => "required|unique:siswa,nis,$id,id,deleted_at,NULL",
-            'nisn' => "required|unique:siswa,nisn,$id,id,deleted_at,NULL",
-            'nik' => "required|unique:siswa,nik,$id,id,deleted_at,NULL",
-            'no_kk' => "required",
-            'nama_lengkap' => 'required',
-            'jenis_kelamin' => 'required',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
-            'golongan_darah' => 'required',
-            'akta_lahir' => 'required',
-            'agama' => 'required',
-            'alamat_jalan' => 'required',
-            'email' => "required|email|unique:siswa,email,$id,id,deleted_at,NULL",
-            'no_handphone' => 'required',
-            'kewarganegaraan' => 'required',
-            'kebutuhan_khusus' => 'required',
-            'nama_negara' => 'required',
-            'tempat_tinggal' => 'required',
-            'rt' => 'required',
-            'rw' => 'required',
-            'nama_dusun' => 'required',
-            'kelurahan' => 'required',
-            'kecamatan' => 'required',
-            'kode_pos' => 'required',
-            'moda_transportasi' => 'required',
-            'anak_keberapa' => 'required'
-        ]);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('21', $session_menu)) {
+            $id = Crypt::decryptString($id);
+            $validated = $request->validate([
+                'nis' => "required|unique:siswa,nis,$id,id,deleted_at,NULL",
+                'nisn' => "required|unique:siswa,nisn,$id,id,deleted_at,NULL",
+                'nik' => "required|unique:siswa,nik,$id,id,deleted_at,NULL",
+                'no_kk' => "required",
+                'nama_lengkap' => 'required',
+                'jenis_kelamin' => 'required',
+                'tempat_lahir' => 'required',
+                'tanggal_lahir' => 'required',
+                'golongan_darah' => 'required',
+                'akta_lahir' => 'required',
+                'agama' => 'required',
+                'alamat_jalan' => 'required',
+                'email' => "required|email|unique:siswa,email,$id,id,deleted_at,NULL",
+                'no_handphone' => 'required',
+                'kewarganegaraan' => 'required',
+                'kebutuhan_khusus' => 'required',
+                'nama_negara' => 'required',
+                'tempat_tinggal' => 'required',
+                'rt' => 'required',
+                'rw' => 'required',
+                'nama_dusun' => 'required',
+                'kelurahan' => 'required',
+                'kecamatan' => 'required',
+                'kode_pos' => 'required',
+                'moda_transportasi' => 'required',
+                'anak_keberapa' => 'required'
+            ]);
 
-        DB::beginTransaction();
-        $student = Siswa::findOrFail($id);
-        try {
-            $student->nis = $validated['nis'];
-            $student->nisn = $validated['nisn'];
-            $student->nik = $validated['nik'];
-            $student->no_kk = $validated['no_kk'];
-            $student->nama_lengkap = $validated['nama_lengkap'];
-            $student->jenis_kelamin = $validated['jenis_kelamin'];
-            $student->tempat_lahir = $validated['tempat_lahir'];
-            $student->tanggal_lahir = $validated['tanggal_lahir'];
-            $student->golongan_darah = $validated['golongan_darah'];
-            $student->no_registrasi_akta_lahir = $validated['akta_lahir'];
-            $student->agama_id = $validated['agama'];
-            $student->alamat = $validated['alamat_jalan'];
-            // $student->email = $validated['email'];
-            $student->no_handphone = $validated['no_handphone'];
-            $student->kewarganegaraan = $validated['kewarganegaraan'];
-            $student->nama_negara = $validated['nama_negara'];
-            $student->kebutuhan_khusus_id = $validated['kebutuhan_khusus'];
-            $student->tempat_tinggal = $validated['tempat_tinggal'];
-            $student->rt = $validated['rt'];
-            $student->rw = $validated['rw'];
-            $student->dusun = $validated['nama_dusun'];
-            $student->village = $validated['kelurahan'];
-            $student->district = $validated['kecamatan'];
-            $student->postal_code = $validated['kode_pos'];
-            $student->transportation = $validated['moda_transportasi'];
-            $student->child_order = $validated['anak_keberapa'];
-            $student->is_have_kip = $request->is_have_kip;
-            $student->is_receive_kip = $request->is_receive_kip;
-            $student->reason_reject_kip = $request->reason_reject_kip;
-            $student->user_updated = Auth::user()->id;
-            $student->save();
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('show_parents/' . Crypt::encryptString($student->id));
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            AlertHelper::updateAlert(false);
-            return back();
+            DB::beginTransaction();
+            $student = Siswa::findOrFail($id);
+            try {
+                $student->nis = $validated['nis'];
+                $student->nisn = $validated['nisn'];
+                $student->nik = $validated['nik'];
+                $student->no_kk = $validated['no_kk'];
+                $student->nama_lengkap = $validated['nama_lengkap'];
+                $student->jenis_kelamin = $validated['jenis_kelamin'];
+                $student->tempat_lahir = $validated['tempat_lahir'];
+                $student->tanggal_lahir = $validated['tanggal_lahir'];
+                $student->golongan_darah = $validated['golongan_darah'];
+                $student->no_registrasi_akta_lahir = $validated['akta_lahir'];
+                $student->agama_id = $validated['agama'];
+                $student->alamat = $validated['alamat_jalan'];
+                // $student->email = $validated['email'];
+                $student->no_handphone = $validated['no_handphone'];
+                $student->kewarganegaraan = $validated['kewarganegaraan'];
+                $student->nama_negara = $validated['nama_negara'];
+                $student->kebutuhan_khusus_id = $validated['kebutuhan_khusus'];
+                $student->tempat_tinggal = $validated['tempat_tinggal'];
+                $student->rt = $validated['rt'];
+                $student->rw = $validated['rw'];
+                $student->dusun = $validated['nama_dusun'];
+                $student->village = $validated['kelurahan'];
+                $student->district = $validated['kecamatan'];
+                $student->postal_code = $validated['kode_pos'];
+                $student->transportation = $validated['moda_transportasi'];
+                $student->child_order = $validated['anak_keberapa'];
+                $student->is_have_kip = $request->is_have_kip;
+                $student->is_receive_kip = $request->is_receive_kip;
+                $student->reason_reject_kip = $request->reason_reject_kip;
+                $student->user_updated = Auth::user()->id;
+                $student->save();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('show_parents/' . Crypt::encryptString($student->id));
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                AlertHelper::updateAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
     public function destroy($id)
     {
-        DB::beginTransaction();
-        try {
-            $date = Carbon::now();
-            // siswa
-            $student = Siswa::findOrFail($id);
-            $student->user_deleted = Auth::user()->id;
-            $student->deleted_at = $date;
-            $student->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('22', $session_menu)) {
+            DB::beginTransaction();
+            try {
+                $date = Carbon::now();
+                // siswa
+                $student = Siswa::findOrFail($id);
+                $student->user_deleted = Auth::user()->id;
+                $student->deleted_at = $date;
+                $student->save();
 
-            // user
-            $user = User::findorfail($student->user_id);
-            $user->user_deleted = Auth::user()->id;
-            $user->deleted_at = $date;
-            $user->save();
+                // user
+                $user = User::findorfail($student->user_id);
+                $user->user_deleted = Auth::user()->id;
+                $user->deleted_at = $date;
+                $user->save();
 
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -1101,126 +1166,135 @@ class SiswaController extends Controller
 
     public function edit_pembayaran($id)
     {
-        $student = Siswa::findOrFail(Crypt::decryptString($id));
-        $formulir = DB::table('payment')
-            ->select(
-                'payment.*',
-                'school_class.classes',
-                'school_level.level',
-            )
-            ->Join('bills', 'bills.id', 'payment.bills_id')
-            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
-            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
-            ->where('bills.bills', '=', 'Uang Formulir')
-            ->whereNull('payment.deleted_at')
-            ->get();
-        $pangkal = DB::table('payment')
-            ->select(
-                'payment.*',
-                'school_class.classes',
-                'school_level.level',
-            )
-            ->Join('bills', 'bills.id', 'payment.bills_id')
-            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
-            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
-            ->where('bills.bills', '=', 'Uang Pangkal')
-            ->whereNull('payment.deleted_at')
-            ->get();
-        $spp = DB::table('payment')
-            ->select(
-                'payment.*',
-                'school_class.classes',
-                'school_level.level',
-            )
-            ->Join('bills', 'bills.id', 'payment.bills_id')
-            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
-            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
-            ->where('bills.bills', '=', 'SPP')
-            ->whereNull('payment.deleted_at')
-            ->get();
-        $kegiatan = DB::table('payment')
-            ->select(
-                'payment.*',
-                'school_class.classes',
-                'school_level.level',
-            )
-            ->Join('bills', 'bills.id', 'payment.bills_id')
-            ->Join('school_level', 'school_level.id', 'payment.school_level_id')
-            ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
-            ->where('bills.bills', '=', 'Uang Kegiatan')
-            ->whereNull('payment.deleted_at')
-            ->get();
-        $kelas = DB::table('classes')
-            ->select(
-                'classes.*',
-                'school_class.classes',
-                'school_level.level',
-            )
-            ->Join('school_level', 'school_level.id', 'classes.id_school_level')
-            ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
-            ->whereNull('classes.deleted_at')
-            ->get();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('56', $session_menu)) {
+            $student = Siswa::findOrFail(Crypt::decryptString($id));
+            $formulir = DB::table('payment')
+                ->select(
+                    'payment.*',
+                    'school_class.classes',
+                    'school_level.level',
+                )
+                ->Join('bills', 'bills.id', 'payment.bills_id')
+                ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+                ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+                ->where('bills.bills', '=', 'Uang Formulir')
+                ->whereNull('payment.deleted_at')
+                ->get();
+            $pangkal = DB::table('payment')
+                ->select(
+                    'payment.*',
+                    'school_class.classes',
+                    'school_level.level',
+                )
+                ->Join('bills', 'bills.id', 'payment.bills_id')
+                ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+                ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+                ->where('bills.bills', '=', 'Uang Pangkal')
+                ->whereNull('payment.deleted_at')
+                ->get();
+            $spp = DB::table('payment')
+                ->select(
+                    'payment.*',
+                    'school_class.classes',
+                    'school_level.level',
+                )
+                ->Join('bills', 'bills.id', 'payment.bills_id')
+                ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+                ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+                ->where('bills.bills', '=', 'SPP')
+                ->whereNull('payment.deleted_at')
+                ->get();
+            $kegiatan = DB::table('payment')
+                ->select(
+                    'payment.*',
+                    'school_class.classes',
+                    'school_level.level',
+                )
+                ->Join('bills', 'bills.id', 'payment.bills_id')
+                ->Join('school_level', 'school_level.id', 'payment.school_level_id')
+                ->leftJoin('school_class', 'school_class.id', 'payment.school_class_id')
+                ->where('bills.bills', '=', 'Uang Kegiatan')
+                ->whereNull('payment.deleted_at')
+                ->get();
+            $kelas = DB::table('classes')
+                ->select(
+                    'classes.*',
+                    'school_class.classes',
+                    'school_level.level',
+                )
+                ->Join('school_level', 'school_level.id', 'classes.id_school_level')
+                ->leftJoin('school_class', 'school_class.id', 'classes.class_id')
+                ->whereNull('classes.deleted_at')
+                ->get();
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Pembayaran Siswa',
-            'label' => 'Edit Pembayaran Siswa',
-            'student' => $student,
-            'formulir' => $formulir,
-            'pangkal' => $pangkal,
-            'spp' => $spp,
-            'kegiatan' => $kegiatan,
-            'kelas' => $kelas,
-        ];
-
-        return view('siswa.edit_pembayaran')->with($data);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Pembayaran Siswa',
+                'label' => 'Edit Pembayaran Siswa',
+                'student' => $student,
+                'formulir' => $formulir,
+                'pangkal' => $pangkal,
+                'spp' => $spp,
+                'kegiatan' => $kegiatan,
+                'kelas' => $kelas,
+            ];
+            return view('siswa.edit_pembayaran')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function update_pembayaran(Request $request, $id)
     {
-        $decrypted_id = Crypt::decryptString($id);
-        $cek_user = Siswa::findOrFail($decrypted_id);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('56', $session_menu)) {
+            $decrypted_id = Crypt::decryptString($id);
+            $cek_user = Siswa::findOrFail($decrypted_id);
 
-        $validated = $request->validate([
-            // 'formulir' => 'required',
-            // 'pangkal' => 'required',
-            // 'spp' => 'required',
-            // 'kegiatan' => 'required',
-            'kelas' => 'required',
-            'email' => 'required|email|unique:users,email,' . $cek_user->user_id,
-            'nis' => "required|unique:siswa,nis,$decrypted_id,id,deleted_at,NULL",
-            'nisn' => "required|unique:siswa,nisn,$decrypted_id,id,deleted_at,NULL",
-            'nik' => "required|unique:siswa,nik,$decrypted_id,id,deleted_at,NULL",
-        ]);
-        DB::beginTransaction();
-        try {
-            $siswa = Siswa::findOrFail($decrypted_id);
-            $siswa->formulir_id = $request->formulir;
-            $siswa->pangkal_id = $request->pangkal;
-            $siswa->spp_id = $request->spp;
-            $siswa->kegiatan_id = $request->kegiatan;
-            $siswa->class_id = $validated['kelas'];
-            $siswa->email = strtolower($request->email);
-            $siswa->nis = $validated['nis'];
-            $siswa->nisn = $validated['nisn'];
-            $siswa->nik = $validated['nik'];
-            $siswa->user_updated = Auth::user()->id;
-            $siswa->save();
+            $validated = $request->validate([
+                // 'formulir' => 'required',
+                // 'pangkal' => 'required',
+                // 'spp' => 'required',
+                // 'kegiatan' => 'required',
+                'kelas' => 'required',
+                'email' => 'required|email|unique:users,email,' . $cek_user->user_id,
+                'nis' => "required|unique:siswa,nis,$decrypted_id,id,deleted_at,NULL",
+                'nisn' => "required|unique:siswa,nisn,$decrypted_id,id,deleted_at,NULL",
+                'nik' => "required|unique:siswa,nik,$decrypted_id,id,deleted_at,NULL",
+            ]);
+            DB::beginTransaction();
+            try {
+                $siswa = Siswa::findOrFail($decrypted_id);
+                $siswa->formulir_id = $request->formulir;
+                $siswa->pangkal_id = $request->pangkal;
+                $siswa->spp_id = $request->spp;
+                $siswa->kegiatan_id = $request->kegiatan;
+                $siswa->class_id = $validated['kelas'];
+                $siswa->email = strtolower($request->email);
+                $siswa->nis = $validated['nis'];
+                $siswa->nisn = $validated['nisn'];
+                $siswa->nik = $validated['nik'];
+                $siswa->user_updated = Auth::user()->id;
+                $siswa->save();
 
-            $user_id = $request->user_id;
-            $user = User::findOrFail($user_id);
-            $user->email = strtolower($request->email);
-            $user->user_updated = Auth::user()->id;
-            $user->save();
+                $user_id = $request->user_id;
+                $user = User::findOrFail($user_id);
+                $user->email = strtolower($request->email);
+                $user->user_updated = Auth::user()->id;
+                $user->save();
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('siswa');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::updateAlert(false);
-            return back();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('siswa');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::updateAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 

@@ -30,415 +30,499 @@ class EmployeeController extends Controller
 
     public function index(Request $request)
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->sid,
-            'submenu' => $this->menu,
-            'label' => 'list karyawan',
-        ];
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('2', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->sid,
+                'submenu' => $this->menu,
+                'label' => 'list karyawan',
+            ];
 
-        if (Auth::user()->roles !== 'Admin' and Auth::user()->roles !== 'Administrator') {
-            $employee = DB::table('karyawan')
-                ->select(
-                    'karyawan.id',
-                    'nama_lengkap',
-                    'email',
-                    'nik',
-                    'npwp',
-                    'no_hp',
-                    'jabatan',
-                    'karyawan.aktif',
-                )
-                ->Join('users', 'users.id', 'karyawan.user_id')
-                ->where('karyawan.user_id', Auth::user()->id)
-                ->whereNull('karyawan.deleted_at');
-        } else {
-            $employee = DB::table('karyawan')
-                ->select(
-                    'karyawan.id',
-                    'nama_lengkap',
-                    'email',
-                    'nik',
-                    'npwp',
-                    'no_hp',
-                    'jabatan',
-                    'karyawan.aktif',
-                )
-                ->Join('users', 'users.id', 'karyawan.user_id')
-                ->whereNull('karyawan.deleted_at');
-            if ($request->get('search') != null) {
-                $search = $request->get('search');
-                $employee->where(function ($where) use ($search) {
-                    if ($search) {
-                        if (strtolower($search) == 'aktif') {
-                            $status = 1;
-                            $where->orWhere('karyawan.aktif', '=', $status);
-                        } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
-                            $status = 0;
-                            $where->orWhere('karyawan.aktif', '=', $status);
-                        }
-                    }
-                    $where
-                        ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
-                        ->orWhere('email', 'like', '%' . $search . '%')
-                        ->orWhere('nik', 'like', '%' . $search . '%')
-                        ->orWhere('npwp', 'like', '%' . $search . '%')
-                        ->orWhere('no_hp', 'like', '%' . $search . '%')
-                        ->orWhere('jabatan', 'like', '%' . $search . '%');
-                });
+            if (Auth::user()->roles !== 'Admin' and Auth::user()->roles !== 'Administrator') {
+                $employee = DB::table('karyawan')
+                    ->select(
+                        'karyawan.id',
+                        'nama_lengkap',
+                        'email',
+                        'nik',
+                        'npwp',
+                        'no_hp',
+                        'jabatan',
+                        'karyawan.aktif',
+                    )
+                    ->Join('users', 'users.id', 'karyawan.user_id')
+                    ->where('karyawan.user_id', Auth::user()->id)
+                    ->whereNull('karyawan.deleted_at');
             } else {
-                if ($request->get('nama') != null) {
-                    $nama = $request->get('nama');
-                    // $employee->where('nama_lengkap', '=', $nama);
-                    $employee->Where('nama_lengkap', 'like', '%' . $nama . '%');
-                }
-                if ($request->get('email') != null) {
-                    $email = $request->get('email');
-                    $employee->where('email', '=', $email);
-                }
-                if ($request->get('nik') != null) {
-                    $nik = $request->get('nik');
-                    $employee->where('nik', '=', $nik);
-                }
-                if ($request->get('npwp') != null) {
-                    $npwp = $request->get('npwp');
-                    $employee->where('npwp', '=', $npwp);
-                }
-                if ($request->get('kontak') != null) {
-                    $kontak = $request->get('kontak');
-                    $employee->where('no_hp', '=', $kontak);
-                }
-                if ($request->get('jabatan') != null) {
-                    $jabatan = $request->get('jabatan');
-                    $employee->where('jabatan', '=', $jabatan);
-                }
-                if ($request->get('stat') != null) {
-                    $stat = $request->get('stat');
-                    if (strtolower($stat) == 'aktif') {
-                        $stat = 1;
-                    } else {
-                        $stat = 0;
+                $employee = DB::table('karyawan')
+                    ->select(
+                        'karyawan.id',
+                        'nama_lengkap',
+                        'email',
+                        'nik',
+                        'npwp',
+                        'no_hp',
+                        'jabatan',
+                        'karyawan.aktif',
+                    )
+                    ->Join('users', 'users.id', 'karyawan.user_id')
+                    ->whereNull('karyawan.deleted_at');
+                if ($request->get('search_manual') != null) {
+                    $search = $request->get('search_manual');
+                    $employee->where(function ($where) use ($search) {
+                        if ($search) {
+                            if (strtolower($search) == 'aktif') {
+                                $status = 1;
+                                $where->orWhere('karyawan.aktif', '=', $status);
+                            } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
+                                $status = 0;
+                                $where->orWhere('karyawan.aktif', '=', $status);
+                            }
+                        }
+                        $where
+                            ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%')
+                            ->orWhere('nik', 'like', '%' . $search . '%')
+                            ->orWhere('npwp', 'like', '%' . $search . '%')
+                            ->orWhere('no_hp', 'like', '%' . $search . '%')
+                            ->orWhere('jabatan', 'like', '%' . $search . '%');
+                    });
+
+                    $search = $request->get('search');
+                    $employee->where(function ($where) use ($search) {
+                        if ($search) {
+                            if (strtolower($search) == 'aktif') {
+                                $status = 1;
+                                $where->orWhere('karyawan.aktif', '=', $status);
+                            } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
+                                $status = 0;
+                                $where->orWhere('karyawan.aktif', '=', $status);
+                            }
+                        }
+                        $where
+                            ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%')
+                            ->orWhere('nik', 'like', '%' . $search . '%')
+                            ->orWhere('npwp', 'like', '%' . $search . '%')
+                            ->orWhere('no_hp', 'like', '%' . $search . '%')
+                            ->orWhere('jabatan', 'like', '%' . $search . '%');
+                    });
+                } else {
+                    if ($request->get('nama') != null) {
+                        $nama = $request->get('nama');
+                        // $employee->where('nama_lengkap', '=', $nama);
+                        $employee->Where('nama_lengkap', 'like', '%' . $nama . '%');
                     }
-                    $employee->where('karyawan.aktif', '=', $stat);
+                    if ($request->get('email') != null) {
+                        $email = $request->get('email');
+                        $employee->where('email', '=', $email);
+                    }
+                    if ($request->get('nik') != null) {
+                        $nik = $request->get('nik');
+                        $employee->where('nik', '=', $nik);
+                    }
+                    if ($request->get('npwp') != null) {
+                        $npwp = $request->get('npwp');
+                        $employee->where('npwp', '=', $npwp);
+                    }
+                    if ($request->get('kontak') != null) {
+                        $kontak = $request->get('kontak');
+                        $employee->where('no_hp', '=', $kontak);
+                    }
+                    if ($request->get('jabatan') != null) {
+                        $jabatan = $request->get('jabatan');
+                        $employee->where('jabatan', '=', $jabatan);
+                    }
+                    if ($request->get('stat') != null) {
+                        $stat = $request->get('stat');
+                        if (strtolower($stat) == 'aktif') {
+                            $stat = 1;
+                        } else {
+                            $stat = 0;
+                        }
+                        $employee->where('karyawan.aktif', '=', $stat);
+                    }
+                    if ($request->get('search') != null) {
+                        $search = $request->get('search');
+                        $employee->where(function ($where) use ($search) {
+                            if ($search) {
+                                if (strtolower($search) == 'aktif') {
+                                    $status = 1;
+                                    $where->orWhere('karyawan.aktif', '=', $status);
+                                } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
+                                    $status = 0;
+                                    $where->orWhere('karyawan.aktif', '=', $status);
+                                }
+                            }
+                            $where
+                                ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%')
+                                ->orWhere('nik', 'like', '%' . $search . '%')
+                                ->orWhere('npwp', 'like', '%' . $search . '%')
+                                ->orWhere('no_hp', 'like', '%' . $search . '%')
+                                ->orWhere('jabatan', 'like', '%' . $search . '%');
+                        });
+                    }
                 }
             }
-        }
 
-        if ($request->ajax()) {
-            return DataTables::of($employee)
-                ->addIndexColumn()
-                ->addColumn('Opsi', 'employee._form')
-                ->addColumn('status', function ($employee) {
-                    $employee->aktif === '1' ? $flag = 'success' : $flag = 'danger';
-                    $employee->aktif === '1' ? $status = 'Aktif' : $status = 'Non Aktif';
-                    return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
-                })
-                ->rawColumns(['Opsi', 'status'])
-                ->make(true);
+            if ($request->ajax()) {
+                return DataTables::of($employee)
+                    ->addIndexColumn()
+                    ->addColumn('Opsi', 'employee._form')
+                    ->addColumn('status', function ($employee) {
+                        $employee->aktif === '1' ? $flag = 'success' : $flag = 'danger';
+                        $employee->aktif === '1' ? $status = 'Aktif' : $status = 'Non Aktif';
+                        return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
+                    })
+                    ->rawColumns(['Opsi', 'status'])
+                    ->make(true);
+            } else {
+                return view('employee.list_employee')->with($data);
+            }
         } else {
-            return view('employee.list_employee')->with($data);
+            return view('not_found');
         }
     }
 
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->sid,
-            'submenu' => $this->menu,
-            'label' => 'karyawan baru',
-        ];
-        return view('employee.add_employee')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('3', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->sid,
+                'submenu' => $this->menu,
+                'label' => 'karyawan baru',
+            ];
+            return view('employee.add_employee')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_lengkap' => 'required|max:128',
-            'tempat_lahir' => 'required|max:64',
-            'tgl_lahir' => 'required',
-            'agama' => 'required',
-            'jabatan' => 'required',
-            'masuk_kerja' => 'required',
-            'nik' => 'required|max:20',
-            'niks' => 'required|max:20|unique:karyawan,niks,NULL,id,deleted_at,NULL',
-            'kk' => 'required|max:20',
-            'dok_nik' => 'mimes:png,jpeg,jpg,pdf|max:2048',
-            'dok_npwp' => 'mimes:png,jpeg,jpg,pdf|max:2048',
-            'dok_kk' => 'mimes:png,jpeg,jpg,pdf|max:2048',
-            'foto' => 'mimes:png,jpeg,jpg|max:2048',
-        ]);
-        DB::beginTransaction();
-        try {
-            $employee = new Employee();
-            $employee->nama_lengkap = $request->nama_lengkap;
-            $employee->no_hp = $request->no_hp;
-            $employee->tempat_lahir = $request->tempat_lahir;
-            $employee->tgl_lahir = $request->tgl_lahir;
-            // niks (no induk karyawan sekolah)
-            $employee->niks = $request->niks;
-            // dokumen nik
-            $employee->nik = $request->nik;
-            if ($request->dok_nik) {
-                $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_nik->extension();
-                $employee->dok_nik = $fileName;
-                $request->file('dok_nik')->storeAs('public/karyawan/nik', $fileName);
-            }
-            // dokumen npwp
-            $employee->npwp = $request->npwp;
-            if ($request->dok_npwp) {
-                $fileNameNpwp = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_npwp->extension();
-                $employee->dok_npwp = $fileNameNpwp;
-                $request->file('dok_npwp')->storeAs('public/karyawan/npwp', $fileNameNpwp);
-            }
-            // dokumen kartu keluarga
-            $employee->kk = $request->kk;
-            if ($request->dok_kk) {
-                $fileNameKK = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_kk->extension();
-                $employee->dok_kk = $fileNameKK;
-                $request->file('dok_kk')->storeAs('public/karyawan/kk', $fileNameKK);
-            }
-            // dokumen foto karyawan
-            $employee->foto = $request->foto;
-            if ($request->foto) {
-                $fileNameFoto = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->foto->extension();
-                $employee->foto = $fileNameFoto;
-                $request->file('foto')->storeAs('public/karyawan/foto', $fileNameFoto);
-            }
-            $employee->bpjs_kesehatan = $request->bpjs_kesehatan;
-            $employee->bpjs_ketenagakerjaan = $request->bpjs_ketenagakerjaan;
-            $employee->agama_id  = $request->agama;
-            $employee->golongan_darah = $request->golongan_darah;
-            $employee->nama_pasangan = $request->nama_pasangan;
-            $employee->no_pasangan = $request->no_pasangan;
-            $employee->alamat_asal = $request->alamat_asal;
-            $employee->dusun_asal = $request->dusun_asal;
-            $employee->rt_asal = $request->rt_asal;
-            $employee->rw_asal = $request->rw_asal;
-            $employee->provinsi_asal = $request->provinsi_asal;
-            $employee->kota_asal = $request->kota_asal;
-            $employee->kecamatan_asal = $request->kecamatan_asal;
-            $employee->kelurahan_asal = $request->kelurahan_asal;
-            $employee->kodepos_asal = $request->kodepos_asal;
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('3', $session_menu)) {
+            $request->validate([
+                'nama_lengkap' => 'required|max:128',
+                'tempat_lahir' => 'required|max:64',
+                'tgl_lahir' => 'required',
+                'agama' => 'required',
+                'jabatan' => 'required',
+                'masuk_kerja' => 'required',
+                'nik' => 'required|max:20',
+                'niks' => 'required|max:20|unique:karyawan,niks,NULL,id,deleted_at,NULL',
+                'kk' => 'required|max:20',
+                'dok_nik' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+                'dok_npwp' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+                'dok_kk' => 'mimes:png,jpeg,jpg,pdf|max:2048',
+                'foto' => 'mimes:png,jpeg,jpg|max:2048',
+            ]);
+            DB::beginTransaction();
+            try {
+                $employee = new Employee();
+                $employee->nama_lengkap = $request->nama_lengkap;
+                $employee->no_hp = $request->no_hp;
+                $employee->tempat_lahir = $request->tempat_lahir;
+                $employee->tgl_lahir = $request->tgl_lahir;
+                // niks (no induk karyawan sekolah)
+                $employee->niks = $request->niks;
+                // dokumen nik
+                $employee->nik = $request->nik;
+                if ($request->dok_nik) {
+                    $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_nik->extension();
+                    $employee->dok_nik = $fileName;
+                    $request->file('dok_nik')->storeAs('public/karyawan/nik', $fileName);
+                }
+                // dokumen npwp
+                $employee->npwp = $request->npwp;
+                if ($request->dok_npwp) {
+                    $fileNameNpwp = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_npwp->extension();
+                    $employee->dok_npwp = $fileNameNpwp;
+                    $request->file('dok_npwp')->storeAs('public/karyawan/npwp', $fileNameNpwp);
+                }
+                // dokumen kartu keluarga
+                $employee->kk = $request->kk;
+                if ($request->dok_kk) {
+                    $fileNameKK = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_kk->extension();
+                    $employee->dok_kk = $fileNameKK;
+                    $request->file('dok_kk')->storeAs('public/karyawan/kk', $fileNameKK);
+                }
+                // dokumen foto karyawan
+                $employee->foto = $request->foto;
+                if ($request->foto) {
+                    $fileNameFoto = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->foto->extension();
+                    $employee->foto = $fileNameFoto;
+                    $request->file('foto')->storeAs('public/karyawan/foto', $fileNameFoto);
+                }
+                $employee->bpjs_kesehatan = $request->bpjs_kesehatan;
+                $employee->bpjs_ketenagakerjaan = $request->bpjs_ketenagakerjaan;
+                $employee->agama_id  = $request->agama;
+                $employee->golongan_darah = $request->golongan_darah;
+                $employee->nama_pasangan = $request->nama_pasangan;
+                $employee->no_pasangan = $request->no_pasangan;
+                $employee->alamat_asal = $request->alamat_asal;
+                $employee->dusun_asal = $request->dusun_asal;
+                $employee->rt_asal = $request->rt_asal;
+                $employee->rw_asal = $request->rw_asal;
+                $employee->provinsi_asal = $request->provinsi_asal;
+                $employee->kota_asal = $request->kota_asal;
+                $employee->kecamatan_asal = $request->kecamatan_asal;
+                $employee->kelurahan_asal = $request->kelurahan_asal;
+                $employee->kodepos_asal = $request->kodepos_asal;
 
-            if ($request->AlamatSama === null) {
-                $employee->alamat = $request->alamat;
-                $employee->dusun = $request->dusun;
-                $employee->rt = $request->rt;
-                $employee->rw = $request->rw;
-                $employee->provinsi = $request->provinsi;
-                $employee->kota = $request->kota;
-                $employee->kecamatan = $request->kecamatan;
-                $employee->kelurahan = $request->kelurahan;
-                $employee->kodepos = $request->kodepos;
-            } else {
-                $employee->alamat = $request->alamat_asal;
-                $employee->dusun = $request->dusun_asal;
-                $employee->rt = $request->rt_asal;
-                $employee->rw = $request->rw_asal;
-                $employee->provinsi = $request->provinsi_asal;
-                $employee->kota = $request->kota_asal;
-                $employee->kecamatan = $request->kecamatan_asal;
-                $employee->kelurahan = $request->kelurahan_asal;
-                $employee->kodepos = $request->kodepos_asal;
-            }
-            $employee->jabatan = $request->jabatan;
-            $employee->masuk_kerja = $request->masuk_kerja;
-            $employee->aktif = '1';
-            $employee->user_id = $request->user_id;
-            $employee->user_created = Auth::user()->id;
-            $employee->save();
-            $last_id = $employee->id;
+                if ($request->AlamatSama === null) {
+                    $employee->alamat = $request->alamat;
+                    $employee->dusun = $request->dusun;
+                    $employee->rt = $request->rt;
+                    $employee->rw = $request->rw;
+                    $employee->provinsi = $request->provinsi;
+                    $employee->kota = $request->kota;
+                    $employee->kecamatan = $request->kecamatan;
+                    $employee->kelurahan = $request->kelurahan;
+                    $employee->kodepos = $request->kodepos;
+                } else {
+                    $employee->alamat = $request->alamat_asal;
+                    $employee->dusun = $request->dusun_asal;
+                    $employee->rt = $request->rt_asal;
+                    $employee->rw = $request->rw_asal;
+                    $employee->provinsi = $request->provinsi_asal;
+                    $employee->kota = $request->kota_asal;
+                    $employee->kecamatan = $request->kecamatan_asal;
+                    $employee->kelurahan = $request->kelurahan_asal;
+                    $employee->kodepos = $request->kodepos_asal;
+                }
+                $employee->jabatan = $request->jabatan;
+                $employee->masuk_kerja = $request->masuk_kerja;
+                $employee->aktif = '1';
+                $employee->user_id = $request->user_id;
+                $employee->user_created = Auth::user()->id;
+                $employee->save();
+                $last_id = $employee->id;
 
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('employee/ijazah/' . Crypt::encryptString($last_id));
-        } catch (\Exception $e) {
-            dd($e);
-            DB::rollback();
-            AlertHelper::addAlert(false);
-            return back();
+                // update avatar untuk chat 
+                User::where("id", Auth::user()->id)
+                    ->update(["avatar" => $fileNameFoto]);
+
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('employee/ijazah/' . Crypt::encryptString($last_id));
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollback();
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
     public function show($id)
     {
-        $id_karyawan = Crypt::decryptString($id);
-        $employee = Employee::findOrFail($id_karyawan);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->sid,
-            'submenu' => $this->menu,
-            'label' => 'karyawan',
-            'item' => $employee,
-            'child' => Anak_karyawan::where('karyawan_id', $id_karyawan)->orderBy('anak_ke', 'asc')->get(),
-            'school' => Anak_karyawan_sekolah_dw::where('karyawan_id', $id_karyawan)
-                ->orderBy('jenjang')
-                ->orderByRaw("FIELD('KB', 'TK', 'SD', 'SMP', 'SMK')")
-                ->get(),
-            'ijazah' => Ijazah::select('gelar_ijazah', 'type', 'karyawan_id')->where('karyawan_id', $id_karyawan)
-                ->orderByRaw("FIELD(gelar_ijazah, 'Kursus', 'Seminar', 'SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2','S3')")->groupby('gelar_ijazah')->get(),
-            'sk' => Sk_karyawan::where('karyawan_id', $id_karyawan)->get(),
-            'riwayat' => Riwayat_karyawan::where('karyawan_id', $id_karyawan)->get(),
-            'kontak' => Kontak_darurat::where('karyawan_id', $id_karyawan)->get(),
-        ];
-        return view('employee.show_employee')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('2', $session_menu)) {
+            $id_karyawan = Crypt::decryptString($id);
+            $employee = Employee::findOrFail($id_karyawan);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->sid,
+                'submenu' => $this->menu,
+                'label' => 'karyawan',
+                'item' => $employee,
+                'child' => Anak_karyawan::where('karyawan_id', $id_karyawan)->orderBy('anak_ke', 'asc')->get(),
+                'school' => Anak_karyawan_sekolah_dw::where('karyawan_id', $id_karyawan)
+                    ->orderBy('jenjang')
+                    ->orderByRaw("FIELD('KB', 'TK', 'SD', 'SMP', 'SMK')")
+                    ->get(),
+                'ijazah' => Ijazah::select('gelar_ijazah', 'type', 'karyawan_id')->where('karyawan_id', $id_karyawan)
+                    ->orderByRaw("FIELD(gelar_ijazah, 'Kursus', 'Seminar', 'SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2','S3')")->groupby('gelar_ijazah')->get(),
+                'sk' => Sk_karyawan::where('karyawan_id', $id_karyawan)->get(),
+                'riwayat' => Riwayat_karyawan::where('karyawan_id', $id_karyawan)->get(),
+                'kontak' => Kontak_darurat::where('karyawan_id', $id_karyawan)->get(),
+            ];
+            return view('employee.show_employee')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function edit($id)
     {
-        $result = Crypt::decryptString($id);
-        $employee = Employee::findOrFail($result);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->sid,
-            'submenu' => $this->menu,
-            'label' => 'karyawan',
-            'item' => $employee,
-        ];
-        return view('employee.edit_employee')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('4', $session_menu)) {
+            $result = Crypt::decryptString($id);
+            $employee = Employee::findOrFail($result);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->sid,
+                'submenu' => $this->menu,
+                'label' => 'karyawan',
+                'item' => $employee,
+            ];
+            return view('employee.edit_employee')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function update(Request $request)
     {
-        $id = Crypt::decryptString($request->id);
-        $request->validate([
-            'nama_lengkap' => 'required|max:128',
-            'tempat_lahir' => 'required|max:64',
-            'tgl_lahir' => 'required',
-            'jabatan' => 'required',
-            'masuk_kerja' => 'required',
-            'agama' => 'required',
-            'nik' => 'required|max:20',
-            'niks' => "required|max:20|unique:karyawan,niks,$id,id,deleted_at,NULL",
-            'kk' => 'required|max:20',
-        ]);
-        DB::beginTransaction();
-        try {
-            $employee = Employee::findorfail($id);
-            $employee->nama_lengkap = $request->nama_lengkap;
-            if ($request->nama_lengkap_old != $request->nama_lengkap) {
-                $user = User::findorfail($employee->user_id);
-                $user->name = $request->nama_lengkap;
-                $user->user_updated = Auth::user()->id;
-                $user->save();
-            }
-            $employee->no_hp = $request->no_hp;
-            $employee->tempat_lahir = $request->tempat_lahir;
-            $employee->tgl_lahir = $request->tgl_lahir;
-            // niks (no induk karyawan sekolah)
-            $employee->niks = $request->niks;
-            // dokumen nik
-            $employee->nik = $request->nik;
-            if ($request->dok_nik) {
-                $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_nik->extension();
-                $employee->dok_nik = $fileName;
-                $request->file('dok_nik')->storeAs('public/karyawan/nik', $fileName);
-                // Storage::delete('public/karyawan/nik/' . $request->dok_nik_old);
-            }
-            // dokumen npwp
-            $employee->npwp = $request->npwp;
-            if ($request->dok_npwp) {
-                $fileNameNpwp = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_npwp->extension();
-                $employee->dok_npwp = $fileNameNpwp;
-                $request->file('dok_npwp')->storeAs('public/karyawan/npwp', $fileNameNpwp);
-                // Storage::delete('public/karyawan/npwp/' . $request->dok_npwp_old);
-            }
-            // dokumen kartu keluarga
-            $employee->kk = $request->kk;
-            if ($request->dok_kk) {
-                $fileNameKK = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_kk->extension();
-                $employee->dok_kk = $fileNameKK;
-                $request->file('dok_kk')->storeAs('public/karyawan/kk', $fileNameKK);
-                // Storage::delete('public/karyawan/kk/' . $request->dok_kk_old);
-            }
-            // dokumen foto
-            if ($request->foto) {
-                $fileNameFoto = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->foto->extension();
-                $employee->foto = $fileNameFoto;
-                $request->file('foto')->storeAs('public/karyawan/foto', $fileNameFoto);
-                // Storage::delete('public/karyawan/foto/' . $request->foto_old);
-            }
-            $employee->bpjs_kesehatan = $request->bpjs_kesehatan;
-            $employee->bpjs_ketenagakerjaan = $request->bpjs_ketenagakerjaan;
-            $employee->agama_id  = $request->agama;
-            $employee->golongan_darah = $request->golongan_darah;
-            $employee->nama_pasangan = $request->nama_pasangan;
-            $employee->no_pasangan = $request->no_pasangan;
-            $employee->alamat_asal = $request->alamat_asal;
-            $employee->dusun_asal = $request->dusun_asal;
-            $employee->rt_asal = $request->rt_asal;
-            $employee->rw_asal = $request->rw_asal;
-            $employee->provinsi_asal = $request->provinsi_asal;
-            $employee->kota_asal = $request->kota_asal;
-            $employee->kecamatan_asal = $request->kecamatan_asal;
-            $employee->kelurahan_asal = $request->kelurahan_asal;
-            $employee->kodepos_asal = $request->kodepos_asal;
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('4', $session_menu)) {
+            $id = Crypt::decryptString($request->id);
+            $request->validate([
+                'nama_lengkap' => 'required|max:128',
+                'tempat_lahir' => 'required|max:64',
+                'tgl_lahir' => 'required',
+                'jabatan' => 'required',
+                'masuk_kerja' => 'required',
+                'agama' => 'required',
+                'nik' => 'required|max:20',
+                'niks' => "required|max:20|unique:karyawan,niks,$id,id,deleted_at,NULL",
+                'kk' => 'required|max:20',
+            ]);
+            DB::beginTransaction();
+            try {
+                $employee = Employee::findorfail($id);
+                $employee->nama_lengkap = $request->nama_lengkap;
+                if ($request->nama_lengkap_old != $request->nama_lengkap) {
+                    $user = User::findorfail($employee->user_id);
+                    $user->name = $request->nama_lengkap;
+                    $user->user_updated = Auth::user()->id;
+                    $user->save();
+                }
+                $employee->no_hp = $request->no_hp;
+                $employee->tempat_lahir = $request->tempat_lahir;
+                $employee->tgl_lahir = $request->tgl_lahir;
+                // niks (no induk karyawan sekolah)
+                $employee->niks = $request->niks;
+                // dokumen nik
+                $employee->nik = $request->nik;
+                if ($request->dok_nik) {
+                    $fileName = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_nik->extension();
+                    $employee->dok_nik = $fileName;
+                    $request->file('dok_nik')->storeAs('public/karyawan/nik', $fileName);
+                    // Storage::delete('public/karyawan/nik/' . $request->dok_nik_old);
+                }
+                // dokumen npwp
+                $employee->npwp = $request->npwp;
+                if ($request->dok_npwp) {
+                    $fileNameNpwp = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_npwp->extension();
+                    $employee->dok_npwp = $fileNameNpwp;
+                    $request->file('dok_npwp')->storeAs('public/karyawan/npwp', $fileNameNpwp);
+                    // Storage::delete('public/karyawan/npwp/' . $request->dok_npwp_old);
+                }
+                // dokumen kartu keluarga
+                $employee->kk = $request->kk;
+                if ($request->dok_kk) {
+                    $fileNameKK = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->dok_kk->extension();
+                    $employee->dok_kk = $fileNameKK;
+                    $request->file('dok_kk')->storeAs('public/karyawan/kk', $fileNameKK);
+                    // Storage::delete('public/karyawan/kk/' . $request->dok_kk_old);
+                }
+                // dokumen foto
+                if ($request->foto) {
+                    $fileNameFoto = Carbon::now()->format('ymdhis') . '_' . str::random(25) . '.' . $request->foto->extension();
+                    $employee->foto = $fileNameFoto;
+                    $request->file('foto')->storeAs('public/karyawan/foto', $fileNameFoto);
+                    // Storage::delete('public/karyawan/foto/' . $request->foto_old);
 
-            if ($request->AlamatSama === null) {
-                $employee->alamat = $request->alamat;
-                $employee->dusun = $request->dusun;
-                $employee->rt = $request->rt;
-                $employee->rw = $request->rw;
-                $employee->provinsi = $request->provinsi;
-                $employee->kota = $request->kota;
-                $employee->kecamatan = $request->kecamatan;
-                $employee->kelurahan = $request->kelurahan;
-                $employee->kodepos = $request->kodepos;
-            } else {
-                $employee->alamat = $request->alamat_asal;
-                $employee->dusun = $request->dusun_asal;
-                $employee->rt = $request->rt_asal;
-                $employee->rw = $request->rw_asal;
-                $employee->provinsi = $request->provinsi_asal;
-                $employee->kota = $request->kota_asal;
-                $employee->kecamatan = $request->kecamatan_asal;
-                $employee->kelurahan = $request->kelurahan_asal;
-                $employee->kodepos = $request->kodepos_asal;
-            }
-            $employee->jabatan = $request->jabatan;
-            $employee->masuk_kerja = $request->masuk_kerja;
-            $employee->user_id = $request->user_id;
-            $aktif = isset($request->aktif) ? 1 : 0;
-            if ($request->aktif_old != $aktif) {
-                $user = User::findorfail($employee->user_id);
-                $user->aktif = $aktif;
-                $user->user_updated = Auth::user()->id;
-                $user->save();
-            }
-            $employee->aktif = $aktif;
-            $employee->user_updated = Auth::user()->id;
-            $employee->save();
+                    // update avatar untuk chat 
+                    User::where("id", $employee->user_id)
+                        ->update(["avatar" => $fileNameFoto]);
+                }
+                $employee->bpjs_kesehatan = $request->bpjs_kesehatan;
+                $employee->bpjs_ketenagakerjaan = $request->bpjs_ketenagakerjaan;
+                $employee->agama_id  = $request->agama;
+                $employee->golongan_darah = $request->golongan_darah;
+                $employee->nama_pasangan = $request->nama_pasangan;
+                $employee->no_pasangan = $request->no_pasangan;
+                $employee->alamat_asal = $request->alamat_asal;
+                $employee->dusun_asal = $request->dusun_asal;
+                $employee->rt_asal = $request->rt_asal;
+                $employee->rw_asal = $request->rw_asal;
+                $employee->provinsi_asal = $request->provinsi_asal;
+                $employee->kota_asal = $request->kota_asal;
+                $employee->kecamatan_asal = $request->kecamatan_asal;
+                $employee->kelurahan_asal = $request->kelurahan_asal;
+                $employee->kodepos_asal = $request->kodepos_asal;
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('employee/ijazah/' . $request->id);
-        } catch (\Exception $e) {
-            dd($e);
-            DB::rollback();
-            AlertHelper::updateAlert(false);
-            return back();
+                if ($request->AlamatSama === null) {
+                    $employee->alamat = $request->alamat;
+                    $employee->dusun = $request->dusun;
+                    $employee->rt = $request->rt;
+                    $employee->rw = $request->rw;
+                    $employee->provinsi = $request->provinsi;
+                    $employee->kota = $request->kota;
+                    $employee->kecamatan = $request->kecamatan;
+                    $employee->kelurahan = $request->kelurahan;
+                    $employee->kodepos = $request->kodepos;
+                } else {
+                    $employee->alamat = $request->alamat_asal;
+                    $employee->dusun = $request->dusun_asal;
+                    $employee->rt = $request->rt_asal;
+                    $employee->rw = $request->rw_asal;
+                    $employee->provinsi = $request->provinsi_asal;
+                    $employee->kota = $request->kota_asal;
+                    $employee->kecamatan = $request->kecamatan_asal;
+                    $employee->kelurahan = $request->kelurahan_asal;
+                    $employee->kodepos = $request->kodepos_asal;
+                }
+                $employee->jabatan = $request->jabatan;
+                $employee->masuk_kerja = $request->masuk_kerja;
+                $employee->user_id = $request->user_id;
+                $aktif = isset($request->aktif) ? 1 : 0;
+                if ($request->aktif_old != $aktif) {
+                    $user = User::findorfail($employee->user_id);
+                    $user->aktif = $aktif;
+                    $user->user_updated = Auth::user()->id;
+                    $user->save();
+                }
+                $employee->aktif = $aktif;
+                $employee->user_updated = Auth::user()->id;
+                $employee->save();
+
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('employee/ijazah/' . $request->id);
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollback();
+                AlertHelper::updateAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
     public function destroy(Employee $employee, $id)
     {
-        $date = Carbon::now();
-        $employee_id = Crypt::decryptString($id);
-        // karyawan
-        $employee = Employee::findOrFail($employee_id);
-        $employee->user_deleted = Auth::user()->id;
-        $employee->deleted_at = $date;
-        $employee->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('5', $session_menu)) {
+            $date = Carbon::now();
+            $employee_id = Crypt::decryptString($id);
+            // karyawan
+            $employee = Employee::findOrFail($employee_id);
+            $employee->user_deleted = Auth::user()->id;
+            $employee->deleted_at = $date;
+            $employee->save();
 
-        // user
-        $user = User::findorfail($employee->user_id);
-        $user->user_deleted = Auth::user()->id;
-        $user->deleted_at = $date;
-        $user->save();
+            // user
+            $user = User::findorfail($employee->user_id);
+            $user->user_deleted = Auth::user()->id;
+            $user->deleted_at = $date;
+            $user->save();
 
-        AlertHelper::deleteAlert(true);
-        return back();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } else {
+            return view('not_found');
+        }
     }
 
     public function ijazah($id)

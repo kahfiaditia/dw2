@@ -6,6 +6,7 @@ use App\Helper\AlertHelper;
 use App\Models\Classes;
 use App\Models\School_class;
 use App\Models\School_level;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -42,7 +43,6 @@ class ClassesController extends Controller
 
     public function list_classes(Request $request)
     {
-
         $item = Classes::orderBy('id', 'DESC')->get();
         return DataTables::of($item)
             ->addColumn('level', function ($item) {
@@ -92,21 +92,21 @@ class ClassesController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'jenjang' => 'required',
-        ]);
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('32', $session_menu)) {
-
+            $validated = $request->validate([
+                'jenjang' => 'required',
+            ]);
             DB::beginTransaction();
             try {
                 Classes::create([
                     'id_school_level' => $validated['jenjang'],
                     'jurusan' => $request->jurusan,
                     'class_id' => $request->kelas,
-                    'type' => $request->type
+                    'type' => $request->type,
+                    'user_created' => Auth::user()->id,
                 ]);
+
                 DB::commit();
                 AlertHelper::addAlert(true);
                 return redirect('classes');
@@ -142,7 +142,6 @@ class ClassesController extends Controller
     {
         $session_menu = explode(',', Auth::User()->akses_submenu);
         if (in_array('33', $session_menu)) {
-
             $classes = Classes::findOrFail(Crypt::decryptString($id));
             $data = [
                 'title' => $this->title,
@@ -168,13 +167,12 @@ class ClassesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $decrypted_id = Crypt::decryptString($id);
-        $validated = $request->validate([
-            'jenjang' => 'required',
-        ]);
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('33', $session_menu)) {
-
+            $decrypted_id = Crypt::decryptString($id);
+            $validated = $request->validate([
+                'jenjang' => 'required',
+            ]);
             DB::beginTransaction();
             try {
                 $classes = Classes::findOrFail($decrypted_id);
@@ -182,7 +180,9 @@ class ClassesController extends Controller
                 $classes->jurusan = $request->jurusan;
                 $classes->class_id = $request->kelas;
                 $classes->type = $request->type;
+                $classes->user_updated = Auth::user()->id;
                 $classes->save();
+
                 DB::commit();
                 AlertHelper::updateAlert(true);
                 return redirect('classes');
@@ -206,11 +206,13 @@ class ClassesController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('34', $session_menu)) {
-
             DB::beginTransaction();
             try {
                 $delete = Classes::findOrFail(Crypt::decryptString($id));
-                $delete->delete();
+                $delete->user_deleted = Auth::user()->id;
+                $delete->deleted_at = Carbon::now();
+                $delete->save();
+
                 DB::commit();
                 AlertHelper::deleteAlert(true);
                 return back();

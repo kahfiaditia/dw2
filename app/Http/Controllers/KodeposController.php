@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Kodepos;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
@@ -21,13 +23,18 @@ class KodeposController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'kodepos',
-            'label' => 'data kodepos',
-        ];
-        return view('kodepos.list_kodepos')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('15', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'kodepos',
+                'label' => 'data kodepos',
+            ];
+            return view('kodepos.list_kodepos')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function data_ajax(Request $request)
@@ -74,6 +81,11 @@ class KodeposController extends Controller
      */
     public function create()
     {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('15', $session_menu)) {
+        } else {
+            return view('not_found');
+        }
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
@@ -91,31 +103,37 @@ class KodeposController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'provinsi' => 'required|max:100',
-            'kabupaten' => 'required|max:100',
-            'kecamatan' => 'required|max:100',
-            'kelurahan' => 'required|max:100',
-            'kodepos' => 'required|max:5',
-        ]);
-        DB::beginTransaction();
-        try {
-            $kodepos = new Kodepos();
-            $kodepos->provinsi = $request->provinsi;
-            $kodepos->kabupaten = $request->kabupaten;
-            $kodepos->kecamatan = $request->kecamatan;
-            $kodepos->kelurahan = $request->kelurahan;
-            $kodepos->kodepos = $request->kodepos;
-            $kodepos->status = '1';
-            $kodepos->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('16', $session_menu)) {
+            $request->validate([
+                'provinsi' => 'required|max:100',
+                'kabupaten' => 'required|max:100',
+                'kecamatan' => 'required|max:100',
+                'kelurahan' => 'required|max:100',
+                'kodepos' => 'required|max:5',
+            ]);
+            DB::beginTransaction();
+            try {
+                $kodepos = new Kodepos();
+                $kodepos->provinsi = $request->provinsi;
+                $kodepos->kabupaten = $request->kabupaten;
+                $kodepos->kecamatan = $request->kecamatan;
+                $kodepos->kelurahan = $request->kelurahan;
+                $kodepos->kodepos = $request->kodepos;
+                $kodepos->status = '1';
+                $kodepos->user_created = Auth::user()->id;
+                $kodepos->save();
 
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('kodepos');
-        } catch (\Exception $e) {
-            dd($e);
-            DB::rollback();
-            // something went wrong
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('kodepos');
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollback();
+                // something went wrong
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -138,15 +156,20 @@ class KodeposController extends Controller
      */
     public function edit(Request $request)
     {
-        $id_decrypted = Crypt::decryptString($request->id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'kodepos',
-            'label' => 'ubah kodepos',
-            'kodepos' => Kodepos::findorfail($id_decrypted)
-        ];
-        return view('kodepos.edit_kodepos')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('17', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($request->id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'kodepos',
+                'label' => 'ubah kodepos',
+                'kodepos' => Kodepos::findorfail($id_decrypted)
+            ];
+            return view('kodepos.edit_kodepos')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -158,24 +181,30 @@ class KodeposController extends Controller
      */
     public function update(Request $request, Kodepos $kodepos)
     {
-        DB::beginTransaction();
-        try {
-            $kodepos = Kodepos::findorfail($request->id);
-            $kodepos->provinsi = $request->provinsi;
-            $kodepos->kabupaten = $request->kabupaten;
-            $kodepos->kecamatan = $request->kecamatan;
-            $kodepos->kelurahan = $request->kelurahan;
-            $kodepos->kodepos = $request->kodepos;
-            $kodepos->status = isset($request->Status) ? '1' : '0';
-            $kodepos->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('17', $session_menu)) {
+            DB::beginTransaction();
+            try {
+                $kodepos = Kodepos::findorfail($request->id);
+                $kodepos->provinsi = $request->provinsi;
+                $kodepos->kabupaten = $request->kabupaten;
+                $kodepos->kecamatan = $request->kecamatan;
+                $kodepos->kelurahan = $request->kelurahan;
+                $kodepos->kodepos = $request->kodepos;
+                $kodepos->status = isset($request->Status) ? '1' : '0';
+                $kodepos->user_updated = Auth::user()->id;
+                $kodepos->save();
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('kodepos');
-        } catch (\Exception $e) {
-            dd($e);
-            DB::rollback();
-            // something went wrong
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('kodepos');
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollback();
+                // something went wrong
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -187,23 +216,27 @@ class KodeposController extends Controller
      */
     public function destroy(Request $request)
     {
-        $id_decrypted = Crypt::decryptString($request->id);
-        DB::beginTransaction();
-        try {
-            $kodepos = Kodepos::findorfail($id_decrypted);
-            $kodepos->status = 0;
-            $kodepos->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('18', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($request->id);
+            DB::beginTransaction();
+            try {
+                $kodepos = Kodepos::findorfail($id_decrypted);
+                $kodepos->status = 0;
+                $kodepos->user_deleted = Auth::user()->id;
+                $kodepos->deleted_at = Carbon::now();
+                $kodepos->save();
 
-            $kodepos = Kodepos::findorfail($id_decrypted);
-            $kodepos->delete();
-
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 

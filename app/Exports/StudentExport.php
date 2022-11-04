@@ -39,7 +39,8 @@ class StudentExport implements WithColumnFormatting, FromQuery, WithHeadings, Wi
 
         $search = $this->data['search'];
         if ($search != null) {
-            $students->where(function ($where) use ($search) {
+            $replaced = str_replace(' ', '', $search);
+            $students->where(function ($where) use ($search, $replaced) {
                 $where
                     ->orWhere('nis', 'like', '%' . $search . '%')
                     ->orWhere('nisn', 'like', '%' . $search . '%')
@@ -47,8 +48,8 @@ class StudentExport implements WithColumnFormatting, FromQuery, WithHeadings, Wi
                     ->orWhere('nama_lengkap', 'like', '%' . $search . '%')
                     ->orWhere('email', 'like', '%' . $search . '%')
                     ->orwhereRaw(
-                        "CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) like ?",
-                        '%' . $search . '%'
+                        "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                        '%' . $replaced . '%'
                     );
             });
         } else {
@@ -76,8 +77,9 @@ class StudentExport implements WithColumnFormatting, FromQuery, WithHeadings, Wi
                 $students->where('email', '=', $email);
             }
             if ($kelas != null) {
+                $kelas = str_replace(' ', '', $kelas);
                 $students->whereRaw(
-                    "CONCAT(IFNULL(school_level.level,''),' ',IFNULL(school_class.classes,''),' ',IFNULL(classes.jurusan,''),' ',IFNULL(classes.type,'')) like ?",
+                    "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
                     '%' . $kelas . '%'
                 );
             }

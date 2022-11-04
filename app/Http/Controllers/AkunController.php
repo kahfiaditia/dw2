@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
+use App\Mail\KirimEmail;
 use App\Models\Employee;
 use App\Models\School_level;
 use App\Models\Siswa;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\DataTables;
 
 class AkunController extends Controller
@@ -90,7 +92,6 @@ class AkunController extends Controller
      */
     public function create()
     {
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('8', $session_menu)) {
             $data = [
@@ -114,16 +115,17 @@ class AkunController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'username' => 'required|max:128',
-            'roles' => 'required',
-            'email' => 'required|email:dns|unique:users|max:128',
-            'password' => 'required|min:5|max:255',
-        ]);
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('8', $session_menu)) {
+            $request->validate([
+                'username' => 'required|max:128',
+                'roles' => 'required',
+                'email' => 'required|email:dns|unique:users|max:128',
+                'password' => 'required|min:5|max:255',
+            ]);
             DB::beginTransaction();
             try {
+                $pin_verified = sprintf("%04d", rand(0, 9999));
                 $user = new User();
                 $user->name = $request->username;
                 $user->roles = $request->roles;
@@ -152,8 +154,17 @@ class AkunController extends Controller
                     $user->akses_submenu = '1';
                 } elseif ($request->roles === 'Ortu') {
                 }
+                $user->pin_verified = $pin_verified;
+                $user->pin_verified_at = Carbon::now();
                 $user->user_created = Auth::user()->id;
                 $user->save();
+
+                $details = [
+                    'subject' => 'Verifikasi Email',
+                    'email' => $request->email,
+                    'pin_verified' => $pin_verified,
+                ];
+                Mail::to($request->email)->send(new KirimEmail($details));
 
                 DB::commit();
                 AlertHelper::addAlert(true);
@@ -167,17 +178,6 @@ class AkunController extends Controller
         } else {
             return view('not_found');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -216,7 +216,6 @@ class AkunController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('9', $session_menu)) {
-
             $request->validate([
                 'username' => 'required',
                 'roles' => 'required',
@@ -302,7 +301,6 @@ class AkunController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('10', $session_menu)) {
-
             $id_decrypted = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
@@ -363,5 +361,19 @@ class AkunController extends Controller
             AlertHelper::addAlert(false);
             return back();
         }
+    }
+
+    public function profile($id)
+    {
+        $id_decrypted = Crypt::decryptString($id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
+            'label' => 'ubah akun',
+            'school_level' => School_level::all(),
+            'akun' => User::findorfail($id_decrypted)
+        ];
+        return view('akun.edit')->with($data);
     }
 }

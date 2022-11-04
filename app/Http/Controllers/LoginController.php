@@ -66,6 +66,10 @@ class LoginController extends Controller
         // login password harus bcrpt baru bisa masuk auth::attempt
         if (Auth::attempt($credentials)) {
             if (Auth::user()->aktif === '1') {
+                User::where(['id' => Auth::user()->id])->update([
+                    'date_login' => Carbon::now(),
+                ]);
+
                 if (Auth::user()->roles == 'Administrator') {
                     $request->session()->regenerate();
                     return redirect()->intended('dashboard');
@@ -382,6 +386,11 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        User::where(['id' => Auth::user()->id])->update([
+            'date_login' => null,
+            'date_logout' => Carbon::now(),
+        ]);
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

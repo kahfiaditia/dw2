@@ -13,6 +13,7 @@
         @if (in_array('73', $session_menu))
             <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
         @endif
+        <a href="{{ route('buku.print', $id) }}" class="text-dark"><i class="mdi mdi-printer font-size-18"></i></a>
     </div>
 </form>
 <script>

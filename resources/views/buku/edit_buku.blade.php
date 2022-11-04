@@ -208,7 +208,6 @@
     <script src="{{ asset('assets/alert.js') }}"></script>
     <script>
         $(document).ready(function() {
-            // vSkillText = this.querySelector(':checked').getAttribute('data-id')
             var kategoriId = document.getElementById('kategori_id');
             var kategoriId = kategoriId.options[kategoriId.selectedIndex].value;
             $.ajax({
@@ -225,7 +224,6 @@
                     console.log(err);
                 },
             });
-
 
             $("#kategori_id").change(function() {
                 var kode_kategori = $(this).find(':selected').data('id');

@@ -43,6 +43,9 @@
                                                     <th class="text-center">Delete <br>
                                                         <input type="checkbox" onchange="deleteAll(this)" name="chk[]">
                                                     </th>
+                                                    <th class="text-center">Approve <br>
+                                                        <input type="checkbox" onchange="approveAll(this)" name="chk[]">
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -88,6 +91,17 @@
                                                         <input type="checkbox" name="akses_id[]" class="delete"
                                                             value="<?php echo $item->deletes; ?>" <?php $c = explode(',', $user->akses_submenu); ?>
                                                             <?php if (in_array($item->deletes, $c)) {
+                                                                echo 'checked';
+                                                            } ?>>
+                                                        <?php }else{ ?>
+                                                        <input type="checkbox" disabled>
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <?php if(isset($item->approves)){ ?>
+                                                        <input type="checkbox" name="akses_id[]" class="approve"
+                                                            value="<?php echo $item->approves; ?>" <?php $c = explode(',', $user->akses_submenu); ?>
+                                                            <?php if (in_array($item->approves, $c)) {
                                                                 echo 'checked';
                                                             } ?>>
                                                         <?php }else{ ?>
@@ -186,6 +200,23 @@
 
         function deleteAll(ele) {
             var checkboxes = document.getElementsByClassName('delete');
+            if (ele.checked) {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].type == 'checkbox') {
+                        checkboxes[i].checked = true;
+                    }
+                }
+            } else {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].type == 'checkbox') {
+                        checkboxes[i].checked = false;
+                    }
+                }
+            }
+        }
+
+        function approveAll(ele) {
+            var checkboxes = document.getElementsByClassName('approve');
             if (ele.checked) {
                 for (var i = 0; i < checkboxes.length; i++) {
                     if (checkboxes[i].type == 'checkbox') {
