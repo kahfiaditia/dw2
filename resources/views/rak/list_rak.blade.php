@@ -15,7 +15,7 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('12', $session_menu))
+                                @if (in_array('63', $session_menu))
                                     <a href="{{ route('rak.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="mdi mdi-plus me-1"></i> Tambah Rak
@@ -52,11 +52,11 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <div class="d-flex gap-3">
-                                                        @if (in_array('13', $session_menu))
+                                                        @if (in_array('64', $session_menu))
                                                             <a href="{{ route('rak.edit', $id) }}" class="text-success"><i
                                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                                         @endif
-                                                        @if (in_array('14', $session_menu))
+                                                        @if (in_array('65', $session_menu))
                                                             <a href class="text-danger delete_confirm"><i
                                                                     class="mdi mdi-delete font-size-18"></i></a>
                                                         @endif

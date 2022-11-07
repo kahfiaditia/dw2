@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
-use App\Models\penerbit;
+use App\Models\Penerbit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
