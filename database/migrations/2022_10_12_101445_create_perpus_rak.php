@@ -15,8 +15,8 @@ class CreatePerpusRak extends Migration
     {
         Schema::create('perpus_rak', function (Blueprint $table) {
             $table->id();
-            $table->string('no_rak', 128);
             $table->string('rak', 128);
+            $table->string('tingkatan', 128);
             $table->timestamps();
             $table->softDeletes();
         });

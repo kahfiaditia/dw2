@@ -36,6 +36,9 @@ Route::get('/reverify', [LoginController::class, 'reverify'])->name('reverify');
 Route::get('/reset/{id}', [LoginController::class, 'reset'])->name('reset');
 
 Route::get('/phpinfo', [DashboardController::class, 'phpinfo'])->name('phpinfo');
+// stock buku
+Route::get('/book', [BukuController::class, 'book'])->name('book');
+Route::get('/get_book', [BukuController::class, 'get_book'])->name('get_book');
 
 Route::group(
     [
@@ -261,13 +264,14 @@ Route::group(
         Route::post('/store_edit', [PinjamanController::class, 'store_edit'])->name('pinjaman.store_edit');
         Route::post('/scanBarcode', [PinjamanController::class, 'scanBarcode'])->name('pinjaman.scanBarcode');
         Route::get('/pinjaman_ajax', [PinjamanController::class, 'pinjaman_ajax'])->name('pinjaman.pinjaman_ajax');
-        Route::post('/scanBarcodeManual', [PinjamanController::class, 'scanBarcodeManual'])->name('pinjaman.scanBarcodeManual');
+        Route::post('/scanBarcodeEdit', [PinjamanController::class, 'scanBarcodeEdit'])->name('pinjaman.scanBarcodeEdit');
         Route::delete('/destroy_id/{id}', [PinjamanController::class, 'destroy_id'])->name('pinjaman.destroy_id');
         Route::post('/edit_buku', [PinjamanController::class, 'edit_buku'])->name('pinjaman.edit_buku');
         Route::post('/update_jml/{id}', [PinjamanController::class, 'update_jml'])->name('pinjaman.update_jml');
         Route::post('/post_update', [PinjamanController::class, 'post_update'])->name('pinjaman.post_update');
         Route::get('/approve/{id}', [PinjamanController::class, 'approve'])->name('pinjaman.approve');
         Route::get('export_pinjaman_buku', [PinjamanController::class, 'export_pinjaman_buku'])->name('pinjaman.export_pinjaman_buku');
+        Route::get('/search_loan', [PinjamanController::class, 'search_loan'])->name('pinjaman.search_loan');
     }
 );
 

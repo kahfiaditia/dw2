@@ -90,7 +90,12 @@
                                             <div class="mb-3">
                                                 <?php
                                                 if ($pinjaman[0]->siswa) {
-                                                    $jenjang = $pinjaman[0]->siswa->classes_student->school_level->level . ' ' . $pinjaman[0]->siswa->classes_student->school_class->classes . ' ' . $pinjaman[0]->siswa->classes_student->jurusan;
+                                                    if ($pinjaman[0]->siswa->classes_student->school_class) {
+                                                        $classes = $pinjaman[0]->siswa->classes_student->school_class->classes;
+                                                    } else {
+                                                        $classes = null;
+                                                    }
+                                                    $jenjang = $pinjaman[0]->siswa->classes_student->school_level->level . ' ' . $classes . ' ' . $pinjaman[0]->siswa->classes_student->jurusan;
                                                 } else {
                                                     $jenjang = null;
                                                 }
@@ -272,7 +277,7 @@
                 jenjang = document.getElementById("class_id_old").value;
                 $.ajax({
                     type: "POST",
-                    url: '{{ route('pinjaman.scanBarcodeManual') }}',
+                    url: '{{ route('pinjaman.scanBarcodeEdit') }}',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         barcode,

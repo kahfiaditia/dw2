@@ -36,8 +36,16 @@
                                     @if ($sub_item->display_submenu > 0)
                                         @if (in_array($sub_item->id, $session_submenu))
                                             @if ($sub_item->route_submenu)
-                                                <li><a href="{{ route($sub_item->route_submenu) }}"
-                                                        class="waves-effect">{{ $sub_item->submenu }}</a></li>
+                                                @if ($sub_item->submenu == 'Pinjaman')
+                                                    <li><a href="{{ route('pinjaman.search_loan') }}"
+                                                            class="waves-effect">{{ 'Cek ' . $sub_item->submenu }}</a>
+                                                    </li>
+                                                    <li><a href="{{ route($sub_item->route_submenu) }}"
+                                                            class="waves-effect">{{ $sub_item->submenu }}</a></li>
+                                                @else
+                                                    <li><a href="{{ route($sub_item->route_submenu) }}"
+                                                            class="waves-effect">{{ $sub_item->submenu }}</a></li>
+                                                @endif
                                             @else
                                                 <li><a href="#" class="waves-effect">{{ $sub_item->submenu }}</a>
                                                 </li>

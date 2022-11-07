@@ -53,13 +53,13 @@ class RakController extends Controller
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('63', $session_menu)) {
             $request->validate([
-                'no_rak' => 'required|max:64',
+                'tingkatan' => 'required|max:64',
                 'rak' => 'required|max:64',
             ]);
             DB::beginTransaction();
             try {
                 $rak = new Rak();
-                $rak->no_rak = $request['no_rak'];
+                $rak->tingkatan = $request['tingkatan'];
                 $rak->rak = $request['rak'];
                 $rak->user_created = Auth::user()->id;
                 $rak->save();
@@ -107,13 +107,13 @@ class RakController extends Controller
         if (in_array('64', $session_menu)) {
             $id = Crypt::decryptString($id);
             $request->validate([
-                'no_rak' => 'required|max:64',
+                'tingkatan' => 'required|max:64',
                 'rak' => 'required|max:64',
             ]);
             DB::beginTransaction();
             try {
                 $rak = Rak::findOrFail($id);
-                $rak->no_rak = $request['no_rak'];
+                $rak->tingkatan = $request['tingkatan'];
                 $rak->rak = $request['rak'];
                 $rak->user_updated = Auth::user()->id;
                 $rak->save();

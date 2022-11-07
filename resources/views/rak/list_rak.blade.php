@@ -34,8 +34,8 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>No Rak</th>
                                         <th>Rak</th>
+                                        <th>Tingkatan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -43,8 +43,8 @@
                                     @foreach ($lists as $list)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $list->no_rak }}</td>
                                             <td>{{ $list->rak }}</td>
+                                            <td>{{ $list->tingkatan }}</td>
                                             <td>
                                                 <?php $id = Crypt::encryptString($list->id); ?>
                                                 <form class="delete-form" action="{{ route('rak.destroy', $id) }}"

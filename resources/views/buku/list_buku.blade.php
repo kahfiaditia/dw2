@@ -34,7 +34,8 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode Barcode</th>
+                                        <th>Kode Buku</th>
+                                        <th>Barcode</th>
                                         <th>Judul</th>
                                         <th>Pengarang</th>
                                         <th>Penerbit</th>
@@ -75,6 +76,10 @@
                         }
                     },
                     {
+                        data: 'kode_buku',
+                        name: 'kode_buku'
+                    },
+                    {
                         data: 'barcode',
                         name: 'barcode'
                     },
@@ -95,8 +100,8 @@
                         name: 'kategori'
                     },
                     {
-                        data: 'jml_buku',
-                        name: 'jml_buku'
+                        data: 'stock_master',
+                        name: 'stock_master'
                     },
                     {
                         data: 'action',

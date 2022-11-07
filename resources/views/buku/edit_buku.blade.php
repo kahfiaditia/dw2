@@ -139,6 +139,46 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Rak
+                                                <code>*</code></label>
+                                            <select class="form-control select select2" name="rak_id" id="rak_id"
+                                                required>
+                                                <option value="">--Pilih Rak--
+                                                </option>
+                                                @foreach ($rak as $ra)
+                                                    <option value="{{ $ra->id }}"
+                                                        {{ $buku->rak_id == $ra->id ? 'selected' : '' }}>
+                                                        {{ $ra->rak . ' - ' . $ra->tingkatan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('rak_id', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Jumlah Stok Buku
+                                                <code>*</code></label>
+                                            <input data-parsley-type="number" type="text"
+                                                class="form-control number-only" id="stock_master" name="stock_master"
+                                                value="{{ $buku->stock_master }}" required placeholder="Jumlah Buku">
+                                            <input type="hidden" class="form-control " id="stock_master_old"
+                                                name="stock_master_old" value="{{ $buku->stock_master }}" required>
+                                            <input type="hidden" class="form-control " id="jml_buku" name="jml_buku"
+                                                value="{{ $buku->jml_buku }}" required>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('stock_master', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <input type="hidden" name="foto_old" value="{{ $buku->foto }}">
                                             <label for="formFile" class="form-label">Foto Buku (Max 2
                                                 Mb)</label>
@@ -162,15 +202,13 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Jumlah Buku
+                                            <label for="validationCustom02" class="form-label">Barcode
                                                 <code>*</code></label>
-                                            <input data-parsley-type="number" type="text"
-                                                class="form-control number-only" id="jml_buku" name="jml_buku"
-                                                value="{{ $buku->jml_buku }}" required placeholder="Jumlah Buku">
+                                            <input type="text" class="form-control" id="barcode" name="barcode"
+                                                value="{{ $buku->barcode }}" required placeholder="Barcode">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
-                                            {!! $errors->first('jml_buku', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                 </div>

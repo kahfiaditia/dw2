@@ -565,7 +565,7 @@ class PinjamanController extends Controller
         ]);
     }
 
-    public function scanBarcodeManual(Request $request)
+    public function scanBarcodeEdit(Request $request)
     {
         $data = Buku::where('barcode', $request->barcode)->first();
         if ($data) {
@@ -654,19 +654,30 @@ class PinjamanController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $pinjaman = Pinjaman::findOrFail($id);
-            $pinjaman->jml = $request['jml'];
-            $pinjaman->save();
-
             if ($request['jml'] > $request->jml_old) {
                 $stock = Buku::findorfail($request->buku_id);
                 $kurang = $request['jml'] - $request->jml_old;
-                Buku::where('id', $request->buku_id)->update(['jml_buku' => $stock->jml_buku - $kurang]);
+                dd($kurang);
+                if ($kurang < 0) {
+                    AlertHelper::updateAlert(true);
+                    return back();
+                } else {
+                    Buku::where('id', $request->buku_id)->update(['jml_buku' => $stock->jml_buku - $kurang]);
+                }
             } elseif ($request['jml'] < $request->jml_old) {
+                // dd('xq');
                 $stock = Buku::findorfail($request->buku_id);
                 $tambah = $request->jml_old - $request['jml'];
-                Buku::where('id', $request->buku_id)->update(['jml_buku' => $stock->jml_buku + $tambah]);
+                if ($tambah < 0) {
+                    AlertHelper::updateAlert(true);
+                    return back();
+                } else {
+                    Buku::where('id', $request->buku_id)->update(['jml_buku' => $stock->jml_buku + $tambah]);
+                }
             }
+            $pinjaman = Pinjaman::findOrFail($id);
+            $pinjaman->jml = $request['jml'];
+            $pinjaman->save();
 
             DB::commit();
             AlertHelper::updateAlert(true);
@@ -714,5 +725,21 @@ class PinjamanController extends Controller
             'like' => $request->like,
         ];
         return Excel::download(new PinjamanBuku($data), 'pinjaman_buku.xlsx');
+    }
+
+    public function search_loan()
+    {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('74', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'cek pinjaman',
+                'label' => 'Cari data pinjaman',
+            ];
+            return view('pinjaman.search_loan')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 }

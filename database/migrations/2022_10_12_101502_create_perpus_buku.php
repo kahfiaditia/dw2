@@ -15,6 +15,7 @@ class CreatePerpusBuku extends Migration
     {
         Schema::create('perpus_buku', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_buku', 64)->nullable();
             $table->string('judul', 128);
             $table->string('pengarang', 128);
             $table->unsignedBigInteger('penerbit_id')->nullable(); // nama_penerbit
@@ -23,9 +24,12 @@ class CreatePerpusBuku extends Migration
             $table->date('tgl_masuk')->nullable();
             $table->unsignedBigInteger('kategori_id')->nullable(); // kategori
             $table->foreign('kategori_id')->references('id')->on('perpus_kategori_buku');
+            $table->unsignedBigInteger('rak_id')->nullable(); // rak
+            $table->foreign('rak_id')->references('id')->on('perpus_rak');
+            $table->double('jml_buku')->default(0);
+            $table->double('stock_master')->default(0);
             $table->string('foto', 64)->nullable();
             $table->string('barcode', 64)->nullable();
-            $table->double('jml_buku')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

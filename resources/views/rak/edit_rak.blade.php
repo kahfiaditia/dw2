@@ -26,25 +26,30 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">No Rak <code>*</code></label>
-                                            <input type="text" class="form-control" id="no_rak" name="no_rak"
-                                                autofocus value="{{ old('no_rak', $rak->no_rak) }}" required
-                                                placeholder="rak">
-                                            <div class="invalid-feedback">
-                                                Data wajib diisi.
-                                            </div>
-                                            {!! $errors->first('no_rak', '<div class="invalid-validasi">:message</div>') !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Rak <code>*</code></label>
                                             <input type="text" class="form-control" id="rak" name="rak"
-                                                value="{{ old('rak', $rak->rak) }}" required placeholder="Rak">
+                                                style="text-transform:uppercase"
+                                                onkeyup="this.value = this.value.toUpperCase();"
+                                                value="{{ old('rak', $rak->rak) }}" autofocus required placeholder="Rak">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
                                             {!! $errors->first('rak', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Tingkatan
+                                                <code>*</code></label>
+                                            <input type="text" class="form-control" id="tingkatan" name="tingkatan"
+                                                style="text-transform:uppercase"
+                                                onkeyup="this.value = this.value.toUpperCase();"
+                                                value="{{ old('tingkatan', $rak->tingkatan) }}" required
+                                                placeholder="Tingkatan">
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('tingkatan', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                 </div>

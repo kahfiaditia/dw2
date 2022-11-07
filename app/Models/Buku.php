@@ -14,7 +14,7 @@ class Buku extends Model
 
     public function penerbit()
     {
-        return $this->belongsTo(Penerbit::class, 'kategori_id');
+        return $this->belongsTo(Penerbit::class, 'penerbit_id');
     }
 
     public function kategori()

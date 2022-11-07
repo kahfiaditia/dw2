@@ -246,23 +246,23 @@ class DiskonController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('51', $session_menu)) {
+            DB::beginTransaction();
+            try {
+                $delete = Diskon::findOrFail(Crypt::decryptString($id));
+                $delete->user_deleted = Auth::user()->id;
+                $delete->deleted_at = Carbon::now();
+                $delete->save();
+
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
         } else {
             return view('not_found');
-        }
-        DB::beginTransaction();
-        try {
-            $delete = Diskon::findOrFail(Crypt::decryptString($id));
-            $delete->user_deleted = Auth::user()->id;
-            $delete->deleted_at = Carbon::now();
-            $delete->save();
-
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
         }
     }
 
