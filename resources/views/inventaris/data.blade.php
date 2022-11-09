@@ -37,8 +37,8 @@
                                         <th>Nama</th>
                                         <th>No Inv</th>
                                         <th>ID Barang</th>
+                                        <th>Keterangan</th>
                                         <th>Ruangan</th>
-                                        <th>Qty</th>
                                         <th>Pemilik</th>
                                         <th>Action</th>
                                     </tr>
@@ -50,8 +50,8 @@
                                             <td>{{ $inv->nama }}</td>
                                             <td>{{ $inv->nomor_inventaris }}</td>
                                             <td>{{ $inv->idbarang }}</td>
-                                            <td>{{ $inv->ruangan }}</td>
-                                            <td>{{ $inv->qty }}</td>
+                                            <td>{{ $inv->status }}</td>
+                                            <td>{{ $inv->ruang->nama }}</td>
                                             <td>{{ $inv->pemilik }}</td>
                                             <td>
                                                 <a href="{{ url('inventaris/' . $inv->id . '/edit') }}"

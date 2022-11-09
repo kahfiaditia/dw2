@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inv_Ruangan;
 use App\Models\Inventaris;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,13 +34,6 @@ class InventarisController extends Controller
      */
     public function create()
     {
-        function timeAndMilliseconds()
-        {
-            $m = explode(' ', microtime());
-            return [$m[1], (int) round($m[0] * 1000, 3)];
-        }
-        [$totalSeconds, $extraMilliseconds] = timeAndMilliseconds();
-        $milisecond = date('YmdHis', $totalSeconds) . "$extraMilliseconds";
 
         $ruangs = Inv_Ruangan::all();
         $data = [
@@ -47,7 +41,6 @@ class InventarisController extends Controller
             'menu' => $this->menu,
             'submenu' => 'Inventaris',
             'label' => 'Tambah Inventaris',
-            'milisecond' => $milisecond,
         ];
         return view('inventaris.create', compact('ruangs'))->with($data);
     }
@@ -60,21 +53,49 @@ class InventarisController extends Controller
      */
     public function store(Request $request)
     {
-        $inv_ruangan = Inv_Ruangan::create([
-            'nama' => $request->name,
-            'nomor_inventaris' => $request->owner,
-            'id_barang' => $request->desc,
-            'indikasi' => $request->qty,
-            'pemilik' => $request->status,
-            'deskripsi' => $request->status,
-            'qty' => $request->status,
-            'status' => $request->status,
-            'user_created' => $request->status,
-            'user_updated' => $request->status,
-            'user_deleted' => Auth::user()->id,
-        ]);
-        $inv_ruangan->save();
-        return redirect('inventaris', compact('inv_ruangan'));
+        // echo json_encode('1');
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('80', $session_menu)) {
+
+            DB::beginTransaction();
+            try {
+
+
+                for ($i = 0; $i < count($request->databarang); $i++) {
+                    $inventaris = new Inventaris;
+                    $inventaris->nama = $request->databarang[$i]['hasilnama'];
+                    $inventaris->nomor_inventaris = $request->databarang[$i]['hasilno_inv'];
+                    $inventaris->idbarang = $request->databarang[$i]['hasilidbarang'];
+                    $inventaris->id_ruangan  = $request->databarang[$i]['id'];
+                    $inventaris->pemilik = $request->databarang[$i]['pemilik'];
+                    $inventaris->status = $request->databarang[$i]['keterangan'];
+                    $inventaris->indikasi = $request->databarang[$i]['hasilindikasi'];
+                    $inventaris->qty  = 1;
+                    $inventaris->user_created =  Auth::user()->id;
+                    // $inventaris->id_ruangan =  1;
+                    $inventaris->save();
+                }
+
+                DB::commit();
+                return response()->json([
+                    'code' => 200,
+                    'message' => 'Berhasil Input Data',
+                ]);
+                // return redirect('inventaris');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                return response()->json([
+                    'code' => 404,
+                    'message' => 'Gagal Input Data',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Sorry, page not found',
+            ]);
+        }
     }
 
     /**
