@@ -255,7 +255,7 @@
     </body>
     <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="{{ asset('assets/scanner/html5-qrcode.min.js') }}"></script>
     <script>
         var resultContainer = document.getElementById('qr-reader-results');
         var lastResult, countResults = 0;
