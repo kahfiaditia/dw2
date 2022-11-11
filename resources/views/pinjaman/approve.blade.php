@@ -17,164 +17,192 @@
                         </div>
                     </div>
                 </div>
-                <form class="needs-validation"
+                {{-- <form class="needs-validation"
                     action="{{ route('pinjaman.update', Crypt::encryptString($pinjaman[0]->kode_transaksi)) }}"
                     method="POST" novalidate>
                     @csrf
-                    @method('PATCH')
-                    <div class="row col-md-3" hidden>
-                        <input type="text" name="milisecond" id="milisecond" value="{{ $pinjaman[0]->milisecond }}">
-                        <input type="text" name="url" id="url"
-                            value="{{ Crypt::encryptString($pinjaman[0]->kode_transaksi) }}">
-                        <input type="text" name="kode_transaksi" id="kode_transaksi"
-                            value="{{ $pinjaman[0]->kode_transaksi }}">
-                        <input type="text" name="peminjaman_old" id="peminjaman_old"
-                            value="{{ $pinjaman[0]->peminjam }}">
-                        <input type="text" name="siswa_id_old" id="siswa_id_old" value="{{ $pinjaman[0]->siswa_id }}">
-                        <input type="text" name="karyawan_id_old" id="karyawan_id_old"
-                            value="{{ $pinjaman[0]->karyawan_id }}">
-                        <input type="text" name="class_id_old" id="class_id_old" value="{{ $pinjaman[0]->class_id }}">
-                    </div>
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="mb-3">
-                                                <label class="form-label">Peminjam <code>*</code></label>
-                                                <select class="form-control select select2 peminjam" name="peminjam"
-                                                    disabled id="peminjam">
-                                                    <option value="">--Pilih Peminjam--</option>
-                                                    <option value="Siswa"
-                                                        {{ $pinjaman[0]->peminjam == 'Siswa' ? 'selected' : '' }}>Siswa
-                                                    </option>
-                                                    <option value="Guru"
-                                                        {{ $pinjaman[0]->peminjam == 'Guru' ? 'selected' : '' }}>Guru
-                                                    </option>
-                                                    <option value="Karyawan"
-                                                        {{ $pinjaman[0]->peminjam == 'Karyawan' ? 'selected' : '' }}>
-                                                        Karyawan
-                                                    </option>
-                                                </select>
-                                                <div class="invalid-feedback">
-                                                    Data wajib diisi.
-                                                </div>
-                                                {!! $errors->first('peminjam', '<div class="invalid-validasi">:message</div>') !!}
+                    @method('PATCH') --}}
+                <div class="row col-md-3" hidden>
+                    <input type="text" name="milisecond" id="milisecond" value="{{ $pinjaman[0]->milisecond }}">
+                    <input type="text" name="url" id="url"
+                        value="{{ Crypt::encryptString($pinjaman[0]->kode_transaksi) }}">
+                    <input type="text" name="kode_transaksi" id="kode_transaksi"
+                        value="{{ $pinjaman[0]->kode_transaksi }}">
+                    <input type="text" name="peminjaman_old" id="peminjaman_old" value="{{ $pinjaman[0]->peminjam }}">
+                    <input type="text" name="siswa_id_old" id="siswa_id_old" value="{{ $pinjaman[0]->siswa_id }}">
+                    <input type="text" name="karyawan_id_old" id="karyawan_id_old"
+                        value="{{ $pinjaman[0]->karyawan_id }}">
+                    <input type="text" name="class_id_old" id="class_id_old" value="{{ $pinjaman[0]->class_id }}">
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Peminjam <code>*</code></label>
+                                            <select class="form-control select select2 peminjam" name="peminjam" disabled
+                                                id="peminjam">
+                                                <option value="">--Pilih Peminjam--</option>
+                                                <option value="Siswa"
+                                                    {{ $pinjaman[0]->peminjam == 'Siswa' ? 'selected' : '' }}>Siswa
+                                                </option>
+                                                <option value="Guru"
+                                                    {{ $pinjaman[0]->peminjam == 'Guru' ? 'selected' : '' }}>Guru
+                                                </option>
+                                                <option value="Karyawan"
+                                                    {{ $pinjaman[0]->peminjam == 'Karyawan' ? 'selected' : '' }}>
+                                                    Karyawan
+                                                </option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
                                             </div>
+                                            {!! $errors->first('peminjam', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
-                                        <div class="col-md-3 peminjam_siswa">
-                                            <div class="mb-3">
-                                                <?php
-                                                if ($pinjaman[0]->siswa) {
-                                                    if ($pinjaman[0]->siswa->classes_student->school_class) {
-                                                        $classes = $pinjaman[0]->siswa->classes_student->school_class->classes;
-                                                    } else {
-                                                        $classes = null;
-                                                    }
-                                                    $jenjang = $pinjaman[0]->siswa->classes_student->school_level->level . ' ' . $classes . ' ' . $pinjaman[0]->siswa->classes_student->jurusan;
+                                    </div>
+                                    <div class="col-md-3 peminjam_siswa">
+                                        <div class="mb-3">
+                                            <?php
+                                            if ($pinjaman[0]->siswa) {
+                                                if ($pinjaman[0]->siswa->classes_student->school_class) {
+                                                    $classes = $pinjaman[0]->siswa->classes_student->school_class->classes;
                                                 } else {
-                                                    $jenjang = null;
+                                                    $classes = null;
                                                 }
-                                                ?>
-                                                <label class="form-label">Jenjang <code>*</code></label>
-                                                <input type="text" class="form-control" id="pengarang" name="pengarang"
-                                                    value="{{ $jenjang }}" disabled placeholder="Pengarang">
-                                            </div>
+                                                $jenjang = $pinjaman[0]->siswa->classes_student->school_level->level . ' ' . $classes . ' ' . $pinjaman[0]->siswa->classes_student->jurusan;
+                                            } else {
+                                                $jenjang = null;
+                                            }
+                                            ?>
+                                            <label class="form-label">Jenjang <code>*</code></label>
+                                            <input type="text" class="form-control" id="pengarang" name="pengarang"
+                                                value="{{ $jenjang }}" disabled placeholder="Pengarang">
                                         </div>
-                                        <div class="col-md-3 peminjam_siswa">
-                                            <div class="mb-3">
-                                                <?php
-                                                if ($pinjaman[0]->siswa) {
-                                                    $siswa = $pinjaman[0]->siswa->nama_lengkap;
-                                                } else {
-                                                    $siswa = null;
-                                                }
-                                                ?>
-                                                <label for="">Siswa <code>*</code></label>
-                                                <input type="text" class="form-control" id="pengarang" name="pengarang"
-                                                    value="{{ $siswa }}" disabled placeholder="Pengarang">
-                                            </div>
+                                    </div>
+                                    <div class="col-md-3 peminjam_siswa">
+                                        <div class="mb-3">
+                                            <?php
+                                            if ($pinjaman[0]->siswa) {
+                                                $siswa = $pinjaman[0]->siswa->nama_lengkap;
+                                            } else {
+                                                $siswa = null;
+                                            }
+                                            ?>
+                                            <label for="">Siswa <code>*</code></label>
+                                            <input type="text" class="form-control" id="pengarang" name="pengarang"
+                                                value="{{ $siswa }}" disabled placeholder="Pengarang">
                                         </div>
-                                        <div class="col-md-3 peminjam_guru">
-                                            <div class="mb-3">
-                                                <?php
-                                                if ($pinjaman[0]->employee) {
-                                                    $employee = $pinjaman[0]->employee->nama_lengkap;
-                                                } else {
-                                                    $employee = null;
-                                                }
-                                                ?>
-                                                <label for="">Guru/Karyawan <code>*</code></label>
-                                                <input type="text" class="form-control" id="pengarang" name="pengarang"
-                                                    value="{{ $employee }}" disabled placeholder="Pengarang">
-                                            </div>
+                                    </div>
+                                    <div class="col-md-3 peminjam_guru">
+                                        <div class="mb-3">
+                                            <?php
+                                            if ($pinjaman[0]->employee) {
+                                                $employee = $pinjaman[0]->employee->nama_lengkap;
+                                            } else {
+                                                $employee = null;
+                                            }
+                                            ?>
+                                            <label for="">Guru/Karyawan <code>*</code></label>
+                                            <input type="text" class="form-control" id="pengarang" name="pengarang"
+                                                value="{{ $employee }}" disabled placeholder="Pengarang">
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="mb-3">
-                                                <label>Tanggal Pinjam <code>*</code></label>
-                                                <div class="input-group" id="datepicker2">
-                                                    <input type="text" class="form-control tgl_pinjam"
-                                                        placeholder="yyyy-mm-dd" name="tgl_pinjam" id="tgl_pinjam"
-                                                        value="{{ $pinjaman[0]->tgl_pinjam }}" disabled
-                                                        data-date-end-date="{{ date('Y-m-d') }}"
-                                                        data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
-                                                        data-provide="datepicker" required data-date-autoclose="true">
-                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="mb-3">
-                                                <label>Tanggal Perkiraan Kembali <code>*</code></label>
-                                                <div class="input-group" id="datepicker2">
-                                                    <input type="text" class="form-control tgl_pinjam"
-                                                        placeholder="yyyy-mm-dd" name="tgl_pinjam" id="tgl_pinjam"
-                                                        value="{{ $pinjaman[0]->tgl_perkiraan_kembali }}" disabled
-                                                        data-date-end-date="{{ date('Y-m-d') }}"
-                                                        data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
-                                                        data-provide="datepicker" required data-date-autoclose="true">
-                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-                                                </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label>Tanggal Pinjam <code>*</code></label>
+                                            <div class="input-group" id="datepicker2">
+                                                <input type="text" class="form-control tgl_pinjam"
+                                                    placeholder="yyyy-mm-dd" name="tgl_pinjam" id="tgl_pinjam"
+                                                    value="{{ $pinjaman[0]->tgl_pinjam }}" disabled
+                                                    data-date-end-date="{{ date('Y-m-d') }}" data-date-format="yyyy-mm-dd"
+                                                    data-date-container='#datepicker2' data-provide="datepicker" required
+                                                    data-date-autoclose="true">
+                                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-responsive table-bordered table-striped"
-                                                id="table_pinjaman">
-                                                <thead>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label>Tanggal Perkiraan Kembali <code>*</code></label>
+                                            <div class="input-group" id="datepicker2">
+                                                <input type="text" class="form-control tgl_pinjam"
+                                                    placeholder="yyyy-mm-dd" name="tgl_pinjam" id="tgl_pinjam"
+                                                    value="{{ $pinjaman[0]->tgl_perkiraan_kembali }}" disabled
+                                                    data-date-end-date="{{ date('Y-m-d') }}"
+                                                    data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
+                                                    data-provide="datepicker" required data-date-autoclose="true">
+                                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 table-responsive">
+                                        <table class="table table-responsive table-bordered table-striped"
+                                            id="table_pinjaman">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center" style="width: 5%">#</th>
+                                                    <th class="text-center" style="width: 40%">Buku</th>
+                                                    <th class="text-center" style="width: 20%">Jumlah Buku</th>
+                                                    <th class="text-center" style="width: 20%">Tgl Kembali</th>
+                                                    <th class="text-center" style="width: 5%">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pinjaman as $list)
                                                     <tr>
-                                                        <th class="text-center" style="width: 5%">#</th>
-                                                        <th class="text-center" style="width: 40%">Buku</th>
-                                                        <th class="text-center" style="width: 20%">Jumlah Buku</th>
+                                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                                        <td>{{ $list->buku->kategori->kode_kategori . ' - ' . $list->buku->judul }}
+                                                        </td>
+                                                        <td class="text-center">{{ $list->jml }}</td>
+                                                        <td class="text-center">{{ $list->tgl_kembali }}</td>
+                                                        <td class="text-center">
+                                                            <div class="d-flex gap-3">
+                                                                <?php
+                                                                $id = Crypt::encryptString($list->id);
+                                                                ?>
+                                                                @if ($list->tgl_kembali == null)
+                                                                    <form class="delete-form"
+                                                                        action="{{ route('pinjaman.book_return', ['id' => $id, 'kode' => $list->kode_transaksi]) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <a href class="text-success approve_confirm"><i
+                                                                                class="mdi mdi-check-all font-size-18"></i></a>
+                                                                    </form>
+                                                                @elseif ($list->tgl_kembali != null)
+                                                                    <form class="delete-form"
+                                                                        action="{{ route('pinjaman.cancle_return', ['id' => $id, 'kode' => $list->kode_transaksi]) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <a href class="text-danger cancle_confirm"><i
+                                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                                    </form>
+                                                                @endif
+                                                            </div>
+                                                        </td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($pinjaman as $list)
-                                                        <tr>
-                                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                                            <td>{{ $list->buku->kategori->kode_kategori . ' - ' . $list->buku->judul }}
-                                                            </td>
-                                                            <td class="text-center">{{ $list->jml }}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <div class="row mt-4">
-                                        <div class="col-sm-12">
-                                            <a href="{{ route('pinjaman.index') }}"
-                                                class="btn btn-secondary waves-effect">Batal</a>
-                                            <a class="btn btn-success approve_confirm" type="submit"
-                                                style="float: right" id="submit">Buku diKembalikan</a>
-                                        </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-sm-12">
+                                        <a href="{{ route('pinjaman.index') }}"
+                                            class="btn btn-secondary waves-effect">Batal</a>
+                                        {{-- <a class="btn btn-success approve_confirm" type="submit"
+                                                style="float: right" id="submit">Buku diKembalikan</a> --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 </form>
                 <br>
             </div>
@@ -204,6 +232,23 @@
             Swal.fire({
                 title: 'Approve Data',
                 text: 'Ingin mengembalikan pinjaman?',
+                icon: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                cancelButtonText: "Batal",
+                focusConfirm: false,
+            }).then((value) => {
+                if (value.isConfirmed) {
+                    $(this).closest("form").submit()
+                }
+            });
+        });
+
+        $('.cancle_confirm').on('click', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Batal Approve Data',
+                text: 'Ingin batal mengembalikan pinjaman?',
                 icon: 'question',
                 showCloseButton: true,
                 showCancelButton: true,

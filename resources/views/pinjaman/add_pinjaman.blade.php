@@ -155,19 +155,13 @@
                                     <div class="row gy-2 gx-3 align-items-center">
                                         <h5 class="card-title">Tambah Buku</h5>
                                         <div class="col-sm-auto col-md-3">
-                                            <select class="form-control select select2" id="buku_id">
+                                            <select class="form-control select select2 book" id="buku_id">
                                                 <option value="">--Pilih Buku--</option>
-                                                @foreach ($buku as $buku)
-                                                    <option value="{{ $buku->id }}"
-                                                        data-id="{{ $buku->kategori->kode_kategori . ' - ' . $buku->judul }}">
-                                                        {{ $buku->kategori->kode_kategori . ' - ' . $buku->judul }}
-                                                    </option>
-                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-auto col-md-3">
                                             <input type="text" class="form-control number-only" id="jml_buku"
-                                                placeholder="Jumlah Buku">
+                                                readonly value="1" placeholder="Jumlah Buku">
                                         </div>
                                         <div class="col-sm-auto col-md-3">
                                             <a type="submit" class="btn btn-info w-md" id="add">Tambah buku</a>
@@ -730,6 +724,25 @@
                 setLocalStorage('header');
             });
 
+            // load book
+            $.ajax({
+                type: "POST",
+                url: '{{ route('buku.dropdown') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: response => {
+                    $.each(response, function(i, item) {
+                        $('.book').append(
+                            `<option value="${item.id}" data-id="${item.kode_kategori+' - '+item.judul}">${item.kode_kategori+' - '+item.judul}</option>`
+                        )
+                    })
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+
             function setLocalStorage(type) {
                 // initialize header
                 milisecond = document.getElementById("milisecond").value;
@@ -806,7 +819,7 @@
 
                     // null items
                     $('#buku_id').val("").trigger('change')
-                    $('#jml_buku').val("")
+                    // $('#jml_buku').val("")
                 }
 
                 $(".deleteItems").on('click', function() {
@@ -963,7 +976,6 @@
                         },
                         error: err => console.log("Interal Server Error")
                     })
-
                 } else {
                     Swal.fire({
                         icon: 'error',

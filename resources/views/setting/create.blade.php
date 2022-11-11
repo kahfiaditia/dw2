@@ -51,6 +51,34 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Hari Peminjaman Buku</label>
+                                            <input type="number" class="form-control number-only" id="library_loan_day"
+                                                name="library_loan_day" value="{{ old('library_loan_day') }}"
+                                                placeholder="Hari Peminjaman Buku">
+                                            {!! $errors->first(
+                                                'library_loan_day',
+                                                '<div class="invalid-validasi">Hari Peminjaman Buku maskimal berisi 1 karakter.</div>',
+                                            ) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Jumlah Peminjaman
+                                                Buku</label>
+                                            <input type="text" class="form-control number-only"
+                                                id="library_loan_validation" name="library_loan_validation"
+                                                value="{{ old('library_loan_validation') }}"
+                                                placeholder="Jumlah Peminjaman Buku">
+                                            {!! $errors->first(
+                                                'library_loan_validation',
+                                                '<div class="invalid-validasi">Jumlah Peminjaman Buku maskimal berisi 1 karakter.</div>',
+                                            ) !!}
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
                                         <a href="{{ route('setting.index') }}"

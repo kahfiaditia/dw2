@@ -13,6 +13,16 @@
                                 <li class="breadcrumb-item">{{ ucwords($submenu) }}</li>
                             </ol>
                         </div>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                @if (in_array('75', $session_menu))
+                                    <a href="{{ route('pinjaman.create') }}" type="button"
+                                        class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Pinjaman
+                                    </a>
+                                @endif
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -25,15 +35,10 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <div class="col-md-12">
-                                                <h5 class="modal-title">Peminjam</h5>
                                                 <div class="col-md-12">
-                                                    <select class="form-control select select2 peminjam" name="peminjam"
-                                                        style="width: 100%" required id="peminjam">
-                                                        <option value="">--Pilih Peminjam--</option>
-                                                        <option value="Siswa">Siswa</option>
-                                                        <option value="Guru">Guru</option>
-                                                        <option value="Karyawan">Karyawan</option>
-                                                    </select>
+                                                    <label for="">Peminjam</label>
+                                                    <input type="text" class="form-control" value="{{ $name }}"
+                                                        readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -70,6 +75,69 @@
                                     </div>
                                 </div>
                             </div>
+                            <table id="" class="table table-striped dt-responsive nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" width="2%">No</th>
+                                        <th class="text-center" width="18%">Kode Transaksi</th>
+                                        <th width="45%">Tgl Pinjam</th>
+                                        <th width="18%">Tgl Perkiraan Kembali</th>
+                                        <th class="text-center" width="12%">Tgl Kembali</th>
+                                        <th width="5%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $no = 1; ?>
+                                    @foreach ($list as $item)
+                                        <tr>
+                                            <td class="text-center">
+                                                @if ($item['flag'] == 'header')
+                                                    {{ $no++ }}
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($item['flag'] == 'header')
+                                                    {{ $item['kode'] }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $item['tgl_pinjam'] }}</td>
+                                            <td>{{ $item['tgl_perkiraan_kembali'] }}</td>
+                                            <td class="text-center">{{ $item['tgl_kembali'] }}</td>
+                                            <td>
+                                                @if ($item['flag'] == 'detail')
+                                                    <?php
+                                                    $id = Crypt::encryptString($item['id']);
+                                                    $kode = $item['kode'];
+                                                    ?>
+                                                    <div class="d-flex gap-3">
+                                                        @if (in_array('78', $session_menu))
+                                                            @if ($item['tgl_kembali'] == null)
+                                                                <form class="delete-form"
+                                                                    action="{{ route('pinjaman.book_return', ['id' => $id, 'kode' => $kode]) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <a href class="text-success approve_confirm"><i
+                                                                            class="mdi mdi-check-all font-size-18"></i></a>
+                                                                </form>
+                                                            @elseif ($item['tgl_kembali'] != null)
+                                                                <form class="delete-form"
+                                                                    action="{{ route('pinjaman.cancle_return', ['id' => $id, 'kode' => $kode]) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <a href class="text-danger cancle_confirm"><i
+                                                                            class="mdi mdi-delete font-size-18"></i></a>
+                                                                </form>
+                                                            @endif
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -90,9 +158,17 @@
                 lastResult = decodedText;
                 // Handle on success condition with the decoded message.
                 barcode = decodedText;
-                value_peminjam = document.getElementById("peminjam").value;
+                // peminjam = document.getElementById("peminjam").value;
                 // get value database 
-                getValueScanBarcodeCamera(barcode, value_peminjam, 'Scan Kamera')
+                getValueScanBarcodeCamera(barcode)
+
+                // var settingBarcode = {
+                //     "barcode": {
+                //         "status": 'on',
+                //         "metode": 'Scan Kamera',
+                //     }
+                // };
+                // localStorage.setItem('localPerpusDharmaBarcode', JSON.stringify(settingBarcode));
             }
         }
 
@@ -103,7 +179,7 @@
             });
         html5QrcodeScanner.render(onScanSuccess);
 
-        function getValueScanBarcodeCamera(scanner_barcode, value_peminjam, metode) {
+        function getValueScanBarcodeCamera(scanner_barcode, value_peminjam) {
             $.ajax({
                 type: 'POST',
                 url: '{{ route('pinjaman.getsearch') }}',
@@ -121,7 +197,7 @@
                                     "peminjam": response.peminjam,
                                     "jenjang": response.jenjang,
                                     "siswa": response.siswa,
-                                    "karyawan": response.karyawan,
+                                    "karyawan": null,
                                     "tgl_pinjam": response.tgl_pinjam
                                 }
                             };
@@ -131,30 +207,12 @@
                             window.location = APP_URL + '/pinjaman/create'
                         } else if (response.data > 0) {
                             var APP_URL = {!! json_encode(url('/')) !!}
-                            window.location = APP_URL + '/return_book/' + response.encrypt_peminjam + '/' +
-                                response.peminjam
+                            window.location = APP_URL + '/return_book/' + response.encrypt_siswa
                         }
-
-                        var settingBarcode = {
-                            "barcode": {
-                                "status": 'on',
-                                "metode": metode,
-                            }
-                        };
-                        localStorage.setItem('localPerpusDharmaBarcode', JSON.stringify(settingBarcode));
-
-                    } else if (response.code == 404) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: `${response.message}`,
-                            showConfirmButton: false,
-                            timer: 1000,
-                        })
                     }
                 },
                 error: err => console.log("Interal Server Error")
             })
-
         }
 
         $(document).ready(function() {
@@ -184,9 +242,43 @@
                         timer: 1500,
                     })
                 } else {
-                    getValueScanBarcodeCamera(scanner_barcode, value_peminjam, 'Barcode')
+                    getValueScanBarcodeCamera(scanner_barcode, value_peminjam)
                 }
             })
+
+            $('.approve_confirm').on('click', function(event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Approve Data',
+                    text: 'Ingin mengembalikan pinjaman?',
+                    icon: 'question',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    cancelButtonText: "Batal",
+                    focusConfirm: false,
+                }).then((value) => {
+                    if (value.isConfirmed) {
+                        $(this).closest("form").submit()
+                    }
+                });
+            });
+
+            $('.cancle_confirm').on('click', function(event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Batal Approve Data',
+                    text: 'Ingin batal mengembalikan pinjaman?',
+                    icon: 'question',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    cancelButtonText: "Batal",
+                    focusConfirm: false,
+                }).then((value) => {
+                    if (value.isConfirmed) {
+                        $(this).closest("form").submit()
+                    }
+                });
+            });
         });
     </script>
 @endsection

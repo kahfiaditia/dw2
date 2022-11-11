@@ -6,6 +6,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\LoginController;
@@ -258,6 +259,7 @@ Route::group(
         Route::get('/data_ajax', [BukuController::class, 'data_ajax'])->name('buku.data_ajax');
         Route::get('/print/{id}', [BukuController::class, 'print'])->name('buku.print');
         Route::post('/print_barcode', [BukuController::class, 'print_barcode'])->name('buku.print_barcode');
+        Route::post('/dropdown', [BukuController::class, 'dropdown'])->name('buku.dropdown');
 
         // pinjaman
         Route::resource('/pinjaman', PinjamanController::class);
@@ -272,7 +274,19 @@ Route::group(
         Route::get('/approve/{id}', [PinjamanController::class, 'approve'])->name('pinjaman.approve');
         Route::get('export_pinjaman_buku', [PinjamanController::class, 'export_pinjaman_buku'])->name('pinjaman.export_pinjaman_buku');
         Route::get('/search_loan', [PinjamanController::class, 'search_loan'])->name('pinjaman.search_loan');
+        Route::post('/getsearch', [PinjamanController::class, 'getsearch'])->name('pinjaman.getsearch');
+        Route::get('/return_book/{id}/{type}', [PinjamanController::class, 'return_book'])->name('pinjaman.return_book');
+        Route::delete('/book_return/{id}/{kode}', [PinjamanController::class, 'book_return'])->name('pinjaman.book_return');
+        Route::delete('/cancle_return/{id}/{kode}', [PinjamanController::class, 'cancle_return'])->name('pinjaman.cancle_return');
     }
 );
 
+Route::group(
+    [
+        'prefix'     => 'cron',
+    ],
+    function () {
+        Route::get('/cron_buku', [CronController::class, 'cron_buku'])->name('cron.cron_buku');
+    }
+);
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

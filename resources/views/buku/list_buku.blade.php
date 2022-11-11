@@ -35,12 +35,13 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode Buku</th>
-                                        <th>Barcode</th>
                                         <th>Judul</th>
                                         <th>Pengarang</th>
                                         <th>Penerbit</th>
                                         <th>Kategori</th>
-                                        <th>Jumlah</th>
+                                        <th>Rak</th>
+                                        <th>Jumlah Stok</th>
+                                        <th>Jumlah Tersedia</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -80,10 +81,6 @@
                         name: 'kode_buku'
                     },
                     {
-                        data: 'barcode',
-                        name: 'barcode'
-                    },
-                    {
                         data: 'judul',
                         name: 'judul'
                     },
@@ -100,8 +97,16 @@
                         name: 'kategori'
                     },
                     {
+                        data: 'rak',
+                        name: 'rak'
+                    },
+                    {
                         data: 'stock_master',
                         name: 'stock_master'
+                    },
+                    {
+                        data: 'jml_buku',
+                        name: 'jml_buku'
                     },
                     {
                         data: 'action',

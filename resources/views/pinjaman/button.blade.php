@@ -7,7 +7,7 @@
         @if (in_array('74', $session_menu))
             <a href="{{ route('pinjaman.show', $id) }}" class="text-info"><i class="mdi mdi-eye font-size-18"></i></a>
         @endif
-        @if ($model->tgl_kembali == null)
+        @if ($model->all_date_return == null)
             @if (in_array('76', $session_menu))
                 <a href="{{ route('pinjaman.edit', $id) }}" class="text-success"><i
                         class="mdi mdi-pencil font-size-18"></i></a>
@@ -15,10 +15,10 @@
             @if (in_array('77', $session_menu))
                 <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
             @endif
-            @if (in_array('78', $session_menu))
-                <a href="{{ route('pinjaman.approve', $id) }}" class="text-success" data-toggle="tooltip"
-                    data-placement="top" title="Approve"><i class="mdi mdi-check-all font-size-18"></i></a>
-            @endif
+        @endif
+        @if (in_array('78', $session_menu))
+            <a href="{{ route('pinjaman.approve', $id) }}" class="text-success" data-toggle="tooltip"
+                data-placement="top" title="Approve"><i class="mdi mdi-check-all font-size-18"></i></a>
         @endif
     </div>
 </form>

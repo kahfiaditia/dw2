@@ -77,6 +77,14 @@ class BukuController extends Controller
             ->addColumn('kategori', function ($model) {
                 return $model->kategori->kategori;
             })
+            ->addColumn('rak', function ($model) {
+                if ($model->rak) {
+                    $rak = $model->rak->rak . ' - ' . $model->rak->tingkatan;
+                } else {
+                    $rak = null;
+                }
+                return $rak;
+            })
             ->addColumn('action', 'buku.button')
             ->rawColumns(['action', 'judul', 'penerbit', 'pengarang'])
             ->make(true);
@@ -388,7 +396,18 @@ class BukuController extends Controller
 
     public function dropdown()
     {
-        $buku = Buku::all();
+        $buku = DB::table('perpus_buku')
+            ->select(
+                'perpus_buku.id',
+                'kode_kategori',
+                'judul',
+            )
+            ->Join('perpus_kategori_buku', 'perpus_kategori_buku.id', 'perpus_buku.kategori_id')
+            ->whereNull('perpus_buku.deleted_at')
+            ->where('stock_master', '>', '0')
+            ->orderBy('kode_kategori', 'ASC')
+            ->orderBy('judul', 'ASC')
+            ->get();
         return $buku;
     }
 
@@ -442,6 +461,7 @@ class BukuController extends Controller
                 'kategori',
                 'jml_buku',
                 'rak',
+                'tingkatan',
             )
             ->leftJoin('perpus_penerbit', 'perpus_penerbit.id', 'perpus_buku.penerbit_id')
             ->leftJoin('perpus_kategori_buku', 'perpus_kategori_buku.id', 'perpus_buku.kategori_id')
@@ -522,6 +542,9 @@ class BukuController extends Controller
             })
             ->addColumn('kategori', function ($model) {
                 return $model->kategori;
+            })
+            ->addColumn('rak', function ($model) {
+                return $model->rak . ' - ' . $model->tingkatan;
             })
             ->rawColumns(['action', 'judul', 'penerbit', 'pengarang'])
             ->make(true);

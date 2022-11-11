@@ -35,6 +35,8 @@
                                         <th>No</th>
                                         <th>Maintenance</th>
                                         <th>Provinsi Sekolah</th>
+                                        <th>Hari Peminjaman Buku</th>
+                                        <th>Jumlah Peminjaman Buku</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -56,6 +58,8 @@
                                                 </span>
                                             </td>
                                             <td>{{ $setting->provinsi_sekolah }}</td>
+                                            <td>{{ $setting->library_loan_day }}</td>
+                                            <td>{{ $setting->library_loan_validation }}</td>
                                             <td>
                                                 <a href="{{ route('setting.edit', Crypt::encryptString($setting->id)) }}"
                                                     class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>

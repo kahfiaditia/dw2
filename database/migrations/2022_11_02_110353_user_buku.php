@@ -14,7 +14,7 @@ class UserBuku extends Migration
     public function up()
     {
         Schema::table('perpus_buku', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_created')->nullable()->after('jml_buku');
+            $table->unsignedBigInteger('user_created')->nullable()->after('barcode');
             $table->foreign('user_created')->references('id')->on('users');
             $table->unsignedBigInteger('user_updated')->nullable()->after('user_created');
             $table->foreign('user_updated')->references('id')->on('users');

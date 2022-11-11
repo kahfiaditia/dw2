@@ -387,8 +387,8 @@
                         name: 'tgl_perkiraan_kembali'
                     },
                     {
-                        data: 'tgl_kembali',
-                        name: 'tgl_kembali'
+                        data: 'all_date_return',
+                        name: 'all_date_return'
                     },
                     {
                         data: 'jml',

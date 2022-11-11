@@ -58,12 +58,17 @@ class SettingController extends Controller
         if (in_array('45', $session_menu)) {
             $request->validate([
                 'provinsi_sekolah' => 'required',
+                'library_loan_day' => 'max:1',
+                'library_loan_validation' => 'max:1',
             ]);
+
             DB::beginTransaction();
             try {
                 $setting = new Setting();
                 $setting->maintenance = isset($request->maintenance) ? 1 : null;
                 $setting->provinsi_sekolah = $request->provinsi_sekolah;
+                $setting->library_loan_day = $request->library_loan_day;
+                $setting->library_loan_validation = $request->library_loan_validation;
                 $setting->save();
                 DB::commit();
                 AlertHelper::addAlert(true);
@@ -115,12 +120,20 @@ class SettingController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('45', $session_menu)) {
+            $request->validate([
+                'provinsi_sekolah' => 'required',
+                'library_loan_day' => 'max:1',
+                'library_loan_validation' => 'max:1',
+            ]);
+
             $decrypted_id = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
                 $setting = Setting::findOrFail($decrypted_id);
                 $setting->maintenance = isset($request->maintenance) ? 1 : 0;
                 $setting->provinsi_sekolah = $request->provinsi_sekolah;
+                $setting->library_loan_day = $request->library_loan_day;
+                $setting->library_loan_validation = $request->library_loan_validation;
                 $setting->save();
                 DB::commit();
                 AlertHelper::updateAlert(true);
