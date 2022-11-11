@@ -26,7 +26,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label class="form-label">Ruang <code>*</code></label>
+                                                <label class="form-label">Ruang Penyimpanan <code>*</code></label>
                                                 <select class="form-control select select2 ruang" name="ruang" required
                                                     id="ruang">
                                                     <option value="">--Pilih Ruangan--</option>
@@ -43,10 +43,10 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label>Keterangan <code>*</code></label>
-                                                <select class="form-control select select2 status" name="status"
+                                                <label>Status <code>*</code></label>
+                                                <select class="form-control select select2 status" name="keterangan"
                                                     id="keterangan" required>
-                                                    <option value="">--Pilih Keterangan--</option>
+                                                    <option value="">--Pilih Status--</option>
                                                     <option value="Baik"> BAIK</option>
                                                     <option value="Rusak"> RUSAK</option>
                                                     <option value="SPEK TIDAK LAYAK"> SPEK TDK LAYAK</option>
@@ -88,6 +88,33 @@
                                                 {!! $errors->first('pemilik', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="ketersediaan">Ketersediaan <code>*</code></label>
+                                                <select name="ketersediaan" id="ketersediaan"
+                                                    class="form-control select select2 pemilik" required>
+                                                    <option value="">-- Ketersediaan --</option>
+                                                    <option value="TERPAKAI"> TERPAKAI</option>
+                                                    <option value="TIDAK TERPAKAI"> TIDAK TERPAKAI</option>
+                                                    <option value="DAPAT DIPINJAM"> DAPAT DIPINJAMKAN </option>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    Data wajib diisi.
+                                                </div>
+                                                {!! $errors->first('pemilik', '<div class="invalid-validasi">:message</div>') !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label>Deskripsi</label>
+                                                <textarea type="text" class="form-control" style="text-transform:uppercase" id="desc" placeholder="Deskripsi"
+                                                    style="text-transform:uppercase" required></textarea>
+                                                <div class="invalid-feedback">
+                                                    Data wajib diisi.
+                                                </div>
+                                                {!! $errors->first('desc', '<div class="invalid-validasi">:message</div>') !!}
+                                            </div>
+                                        </div>
                                     </div>
                                     <hr>
 
@@ -119,9 +146,10 @@
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>Indikasi</label>
-                                                <input type="text" class="form-control" style="text-transform:uppercase"
-                                                    id="indikasi" placeholder="Indikasi Kerusakan"
-                                                    style="text-transform:uppercase" required>
+                                                <input type="text" class="form-control"
+                                                    style="text-transform:uppercase" id="indikasi"
+                                                    placeholder="Indikasi Kerusakan" style="text-transform:uppercase"
+                                                    required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -145,12 +173,14 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-center" style="width: 10%">Nama</th>
-                                                        <th class="text-center" style="width: 15%">No Inventaris</th>
-                                                        <th class="text-center" style="width: 15%">ID Barang</th>
-                                                        <th class="text-center" style="width: 10%">Ruang</th>
+                                                        <th class="text-center" style="width: 10%">No Inventaris</th>
+                                                        <th class="text-center" style="width: 10%">ID Barang</th>
+                                                        <th class="text-center" style="width: 10%">Penyimpanan</th>
                                                         <th class="text-center" style="width: 10%">Pemilik</th>
-                                                        <th class="text-center" style="width: 15%">Keterangan</th>
-                                                        <th class="text-center" style="width: 15%">Indikasi</th>
+                                                        <th class="text-center" style="width: 10%">Status</th>
+                                                        <th class="text-center" style="width: 10%">Ketersediaan</th>
+                                                        <th class="text-center" style="width: 10%">Indikasi</th>
+                                                        <th class="text-center" style="width: 10%">Desc</th>
                                                         <th class="text-center" style="width: 10%">Action</th>
                                                         <th class="text-center" hidden>ruang->id</th>
                                                     </tr>
@@ -178,26 +208,26 @@
     </body>
 
     <script>
-        function myLoad() {
+        // function myLoad() {
 
-            var select_keterangan = document.getElementById('keterangan');
-            var keterangan = select_keterangan.options[select_keterangan.selectedIndex].value;
-            if (keterangan == 'Baik') {
-                document.getElementById("ruang").required = true
-                document.getElementById("pemilik").required = true
-                document.getElementById("nama").required = true
-                document.getElementById("no_inv").required = true
-                document.getElementById("idbarang").required = true
-                ocument.getElementById("indikasi").required = false
-            } else if (keterangan == 'Rusak' || keterangan == 'SPEK TDK LAYAK') {
-                document.getElementById("ruang").required = true
-                document.getElementById("pemilik").required = true
-                document.getElementById("nama").required = true
-                document.getElementById("no_inv").required = true
-                document.getElementById("idbarang").required = true
-                ocument.getElementById("indikasi").required = true
-            }
-        }
+        //     var select_keterangan = document.getElementById('keterangan');
+        //     var keterangan = select_keterangan.options[select_keterangan.selectedIndex].value;
+        //     if (keterangan == 'Baik') {
+        //         document.getElementById("ruang").required = true
+        //         document.getElementById("pemilik").required = true
+        //         document.getElementById("nama").required = true
+        //         document.getElementById("no_inv").required = true
+        //         document.getElementById("idbarang").required = true
+        //         ocument.getElementById("indikasi").required = false
+        //     } else if (keterangan == 'Rusak' || keterangan == 'SPEK TDK LAYAK') {
+        //         document.getElementById("ruang").required = true
+        //         document.getElementById("pemilik").required = true
+        //         document.getElementById("nama").required = true
+        //         document.getElementById("no_inv").required = true
+        //         document.getElementById("idbarang").required = true
+        //         document.getElementById("indikasi").required = true
+        //     }
+        // }
 
         function tableBarang() {
             var nama = document.getElementById('nama').value;
@@ -210,13 +240,15 @@
             var pemilik = document.getElementById('pemilik').value;
             var keterangan = document.getElementById('keterangan').value;
             var indikasi = document.getElementById('indikasi').value;
-            var hasilindikasi = idbarang.toUpperCase();
+            var hasilindikasi = indikasi.toUpperCase();
             var id = document.getElementById('ruang').value;
+            var ketersediaan = document.getElementById('ketersediaan').value;
+            var desc = document.getElementById('desc').value;
             // var id_ruang = document.getElementById('ruang').value;
             // var ruang = document.getElementById("ruang");
             // var text = ruang.options[ruang.selectedIndex].text;
 
-            // document.getElementById('no_inv').value = '';
+            document.getElementById('no_inv').value = '';
             document.getElementById('idbarang').value = '';
 
             $("#tableBarang tr:last").after(`
@@ -227,7 +259,9 @@
                             <td class="text-left">${ruang}</td>
                             <td class="text-left">${pemilik}</td>
                             <td class="text-left">${keterangan}</td>
+                            <td class="text-left">${ketersediaan}</td>
                             <td class="text-left">${hasilindikasi}</td>
+                            <td class="text-left">${desc}</td>
                             <td class="text-center" hidden>${id}</td>                       
                             <td>
                                 <a class="btn btn-danger btn-sm delete-record" data-id="delete">Delete</a>    
@@ -252,7 +286,9 @@
                         id = tableData.eq(3).text(),
                         pemilik = tableData.eq(4).text(),
                         keterangan = tableData.eq(5).text(),
-                        hasilindikasi = tableData.eq(6).text()
+                        ketersediaan = tableData.eq(6).text(),
+                        hasilindikasi = tableData.eq(7).text(),
+                        desc = tableData.eq(8).text()
 
                     //ini filter data null
                     if (hasilnama != '') {
@@ -263,7 +299,9 @@
                             id,
                             pemilik,
                             keterangan,
-                            hasilindikasi
+                            ketersediaan,
+                            hasilindikasi,
+                            desc
                         });
 
                         console.log(databarang)

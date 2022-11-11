@@ -39,7 +39,7 @@
                                         <th>ID Barang</th>
                                         <th>Keterangan</th>
                                         <th>Ruangan</th>
-                                        <th>Pemilik</th>
+                                        <th>Ketersediaan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -52,13 +52,32 @@
                                             <td>{{ $inv->idbarang }}</td>
                                             <td>{{ $inv->status }}</td>
                                             <td>{{ $inv->ruang->nama }}</td>
-                                            <td>{{ $inv->pemilik }}</td>
+                                            <td>{{ $inv->ketersediaan }}</td>
                                             <td>
-                                                <a href="{{ url('inventaris/' . $inv->id . '/edit') }}"
-                                                    class="mdi mdi-pencil font-size-18">
-                                                </a>
-                                                <a href="" class="mdi mdi-delete font-size-18">
-                                                </a>
+                                                <?php $id = Crypt::encryptString($inv->id); ?>
+                                                <form class="delete-form" action="{{ route('inventaris.destroy', $id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <div class="d-flex gap-3">
+                                                        @if (in_array('79', $session_menu))
+                                                            <a href="{{ route('inventaris.edit', $id) }}"
+                                                                class="text-success">
+                                                                <i class="mdi mdi-pencil font-size-18"></i>
+                                                            </a>
+                                                        @endif
+                                                        @if (in_array('79', $session_menu))
+                                                            <a href="{{ route('inventaris.show', $id) }}"
+                                                                class="text-success">
+                                                                <i class="mdi mdi-eye font-size-18"></i>
+                                                            </a>
+                                                        @endif
+                                                        @if (in_array('82', $session_menu))
+                                                            <a href class="text-danger delete_confirm"><i
+                                                                    class="mdi mdi-delete font-size-18"></i></a>
+                                                        @endif
+                                                    </div>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

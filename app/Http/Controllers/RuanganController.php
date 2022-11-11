@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\Inv_Ruangan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -148,11 +149,10 @@ class RuanganController extends Controller
         $id_decrypted = Crypt::decryptString($id);
         DB::beginTransaction();
         try {
-            $ruangan = Inv_Ruangan::where('id', $id_decrypted)->update([
-                'user_deleted' => Auth::user()->id,
-            ]);
             $ruangan = Inv_Ruangan::findorfail($id_decrypted);
-            $ruangan->delete();
+            $ruangan->user_deleted = Auth::user()->id;
+            $ruangan->deleted_at = Carbon::now();
+            $ruangan->save();
 
             DB::commit();
             AlertHelper::deleteAlert(true);

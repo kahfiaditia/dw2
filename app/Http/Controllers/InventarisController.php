@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\AlertHelper;
 use App\Models\Inv_Ruangan;
 use App\Models\Inventaris;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InventarisController extends Controller
 {
@@ -69,7 +72,9 @@ class InventarisController extends Controller
                     $inventaris->id_ruangan  = $request->databarang[$i]['id'];
                     $inventaris->pemilik = $request->databarang[$i]['pemilik'];
                     $inventaris->status = $request->databarang[$i]['keterangan'];
+                    $inventaris->ketersediaan =  $request->databarang[$i]['ketersediaan'];
                     $inventaris->indikasi = $request->databarang[$i]['hasilindikasi'];
+                    $inventaris->deskripsi =  $request->databarang[$i]['desc'];
                     $inventaris->qty  = 1;
                     $inventaris->user_created =  Auth::user()->id;
                     // $inventaris->id_ruangan =  1;
@@ -104,9 +109,18 @@ class InventarisController extends Controller
      * @param  \App\Models\Inventaris  $inventaris
      * @return \Illuminate\Http\Response
      */
-    public function show(Inventaris $inventaris)
+    public function show(Inventaris $inventaris, $id)
     {
-        //
+        $id_decrypted = Crypt::decryptString($id);
+        $ruangs = Inv_Ruangan::all();
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'inventaris',
+            'label' => 'View Inventaris',
+            'inventaris' => Inventaris::findORFail($id_decrypted),
+        ];
+        return view('inventaris.show', compact('inventaris', 'ruangs'))->with($data);
     }
 
     /**
@@ -115,19 +129,19 @@ class InventarisController extends Controller
      * @param  \App\Models\Inventaris  $inventaris
      * @return \Illuminate\Http\Response
      */
-    public function edit(Inventaris $inventaris, $id)
+    public function edit($id)
     {
-
+        $id_decrypted = Crypt::decryptString($id);
+        $ruangs = Inv_Ruangan::all();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'inventaris',
             'label' => 'Edit Inventaris',
-            'inventaris' => Inventaris::find($id),
+            'inventaris' => Inventaris::findORFail($id_decrypted),
         ];
-        // $inventaris = Inventaris::find($id);
-        return view('inventaris.edit')->with($data);
-        // dd($inventaris);
+
+        return view('inventaris.edit', compact('ruangs'))->with($data);
     }
 
     /**
@@ -139,25 +153,33 @@ class InventarisController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $id = Crypt::decryptString($id);
+
         DB::beginTransaction();
+        try {
 
-        Inventaris::where('id', $id)
-            ->update([
-                'nama' => $request->nama,
-                'nomor_inventaris' => $request->nomor_inventaris,
-                'idbarang' => $request->idbarang,
-                'ruangan' => $request->ruangan,
-                'qty' => $request->qty,
-                'status' => $request->status,
-                'indikasi' => $request->indikasi,
-                'pemilik' => $request->pemilik,
-                'desc' => $request->desc,
-                'user_created' => Auth::user()->id,
-                'user_updated' => Auth::user()->id,
-                'user_deleted' => Auth::user()->id,
-            ]);
+            Inventaris::where('id', $id)
+                ->update([
+                    'nama' => $request->nama,
+                    'nomor_inventaris' => $request->nomor_inventaris,
+                    'idbarang' => $request->idbarang,
+                    'id_ruangan' => $request->id_ruangan,
+                    'qty' => $request->qty,
+                    'status' => $request->status,
+                    'indikasi' => $request->indikasi,
+                    'pemilik' => $request->pemilik,
+                    'deskripsi' => $request->deskripsi,
+                    'user_updated' => Auth::user()->id,
+                ]);
 
-        return redirect('inventaris');
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return redirect('inventaris');
+        } catch (\Throwable $err) {
+            DB::rollback();
+            throw $err;
+            return back();
+        }
     }
 
     /**
@@ -166,8 +188,24 @@ class InventarisController extends Controller
      * @param  \App\Models\Inventaris  $inventaris
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventaris $inventaris)
+    public function destroy($id)
     {
-        //
+
+        $id_decrypted = Crypt::decryptString($id);
+        DB::beginTransaction();
+        try {
+            $inventaris = Inventaris::findorfail($id_decrypted);
+            $inventaris->user_deleted = Auth::user()->id;
+            $inventaris->deleted_at = Carbon::now();
+            $inventaris->save();
+
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
     }
 }

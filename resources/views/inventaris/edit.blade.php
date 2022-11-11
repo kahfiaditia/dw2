@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <form class="needs-validation" action="{{ route('inventaris.update', $inventaris->id) }}"
+            <form class="needs-validation" action="{{ route('inventaris.update', Crypt::encryptString($inventaris->id)) }}"
                 enctype="multipart/form-data" method="POST" novalidate>
                 @method('PUT')
                 @csrf
@@ -25,13 +25,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Nama Inventaris
+                                            <label for="validationCustom02" class="form-label">Inventaris
                                                 <code>*</code></label>
-                                            <input type="text" name="name"
+                                            <input type="text" name="nama"
                                                 class="form-control  @error('name') is-invalid @enderror"
-                                                value="{{ old('name', $inventaris->name) }}" required
+                                                value="{{ old('nama', $inventaris->nama) }}" required
                                                 placeholder="Nama Inventaris">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
@@ -39,14 +39,28 @@
                                             {!! $errors->first('name', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Pemilik
+                                            <label for="validationCustom02" class="form-label">Nomor Inventaris
                                                 <code>*</code></label>
-                                            <input type="text" name="owner"
-                                                class="form-control @error('owner') is-invalid @enderror"
-                                                value="{{ old('owner', $inventaris->owner) }}" required
-                                                placeholder="Unit / Bagian Pemilik Barang">
+                                            <input type="text" name="nomor_inventaris"
+                                                class="form-control  @error('nomor_inventaris') is-invalid @enderror"
+                                                value="{{ old('nomor_inventaris', $inventaris->nomor_inventaris) }}"
+                                                required placeholder="Nama Inventaris">
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('owner', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">ID Inventaris
+                                                <code>*</code></label>
+                                            <input type="text" name="idbarang"
+                                                class="form-control  @error('idbarang') is-invalid @enderror"
+                                                value="{{ old('idbarang', $inventaris->idbarang) }}" required
+                                                placeholder="Nama Inventaris">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
@@ -54,8 +68,9 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Qty
                                                 <code>*</code></label>
@@ -68,17 +83,40 @@
                                             {!! $errors->first('qty', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Ruang Penempatan <code>*</code></label>
+                                            <select
+                                                class="form-control select select2 status @error('id_ruangan') is-invalid @enderror"
+                                                name="id_ruangan" required>
+                                                @foreach ($ruangs as $ruang)
+                                                    <option value="{{ $ruang->id }}"
+                                                        {{ old('id_ruangan', $inventaris->id_ruangan) == $ruang->id ? 'selected' : null }}>
+                                                        {{ $ruang->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('id_ruangan', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Kondisi Barang <code>*</code></label>
                                             <select
                                                 class="form-control select select2 status @error('status') is-invalid @enderror"
                                                 name="status" required>
-                                                <option {{ old('status', $inventaris->status) == 'Baik' ? 'selected' : '' }}
+                                                <option
+                                                    {{ old('status', $inventaris->status) == 'Baik' ? 'selected' : '' }}
                                                     value="Baik">Baik</option>
                                                 <option
                                                     {{ old('status', $inventaris->status) == 'Rusak' ? 'selected' : '' }}
                                                     value="Rusak">Rusak</option>
+                                                <option
+                                                    {{ old('status', $inventaris->status) == 'SPEK TDK LAYAK' ? 'selected' : null }}
+                                                    value="SPEK TDK LAYAK">SPEK TDK LAYAK
+                                                </option>
                                             </select>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
@@ -86,11 +124,87 @@
                                             {!! $errors->first('status', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Ketersediaan
+                                                <code>*</code></label>
+                                            <select
+                                                class="form-control select select2 ketersediaan @error('ketersediaan') is-invalid @enderror"
+                                                id="ketersediaan" name="ketersediaan">
+                                                <option
+                                                    {{ old('ketersediaan', $inventaris->ketersediaan) == 'TERPAKAI' ? 'selected' : null }}
+                                                    value="TERPAKAI">
+                                                    TERPAKAI
+                                                </option>
+                                                <option
+                                                    {{ old('ketersediaan', $inventaris->ketersediaan) == 'TIDAK TERPAKAI' ? 'selected' : null }}
+                                                    value="TIDAK TERPAKAI">
+                                                    TIDAK TERPAKAI
+                                                </option>
+                                                <option
+                                                    {{ old('ketersediaan', $inventaris->ketersediaan) == 'DAPAT DIPINJAM' ? 'selected' : null }}
+                                                    value="DAPAT DIPINJAM">
+                                                    DAPAT DIPINJAM
+                                                </option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('qty', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Indikasi Kerusakan <code>*</code></label>
+                                            <input type="text"
+                                                class="form-control select select2 indikasi @error('indikasi') is-invalid @enderror"
+                                                id="indikasi" name="indikasi" value="{{ $inventaris->indikasi }}"
+                                                {{ old('indikasi', $inventaris->indikasi) }}" required
+                                                placeholder="Indikasi">
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('status', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Pemilik <code>*</code></label>
+                                            <select
+                                                class="form-control select select2 pemilik @error('pemilik') is-invalid @enderror"
+                                                name="pemilik" required>
+                                                <option
+                                                    {{ old('pemilik', $inventaris->indikasi) == 'Yayasan' ? 'selected' : '' }}
+                                                    value="Yayasan">Yayasan</option>
+                                                <option
+                                                    {{ old('pemilik', $inventaris->indikasi) == 'TK' ? 'selected' : '' }}
+                                                    value="TK">TK</option>
+                                                <option
+                                                    {{ old('pemilik', $inventaris->indikasi) == 'SD' ? 'selected' : '' }}
+                                                    value="SD">SD</option>
+                                                <option
+                                                    {{ old('pemilik', $inventaris->indikasi) == 'SMP' ? 'selected' : '' }}
+                                                    value="SMP">SMP</option>
+                                                <option
+                                                    {{ old('pemilik', $inventaris->indikasi) == 'SMK' ? 'selected' : '' }}
+                                                    value="SMK">SMK</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('status', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label>Description</label>
-                                            <textarea name="desc" class="form-control  @error('desc') is-invalid @enderror">{{ old('desc', $inventaris->desc) }}</textarea>
-                                            @error('desc')
+                                            <textarea name="deskripsi" class="form-control  @error('deskripsi') is-invalid @enderror">{{ old('deskripsi', $inventaris->deskripsi) }}</textarea>
+                                            @error('deskripsi')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                             <div class="invalid-feedback">
@@ -99,24 +213,24 @@
                                             {!! $errors->first('desc', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="row mt-4">
-                                            <div class="col-sm-12">
-                                                <a href="{{ route('inventaris.index') }}"
-                                                    class="btn btn-secondary waves-effect">Batal</a>
-                                                <button class="btn btn-primary" type="submit" style="float: right"
-                                                    id="submit">Simpan</button>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-sm-12">
+                                        <a href="{{ route('inventaris.index') }}"
+                                            class="btn btn-secondary waves-effect">Batal</a>
+                                        <button class="btn btn-primary" type="submit" style="float: right"
+                                            id="submit">Simpan</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-            <br>
         </div>
+    </div>
+    </form>
+    <br>
+    </div>
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
