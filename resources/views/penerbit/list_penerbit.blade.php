@@ -35,7 +35,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Penerbit</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

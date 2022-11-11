@@ -267,7 +267,7 @@
                                         <th class="text-center">Diskon Pembayaran</th>
                                         <th class="text-center">Diskon Prestasi</th>
                                         <th>Total</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

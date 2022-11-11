@@ -38,7 +38,7 @@
                                         <th>Kelas</th>
                                         <th>Jurusan</th>
                                         <th>Type</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

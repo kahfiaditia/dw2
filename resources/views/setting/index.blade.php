@@ -36,7 +36,7 @@
                                         <th>Maintenance</th>
                                         <th>Provinsi Sekolah</th>
                                         <th>Hari Peminjaman Buku</th>
-                                        <th>Jumlah Peminjaman Buku</th>
+                                        <th>Limit Jumlah Peminjaman Buku</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

@@ -40,7 +40,7 @@
                                         <th>Jumlah Pembayaran</th>
                                         <th>Diskon Bulan</th>
                                         <th>Diskon Persentase (%)</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -40,7 +40,7 @@
                                         <th>Kecamatan</th>
                                         <th>Kodepos</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

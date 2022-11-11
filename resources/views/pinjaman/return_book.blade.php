@@ -83,7 +83,7 @@
                                         <th width="45%">Tgl Pinjam</th>
                                         <th width="18%">Tgl Perkiraan Kembali</th>
                                         <th class="text-center" width="12%">Tgl Kembali</th>
-                                        <th width="5%">Action</th>
+                                        <th width="5%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

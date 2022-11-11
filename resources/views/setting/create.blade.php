@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Jumlah Peminjaman
+                                            <label for="validationCustom02" class="form-label">Limit Jumlah Peminjaman
                                                 Buku</label>
                                             <input type="text" class="form-control number-only"
                                                 id="library_loan_validation" name="library_loan_validation"

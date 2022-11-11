@@ -182,7 +182,7 @@
                                         <th>Nama</th>
                                         <th>Email</th>
                                         <th>Kelas</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -36,7 +36,7 @@
                                         <th>No</th>
                                         <th>Kode Kategori</th>
                                         <th>Kategori</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

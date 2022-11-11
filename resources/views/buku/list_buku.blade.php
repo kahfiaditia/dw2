@@ -42,7 +42,7 @@
                                         <th>Rak</th>
                                         <th>Jumlah Stok</th>
                                         <th>Jumlah Tersedia</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

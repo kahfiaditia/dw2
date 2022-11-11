@@ -177,7 +177,7 @@
                                                         <th class="text-center" style="width: 5%">#</th>
                                                         <th class="text-center" style="width: 40%">Buku</th>
                                                         <th class="text-center" style="width: 20%">Jumlah Buku</th>
-                                                        <th class="text-center" style="width: 10%">Action</th>
+                                                        <th class="text-center" style="width: 10%">Aksi</th>
                                                         <th class="text-center" hidden>buku_id</th>
                                                     </tr>
                                                 </thead>

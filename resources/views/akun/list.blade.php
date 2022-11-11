@@ -41,7 +41,7 @@
                                         <th>Roles</th>
                                         <th>Verifikasi Email</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

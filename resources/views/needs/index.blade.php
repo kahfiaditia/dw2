@@ -36,7 +36,7 @@
                                         <th>No</th>
                                         <th>Kode</th>
                                         <th>Nama</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

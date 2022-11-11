@@ -176,7 +176,7 @@
                                         <th>Kontak</th>
                                         <th>Jabatan</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

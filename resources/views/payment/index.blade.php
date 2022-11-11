@@ -39,7 +39,7 @@
                                         <th>Kelas</th>
                                         <th>Pembayaran</th>
                                         <th class="text-center">Biaya</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
