@@ -20,14 +20,6 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-
-
-
-
-
-
-
-
                             <div class="modal bs-example-modal" tabindex="-1" role="dialog">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">

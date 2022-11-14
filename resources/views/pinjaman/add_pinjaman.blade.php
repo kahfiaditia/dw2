@@ -315,16 +315,7 @@
                             }
                         };
                         localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
-
-                        Swal.fire({
-                            title: 'Scan Barcode',
-                            text: "Data Siswa tersimpan",
-                            icon: 'success',
-                            timer: 500,
-                            willClose: () => {
-                                location.reload();
-                            }
-                        })
+                        location.reload();
                     } else if (response.type == 'Guru') {
                         guru = response.id;
                         var dataPerpus = {
@@ -338,16 +329,7 @@
                             }
                         };
                         localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
-
-                        Swal.fire({
-                            title: 'Scan Barcode',
-                            text: "Data Guru tersimpan",
-                            icon: 'success',
-                            timer: 500,
-                            willClose: () => {
-                                location.reload();
-                            }
-                        })
+                        location.reload();
                     } else if (response.type == 'Karyawan') {
                         karyawan = response.id;
                         var dataPerpus = {
@@ -361,16 +343,7 @@
                             }
                         };
                         localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
-
-                        Swal.fire({
-                            title: 'Scan Barcode',
-                            text: "Data Karyawan tersimpan",
-                            icon: 'success',
-                            timer: 500,
-                            willClose: () => {
-                                location.reload();
-                            }
-                        })
+                        location.reload();
                     } else if (response.type == 'buku') {
                         buku_id = response.id;
                         judul = response.jenjang;
@@ -382,16 +355,7 @@
                         }
                         dataPerpusItems.items.push(item);
                         localStorage.setItem('localPerpusDharmaItems', JSON.stringify(dataPerpusItems));
-
-                        Swal.fire({
-                            title: 'Scan Barcode',
-                            text: "Data Buku tersimpan",
-                            icon: 'success',
-                            timer: 500,
-                            willClose: () => {
-                                location.reload();
-                            }
-                        })
+                        location.reload();
                     } else {
                         Swal.fire({
                             icon: 'error',

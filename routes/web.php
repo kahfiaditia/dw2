@@ -278,6 +278,7 @@ Route::group(
         Route::get('/return_book/{id}/{type}', [PinjamanController::class, 'return_book'])->name('pinjaman.return_book');
         Route::delete('/book_return/{id}/{kode}', [PinjamanController::class, 'book_return'])->name('pinjaman.book_return');
         Route::delete('/cancle_return/{id}/{kode}', [PinjamanController::class, 'cancle_return'])->name('pinjaman.cancle_return');
+        Route::post('/scanBarcodeEd', [PinjamanController::class, 'scanBarcodeEd'])->name('pinjaman.scanBarcodeEd');
     }
 );
 

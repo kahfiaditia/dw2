@@ -405,9 +405,6 @@ class PinjamanController extends Controller
                 'menu' => $this->menu,
                 'submenu' => 'pinjaman',
                 'label' => 'ubah pinjaman',
-                'buku' => Buku::all(),
-                'kategori' => Kategori::all(),
-                'penerbit' => Penerbit::all(),
                 'pinjaman' => Pinjaman::where('kode_transaksi', $id_decrypted)->get(),
             ];
             return view('pinjaman.edit_pinjaman')->with($data);
@@ -605,6 +602,44 @@ class PinjamanController extends Controller
         ]);
     }
 
+    public function scanBarcodeEd(Request $request)
+    {
+        $data = Buku::where('barcode', $request->barcode)->first();
+        if ($data) {
+            if ($data->jml_buku < '1') {
+                return response()->json([
+                    'code' => 404,
+                    'message' => 'Stock Buku <strong>' . $data->judul . '</strong> hanya <strong>' . $data->jml_buku . '</strong>',
+                ]);
+            }
+
+            $pinjaman = new Pinjaman;
+            $pinjaman->kode_transaksi = $request->kode_transaksi;
+            $pinjaman->milisecond = $request->milisecond;
+            $pinjaman->peminjam = $request->peminjam;
+            $pinjaman->siswa_id = $request->siswa;
+            $pinjaman->karyawan_id = $request->karyawan;
+            $pinjaman->class_id = $request->jenjang;
+            $pinjaman->buku_id = $data->id;
+            $pinjaman->jml = '1';
+            $pinjaman->tgl_pinjam = $request->tgl_pinjam;
+            $pinjaman->user_created =  Auth::user()->id;
+            $pinjaman->save();
+
+            $stock = Buku::findorfail($data->id);
+            Buku::where('id', $data->id)->update(['jml_buku' => '1']);
+
+            return response()->json([
+                'code' => 200,
+            ]);
+        } else {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Data tidak terdaftar',
+            ]);
+        }
+    }
+
     public function scanBarcodeEdit(Request $request)
     {
         $data = Buku::where('barcode', $request->barcode)->first();
@@ -651,7 +686,11 @@ class PinjamanController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('77', $session_menu)) {
-            $id_decrypted = Crypt::decryptString($id);
+            $variabel = Crypt::decryptString($id);
+            $dat = explode("|", $variabel);
+            $id_decrypted = $dat[0];
+            $kode_transaksi = $dat[1];
+
             DB::beginTransaction();
             try {
                 $pinjaman = Pinjaman::findorfail($id_decrypted);
@@ -665,7 +704,13 @@ class PinjamanController extends Controller
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);
-                return back();
+
+                $count_pinjaman = Pinjaman::where('kode_transaksi', $kode_transaksi)->count();
+                if ($count_pinjaman == 0) {
+                    return redirect('pinjaman');
+                } else {
+                    return back();
+                }
             } catch (\Throwable $err) {
                 DB::rollBack();
                 AlertHelper::deleteAlert(false);
