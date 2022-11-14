@@ -20,6 +20,14 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+
+
+
+
+
+
+
+
                             <div class="modal bs-example-modal" tabindex="-1" role="dialog">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
@@ -169,6 +177,13 @@
                     $('.div_scan_camera').show();
                     $('.div_barcode').hide();
                 }
+            });
+
+            $(".scanner_barcode").change(function() {
+                let barcode = $(this).val();
+                peminjam = document.getElementById("peminjam").value;
+                // get value database 
+                getValueScanBarcodeCamera(barcode, peminjam, 'Barcode')
             });
 
             $("#save").on('click', function() {
