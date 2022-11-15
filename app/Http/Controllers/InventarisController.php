@@ -21,8 +21,8 @@ class InventarisController extends Controller
     {
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'inventaris',
+            'menu' => 'Inventaris',
+            'submenu' => 'Data Barang',
             'label' => 'Data Inventaris',
         ];
         $inventaris = Inventaris::all();
@@ -41,8 +41,8 @@ class InventarisController extends Controller
         $ruangs = Inv_Ruangan::all();
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Inventaris',
+            'menu' => 'Inventaris',
+            'submenu' => 'Data Barang',
             'label' => 'Tambah Inventaris',
         ];
         return view('inventaris.create', compact('ruangs'))->with($data);
@@ -115,9 +115,9 @@ class InventarisController extends Controller
         $ruangs = Inv_Ruangan::all();
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'inventaris',
-            'label' => 'View Inventaris',
+            'menu' => 'Inventaris',
+            'submenu' => 'Data Barang',
+            'label' => 'Inventaris',
             'inventaris' => Inventaris::findORFail($id_decrypted),
         ];
         return view('inventaris.show', compact('inventaris', 'ruangs'))->with($data);
@@ -135,8 +135,8 @@ class InventarisController extends Controller
         $ruangs = Inv_Ruangan::all();
         $data = [
             'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'inventaris',
+            'menu' => 'Inventaris',
+            'submenu' => 'Data Barang',
             'label' => 'Edit Inventaris',
             'inventaris' => Inventaris::findORFail($id_decrypted),
         ];

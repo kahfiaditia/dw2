@@ -232,7 +232,7 @@
                 '' || hasilno_inv == '') {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Data tidak Lengkap, Isi tanda (*)!',
+                    title: 'Tanda * (bintang) wajib Diisi',
                     showConfirmButton: false,
                     timer: 1500,
                 })
@@ -318,11 +318,12 @@
                                 window.location = APP_URL + '/inventaris'
                             })
                         } else {
-                            Swal.fire(
-                                'Gagal',
-                                `${response.message}`,
-                                'error',
-                            )
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Tanda * (bintang) dan Buku wajib diisi',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
                         }
                     },
                     error: err => console.log(err)

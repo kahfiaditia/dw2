@@ -61,15 +61,15 @@
                                                     @method('DELETE')
                                                     <div class="d-flex gap-3">
                                                         @if (in_array('79', $session_menu))
-                                                            <a href="{{ route('inventaris.edit', $id) }}"
-                                                                class="text-success">
-                                                                <i class="mdi mdi-pencil font-size-18"></i>
+                                                            <a href="{{ route('inventaris.show', $id) }}"
+                                                                class="text-info">
+                                                                <i class="mdi mdi-eye font-size-18"></i>
                                                             </a>
                                                         @endif
                                                         @if (in_array('79', $session_menu))
-                                                            <a href="{{ route('inventaris.show', $id) }}"
+                                                            <a href="{{ route('inventaris.edit', $id) }}"
                                                                 class="text-success">
-                                                                <i class="mdi mdi-eye font-size-18"></i>
+                                                                <i class="mdi mdi-pencil font-size-18"></i>
                                                             </a>
                                                         @endif
                                                         @if (in_array('82', $session_menu))
