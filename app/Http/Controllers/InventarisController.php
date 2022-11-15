@@ -74,7 +74,7 @@ class InventarisController extends Controller
                     $inventaris->status = $request->databarang[$i]['keterangan'];
                     $inventaris->ketersediaan =  $request->databarang[$i]['ketersediaan'];
                     $inventaris->indikasi = $request->databarang[$i]['hasilindikasi'];
-                    $inventaris->deskripsi =  $request->databarang[$i]['desc'];
+                    $inventaris->deskripsi =  $request->databarang[$i]['hasildesc'];
                     $inventaris->qty  = 1;
                     $inventaris->user_created =  Auth::user()->id;
                     // $inventaris->id_ruangan =  1;

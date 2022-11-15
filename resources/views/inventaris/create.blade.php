@@ -203,27 +203,10 @@
             </div>
         </div>
     </body>
-    <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/alert.js') }}"></script>
+    {{-- <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/alert.js') }}"></script> --}}
     <script>
-        // function myLoad() {
-        //     // load karyawan
-        //     var select_keterangan = document.getElementById('keterangan');
-        //     var keterangan = select_keterangan.options[select_keterangan.selectedIndex].value;
-        //     if (keterangan == 'Rusak') {
-        //         (indikasi != '')
-        //     } else {
-        //         Swal.fire(
-        //             'Gagal',
-        //             'Data Tidak lengkap, segera lengkapi',
-        //             'Gagal'
-        //         )
-        //     }
-
-        // }
-
         function tableBarang() {
-
             var nama = document.getElementById('nama').value;
             var hasilnama = nama.toUpperCase();
             var no_inv = document.getElementById('no_inv').value;
@@ -241,19 +224,26 @@
 
             document.getElementById('no_inv').value = '';
             document.getElementById('idbarang').value = '';
+            document.getElementById('indikasi').value = '';
 
 
             if (ruang == '' || keterangan == '' || pemilik == '' || hasilnama == '' || ketersediaan == '' ||
                 hasilidbarang ==
                 '' || hasilno_inv == '') {
                 // console.log(keterangan);
-                Swal.fire(
-                    'Gagal',
-                    'Data Tidak lengkap, segera lengkapi',
-                    'Gagal'
-                )
-                // } else if (keterangan == Rusak) {
-                //     (hasilindikasi != null);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Data tidak Lengkap, Isi tanda (*)!',
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
+            } else if (keterangan == 'Rusak' && indikasi == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Jika Keterangan "Rusak" \n Filed Indikasi harus diisi',
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
             } else {
                 $("#tableBarang tr:last").after(`
                         <tr>
