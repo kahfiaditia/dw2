@@ -29,8 +29,8 @@
                                             <label for="validationCustom02" class="form-label">Ruangan
                                                 <code>*</code></label>
                                             <input type="text" class="form-control" id="nama" name="nama"
-                                                autofocus required placeholder="Input Data Ruangan"
-                                                value="{{ old('nama', $ruangan->nama) }}">
+                                                placeholder="Input Data Ruangan" style="text-transform:uppercase"
+                                                value="{{ old('nama', $ruangan->nama) }}" autofocus required>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>

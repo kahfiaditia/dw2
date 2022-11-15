@@ -230,7 +230,6 @@
             if (ruang == '' || keterangan == '' || pemilik == '' || hasilnama == '' || ketersediaan == '' ||
                 hasilidbarang ==
                 '' || hasilno_inv == '') {
-                // console.log(keterangan);
                 Swal.fire({
                     icon: 'error',
                     title: 'Data tidak Lengkap, Isi tanda (*)!',
@@ -263,9 +262,6 @@
                     `)
             }
         }
-
-
-
         //fungsi hapus
         $("#tableBarang").on('click', '.delete-record', function() {
             $(this).parent().parent().remove()
@@ -299,12 +295,9 @@
                             hasilindikasi,
                             hasildesc
                         });
-
                         console.log(databarang)
                     }
                 })
-
-
                 jQuery.ajax({
                     type: "POST",
                     url: '{{ route('inventaris.store') }}',
@@ -313,7 +306,6 @@
                         "_token": "{{ csrf_token() }}",
                         databarang
                     },
-
                     success: (response) => {
                         if (response.code === 200) {
 
@@ -326,7 +318,6 @@
                                 window.location = APP_URL + '/inventaris'
                             })
                         } else {
-
                             Swal.fire(
                                 'Gagal',
                                 `${response.message}`,
@@ -338,7 +329,6 @@
                 });
 
             });
-
         })
 
         $("#batal").on('click', function() {
