@@ -94,56 +94,55 @@
                                                                 <div class="col-sm-4 mb-2">
                                                                     <div class="input-daterange input-group">
                                                                         <input type="text" name="biaya_start"
-                                                                            id="biaya_start"
                                                                             value="{{ isset($_GET['biaya_start']) ? $_GET['biaya_start'] : null }}"
-                                                                            class="form-control number-only rangeJml"
+                                                                            id="biaya_start"
+                                                                            class="form-control number-only"
                                                                             placeholder="Biaya Awal">
                                                                         <input type="text" name="biaya_end"
-                                                                            id="biaya_end" onkeyup="rangeJml()"
                                                                             value="{{ isset($_GET['biaya_end']) ? $_GET['biaya_end'] : null }}"
-                                                                            class="form-control number-only rangeJml"
+                                                                            id="biaya_end" class="form-control number-only"
                                                                             placeholder="Biaya Akhir">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4 mb-2">
                                                                     <div class="input-daterange input-group">
                                                                         <input type="text" name="disc_start"
-                                                                            id="disc_start"
                                                                             value="{{ isset($_GET['disc_start']) ? $_GET['disc_start'] : null }}"
-                                                                            class="form-control number-only rangeJml"
+                                                                            id="disc_start"
+                                                                            class="form-control number-only"
                                                                             placeholder="Diskon Pembayaran Awal">
                                                                         <input type="text" name="disc_end"
                                                                             id="disc_end"
                                                                             value="{{ isset($_GET['disc_end']) ? $_GET['disc_end'] : null }}"
-                                                                            class="form-control number-only rangeJml"
+                                                                            class="form-control number-only "
                                                                             placeholder="Diskon Pembayaran Akhir">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4 mb-2">
                                                                     <div class="input-daterange input-group">
                                                                         <input type="text" name="prestasi_start"
-                                                                            id="prestasi_start"
                                                                             value="{{ isset($_GET['prestasi_start']) ? $_GET['prestasi_start'] : null }}"
-                                                                            class="form-control number-only rangeJml"
+                                                                            id="prestasi_start"
+                                                                            class="form-control number-only"
                                                                             placeholder="Diskon Prestasi Awal">
                                                                         <input type="text" name="prestasi_end"
-                                                                            id="prestasi_end"
                                                                             value="{{ isset($_GET['prestasi_end']) ? $_GET['prestasi_end'] : null }}"
-                                                                            class="form-control number-only rangeJml"
+                                                                            id="prestasi_end"
+                                                                            class="form-control number-only "
                                                                             placeholder="Diskon Prestasi Akhir">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4 mb-2">
                                                                     <div class="input-daterange input-group">
                                                                         <input type="text" name="total_start"
-                                                                            id="total_start"
                                                                             value="{{ isset($_GET['total_start']) ? $_GET['total_start'] : null }}"
-                                                                            class="form-control number-only rangeJml"
+                                                                            id="total_start"
+                                                                            class="form-control number-only"
                                                                             placeholder="Total Awal">
                                                                         <input type="text" name="total_end"
-                                                                            id="total_end"
                                                                             value="{{ isset($_GET['total_end']) ? $_GET['total_end'] : null }}"
-                                                                            class="form-control number-only rangeJml"
+                                                                            id="total_end"
+                                                                            class="form-control number-only "
                                                                             placeholder="Total Akhir">
                                                                     </div>
                                                                 </div>

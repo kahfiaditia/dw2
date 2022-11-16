@@ -238,7 +238,9 @@
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Jabatan</h5>
-                                                    <p class="text-muted mb-0">{{ $item->jabatan }}</p>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $item->jabatan . ' - ' . $item->divisi }}
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-6">
@@ -262,7 +264,7 @@
                                         </div>
                                         <div class="row task-dates">
                                             <a href="{{ route('employee') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-ijazah" role="tabpanel"
@@ -353,7 +355,7 @@
                                         @endif
                                         <div class="row task-dates">
                                             <a href="{{ route('employee') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-sk" role="tabpanel"
@@ -399,7 +401,7 @@
                                         @endif
                                         <div class="row task-dates">
                                             <a href="{{ route('employee') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-anak" role="tabpanel"
@@ -493,7 +495,7 @@
                                         @endif
                                         <div class="row task-dates">
                                             <a href="{{ route('employee') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-riwayat" role="tabpanel"
@@ -642,7 +644,7 @@
                                         @endif
                                         <div class="row task-dates">
                                             <a href="{{ route('employee') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                 </div>

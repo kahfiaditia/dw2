@@ -35,10 +35,11 @@
 
 </head>
 
-<body data-sidebar="dark">
-    {{-- <body data-sidebar="dark" oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;"> --}}
+<body data-sidebar="{{ Auth::user()->menu_tema == 'light' ? 'light' : 'dark' }}"
+    class="{{ Auth::user()->menu_icon == 'icon' ? 'sidebar-enable vertical-collpsed' : '' }}">
     {{-- loading --}}
     <div id="loader"></div>
+
     @include('sweetalert::alert')
     <div id="layout-wrapper">
         <header id="page-topbar">
@@ -52,6 +53,51 @@
         <div class="main-content">
             @yield('container')
             @include('layouts.footer')
+        </div>
+    </div>
+
+    <div class="right-bar">
+        <div data-simplebar class="h-100">
+            <div class="rightbar-title d-flex align-items-center px-3 py-4">
+                <h5 class="m-0 me-2">Pengaturan</h5>
+                <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                    <i class="mdi mdi-close noti-icon"></i>
+                </a>
+            </div>
+            <hr class="mt-0" />
+            <h6 class="text-center mb-0">Pilih Tampilan</h6>
+            <div class="p-4">
+                <div class="mb-3">
+                    <label class="d-block mb-3">Tema Menu :</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input radio" type="radio" name="thema" id="thema1"
+                            value="dark" <?php if (Auth::user()->menu_tema == 'dark' or Auth::user()->menu_tema == null) {
+                                echo 'checked';
+                            } ?>>
+                        <label class="form-check-label" for="thema1">Dark</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input radio" type="radio" name="thema" id="thema2"
+                            value="light" {{ Auth::user()->menu_tema == 'light' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="thema2">Light</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="d-block mb-3">Menu :</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input radio" type="radio" name="menu" id="menu1"
+                            value="text" <?php if (Auth::user()->menu_icon == 'text' or Auth::user()->menu_icon == '') {
+                                echo 'checked';
+                            } ?>>
+                        <label class="form-check-label" for="menu1">Icon & Text</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input radio" type="radio" name="menu" id="menu2"
+                            value="icon" {{ Auth::user()->menu_icon == 'icon' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="menu2">Icon</label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -136,6 +182,40 @@
             format: "yyyy",
             viewMode: "years",
             minViewMode: "years",
+        });
+
+        $(document).ready(function() {
+            $('.radio').click(function() {
+                let button = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('dashboard.tema') }}',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        button,
+                    },
+                    success: response => {
+                        if (response.code == 200) {
+
+                            location.reload();
+                        } else {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Data tidak terdaftar!',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                willClose: () => {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            });
         });
     </script>
 </body>

@@ -180,7 +180,7 @@
                                     <div class="row mt-4">
                                         <div class="col-sm-12">
                                             <a href="{{ route('pinjaman.index') }}"
-                                                class="btn btn-secondary waves-effect">Batal</a>
+                                                class="btn btn-secondary waves-effect">Kembali</a>
                                         </div>
                                     </div>
                                 </div>

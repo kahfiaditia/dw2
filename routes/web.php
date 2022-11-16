@@ -161,6 +161,7 @@ Route::group(
         // dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/history_payment/{student_id}', [DashboardController::class, 'history_payment'])->name('history_payment');
+        Route::post('/tema', [DashboardController::class, 'tema'])->name('dashboard.tema');
 
         // siswa
         Route::resource('/siswa', SiswaController::class);
@@ -260,6 +261,7 @@ Route::group(
         Route::get('/print/{id}', [BukuController::class, 'print'])->name('buku.print');
         Route::post('/print_barcode', [BukuController::class, 'print_barcode'])->name('buku.print_barcode');
         Route::post('/dropdown', [BukuController::class, 'dropdown'])->name('buku.dropdown');
+        Route::get('export_buku', [BukuController::class, 'export_buku'])->name('buku.export_buku');
 
         // pinjaman
         Route::resource('/pinjaman', PinjamanController::class);

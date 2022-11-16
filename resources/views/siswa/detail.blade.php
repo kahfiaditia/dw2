@@ -324,7 +324,7 @@
                                         </div>
                                         <div class="row task-dates">
                                             <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-orang-tua" role="tabpanel"
@@ -486,7 +486,7 @@
                                         </div>
                                         <div class="row">
                                             <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-sk" role="tabpanel"
@@ -542,7 +542,7 @@
                                         </div>
                                         <div class="row">
                                             <a href="{{ route('siswa.index') }}" style="margin-left: 10px;"
-                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-anak" role="tabpanel"
@@ -589,7 +589,7 @@
                                                         <div class="row">
                                                             <a href="{{ route('siswa.index') }}"
                                                                 style="margin-left: 10px;"
-                                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -633,7 +633,7 @@
                                                         <div class="row">
                                                             <a href="{{ route('siswa.index') }}"
                                                                 style="margin-left: 10px;"
-                                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -674,7 +674,7 @@
                                                         <div class="row">
                                                             <a href="{{ route('siswa.index') }}"
                                                                 style="margin-left: 10px;"
-                                                                class="col-md-1 mt-3 btn btn-secondary">Kembali</a>
+                                                                class="col-md-2 mt-3 btn btn-secondary">Kembali</a>
                                                         </div>
                                                     </div>
                                                 </div>

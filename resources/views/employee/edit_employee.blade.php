@@ -678,7 +678,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Jabatan
                                                             <code>*</code></label>
@@ -691,6 +691,43 @@
                                                             <option value="Karyawan"
                                                                 {{ $item->jabatan === 'Karyawan' ? 'selected' : '' }}>
                                                                 Karyawan</option>
+                                                        </select>
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="mb-3">
+                                                        <label for="validationCustom02" class="form-label">Divisi
+                                                            <code>*</code></label>
+                                                        <select class="form-control select select2" name="divisi"
+                                                            required>
+                                                            <option value="">--Pilih Divisi--</option>
+                                                            <option value="IT"
+                                                                {{ $item->divisi == 'IT' ? 'selected' : '' }}>IT</option>
+                                                            <option value="LM"
+                                                                {{ $item->divisi == 'LM' ? 'selected' : '' }}>LM</option>
+                                                            <option value="TU"
+                                                                {{ $item->divisi == 'TU' ? 'selected' : '' }}>TU</option>
+                                                            <option value="PERPUS"
+                                                                {{ $item->divisi == 'PERPUS' ? 'selected' : '' }}>PERPUS
+                                                            </option>
+                                                            <option value="Petugas Kebersihan dan Keamanan"
+                                                                {{ $item->divisi == 'Petugas Kebersihan dan Keamanan' ? 'selected' : '' }}>
+                                                                Petugas
+                                                                Kebersihan dan Keamanan</option>
+                                                            <option value="TK"
+                                                                {{ $item->divisi == 'TK' ? 'selected' : '' }}>TK</option>
+                                                            <option value="SD"
+                                                                {{ $item->divisi == 'SD' ? 'selected' : '' }}>SD</option>
+                                                            <option value="SMP"
+                                                                {{ $item->divisi == 'SMP' ? 'selected' : '' }}>SMP</option>
+                                                            <option value="SMK"
+                                                                {{ $item->divisi == 'SMK' ? 'selected' : '' }}>SMK</option>
+                                                            <option value="DIREKTUR"
+                                                                {{ $item->divisi == 'DIREKTUR' ? 'selected' : '' }}>
+                                                                DIREKTUR</option>
                                                         </select>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.

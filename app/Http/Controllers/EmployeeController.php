@@ -296,6 +296,7 @@ class EmployeeController extends Controller
                     $employee->kodepos = $request->kodepos_asal;
                 }
                 $employee->jabatan = $request->jabatan;
+                $employee->divisi = $request->divisi;
                 $employee->masuk_kerja = $request->masuk_kerja;
                 $employee->aktif = '1';
                 $employee->user_id = $request->user_id;
@@ -473,6 +474,7 @@ class EmployeeController extends Controller
                     $employee->kodepos = $request->kodepos_asal;
                 }
                 $employee->jabatan = $request->jabatan;
+                $employee->divisi = $request->divisi;
                 $employee->masuk_kerja = $request->masuk_kerja;
                 $employee->user_id = $request->user_id;
                 $aktif = isset($request->aktif) ? 1 : 0;
@@ -1256,11 +1258,19 @@ class EmployeeController extends Controller
                     $query->where('gelar_ijazah', '!=', 'Kursus')
                         ->orWhere('gelar_ijazah', '!=', 'Seminar');
                 })->count();
-            if ($count >= 1) {
-                $code = 200;
-            } else {
+
+            $count_divisi = Employee::where('id', $request->karyawan_id)->whereNotNull('divisi')->count();
+
+            if ($count == 0 or $count_divisi == 0) {
                 $code = 404;
-                array_push($message, "Ijazah, ");
+                if ($count == 0) {
+                    array_push($message, "Ijazah, ");
+                }
+                if ($count_divisi == 0) {
+                    array_push($message, "Divisi, ");
+                }
+            } else {
+                $code = 200;
             }
         } elseif ($request->jabatan === 'Guru') {
             $ijazah = DB::table('ijazah_karyawan')

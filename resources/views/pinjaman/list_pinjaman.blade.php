@@ -76,7 +76,7 @@
                                                                         value="{{ isset($_GET['kelas']) ? $_GET['kelas'] : null }}"
                                                                         class="form-control" placeholder="Kelas">
                                                                 </div>
-                                                                <div class="col-sm-2 mb-2">
+                                                                <div class="col-sm-4 mb-2">
                                                                     <div class="input-daterange input-group"
                                                                         id="datepicker6" data-date-format="yyyy-mm-dd"
                                                                         data-date-autoclose="true" data-provide="datepicker"
@@ -92,6 +92,18 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-2 mb-2">
+                                                                    <select class="form-control select select2 type"
+                                                                        style="width: 100%" name="type" id="type">
+                                                                        <option value="">--Pilih Type--</option>
+                                                                        <option value="Detail"
+                                                                            {{ (isset($_GET['type']) and $_GET['type'] == 'Detail') ? 'selected' : null }}>
+                                                                            Detail</option>
+                                                                        <option value="Summary"
+                                                                            {{ (isset($_GET['type']) and $_GET['type'] == 'Summary') ? 'selected' : null }}>
+                                                                            Summary</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-sm-4 mb-2">
                                                                     <div class="input-daterange input-group">
                                                                         <input type="text" name="jml_start"
                                                                             id="jml_start"
@@ -104,18 +116,6 @@
                                                                             class="form-control number-only rangeJml"
                                                                             placeholder="Jumlah">
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-sm-2 mb-2">
-                                                                    <select class="form-control select select2 type"
-                                                                        style="width: 100%" name="type" id="type">
-                                                                        <option value="">--Pilih Type--</option>
-                                                                        <option value="Detail"
-                                                                            {{ (isset($_GET['type']) and $_GET['type'] == 'Detail') ? 'selected' : null }}>
-                                                                            Detail</option>
-                                                                        <option value="Summary"
-                                                                            {{ (isset($_GET['type']) and $_GET['type'] == 'Summary') ? 'selected' : null }}>
-                                                                            Summary</option>
-                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>

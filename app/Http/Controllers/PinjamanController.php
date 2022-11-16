@@ -91,20 +91,23 @@ class PinjamanController extends Controller
             });
 
             $search = $request->get('search');
-            $pin->where(function ($where) use ($search, $replaced) {
-                $where
-                    ->orWhere('kode_transaksi', 'like', '%' . $search . '%')
-                    ->orWhere('peminjam', 'like', '%' . $search . '%')
-                    ->orWhere('siswa.nama_lengkap', 'like', '%' . $search . '%')
-                    ->orWhere('karyawan.nama_lengkap', 'like', '%' . $search . '%')
-                    ->orwhereRaw(
-                        "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
-                        '%' . $replaced . '%'
-                    )
-                    ->orWhere('tgl_pinjam', 'like', '%' . $search . '%')
-                    ->orWhere('tgl_perkiraan_kembali', 'like', '%' . $search . '%')
-                    ->orWhere('tgl_kembali', 'like', '%' . $search . '%');
-            });
+            if ($search != null) {
+                $replaced = str_replace(' ', '', $search);
+                $pin->where(function ($where) use ($search, $replaced) {
+                    $where
+                        ->orWhere('kode_transaksi', 'like', '%' . $search . '%')
+                        ->orWhere('peminjam', 'like', '%' . $search . '%')
+                        ->orWhere('siswa.nama_lengkap', 'like', '%' . $search . '%')
+                        ->orWhere('karyawan.nama_lengkap', 'like', '%' . $search . '%')
+                        ->orwhereRaw(
+                            "CONCAT(IFNULL(school_level.level,''),'',IFNULL(school_class.classes,''),'',IFNULL(classes.jurusan,''),'',IFNULL(classes.type,'')) like ?",
+                            '%' . $replaced . '%'
+                        )
+                        ->orWhere('tgl_pinjam', 'like', '%' . $search . '%')
+                        ->orWhere('tgl_perkiraan_kembali', 'like', '%' . $search . '%')
+                        ->orWhere('tgl_kembali', 'like', '%' . $search . '%');
+                });
+            }
             $pin->groupBy('kode_transaksi');
         } else {
             if ($request->get('kode') != null) {

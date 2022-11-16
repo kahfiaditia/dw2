@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BukuExport;
 use App\Helper\AlertHelper;
 use App\Models\Buku;
 use App\Models\Kategori;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class BukuController extends Controller
@@ -45,7 +47,105 @@ class BukuController extends Controller
 
     public function data_ajax(Request $request)
     {
-        $buku = Buku::all();
+        // querynya
+        $buku = DB::table('perpus_buku')
+            ->select(
+                'perpus_buku.*',
+                'kategori',
+                'nama_penerbit',
+                'rak',
+            )
+            ->Join('perpus_kategori_buku', 'perpus_kategori_buku.id', 'perpus_buku.kategori_id')
+            ->Join('perpus_penerbit', 'perpus_penerbit.id', 'perpus_buku.penerbit_id')
+            ->leftJoin('perpus_rak', 'perpus_rak.id', 'perpus_buku.rak_id')
+            ->whereNull('perpus_buku.deleted_at')
+            ->orderBy('perpus_buku.id', 'DESC');
+
+        if ($request->get('search_manual') != null) {
+            $search = $request->get('search_manual');
+            $buku->where(function ($where) use ($search) {
+                $where
+                    ->orWhere('kode_buku', 'like', '%' . $search . '%')
+                    ->orWhere('judul', 'like', '%' . $search . '%')
+                    ->orWhere('pengarang', 'like', '%' . $search . '%')
+                    ->orWhere('nama_penerbit', 'like', '%' . $search . '%')
+                    ->orWhere('kategori', 'like', '%' . $search . '%')
+                    ->orWhere('rak', 'like', '%' . $search . '%')
+                    ->orWhere('jml_buku', 'like', '%' . $search . '%')
+                    ->orWhere('stock_master', 'like', '%' . $search . '%');
+            });
+
+            $search = $request->get('search');
+            if ($search != null) {
+                $buku->where(function ($where) use ($search) {
+                    $where
+                        ->orWhere('kode_buku', 'like', '%' . $search . '%')
+                        ->orWhere('judul', 'like', '%' . $search . '%')
+                        ->orWhere('pengarang', 'like', '%' . $search . '%')
+                        ->orWhere('nama_penerbit', 'like', '%' . $search . '%')
+                        ->orWhere('kategori', 'like', '%' . $search . '%')
+                        ->orWhere('rak', 'like', '%' . $search . '%')
+                        ->orWhere('jml_buku', 'like', '%' . $search . '%')
+                        ->orWhere('stock_master', 'like', '%' . $search . '%');
+                });
+            }
+        } else {
+            if ($request->get('kode') != null) {
+                $kode = $request->get('kode');
+                $buku->where('kode_buku', '=', $kode);
+            }
+            if ($request->get('judul') != null) {
+                $judul = $request->get('judul');
+                $buku->where('judul', '=', $judul);
+            }
+            if ($request->get('pengarang') != null) {
+                $pengarang = $request->get('pengarang');
+                $buku->where('pengarang', '=', $pengarang);
+            }
+            if ($request->get('penerbit') != null) {
+                $penerbit = $request->get('penerbit');
+                $buku->where('nama_penerbit', '=', $penerbit);
+            }
+            if ($request->get('penerbit') != null) {
+                $penerbit = $request->get('penerbit');
+                $buku->where('nama_penerbit', '=', $penerbit);
+            }
+            if ($request->get('kategori') != null) {
+                $kategori = $request->get('kategori');
+                $buku->where('kategori', '=', $kategori);
+            }
+            if ($request->get('rak') != null) {
+                $rak = $request->get('rak');
+                $buku->where('rak', '=', $rak);
+            }
+            if ($request->get('jml_end') != null) {
+                $jml_start = $request->get('jml_start');
+                $jml_end = $request->get('jml_end');
+                $buku->whereRaw('jml_buku BETWEEN ' . $jml_start . ' AND ' . $jml_end . '');
+            }
+            if ($request->get('stock_end') != null) {
+                $stock_start = $request->get('stock_start');
+                $stock_end = $request->get('stock_end');
+                $buku->whereRaw('stock_master BETWEEN ' . $stock_start . ' AND ' . $stock_end . '');
+            }
+            // stock master
+            if ($request->get('search') != null) {
+                $search = $request->get('search');
+                $replaced = str_replace(' ', '', $search);
+                $buku->where(function ($where) use ($search, $replaced) {
+                    $where
+                        ->orWhere('kode_buku', 'like', '%' . $search . '%')
+                        ->orWhere('judul', 'like', '%' . $search . '%')
+                        ->orWhere('pengarang', 'like', '%' . $search . '%')
+                        ->orWhere('nama_penerbit', 'like', '%' . $search . '%')
+                        ->orWhere('kategori', 'like', '%' . $search . '%')
+                        ->orWhere('rak', 'like', '%' . $search . '%')
+                        ->orWhere('jml_buku', 'like', '%' . $search . '%')
+                        ->orWhere('stock_master', 'like', '%' . $search . '%');
+                });
+            }
+        }
+
         return DataTables::of($buku)
             ->addColumn('judul', function ($model) {
                 if (strlen($model->judul) > 30) {
@@ -66,16 +166,16 @@ class BukuController extends Controller
                 return '<label class="" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="' . $model->pengarang . '">' . substr($model->pengarang, 0, 30) . $titik . '</label>';
             })
             ->addColumn('penerbit', function ($model) {
-                if (strlen($model->penerbit->nama_penerbit) > 30) {
+                if (strlen($model->nama_penerbit) > 30) {
                     $titik = '...';
                 } else {
                     $titik = null;
                 }
 
-                return '<label class="" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="' . $model->penerbit->nama_penerbit . '">' . substr($model->penerbit->nama_penerbit, 0, 30) . $titik . '</label>';
+                return '<label class="" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="' . $model->nama_penerbit . '">' . substr($model->nama_penerbit, 0, 30) . $titik . '</label>';
             })
             ->addColumn('kategori', function ($model) {
-                return $model->kategori->kategori;
+                return $model->kategori;
             })
             ->addColumn('rak', function ($model) {
                 if ($model->rak) {
@@ -548,5 +648,24 @@ class BukuController extends Controller
             })
             ->rawColumns(['action', 'judul', 'penerbit', 'pengarang'])
             ->make(true);
+    }
+
+    public function export_buku(Request $request)
+    {
+        $data = [
+            'kode' => $request->kode,
+            'judul' => $request->judul,
+            'pengarang' => $request->pengarang,
+            'penerbit' => $request->penerbit,
+            'kategori' => $request->kategori,
+            'jml_start' => $request->jml_start,
+            'jml_end' => $request->jml_end,
+            'stock_start' => $request->stock_start,
+            'stock_end' => $request->stock_end,
+            'rak' => $request->rak,
+            'search_manual' => $request->search_manual,
+            'like' => $request->like,
+        ];
+        return Excel::download(new BukuExport($data), 'buku.xlsx');
     }
 }
