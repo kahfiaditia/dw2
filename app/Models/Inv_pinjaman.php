@@ -11,9 +11,9 @@ class Inv_pinjaman extends Model
     protected $table = 'inv_pinjaman';
     protected $guarded = [];
 
-    public function karyawan()
+    public function users()
     {
-        return $this->belongsTo(Employee::class, 'id_karyawan');
+        return $this->belongsTo(User::class, 'nama_peminjam');
     }
 
     public function barang()

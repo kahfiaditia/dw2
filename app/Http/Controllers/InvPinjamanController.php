@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\Inv_pinjaman;
 use App\Models\Inventaris;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class InvPinjamanController extends Controller
@@ -16,14 +19,16 @@ class InvPinjamanController extends Controller
 
     public function index()
     {
+
+        $list = Inv_pinjaman::groupBy('kode_transaksi')->get();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'Pinjaman Inventaris',
             'label' => 'data pinjaman',
-            'list' => Inv_pinjaman::all()
+
         ];
-        return view('inv_pinjaman.data')->with($data);
+        return view('inv_pinjaman.data', compact('list'))->with($data);
     }
 
     /**
@@ -55,7 +60,7 @@ class InvPinjamanController extends Controller
         // echo json_encode('datapinjaman');
 
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('80', $session_menu)) {
+        if (in_array('88', $session_menu)) {
 
             $registration_number = Inv_pinjaman::limit(1)->groupBy('kode_transaksi')->orderBy('id', 'desc')->get();
             if (count($registration_number) > 0) {
@@ -81,17 +86,18 @@ class InvPinjamanController extends Controller
             DB::beginTransaction();
             try {
 
-                for ($i = 0; $i < count($request->datapinjaman); $i++) {
+
+                for ($i = 0; $i < count($request->datapinjam); $i++) {
                     $invpinjaman = new Inv_pinjaman;
                     $invpinjaman->kode_transaksi = $kode_transaksi;
                     $invpinjaman->status_transaksi = 'Proses';
-                    $invpinjaman->id_karyawan = Auth::user()->id;
-                    $invpinjaman->tgl_pemakaian = $request->datapinjaman[$i]['tgl_pemakaian'];
-                    $invpinjaman->tgl_permintaan = $request->datapinjaman[$i]['tgl_permintaan'];
-                    $invpinjaman->estimasi_kembali = $request->datapinjaman[$i]['tgl_renc_pengembalian'];
-                    $invpinjaman->id_barang = $request->datapinjaman[$i]['nama_barang'];
-                    $invpinjaman->qty = 1;
-                    $invpinjaman->deskripsi = $request->datapinjaman[$i]['desc'];
+                    $invpinjaman->nama_peminjam = $request->datapinjam[$i]['nama_peminjam'];
+                    $invpinjaman->tgl_pemakaian = $request->datapinjam[$i]['tgl_pemakaian'];
+                    $invpinjaman->tgl_permintaan = $request->datapinjam[$i]['tgl_permintaan'];
+                    $invpinjaman->estimasi_kembali = $request->datapinjam[$i]['tgl_renc_pengembalian'];
+                    $invpinjaman->id_barang = $request->datapinjam[$i]['nama_barang'];
+                    $invpinjaman->deskripsi = $request->datapinjam[$i]['desc'];
+                    $invpinjaman->jumlah = 1;
                     $invpinjaman->user_created =  Auth::user()->id;
                     $invpinjaman->save();
                 }
@@ -128,7 +134,49 @@ class InvPinjamanController extends Controller
      */
     public function show($id)
     {
-        //
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('87', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $data_pinjaman = inv_pinjaman::where('kode_transaksi', $id_decrypted)->get();
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'pinjaman',
+                'label' => 'Data Pinjaman',
+                'karyawan' => Employee::all(),
+                'User' => User::all(),
+
+            ];
+            return view('inv_pinjaman.show', compact('data_pinjaman'))->with($data);
+        } else {
+            return view('not_found');
+        }
+    }
+
+    public function approve($id)
+    {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('87', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $data_pinjaman = inv_pinjaman::where('kode_transaksi', $id_decrypted)->get();
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'pinjaman',
+                'label' => 'Penyerahan Pinjaman',
+                'karyawan' => Employee::all(),
+                'User' => User::all(),
+                'kondisi' => Inventaris::all(),
+
+            ];
+            return view('inv_pinjaman.approve', compact('data_pinjaman'))->with($data);
+        } else {
+            return view('not_found');
+        }
+    }
+
+    public function approveProses($id)
+    {
     }
 
     /**

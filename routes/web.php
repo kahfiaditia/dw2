@@ -276,6 +276,8 @@ Route::group(
         Route::resource('inventaris', InventarisController::class);
         Route::resource('ruangan', RuanganController::class);
         Route::resource('inv_pinjaman', InvPinjamanController::class);
+        Route::get('/approvel/{id}', [InvPinjamanController::class, 'approve'])->name('inv_pinjaman.approve');
+        Route::post('/approveProses', [PinjamanController::class, 'approveProses'])->name('inv_pinjaman.approveProses');
     }
 );
 

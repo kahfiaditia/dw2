@@ -24,20 +24,19 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-
                                         <div class="col-md-3 peminjam">
                                             <div class="mb-3">
                                                 <label>Peminjam <code>*</code></label>
-                                                {{ Auth::user()->id }}
-                                                <input type="disable" class="form-control" name="peminjam" id="peminjam"
-                                                    style="text-transform:uppercase" value="{{ Auth::user()->name }}"
-                                                    readonly>
+                                                <input type="disable" class="form-control" name="peminjam1" id="peminjam1"
+                                                    value="{{ Auth::user()->name }}" readonly>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
                                                 {!! $errors->first('peminjam', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
+                                        <input type="hidden" id="nama_peminjam" name="nama_peminjam"
+                                            value="{{ Auth::user()->id }}">
                                         <div class="col-md-3 wajib">
                                             <div class="mb-3">
                                                 <label>Tanggal Pengajuan <code>*</code></label>
@@ -76,7 +75,7 @@
                                             <div class="mb-3">
                                                 <label>Rencana Pengembalian <code>*</code></label>
                                                 <div class="input-group" id="datepicker3">
-                                                    <input type="date" class="form-control tgl_renc_pengembalian"
+                                                    <input type="text" class="form-control tgl_renc_pengembalian"
                                                         placeholder="yyyy-mm-dd" name="tgl_renc_pengembalian"
                                                         id="tgl_renc_pengembalian" value="{{ date('Y-m-d') }}"
                                                         data-date-format="yyyy-mm-dd" data-date-container='#datepicker3'
@@ -141,7 +140,7 @@
                                                         <th class="text-center" style="width: 10%">Nama Barang</th>
                                                         <th class="text-center" style="width: 10%">Keterangan</th>
                                                         <th class="text-center" style="width: 10%">Aksi</th>
-                                                        <th class="text-center" hidden>$inv->id</th>
+                                                        <th class="text-center" hidden>{{ Auth::user()->id }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -169,26 +168,31 @@
     <script src="{{ asset('assets/alert.js') }}"></script>
     <script>
         function tablePinjam() {
-            var peminjam = document.getElementById('peminjam').value;
+            var nama_peminjam = document.getElementById('nama_peminjam').value;
             var tgl_pemakaian = document.getElementById('tgl_pemakaian').value;
             var tgl_permintaan = document.getElementById('tgl_permintaan').value;
             var tgl_renc_pengembalian = document.getElementById('tgl_renc_pengembalian').value;
             var nama_barang = document.getElementById('nama_barang').value;
             var desc = document.getElementById('desc').value;
 
+
             document.getElementById("nama_barang").onclick = '';
             document.getElementById('desc').value = '';
-            // console.log('peminjam');
-            // console.log('tgl_pemakaian');
-            // console.log('tgl_permintaan');
-            // console.log('tgl_renc_pengembalian');
-            // console.log('nama_barang');
-            // console.log('desc');
+            document.getElementById('nama_barang').value = '';
+            // $("#nama_barang option").attr("selected", false);
+            // $('#nama_barang').find('option:empty')
+
+            console.log(nama_peminjam)
+            console.log(tgl_pemakaian)
+            console.log(tgl_permintaan)
+            console.log(tgl_renc_pengembalian)
+            console.log(nama_barang)
+            console.log(desc)
 
             if (nama_barang == '' || desc == '') {
                 Swal.fire({
                     icon: 'error',
-                    title: '1Tanda * (bintang) wajib Diisi',
+                    title: 'Tanda * (bintang) wajib Diisi',
                     showConfirmButton: false,
                     timer: 1900,
                 })
@@ -203,7 +207,7 @@
             } else {
                 $("#tablePinjam tr:last").after(`
                         <tr>
-                            <td class="text-left">${peminjam}</td>
+                            <td class="text-left">${nama_peminjam}</td>
                             <td class="text-left">${tgl_pemakaian}</td>
                             <td class="text-left">${tgl_permintaan}</td>
                             <td class="text-left">${tgl_renc_pengembalian}</td>
@@ -214,92 +218,72 @@
                             </td>
                         </tr>
                     `)
-                // console.log(peminjam)
-                // console.log(tgl_pemakaian)
-                // console.log(tgl_permintaan)
-                // console.log(tgl_renc_pengembalian)
-                // console.log(nama_barang)
-                // console.log(desc)
-
             }
         }
 
-        $(document).ready(function() {
-            $("#save").on('click', function() {
-                let datapinjaman = []
-                $("#tablePinjam").find("tr").each(function(index, element) {
-                    let tableData = $(this).find('td'),
-                        peminjam = tableData.eq(0).text(),
-                        tgl_pemakaian = tableData.eq(1).text(),
-                        tgl_permintaan = tableData.eq(2).text(),
-                        tgl_renc_pengembalian = tableData.eq(3).text(),
-                        nama_barang = tableData.eq(4).text(),
-                        desc = tableData.eq(5).text()
+        $("#save").on('click', function() {
+            let datapinjam = []
+            $("#tablePinjam").find("tr").each(function(index, element) {
+                let tableData = $(this).find('td'),
+                    nama_peminjam = tableData.eq(0).text(),
+                    tgl_pemakaian = tableData.eq(1).text(),
+                    tgl_permintaan = tableData.eq(2).text(),
+                    tgl_renc_pengembalian = tableData.eq(3).text(),
+                    nama_barang = tableData.eq(4).text(),
+                    desc = tableData.eq(5).text()
 
-                    // console.log(peminjam)
-                    // console.log(tgl_pemakaian)
-                    // console.log(tgl_permintaan)
-                    // console.log(tgl_renc_pengembalian)
-                    // console.log(nama_barang)
-                    // console.log(desc)
+                //ini filter data null
+                if (nama_barang != '') {
+                    datapinjam.push({
+                        nama_peminjam,
+                        tgl_pemakaian,
+                        tgl_permintaan,
+                        tgl_renc_pengembalian,
+                        nama_barang,
+                        desc
+                    });
+                    console.log(datapinjam)
+                }
+            })
+            jQuery.ajax({
+                type: "POST",
+                url: '{{ route('inv_pinjaman.store') }}',
+                dataType: 'json',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    datapinjam
+                },
+                success: (response) => {
+                    console.log(response)
+                    if (response.code === 200) {
 
-                    //ini filter data null
-                    if (nama_barang != '') {
-                        datapinjaman.push({
-                            peminjam,
-                            tgl_pemakaian,
-                            tgl_permintaan,
-                            tgl_renc_pengembalian,
-                            nama_barang,
-                            desc
-                        });
-                        console.log(datapinjaman)
-
-                        // console.log('peminjam')
-                        // console.log('tgl_pemakaian')
-                        // console.log('tgl_permintaan')
-                        // console.log('tgl_renc_pengembalian')
-                        // console.log('nama_barang')
-                        // console.log('desc')
+                        Swal.fire(
+                            'Success',
+                            'Pinjaman Berhasil di masukan',
+                            'success'
+                        ).then(() => {
+                            var APP_URL = {!! json_encode(url('/')) !!}
+                            window.location = APP_URL + '/inv_pinjaman'
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terdapat dua barang yang sama',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        })
                     }
-                })
-                jQuery.ajax({
-                    type: "POST",
-                    url: '{{ route('inv_pinjaman.store') }}',
-                    dataType: 'json',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        datapinjaman
-                    },
-                    success: (response) => {
-                        if (response.code === 200) {
-
-                            Swal.fire(
-                                'Success',
-                                'Data Pinjaman Berhasil di masukan',
-                                'success'
-                            ).then(() => {
-                                var APP_URL = {!! json_encode(url('/')) !!}
-                                window.location = APP_URL + '/inv_pinjaman'
-                            })
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Tanda * (bintang) harus diisi',
-                                showConfirmButton: false,
-                                timer: 1500,
-                            })
-                        }
-                    },
-                    error: err => console.log(err)
-                });
-
+                },
+                error: err => console.log(err)
             });
-        })
 
+        });
+
+        //fungsi hapus
         $("#tablePinjam").on('click', '.delete-record', function() {
             $(this).parent().parent().remove()
         })
+
 
         $("#batal").on('click', function() {
             // hapus localStorage

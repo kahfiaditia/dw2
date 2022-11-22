@@ -26,7 +26,7 @@ class AddKetersediaanToInvInventarisTable extends Migration
     public function down()
     {
         Schema::table('inv_inventaris', function (Blueprint $table) {
-            //
+            $table->dropColumn('ketersediaan');
         });
     }
 }

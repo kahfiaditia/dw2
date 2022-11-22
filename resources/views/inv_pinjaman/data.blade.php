@@ -214,9 +214,8 @@
                                         <th>No</th>
                                         <th>Kode Transaksi</th>
                                         <th>Peminjam</th>
-                                        <th>Inventaris</th>
                                         <th>Tgl Pinjam</th>
-                                        <th>Tgl Pemakaian</th>
+                                        <th>Tgl Kembali</th>
                                         <th>Status Transaksi</th>
                                         <th>Action</th>
                                     </tr>
@@ -226,34 +225,40 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $pinjam->kode_transaksi }}</td>
-                                            <td>{{ $pinjam->karyawan->nama_lengkap }}</td>
-                                            <td>{{ $pinjam->barang->nama }}</td>
+                                            <td>{{ $pinjam->users->name }}</td>
                                             <td>{{ $pinjam->tgl_permintaan }}</td>
-                                            <td>{{ $pinjam->tgl_pemakaian }}</td>
+                                            <td>{{ $pinjam->tgl_diberikan }}</td>
                                             <td>
                                                 {{ $pinjam->status_transaksi }}
                                             </td>
-                                            <td><?php $id = Crypt::encryptString($pinjam->id); ?>
-                                                <form class="delete-form" action="{{ route('inventaris.destroy', $id) }}"
-                                                    method="POST">
+                                            <td>
+                                                <?php $id = Crypt::encryptString($pinjam->kode_transaksi); ?>
+                                                <form class="delete-form"
+                                                    action="{{ route('inv_pinjaman.destroy', $id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <div class="d-flex gap-3">
-                                                        @if (in_array('79', $session_menu))
+                                                        @if (in_array('87', $session_menu))
                                                             <a href="{{ route('inv_pinjaman.show', $id) }}"
                                                                 class="text-info">
                                                                 <i class="mdi mdi-eye font-size-18"></i>
                                                             </a>
                                                         @endif
-                                                        @if (in_array('79', $session_menu))
+                                                        @if (in_array('88', $session_menu))
                                                             <a href="{{ route('inv_pinjaman.edit', $id) }}"
                                                                 class="text-success">
                                                                 <i class="mdi mdi-pencil font-size-18"></i>
                                                             </a>
                                                         @endif
-                                                        @if (in_array('82', $session_menu))
+                                                        @if (in_array('90', $session_menu))
                                                             <a href class="text-danger delete_confirm"><i
                                                                     class="mdi mdi-delete font-size-18"></i></a>
+                                                        @endif
+                                                        @if (in_array('88', $session_menu))
+                                                            <a href="{{ route('inv_pinjaman.approve', $id) }}"
+                                                                class="text-success">
+                                                                <i class="mdi mdi-check-all font-size-18"></i>
+                                                            </a>
                                                         @endif
                                                     </div>
                                                 </form>

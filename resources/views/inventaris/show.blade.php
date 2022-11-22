@@ -19,7 +19,6 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-
                             {{-- baris atas --}}
                             <div class="row">
                                 <div class="col-md-4">
@@ -107,7 +106,6 @@
                                 <div class="col-sm-12">
                                     <a href="{{ route('inventaris.index') }}"
                                         class="btn btn-secondary waves-effect">Batal</a>
-
                                 </div>
                             </div>
                         </div>
