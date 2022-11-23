@@ -247,7 +247,7 @@
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Tanggal Masuk Kerja</h5>
                                                     <p class="text-muted mb-0">
-                                                        {{ date('d F Y', strtotime($item->masuk_kerja)) }}
+                                                        {{ date('d F Y', strtotime($item->masuk_kerja)) }}<br>
                                                         ({{ hitung_umur($item->masuk_kerja) }})
                                                     </p>
                                                 </div>
@@ -259,6 +259,24 @@
                                                         disabled {{ $item->aktif === '1' ? 'checked' : '' }} />
                                                     <label for="switch1" data-on-label="On"
                                                         data-off-label="Off"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row task-dates">
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Tanggal Resign</h5>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $item->tgl_resign }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14">Alasan Resign</h5>
+                                                    <p class="text-muted mb-0">
+                                                        {{ $item->alasan_resign }}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>

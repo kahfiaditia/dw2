@@ -65,6 +65,7 @@ class EmployeeController extends Controller
                         'no_hp',
                         'jabatan',
                         'karyawan.aktif',
+                        'tgl_resign',
                     )
                     ->Join('users', 'users.id', 'karyawan.user_id')
                     ->whereNull('karyawan.deleted_at');
@@ -78,6 +79,10 @@ class EmployeeController extends Controller
                             } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
                                 $status = 0;
                                 $where->orWhere('karyawan.aktif', '=', $status);
+                                $where->WhereNull('karyawan.tgl_resign');
+                            } elseif (strtolower($search) == 'resign') {
+                                $status = 0;
+                                $where->orWhereNotNull('karyawan.tgl_resign');
                             }
                         }
                         $where
@@ -98,6 +103,9 @@ class EmployeeController extends Controller
                             } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
                                 $status = 0;
                                 $where->orWhere('karyawan.aktif', '=', $status);
+                                $where->WhereNull('karyawan.tgl_resign');
+                            } elseif (strtolower($search) == 'resign') {
+                                $where->orWhereNotNull('karyawan.tgl_resign');
                             }
                         }
                         $where
@@ -138,10 +146,14 @@ class EmployeeController extends Controller
                         $stat = $request->get('stat');
                         if (strtolower($stat) == 'aktif') {
                             $stat = 1;
-                        } else {
+                            $employee->where('karyawan.aktif', '=', $stat);
+                        } elseif (strtolower($stat) == 'non aktif' or strtolower($stat) == 'non') {
                             $stat = 0;
+                            $employee->where('karyawan.aktif', '=', $stat);
+                            $employee->WhereNull('karyawan.tgl_resign');
+                        } elseif (strtolower($stat) == 'resign') {
+                            $employee->WhereNotNull('karyawan.tgl_resign');
                         }
-                        $employee->where('karyawan.aktif', '=', $stat);
                     }
                     if ($request->get('search') != null) {
                         $search = $request->get('search');
@@ -153,6 +165,9 @@ class EmployeeController extends Controller
                                 } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
                                     $status = 0;
                                     $where->orWhere('karyawan.aktif', '=', $status);
+                                    $where->WhereNull('karyawan.tgl_resign');
+                                } elseif (strtolower($search) == 'resign') {
+                                    $where->orWhereNotNull('karyawan.tgl_resign');
                                 }
                             }
                             $where
@@ -172,8 +187,18 @@ class EmployeeController extends Controller
                     ->addIndexColumn()
                     ->addColumn('Opsi', 'employee._form')
                     ->addColumn('status', function ($employee) {
-                        $employee->aktif === '1' ? $flag = 'success' : $flag = 'danger';
-                        $employee->aktif === '1' ? $status = 'Aktif' : $status = 'Non Aktif';
+                        // $employee->aktif === '1' ? $flag = 'success' : $flag = 'danger';
+                        // ($employee->aktif === '1' and $employee->tgl_resign != '') ? $status = 'Aktif' : $status = 'Non Aktif';
+                        if ($employee->aktif == '1' and $employee->tgl_resign == null) {
+                            $status = 'Aktif';
+                            $flag = 'success';
+                        } elseif ($employee->aktif == '0' and $employee->tgl_resign != null) {
+                            $status = 'Resign';
+                            $flag = 'warning';
+                        } else {
+                            $status = 'Non Aktif';
+                            $flag = 'danger';
+                        }
                         return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
                     })
                     ->rawColumns(['Opsi', 'status'])
@@ -477,6 +502,16 @@ class EmployeeController extends Controller
                 $employee->divisi = $request->divisi;
                 $employee->masuk_kerja = $request->masuk_kerja;
                 $employee->user_id = $request->user_id;
+
+                $resign = isset($request->resign) ? 1 : 0;
+                if ($resign == 0) {
+                    $employee->tgl_resign = null;
+                    $employee->alasan_resign = null;
+                } else {
+                    $employee->tgl_resign = $request->tgl_resign;
+                    $employee->alasan_resign = $request->alasan_resign;
+                }
+
                 $aktif = isset($request->aktif) ? 1 : 0;
                 if ($request->aktif_old != $aktif) {
                     $user = User::findorfail($employee->user_id);
@@ -484,6 +519,7 @@ class EmployeeController extends Controller
                     $user->user_updated = Auth::user()->id;
                     $user->save();
                 }
+
                 $employee->aktif = $aktif;
                 $employee->user_updated = Auth::user()->id;
                 $employee->save();

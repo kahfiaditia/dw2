@@ -15,6 +15,8 @@ class AddFieldDivisi extends Migration
     {
         Schema::table('karyawan', function (Blueprint $table) {
             $table->string('divisi', 64)->nullable()->after('jabatan');
+            $table->date('tgl_resign')->nullable()->after('divisi');
+            $table->text('alasan_resign')->nullable()->after('tgl_resign');
         });
     }
 
@@ -27,6 +29,8 @@ class AddFieldDivisi extends Migration
     {
         Schema::table('karyawan', function (Blueprint $table) {
             $table->dropColumn('divisi');
+            $table->dropColumn('tgl_resign');
+            $table->dropColumn('alasan_resign');
         });
     }
 }
