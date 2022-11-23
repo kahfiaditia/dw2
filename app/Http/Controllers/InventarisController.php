@@ -15,20 +15,20 @@ use Illuminate\Support\Facades\Log;
 class InventarisController extends Controller
 {
     protected $title = 'dharmawidya';
-    protected $menu = 'setting';
+    protected $menu = 'Inventaris';
 
     public function index()
     {
         $data = [
             'title' => $this->title,
-            'menu' => 'Inventaris',
+            'menu' => $this->menu,
             'submenu' => 'Data Barang',
             'label' => 'Data Inventaris',
+            'inventaris' => Inventaris::all(),
         ];
-        $inventaris = Inventaris::all();
-        return view('inventaris.data', compact('inventaris'))->with($data);
-    }
 
+        return view('inventaris.data')->with($data);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -38,14 +38,14 @@ class InventarisController extends Controller
     public function create()
     {
 
-        $ruangs = Inv_Ruangan::all();
         $data = [
             'title' => $this->title,
-            'menu' => 'Inventaris',
+            'menu' => $this->menu,
             'submenu' => 'Data Barang',
             'label' => 'Tambah Inventaris',
+            'ruangs' => Inv_Ruangan::all(),
         ];
-        return view('inventaris.create', compact('ruangs'))->with($data);
+        return view('inventaris.create')->with($data);
     }
 
     /**
@@ -56,14 +56,18 @@ class InventarisController extends Controller
      */
     public function store(Request $request)
     {
-        // echo json_encode('1');
+        $request->validate(
+            [
+                'nomor_inventaris' => 'required|unique:inv_inventaris',
+                'idbarang' => 'required|unique:inv_inventaris',
+            ]
+        );
+
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('80', $session_menu)) {
+        if (in_array('84', $session_menu)) {
 
             DB::beginTransaction();
             try {
-
-
                 for ($i = 0; $i < count($request->databarang); $i++) {
                     $inventaris = new Inventaris;
                     $inventaris->nama = $request->databarang[$i]['hasilnama'];
@@ -77,7 +81,6 @@ class InventarisController extends Controller
                     $inventaris->deskripsi =  $request->databarang[$i]['hasildesc'];
                     $inventaris->qty  = 1;
                     $inventaris->user_created =  Auth::user()->id;
-                    // $inventaris->id_ruangan =  1;
                     $inventaris->save();
                 }
 
@@ -86,7 +89,6 @@ class InventarisController extends Controller
                     'code' => 200,
                     'message' => 'Berhasil Input Data',
                 ]);
-                // return redirect('inventaris');
             } catch (\Throwable $err) {
                 DB::rollBack();
                 throw $err;
@@ -112,15 +114,16 @@ class InventarisController extends Controller
     public function show(Inventaris $inventaris, $id)
     {
         $id_decrypted = Crypt::decryptString($id);
-        $ruangs = Inv_Ruangan::all();
+
         $data = [
             'title' => $this->title,
-            'menu' => 'Inventaris',
+            'menu' => $this->menu,
             'submenu' => 'Data Barang',
             'label' => 'Inventaris',
             'inventaris' => Inventaris::findORFail($id_decrypted),
+            'ruangs' => Inv_Ruangan::all(),
         ];
-        return view('inventaris.show', compact('inventaris', 'ruangs'))->with($data);
+        return view('inventaris.show')->with($data);
     }
 
     /**
@@ -131,17 +134,19 @@ class InventarisController extends Controller
      */
     public function edit($id)
     {
+
         $id_decrypted = Crypt::decryptString($id);
-        $ruangs = Inv_Ruangan::all();
+
         $data = [
             'title' => $this->title,
-            'menu' => 'Inventaris',
+            'menu' => $this->menu,
             'submenu' => 'Data Barang',
             'label' => 'Edit Inventaris',
             'inventaris' => Inventaris::findORFail($id_decrypted),
+            'ruangs' => Inv_Ruangan::all()
         ];
 
-        return view('inventaris.edit', compact('ruangs'))->with($data);
+        return view('inventaris.edit')->with($data);
     }
 
     /**
@@ -190,7 +195,6 @@ class InventarisController extends Controller
      */
     public function destroy($id)
     {
-
         $id_decrypted = Crypt::decryptString($id);
         DB::beginTransaction();
         try {

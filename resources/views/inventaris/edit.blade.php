@@ -31,7 +31,8 @@
                                                 <code>*</code></label>
                                             <input type="text" name="nama"
                                                 class="form-control  @error('name') is-invalid @enderror"
-                                                value="{{ old('nama', $inventaris->nama) }}" required
+                                                value="{{ old('nama', $inventaris->nama) }}"
+                                                oninput="this.value = this.value.toUpperCase()" required
                                                 placeholder="Nama Inventaris">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
@@ -75,7 +76,7 @@
                                             <label for="validationCustom02" class="form-label">Qty
                                                 <code>*</code></label>
                                             <input type="number" class="form-control @error('qty') is-invalid @enderror"
-                                                id="qty" name="qty" value="{{ $inventaris->qty }}"
+                                                id="qty" name="qty" value="{{ $inventaris->qty }}" min="1"
                                                 {{ old('qty', $inventaris->qty) }}" required placeholder="Jumlah Barang">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
@@ -87,7 +88,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Ruang Penempatan <code>*</code></label>
                                             <select
-                                                class="form-control select select2 status @error('id_ruangan') is-invalid @enderror"
+                                                class="form-control select status @error('id_ruangan') is-invalid @enderror"
                                                 name="id_ruangan" required>
                                                 @foreach ($ruangs as $ruang)
                                                     <option value="{{ $ruang->id }}"
@@ -104,8 +105,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Kondisi Barang <code>*</code></label>
-                                            <select
-                                                class="form-control select select2 status @error('status') is-invalid @enderror"
+                                            <select class="form-control select status @error('status') is-invalid @enderror"
                                                 name="status" required>
                                                 <option
                                                     {{ old('status', $inventaris->status) == 'Baik' ? 'selected' : '' }}
@@ -132,7 +132,7 @@
                                             <label for="validationCustom02" class="form-label">Ketersediaan
                                                 <code>*</code></label>
                                             <select
-                                                class="form-control select select2 ketersediaan @error('ketersediaan') is-invalid @enderror"
+                                                class="form-control select ketersediaan @error('ketersediaan') is-invalid @enderror"
                                                 id="ketersediaan" name="ketersediaan">
                                                 <option
                                                     {{ old('ketersediaan', $inventaris->ketersediaan) == 'TERPAKAI' ? 'selected' : null }}
@@ -160,7 +160,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Indikasi Kerusakan <code>*</code></label>
                                             <input type="text"
-                                                class="form-control select select2 indikasi @error('indikasi') is-invalid @enderror"
+                                                class="form-control select indikasi @error('indikasi') is-invalid @enderror"
                                                 id="indikasi" name="indikasi" value="{{ $inventaris->indikasi }}"
                                                 {{ old('indikasi', $inventaris->indikasi) }}" required
                                                 placeholder="Indikasi">
@@ -174,7 +174,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Pemilik <code>*</code></label>
                                             <select
-                                                class="form-control select select2 pemilik @error('pemilik') is-invalid @enderror"
+                                                class="form-control select pemilik @error('pemilik') is-invalid @enderror"
                                                 name="pemilik" required>
                                                 <option
                                                     {{ old('pemilik', $inventaris->indikasi) == 'Yayasan' ? 'selected' : '' }}

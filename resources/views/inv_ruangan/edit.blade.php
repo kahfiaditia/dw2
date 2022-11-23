@@ -30,6 +30,7 @@
                                                 <code>*</code></label>
                                             <input type="text" class="form-control" id="nama" name="nama"
                                                 placeholder="Input Data Ruangan" style="text-transform:uppercase"
+                                                oninput="this.value = this.value.toUpperCase()"
                                                 value="{{ old('nama', $ruangan->nama) }}" autofocus required>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.

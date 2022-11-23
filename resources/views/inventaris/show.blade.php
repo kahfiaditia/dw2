@@ -23,25 +23,23 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">Inventaris
+                                        <label class="form-label">Inventaris
                                             <code>*</code></label>
-                                        <input type="text" class="form-control" value="{{ $inventaris->nama }}" readonly>
+                                        <input class="form-control" value="{{ $inventaris->nama }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">Nomor Inventaris
+                                        <label class="form-label">Nomor Inventaris
                                             <code>*</code></label>
-                                        <input type="text" class="form-control"
-                                            value="{{ $inventaris->nomor_inventaris }}" readonly>
+                                        <input class="form-control" value="{{ $inventaris->nomor_inventaris }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">ID Inventaris
+                                        <label class="form-label">ID Inventaris
                                             <code>*</code></label>
-                                        <input type="text" class="form-control" value="{{ $inventaris->idbarang }}"
-                                            readonly>
+                                        <input class="form-control" value="{{ $inventaris->idbarang }}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -50,9 +48,9 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">Qty
+                                        <label class="form-label">Qty
                                             <code>*</code></label>
-                                        <input type="number" class="form-control" value='{{ $inventaris->qty }}' readonly>
+                                        <input class="form-control" value='{{ $inventaris->qty }}' readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -64,15 +62,14 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label">Kondisi Barang <code>*</code></label>
-                                        <input type="text" class="form-control" value="{{ $inventaris->status }}"
-                                            readonly>
+                                        <input class="form-control" value="{{ $inventaris->status }}" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="validationCustom02" class="form-label">Ketersediaan
+                                        <label class="form-label">Ketersediaan
                                             <code>*</code></label>
                                         <input type="text" class="form-control" value="{{ $inventaris->ketersediaan }}"
                                             readonly>
@@ -81,16 +78,15 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label">Indikasi Kerusakan <code>*</code></label>
-                                        <input type="text"
-                                            class="form-control select select2 indikasi @error('indikasi') is-invalid @enderror"
+                                        <input type="text" class="form-control @error('indikasi') is-invalid @enderror"
                                             id="indikasi" value="{{ $inventaris->indikasi }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label">Pemilik <code>*</code></label>
-                                        <input type="text" class="form-control select select2 indikasi"
-                                            value="{{ $inventaris->pemilik }}" readonly>
+                                        <input type="text" class="form-control " value="{{ $inventaris->pemilik }}"
+                                            readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -105,7 +101,7 @@
                             <div class="row mt-4">
                                 <div class="col-sm-12">
                                     <a href="{{ route('inventaris.index') }}"
-                                        class="btn btn-secondary waves-effect">Batal</a>
+                                        class="btn btn-secondary waves-effect">Kembali</a>
                                 </div>
                             </div>
                         </div>

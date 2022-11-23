@@ -175,12 +175,9 @@
             var nama_barang = document.getElementById('nama_barang').value;
             var desc = document.getElementById('desc').value;
 
-
             document.getElementById("nama_barang").onclick = '';
             document.getElementById('desc').value = '';
             document.getElementById('nama_barang').value = '';
-            // $("#nama_barang option").attr("selected", false);
-            // $('#nama_barang').find('option:empty')
 
             console.log(nama_peminjam)
             console.log(tgl_pemakaian)
@@ -188,6 +185,7 @@
             console.log(tgl_renc_pengembalian)
             console.log(nama_barang)
             console.log(desc)
+
 
             if (nama_barang == '' || desc == '') {
                 Swal.fire({

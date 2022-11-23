@@ -20,15 +20,15 @@ class InvPinjamanController extends Controller
     public function index()
     {
 
-        $list = Inv_pinjaman::groupBy('kode_transaksi')->get();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'Pinjaman Inventaris',
             'label' => 'data pinjaman',
+            'list' => Inv_pinjaman::groupBy('kode_transaksi')->get(),
 
         ];
-        return view('inv_pinjaman.data', compact('list'))->with($data);
+        return view('inv_pinjaman.data')->with($data);
     }
 
     /**
@@ -38,15 +38,16 @@ class InvPinjamanController extends Controller
      */
     public function create()
     {
-        $inventaris = Inventaris::where('ketersediaan', 'DAPAT DIPINJAM')->get();
+
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'Pinjaman Inventaris',
             'label' => 'Tambah Pinjaman',
+            'inventaris' => Inventaris::where('ketersediaan', 'DAPAT DIPINJAM')->get(),
 
         ];
-        return view('inv_pinjaman.add', compact('inventaris'))->with($data);
+        return view('inv_pinjaman.add')->with($data);
     }
 
     /**
@@ -85,8 +86,6 @@ class InvPinjamanController extends Controller
 
             DB::beginTransaction();
             try {
-
-
                 for ($i = 0; $i < count($request->datapinjam); $i++) {
                     $invpinjaman = new Inv_pinjaman;
                     $invpinjaman->kode_transaksi = $kode_transaksi;
@@ -101,8 +100,6 @@ class InvPinjamanController extends Controller
                     $invpinjaman->user_created =  Auth::user()->id;
                     $invpinjaman->save();
                 }
-
-
 
                 DB::commit();
                 return response()->json([
@@ -137,7 +134,7 @@ class InvPinjamanController extends Controller
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('87', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
-            $data_pinjaman = inv_pinjaman::where('kode_transaksi', $id_decrypted)->get();
+
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
@@ -145,9 +142,10 @@ class InvPinjamanController extends Controller
                 'label' => 'Data Pinjaman',
                 'karyawan' => Employee::all(),
                 'User' => User::all(),
+                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id_decrypted)->get(),
 
             ];
-            return view('inv_pinjaman.show', compact('data_pinjaman'))->with($data);
+            return view('inv_pinjaman.show')->with($data);
         } else {
             return view('not_found');
         }
@@ -158,7 +156,7 @@ class InvPinjamanController extends Controller
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('87', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
-            $data_pinjaman = inv_pinjaman::where('kode_transaksi', $id_decrypted)->get();
+
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
@@ -167,9 +165,10 @@ class InvPinjamanController extends Controller
                 'karyawan' => Employee::all(),
                 'User' => User::all(),
                 'kondisi' => Inventaris::all(),
+                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id_decrypted)->get(),
 
             ];
-            return view('inv_pinjaman.approve', compact('data_pinjaman'))->with($data);
+            return view('inv_pinjaman.approve')->with($data);
         } else {
             return view('not_found');
         }

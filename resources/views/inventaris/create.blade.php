@@ -117,14 +117,19 @@
                                         </div>
                                     </div>
                                     <hr>
-
                                     <div class="row wajib">
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>No Inventaris <code>*</code></label>
-                                                <input type="text" class="form-control" style="text-transform:uppercase"
-                                                    id="no_inv" placeholder="No Inventaris"
-                                                    style="text-transform:uppercase" required>
+                                                <input type="text"
+                                                    class="form-control @error('no_inv') is-invalid @enderror"
+                                                    style="text-transform:uppercase"
+                                                    oninput="this.value = this.value.toUpperCase()" id="no_inv"
+                                                    onchange="
+                                                    checkUniq(this.no_inv, this.value)"";
+                                                    placeholder="No
+                                                    Inventaris"
+                                                    required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -134,9 +139,10 @@
                                         <div class="col-md-3 wajib">
                                             <div class="mb-3">
                                                 <label>ID Barang <code>*</code></label>
-                                                <input type="text" class="form-control" style="text-transform:uppercase"
-                                                    id="idbarang" placeholder="ID Barang" style="text-transform:uppercase"
-                                                    required>
+                                                <input type="text"
+                                                    class="form-control @error('idbarang') is-invalid @enderror"
+                                                    style="text-transform:uppercase" id="idbarang" placeholder="ID Barang"
+                                                    oninput="this.value = this.value.toUpperCase()" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -146,10 +152,10 @@
                                         <div class="col-md-3 keterangan">
                                             <div class="mb-3">
                                                 <label>Indikasi</label>
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control "
                                                     style="text-transform:uppercase" id="indikasi"
-                                                    placeholder="Indikasi Kerusakan" style="text-transform:uppercase"
-                                                    required>
+                                                    placeholder="Indikasi Kerusakan"
+                                                    oninput="this.value = this.value.toUpperCase()" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -203,8 +209,7 @@
             </div>
         </div>
     </body>
-    {{-- <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/alert.js') }}"></script> --}}
+
     <script>
         function tableBarang() {
             var nama = document.getElementById('nama').value;
@@ -226,6 +231,15 @@
             document.getElementById('idbarang').value = '';
             document.getElementById('indikasi').value = '';
 
+            document.getElementById('no_inv').value = '';
+            document.getElementById('idbarang').value = '';
+
+            function checkUniq(no_inv, value) {
+                var req = new AjaxRequest();
+                req.setMethod('POST');
+                var params = "table=table&field=" + encodeURIComponent(field) + "&value=" + encodeURIComponent(value);
+                req.loadXMLDoc("checkuniq.php", params);
+            }
 
             if (ruang == '' || keterangan == '' || pemilik == '' || hasilnama == '' || ketersediaan == '' ||
                 hasilidbarang ==

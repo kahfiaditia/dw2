@@ -176,14 +176,6 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Pinjaman', 'route_submenu' => null, 'type_menu' => 'approve', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Data Barang', 'route_submenu' => 'inventaris.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
-            ], [
-                'submenu' => 'Data Barang', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
-            ], [
-                'submenu' => 'Data Barang', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
-            ], [
-                'submenu' => 'Data Barang', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
-            ], [
                 'submenu' => 'Data Ruangan', 'route_submenu' => 'ruangan.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Data Ruangan', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
@@ -191,6 +183,14 @@ class SubMenuSeeder extends Seeder
                 'submenu' => 'Data Ruangan', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Data Ruangan', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Data Barang', 'route_submenu' => 'inventaris.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Data Barang', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Data Barang', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Data Barang', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Pinjaman Inventaris', 'route_submenu' => 'inv_pinjaman.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [

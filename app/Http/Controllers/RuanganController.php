@@ -22,12 +22,12 @@ class RuanganController extends Controller
             'menu' => $this->menu,
             'submenu' => 'ruangan',
             'label' => 'Data Ruangan',
+            'ruangan' => Inv_Ruangan::all(),
         ];
 
-        $ruangan = Inv_Ruangan::all();
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('83', $session_menu)) {
-            return view('inv_ruangan.data', compact('ruangan'))->with($data);
+            return view('inv_ruangan.data')->with($data);
         } else {
             return view('not_found');
         }
@@ -46,6 +46,7 @@ class RuanganController extends Controller
             'submenu' => 'ruangan',
             'label' => 'Tambah Ruangan',
         ];
+
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('84', $session_menu)) {
             return view('inv_ruangan.create')->with($data);
@@ -62,6 +63,13 @@ class RuanganController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(
+            [
+                'nama' => 'required|unique:inv_ruangan|min:5',
+            ]
+        );
+
+
         DB::beginTransaction();
         try {
             $inv_ruangan = new Inv_ruangan([
@@ -120,6 +128,12 @@ class RuanganController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate(
+            [
+                'nama' => 'required|unique:inv_ruangan|min:5',
+            ]
+        );
+
         $id = Crypt::decryptString($id);
         DB::beginTransaction();
         try {

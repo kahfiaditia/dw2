@@ -85,7 +85,9 @@
                                                             </th>
                                                             <th class="text-center" style="width: 15%">No Inv</th>
                                                             <th class="text-center" style="width: 15%">ID Barang</th>
-
+                                                            <th class="text-center" style="width: 15%">Tangal diberikan</th>
+                                                            <th class="text-center" style="width: 15%">Kondisi</th>
+                                                            <th class="text-center" style="width: 15%">Aksi</th>
                                                             <th class="text-center" hidden>{{ Auth::user()->id }}</th>
                                                         </tr>
                                                     </thead>
@@ -99,6 +101,30 @@
                                                                 {{ $item->barang->nomor_inventaris }}</td>
                                                             <td class="text-center" style="width: 15%">
                                                                 {{ $item->barang->idbarang }}</td>
+                                                            <td class="text-center" style="width: 15%">
+                                                                {{ $item->barang->idbarang }}</td>
+                                                            <td class="text-center" style="width: 15%">
+                                                                {{ $item->barang->idbarang }}</td>
+                                                            <td class="text-center">
+                                                                <?php $id = Crypt::encryptString($item->id); ?>
+                                                                <form class="delete-form"
+                                                                    action="{{ route('pinjaman.destroy_id', $id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <div class="d-flex gap-3">
+                                                                        <a href="javascript:void(0)"
+                                                                            data-id="{{ $id }}"
+                                                                            class="text-success" id="get_data_edit"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target=".bs-example-modal-lg-edit">
+                                                                            <i class="mdi mdi-pencil font-size-18"></i>
+                                                                        </a>
+                                                                        <a href class="text-danger delete_confirm"><i
+                                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                                    </div>
+                                                                </form>
+                                                            </td>
                                                         </tbody>
                                                     @endforeach
 
@@ -106,7 +132,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="card-body">
+                                        {{-- <div class="card-body">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-3 wajib">
@@ -176,7 +202,7 @@
                                                 </div>
                                             </div>
 
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -186,6 +212,7 @@
             </div>
         </div>
         <!-- modal -->
+        <!-- Modal -->
         <div class="modal fade bs-example-modal-lg-edit" tabindex="-1" role="dialog"
             aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -234,54 +261,82 @@
             }
         }
 
-        $("#save").on('click', function() {
-            let dataproses = []
-            $("#tableProses").find("tr").each(function(index, element) {
-                let tableData = $(this).find('td'),
-                    tgl_diberikan = tableData.eq(0).text(),
-                    kondisi = tableData.eq(1).text()
-
-                //ini filter data null
-                if (nama_barang != '') {
-                    datapinjam.push({
-                        tgl_diberikan,
-                        kondisi
+        $(document).on('click', '#get_data_edit', function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('id'); // it will get id of clicked row
+                    $('#
+                        ').html('
+                        '); // leave it blank before ajax call
+                        $('#modal-loader').show(); // load ajax loader
+                        var url = "{{ route('pinjaman.edit_buku') }}"
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                id
+                            }
+                        })
+                        .done(function(url) {
+                            $('#dynamic-content-edit').html(url); // load response
+                            $('#modal-loader').hide(); // hide ajax loader
+                        })
+                        .fail(function(err) {
+                            $('#dynamic-content').html(
+                                '<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...'
+                            );
+                            $('#modal-loader').hide();
+                        });
                     });
-                    console.log(dataproses)
-                }
-            })
-            jQuery.ajax({
-                type: "POST",
-                url: '{{ route('inv_pinjaman.approveProses') }}',
-                dataType: 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    dataproses
-                },
-                success: (response) => {
-                    console.log(response)
-                    if (response.code === 200) {
 
-                        Swal.fire(
-                            'Success',
-                            'Pinjaman Berhasil di masukan',
-                            'success'
-                        ).then(() => {
-                            var APP_URL = {!! json_encode(url('/')) !!}
-                            window.location = APP_URL + '/inv_pinjaman'
-                        })
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terdapat dua barang yang sama',
-                            showConfirmButton: false,
-                            timer: 1500,
-                        })
-                    }
-                },
-                error: err => console.log(err)
-            });
+                $("#save").on('click', function() {
+                    let dataproses = []
+                    $("#tableProses").find("tr").each(function(index, element) {
+                        let tableData = $(this).find('td'),
+                            tgl_diberikan = tableData.eq(0).text(),
+                            kondisi = tableData.eq(1).text()
 
-        });
+                        //ini filter data null
+                        if (nama_barang != '') {
+                            datapinjam.push({
+                                tgl_diberikan,
+                                kondisi
+                            });
+                            console.log(dataproses)
+                        }
+                    })
+                    jQuery.ajax({
+                        type: "POST",
+                        url: '{{ route('inv_pinjaman.approveProses') }}',
+                        dataType: 'json',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            dataproses
+                        },
+                        success: (response) => {
+                            console.log(response)
+                            if (response.code === 200) {
+
+                                Swal.fire(
+                                    'Success',
+                                    'Pinjaman Berhasil di masukan',
+                                    'success'
+                                ).then(() => {
+                                    var APP_URL = {!! json_encode(url('/')) !!}
+                                    window.location = APP_URL + '/inv_pinjaman'
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terdapat dua barang yang sama',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                })
+                            }
+                        },
+                        error: err => console.log(err)
+                    });
+
+                });
     </script>
 @endsection
