@@ -951,8 +951,10 @@
                 switchButton = document.getElementById('switch1');
                 if (switchButton.checked == true) {
                     $('#div_resign').hide();
+                    $('#div_tgl_resign').hide();
                 } else {
                     $('#div_resign').show();
+                    $('#div_tgl_resign').hide();
                 }
             });
 
