@@ -16,6 +16,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NeedsController;
+use App\Http\Controllers\ObatController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PenerbitController;
@@ -290,6 +291,16 @@ Route::group(
     ],
     function () {
         Route::get('/cron_buku', [CronController::class, 'cron_buku'])->name('cron.cron_buku');
+    }
+);
+
+Route::group(
+    [
+        'prefix' => 'uks',
+        'middleware' => 'auth',
+    ],
+    function () {
+        Route::resource('/obat', ObatController::class);
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

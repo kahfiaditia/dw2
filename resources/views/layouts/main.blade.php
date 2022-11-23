@@ -93,16 +93,16 @@
             <div class="mb-3">
                 <label class="d-block mb-3">Menu :</label>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input radio" type="radio" name="menu" id="menu1" value="text"
-                        <?php if (Auth::user()->menu_icon == 'text' or Auth::user()->menu_icon == '') {
+                    <input class="form-check-input radio" type="radio" name="menu" id="menu1" value="icon"
+                        <?php if (Auth::user()->menu_icon == 'icon' or Auth::user()->menu_icon == '') {
                             echo 'checked';
                         } ?>>
-                    <label class="form-check-label" for="menu1">Icon & Text</label>
+                    <label class="form-check-label" for="menu1">Icon</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input radio" type="radio" name="menu" id="menu2"
-                        value="icon" {{ Auth::user()->menu_icon == 'icon' ? 'checked' : '' }}>
-                    <label class="form-check-label" for="menu2">Icon</label>
+                        value="text" {{ Auth::user()->menu_icon == 'text' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="menu2">Icon & Text</label>
                 </div>
             </div>
         </div>
