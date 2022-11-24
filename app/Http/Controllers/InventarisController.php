@@ -19,15 +19,19 @@ class InventarisController extends Controller
 
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Data Barang',
-            'label' => 'Data Inventaris',
-            'inventaris' => Inventaris::all(),
-        ];
-
-        return view('inventaris.data')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('83', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Data Barang',
+                'label' => 'Data Inventaris',
+                'inventaris' => Inventaris::all(),
+            ];
+            return view('inventaris.data')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -37,15 +41,20 @@ class InventarisController extends Controller
      */
     public function create()
     {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('84', $session_menu)) {
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Data Barang',
-            'label' => 'Tambah Inventaris',
-            'ruangs' => Inv_Ruangan::all(),
-        ];
-        return view('inventaris.create')->with($data);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Data Barang',
+                'label' => 'Tambah Inventaris',
+                'ruangs' => Inv_Ruangan::all(),
+            ];
+            return view('inventaris.create')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -113,17 +122,22 @@ class InventarisController extends Controller
      */
     public function show(Inventaris $inventaris, $id)
     {
-        $id_decrypted = Crypt::decryptString($id);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('83', $session_menu)) {
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Data Barang',
-            'label' => 'Inventaris',
-            'inventaris' => Inventaris::findORFail($id_decrypted),
-            'ruangs' => Inv_Ruangan::all(),
-        ];
-        return view('inventaris.show')->with($data);
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Data Barang',
+                'label' => 'Inventaris',
+                'inventaris' => Inventaris::findORFail($id_decrypted),
+                'ruangs' => Inv_Ruangan::all(),
+            ];
+            return view('inventaris.show')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -134,19 +148,22 @@ class InventarisController extends Controller
      */
     public function edit($id)
     {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('85', $session_menu)) {
 
-        $id_decrypted = Crypt::decryptString($id);
-
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Data Barang',
-            'label' => 'Edit Inventaris',
-            'inventaris' => Inventaris::findORFail($id_decrypted),
-            'ruangs' => Inv_Ruangan::all()
-        ];
-
-        return view('inventaris.edit')->with($data);
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Data Barang',
+                'label' => 'Edit Inventaris',
+                'inventaris' => Inventaris::findORFail($id_decrypted),
+                'ruangs' => Inv_Ruangan::all()
+            ];
+            return view('inventaris.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -158,32 +175,36 @@ class InventarisController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id = Crypt::decryptString($id);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('84', $session_menu)) {
 
-        DB::beginTransaction();
-        try {
+            $id = Crypt::decryptString($id);
+            DB::beginTransaction();
+            try {
+                Inventaris::where('id', $id)
+                    ->update([
+                        'nama' => $request->nama,
+                        'nomor_inventaris' => $request->nomor_inventaris,
+                        'idbarang' => $request->idbarang,
+                        'id_ruangan' => $request->id_ruangan,
+                        'qty' => $request->qty,
+                        'status' => $request->status,
+                        'indikasi' => $request->indikasi,
+                        'pemilik' => $request->pemilik,
+                        'deskripsi' => $request->deskripsi,
+                        'user_updated' => Auth::user()->id,
+                    ]);
 
-            Inventaris::where('id', $id)
-                ->update([
-                    'nama' => $request->nama,
-                    'nomor_inventaris' => $request->nomor_inventaris,
-                    'idbarang' => $request->idbarang,
-                    'id_ruangan' => $request->id_ruangan,
-                    'qty' => $request->qty,
-                    'status' => $request->status,
-                    'indikasi' => $request->indikasi,
-                    'pemilik' => $request->pemilik,
-                    'deskripsi' => $request->deskripsi,
-                    'user_updated' => Auth::user()->id,
-                ]);
-
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('inventaris');
-        } catch (\Throwable $err) {
-            DB::rollback();
-            throw $err;
-            return back();
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('inventaris');
+            } catch (\Throwable $err) {
+                DB::rollback();
+                throw $err;
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -195,21 +216,27 @@ class InventarisController extends Controller
      */
     public function destroy($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        DB::beginTransaction();
-        try {
-            $inventaris = Inventaris::findorfail($id_decrypted);
-            $inventaris->user_deleted = Auth::user()->id;
-            $inventaris->deleted_at = Carbon::now();
-            $inventaris->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('86', $session_menu)) {
 
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
+            $id_decrypted = Crypt::decryptString($id);
+            DB::beginTransaction();
+            try {
+                $inventaris = Inventaris::findorfail($id_decrypted);
+                $inventaris->user_deleted = Auth::user()->id;
+                $inventaris->deleted_at = Carbon::now();
+                $inventaris->save();
+
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 }

@@ -120,6 +120,12 @@ class MenuSeeder extends Seeder
                 'sub_menu' => '1',
                 'order_menu' => '6',
                 'display' => '1',
+            ], [
+                'menu' => 'UKS',
+                'icon' => 'bx bx-file',
+                'sub_menu' => '1',
+                'order_menu' => '6',
+                'display' => '1',
             ]
         ];
         DB::table('menu')->insert($menus);

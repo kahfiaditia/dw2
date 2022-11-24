@@ -26,9 +26,8 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Ruangan
                                                 <code>*</code></label>
-                                            <input type="text" value="{{ old('nama') }}"
-                                                class="form-control @error('nama') is-invalid @enderror" id="nama"
-                                                name="nama" style="text-transform:uppercase"
+                                            <input type="text" value="{{ old('nama') }}" class="form-control"
+                                                id="nama" name="nama"
                                                 oninput="this.value = this.value.toUpperCase()" placeholder="Tambah Ruangan"
                                                 autofocus required>
                                             <div class="invalid-feedback">

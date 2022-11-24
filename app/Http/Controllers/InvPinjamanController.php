@@ -19,16 +19,21 @@ class InvPinjamanController extends Controller
 
     public function index()
     {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('87', $session_menu)) {
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Pinjaman Inventaris',
-            'label' => 'data pinjaman',
-            'list' => Inv_pinjaman::groupBy('kode_transaksi')->get(),
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Pinjaman Inventaris',
+                'label' => 'data pinjaman',
+                'list' => Inv_pinjaman::groupBy('kode_transaksi')->get(),
 
-        ];
-        return view('inv_pinjaman.data')->with($data);
+            ];
+            return view('inv_pinjaman.data')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -38,16 +43,20 @@ class InvPinjamanController extends Controller
      */
     public function create()
     {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('88', $session_menu)) {
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Pinjaman Inventaris',
-            'label' => 'Tambah Pinjaman',
-            'inventaris' => Inventaris::where('ketersediaan', 'DAPAT DIPINJAM')->get(),
-
-        ];
-        return view('inv_pinjaman.add')->with($data);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Pinjaman Inventaris',
+                'label' => 'Tambah Pinjaman',
+                'inventaris' => Inventaris::where('ketersediaan', 'DAPAT DIPINJAM')->get(),
+            ];
+            return view('inv_pinjaman.add')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -58,8 +67,6 @@ class InvPinjamanController extends Controller
      */
     public function store(Request $request)
     {
-        // echo json_encode('datapinjaman');
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('88', $session_menu)) {
 
@@ -82,7 +89,6 @@ class InvPinjamanController extends Controller
             } else {
                 $kode_transaksi   = Carbon::now()->format('ymd') . "0001";
             }
-            // echo ($kode_transaksi);
 
             DB::beginTransaction();
             try {
@@ -106,7 +112,6 @@ class InvPinjamanController extends Controller
                     'code' => 200,
                     'message' => 'Berhasil Input Data',
                 ]);
-                // return redirect('inventaris');
             } catch (\Throwable $err) {
                 DB::rollBack();
                 throw $err;
@@ -143,7 +148,6 @@ class InvPinjamanController extends Controller
                 'karyawan' => Employee::all(),
                 'User' => User::all(),
                 'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id_decrypted)->get(),
-
             ];
             return view('inv_pinjaman.show')->with($data);
         } else {
@@ -154,7 +158,7 @@ class InvPinjamanController extends Controller
     public function approve($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('87', $session_menu)) {
+        if (in_array('91', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
 
             $data = [

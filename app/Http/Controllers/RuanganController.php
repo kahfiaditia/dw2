@@ -17,16 +17,16 @@ class RuanganController extends Controller
 
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'ruangan',
-            'label' => 'Data Ruangan',
-            'ruangan' => Inv_Ruangan::all(),
-        ];
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('83', $session_menu)) {
+        if (in_array('79', $session_menu)) {
+
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'ruangan',
+                'label' => 'Data Ruangan',
+                'ruangan' => Inv_Ruangan::all(),
+            ];
             return view('inv_ruangan.data')->with($data);
         } else {
             return view('not_found');
@@ -40,15 +40,14 @@ class RuanganController extends Controller
      */
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'ruangan',
-            'label' => 'Tambah Ruangan',
-        ];
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('84', $session_menu)) {
+        if (in_array('80', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'ruangan',
+                'label' => 'Tambah Ruangan',
+            ];
             return view('inv_ruangan.create')->with($data);
         } else {
             return view('not_found');
@@ -65,27 +64,32 @@ class RuanganController extends Controller
     {
         $request->validate(
             [
-                'nama' => 'required|unique:inv_ruangan|min:5',
+                'nama' => 'required|unique:inv_ruangan,nama,NULL,id,deleted_at,NULL',
             ]
         );
 
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('80', $session_menu)) {
 
-        DB::beginTransaction();
-        try {
-            $inv_ruangan = new Inv_ruangan([
-                'nama' => $request->nama,
-                'user_created' => Auth::user()->id,
-            ]);
-            $inv_ruangan->save();
+            DB::beginTransaction();
+            try {
+                $inv_ruangan = new Inv_ruangan([
+                    'nama' => $request->nama,
+                    'user_created' => Auth::user()->id,
+                ]);
+                $inv_ruangan->save();
 
-            DB::commit();
-            AlertHelper::addAlert(true);
-            return redirect('ruangan');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
-            AlertHelper::addAlert(false);
-            return back();
+                DB::commit();
+                AlertHelper::addAlert(true);
+                return redirect('ruangan');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                AlertHelper::addAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -108,15 +112,21 @@ class RuanganController extends Controller
      */
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'ruangan',
-            'label' => 'Edit Data Ruangan',
-            'ruangan' => Inv_Ruangan::findOrFail($id_decrypted)
-        ];
-        return view('inv_ruangan.edit')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('81', $session_menu)) {
+
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'ruangan',
+                'label' => 'Edit Data Ruangan',
+                'ruangan' => Inv_Ruangan::findOrFail($id_decrypted)
+            ];
+            return view('inv_ruangan.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -134,21 +144,27 @@ class RuanganController extends Controller
             ]
         );
 
-        $id = Crypt::decryptString($id);
-        DB::beginTransaction();
-        try {
-            $ruangan = Inv_Ruangan::findOrFail($id)->update([
-                'nama' => $request->nama,
-                'user_updated' => Auth::user()->id,
-            ]);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('80', $session_menu)) {
 
-            DB::commit();
-            AlertHelper::updateAlert(true);
-            return redirect('ruangan');
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            throw $err;
-            return back();
+            $id = Crypt::decryptString($id);
+            DB::beginTransaction();
+            try {
+                $ruangan = Inv_Ruangan::findOrFail($id)->update([
+                    'nama' => $request->nama,
+                    'user_updated' => Auth::user()->id,
+                ]);
+
+                DB::commit();
+                AlertHelper::updateAlert(true);
+                return redirect('ruangan');
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                throw $err;
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 
@@ -160,21 +176,27 @@ class RuanganController extends Controller
      */
     public function destroy($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        DB::beginTransaction();
-        try {
-            $ruangan = Inv_Ruangan::findorfail($id_decrypted);
-            $ruangan->user_deleted = Auth::user()->id;
-            $ruangan->deleted_at = Carbon::now();
-            $ruangan->save();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('82', $session_menu)) {
 
-            DB::commit();
-            AlertHelper::deleteAlert(true);
-            return back();
-        } catch (\Throwable $err) {
-            DB::rollBack();
-            AlertHelper::deleteAlert(false);
-            return back();
+            $id_decrypted = Crypt::decryptString($id);
+            DB::beginTransaction();
+            try {
+                $ruangan = Inv_Ruangan::findorfail($id_decrypted);
+                $ruangan->user_deleted = Auth::user()->id;
+                $ruangan->deleted_at = Carbon::now();
+                $ruangan->save();
+
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
         }
     }
 }

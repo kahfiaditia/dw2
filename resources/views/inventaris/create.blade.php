@@ -121,15 +121,9 @@
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>No Inventaris <code>*</code></label>
-                                                <input type="text"
-                                                    class="form-control @error('no_inv') is-invalid @enderror"
-                                                    style="text-transform:uppercase"
+                                                <input type="text" class="form-control" style="text-transform:uppercase"
                                                     oninput="this.value = this.value.toUpperCase()" id="no_inv"
-                                                    onchange="
-                                                    checkUniq(this.no_inv, this.value)"";
-                                                    placeholder="No
-                                                    Inventaris"
-                                                    required>
+                                                    placeholder="No Inventaris" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -234,12 +228,12 @@
             document.getElementById('no_inv').value = '';
             document.getElementById('idbarang').value = '';
 
-            function checkUniq(no_inv, value) {
-                var req = new AjaxRequest();
-                req.setMethod('POST');
-                var params = "table=table&field=" + encodeURIComponent(field) + "&value=" + encodeURIComponent(value);
-                req.loadXMLDoc("checkuniq.php", params);
-            }
+            // function checkUniq(no_inv, value) {
+            //     var req = new AjaxRequest();
+            //     req.setMethod('POST');
+            //     var params = "table=table&field=" + encodeURIComponent(no_inv) + "&value=" + encodeURIComponent(value);
+            //     req.loadXMLDoc("checkuniq.php", params);
+            // }
 
             if (ruang == '' || keterangan == '' || pemilik == '' || hasilnama == '' || ketersediaan == '' ||
                 hasilidbarang ==
