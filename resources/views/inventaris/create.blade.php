@@ -121,9 +121,9 @@
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>No Inventaris <code>*</code></label>
-                                                <input type="text" class="form-control" style="text-transform:uppercase"
+                                                <input type="text" class="form-control"
                                                     oninput="this.value = this.value.toUpperCase()" id="no_inv"
-                                                    placeholder="No Inventaris" required>
+                                                    name="no_inv" placeholder="No Inventaris" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -133,10 +133,9 @@
                                         <div class="col-md-3 wajib">
                                             <div class="mb-3">
                                                 <label>ID Barang <code>*</code></label>
-                                                <input type="text"
-                                                    class="form-control @error('idbarang') is-invalid @enderror"
-                                                    style="text-transform:uppercase" id="idbarang" placeholder="ID Barang"
-                                                    oninput="this.value = this.value.toUpperCase()" required>
+                                                <input type="text" class="form-control" id="idbarang"
+                                                    placeholder="ID Barang" oninput="this.value = this.value.toUpperCase()"
+                                                    required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -163,6 +162,7 @@
                                         </div>
                                     </div>
                                     <hr>
+
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
                                             <table class="table table-responsive table-bordered table-striped"
@@ -179,7 +179,6 @@
                                                         <th class="text-center" style="width: 10%">Indikasi</th>
                                                         <th class="text-center" style="width: 10%">Deskripsi</th>
                                                         <th class="text-center" style="width: 10%">Aksi</th>
-                                                        <th class="text-center" hidden>ruang->id</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -221,6 +220,7 @@
             var desc = document.getElementById('desc').value;
             var hasildesc = desc.toUpperCase();
 
+
             document.getElementById('no_inv').value = '';
             document.getElementById('idbarang').value = '';
             document.getElementById('indikasi').value = '';
@@ -228,12 +228,6 @@
             document.getElementById('no_inv').value = '';
             document.getElementById('idbarang').value = '';
 
-            // function checkUniq(no_inv, value) {
-            //     var req = new AjaxRequest();
-            //     req.setMethod('POST');
-            //     var params = "table=table&field=" + encodeURIComponent(no_inv) + "&value=" + encodeURIComponent(value);
-            //     req.loadXMLDoc("checkuniq.php", params);
-            // }
 
             if (ruang == '' || keterangan == '' || pemilik == '' || hasilnama == '' || ketersediaan == '' ||
                 hasilidbarang ==
@@ -244,6 +238,7 @@
                     showConfirmButton: false,
                     timer: 1500,
                 })
+
             } else if (keterangan == 'Rusak' && indikasi == '') {
                 Swal.fire({
                     icon: 'error',
@@ -269,15 +264,29 @@
                         </tr>
                     `)
             }
+            console.log(hasilno_inv)
+
         }
         //fungsi hapus
         $("#tableBarang").on('click', '.delete-record', function() {
             $(this).parent().parent().remove()
         })
 
+        function uniqueArray3(hasilno_inv) {
+            function onlyUnique(value, index, self) {
+                return self.indexOf(value) === index;
+            }
+
+            // usage
+            var unique = hasilno_inv.filter(onlyUnique); // returns ['a', 1, 2, '1']
+
+            return unique;
+        }
+
         $(document).ready(function() {
             $("#save").on('click', function() {
                 let databarang = []
+
                 $("#tableBarang").find("tr").each(function(index, element) {
                     let tableData = $(this).find('td'),
                         hasilnama = tableData.eq(0).text(),
@@ -304,8 +313,32 @@
                             hasildesc
                         });
                         console.log(databarang)
+                    } else if (Array.prototype.contains) {
+                        Array.prototype.contains = function(v) {
+                            for (var i = 0; i < this.length; i++) {
+                                if (this[i] === v) return true;
+                            }
+                            return false;
+                        };
+
+                        Array.prototype.unique = function() {
+                            var arr = [];
+                            for (var i = 0; i < this.length; i++) {
+                                if (!arr.contains(this[i])) {
+                                    arr.push(this[i]);
+                                }
+                            }
+                            return arr;
+                        }
+
+                        var cekdata = hasilno_inv;
+                        var uniques = cekdata.unique();
+
+                        console.log(uniques);
+
                     }
                 })
+
                 jQuery.ajax({
                     type: "POST",
                     url: '{{ route('inventaris.store') }}',

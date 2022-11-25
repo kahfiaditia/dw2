@@ -51,7 +51,7 @@
                                             <td>{{ $inv->nomor_inventaris }}</td>
                                             <td>{{ $inv->idbarang }}</td>
                                             <td>{{ $inv->status }}</td>
-                                            <td>{{ $inv->nama }}</td>
+                                            <td>{{ $inv->ruang->nama }}</td>
                                             <td>{{ $inv->ketersediaan }}</td>
                                             <td>
                                                 <?php $id = Crypt::encryptString($inv->id); ?>

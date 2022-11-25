@@ -162,8 +162,7 @@
                                             <input type="text"
                                                 class="form-control select indikasi @error('indikasi') is-invalid @enderror"
                                                 id="indikasi" name="indikasi" value="{{ $inventaris->indikasi }}"
-                                                {{ old('indikasi', $inventaris->indikasi) }}" required
-                                                placeholder="Indikasi">
+                                                {{ old('indikasi', $inventaris->indikasi) }} placeholder="Indikasi">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>

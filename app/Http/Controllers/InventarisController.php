@@ -65,18 +65,13 @@ class InventarisController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'nomor_inventaris' => 'required|unique:inv_inventaris',
-                'idbarang' => 'required|unique:inv_inventaris',
-            ]
-        );
 
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('84', $session_menu)) {
 
             DB::beginTransaction();
             try {
+
                 for ($i = 0; $i < count($request->databarang); $i++) {
                     $inventaris = new Inventaris;
                     $inventaris->nama = $request->databarang[$i]['hasilnama'];
@@ -192,6 +187,7 @@ class InventarisController extends Controller
                         'indikasi' => $request->indikasi,
                         'pemilik' => $request->pemilik,
                         'deskripsi' => $request->deskripsi,
+                        'ketersediaan' => $request->ketersediaan,
                         'user_updated' => Auth::user()->id,
                     ]);
 
