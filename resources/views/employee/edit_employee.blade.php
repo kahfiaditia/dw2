@@ -955,6 +955,7 @@
                 } else {
                     $('#div_resign').show();
                     $('#div_tgl_resign').hide();
+                    document.getElementById("resign").checked = false;
                 }
             });
 

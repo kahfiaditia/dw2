@@ -922,14 +922,17 @@
                                 localStorage.removeItem("localPerpusDharmaBarcode");
                                 localStorage.removeItem("localPerpusDharmaItems");
 
-                                Swal.fire(
-                                    'Success',
-                                    'Peminjaman Buku berhasil',
-                                    'success'
-                                ).then(() => {
-                                    var APP_URL = {!! json_encode(url('/')) !!}
-                                    window.location = APP_URL + '/pinjaman'
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Peminjaman Buku berhasil',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                    willClose: () => {
+                                        var APP_URL = {!! json_encode(url('/')) !!}
+                                        window.location = APP_URL + '/pinjaman'
+                                    }
                                 })
+
                             } else {
                                 Swal.fire(
                                     'Gagal',

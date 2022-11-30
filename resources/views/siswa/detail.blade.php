@@ -90,8 +90,10 @@
                                                 <div class="mt-4">
                                                     <h5 class="font-size-14">Barcode</h5>
                                                     <p class="text-muted">
-                                                        {!! DNS1D::getBarcodeHTML($student->nis, 'C128') !!}
-                                                        {{ $student->nis }}
+                                                        @if ($student->barcode)
+                                                            {!! DNS1D::getBarcodeHTML($student->barcode, 'C128') !!}
+                                                            {{ $student->barcode }}
+                                                        @endif
                                                     </p>
                                                 </div>
                                             </div>
@@ -162,7 +164,7 @@
                                                             {{ $student->tempat_lahir . ', ' }}
                                                         @endif
                                                         @if ($student->tanggal_lahir)
-                                                            {{ \Carbon\Carbon::parse($student->tanggal_lahir)->format('d F Y') . ' (' . hitung_umur($student->tanggal_lahir) . ')' }}
+                                                            {{ \Carbon\Carbon::parse($student->tanggal_lahir)->format('d F Y') . '<br> (' . hitung_umur($student->tanggal_lahir) . ')' }}
                                                         @endif
                                                     </p>
                                                     <a href="javascript:void(0)" data-id="" id="get_data"

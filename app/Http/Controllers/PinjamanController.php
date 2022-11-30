@@ -470,6 +470,9 @@ class PinjamanController extends Controller
     {
         DB::beginTransaction();
         try {
+            // cek setting peminjaman jumlah buku berapa hari
+            $setting = Setting::first();
+
             for ($i = 0; $i < count($request->data_post); $i++) {
 
                 $cek_qty = Buku::findorfail($request->data_post[$i]['buku_id']);
@@ -477,6 +480,44 @@ class PinjamanController extends Controller
                     return response()->json([
                         'code' => 404,
                         'message' => 'Stock Buku <strong>' . $cek_qty->judul . '</strong> hanya <strong>' . $cek_qty->jml_buku . '</strong>',
+                    ]);
+                }
+
+                // cek denda
+                if ($request->peminjam == 'Siswa') {
+                    $cek_denda = DB::table('perpus_pinjaman')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali = CURDATE() THEN 1 END) AS jml')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali > CURDATE() THEN 1 END) AS jml_pinjam')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali < CURDATE() THEN 1 END) AS jml_denda')
+                        ->whereNull('deleted_at')
+                        ->whereNull('tgl_kembali')
+                        ->where('siswa_id', '=', $request->siswa)
+                        ->get();
+                } else {
+                    $cek_denda = DB::table('perpus_pinjaman')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali = CURDATE() THEN 1 END) AS jml')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali > CURDATE() THEN 1 END) AS jml_pinjam')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali < CURDATE() THEN 1 END) AS jml_denda')
+                        ->whereNull('deleted_at')
+                        ->whereNull('tgl_kembali')
+                        ->where('karyawan_id', '=', $request->karyawan)
+                        ->get();
+                }
+
+                if ($cek_denda) {
+                    $jml = $cek_denda[0]->jml;
+                    $jml_pinjam = $cek_denda[0]->jml_pinjam;
+                    $denda = $cek_denda[0]->jml_denda * 2;
+                    $sisa_limit = $jml + $jml_pinjam + $denda;
+                } else {
+                    $sisa_limit = 0;
+                }
+
+                // cek limit dengan denda
+                if ($sisa_limit >= $setting->library_loan_validation) {
+                    return response()->json([
+                        'code' => 404,
+                        'message' => 'Gagal karena melebihi limit peminjaman',
                     ]);
                 }
 
@@ -490,6 +531,7 @@ class PinjamanController extends Controller
                 $pinjaman->buku_id = $request->data_post[$i]['buku_id'];
                 $pinjaman->jml = $request->data_post[$i]['jml_buku'];
                 $pinjaman->tgl_pinjam = $request->tgl_pinjam;
+                $pinjaman->tgl_perkiraan_kembali = Carbon::parse($request->tgl_pinjam)->addDay($setting->library_loan_day);
                 $pinjaman->user_created =  Auth::user()->id;
                 $pinjaman->save();
 
@@ -552,7 +594,7 @@ class PinjamanController extends Controller
     {
         $val = 0;
         if ($request->peminjam == 'Siswa') {
-            $data = Siswa::where('nis', $request->barcode)->first();
+            $data = Siswa::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
                 $class_id = $data->class_id;
@@ -616,6 +658,46 @@ class PinjamanController extends Controller
                 ]);
             }
 
+            // cek setting peminjaman jumlah buku berapa hari
+            $setting = Setting::first();
+            // cek denda
+            if ($request->peminjam == 'Siswa') {
+                $cek_denda = DB::table('perpus_pinjaman')
+                    ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali = CURDATE() THEN 1 END) AS jml')
+                    ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali > CURDATE() THEN 1 END) AS jml_pinjam')
+                    ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali < CURDATE() THEN 1 END) AS jml_denda')
+                    ->whereNull('deleted_at')
+                    ->whereNull('tgl_kembali')
+                    ->where('siswa_id', '=', $request->siswa)
+                    ->get();
+            } else {
+                $cek_denda = DB::table('perpus_pinjaman')
+                    ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali = CURDATE() THEN 1 END) AS jml')
+                    ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali > CURDATE() THEN 1 END) AS jml_pinjam')
+                    ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali < CURDATE() THEN 1 END) AS jml_denda')
+                    ->whereNull('deleted_at')
+                    ->whereNull('tgl_kembali')
+                    ->where('karyawan_id', '=', $request->karyawan)
+                    ->get();
+            }
+
+            if ($cek_denda) {
+                $jml = $cek_denda[0]->jml;
+                $jml_pinjam = $cek_denda[0]->jml_pinjam;
+                $denda = $cek_denda[0]->jml_denda * 2;
+                $sisa_limit = $jml + $jml_pinjam + $denda;
+            } else {
+                $sisa_limit = 0;
+            }
+
+            // cek limit dengan denda
+            if ($sisa_limit >= $setting->library_loan_validation) {
+                return response()->json([
+                    'code' => 404,
+                    'message' => 'Gagal karena melebihi limit peminjaman',
+                ]);
+            }
+
             $pinjaman = new Pinjaman;
             $pinjaman->kode_transaksi = $request->kode_transaksi;
             $pinjaman->milisecond = $request->milisecond;
@@ -634,6 +716,7 @@ class PinjamanController extends Controller
 
             return response()->json([
                 'code' => 200,
+                'message' => 'Peminjaman Buku berhasil',
             ]);
         } else {
             return response()->json([
@@ -650,6 +733,53 @@ class PinjamanController extends Controller
             $id = $data->id;
             DB::beginTransaction();
             try {
+                if ($data->jml_buku < '1') {
+                    return response()->json([
+                        'code' => 404,
+                        'message' => 'Stock Buku <strong>' . $data->judul . '</strong> hanya <strong>' . $data->jml_buku . '</strong>',
+                    ]);
+                }
+
+                // cek setting peminjaman jumlah buku berapa hari
+                $setting = Setting::first();
+                // cek denda
+                if ($request->peminjam == 'Siswa') {
+                    $cek_denda = DB::table('perpus_pinjaman')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali = CURDATE() THEN 1 END) AS jml')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali > CURDATE() THEN 1 END) AS jml_pinjam')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali < CURDATE() THEN 1 END) AS jml_denda')
+                        ->whereNull('deleted_at')
+                        ->whereNull('tgl_kembali')
+                        ->where('siswa_id', '=', $request->siswa)
+                        ->get();
+                } else {
+                    $cek_denda = DB::table('perpus_pinjaman')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali = CURDATE() THEN 1 END) AS jml')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali > CURDATE() THEN 1 END) AS jml_pinjam')
+                        ->selectRaw('COUNT(CASE WHEN tgl_perkiraan_kembali < CURDATE() THEN 1 END) AS jml_denda')
+                        ->whereNull('deleted_at')
+                        ->whereNull('tgl_kembali')
+                        ->where('karyawan_id', '=', $request->karyawan)
+                        ->get();
+                }
+
+                if ($cek_denda) {
+                    $jml = $cek_denda[0]->jml;
+                    $jml_pinjam = $cek_denda[0]->jml_pinjam;
+                    $denda = $cek_denda[0]->jml_denda * 2;
+                    $sisa_limit = $jml + $jml_pinjam + $denda;
+                } else {
+                    $sisa_limit = 0;
+                }
+
+                // cek limit dengan denda
+                if ($sisa_limit >= $setting->library_loan_validation) {
+                    return response()->json([
+                        'code' => 404,
+                        'message' => 'Gagal karena melebihi limit peminjaman',
+                    ]);
+                }
+
                 $pinjaman = new Pinjaman;
                 $pinjaman->kode_transaksi = $request->kode_transaksi;
                 $pinjaman->milisecond = $request->milisecond;
@@ -842,7 +972,7 @@ class PinjamanController extends Controller
         $milisecond = date('YmdHis', $totalSeconds) . "$extraMilliseconds";
 
         if ($request->value_peminjam == 'Siswa') {
-            $idPeminjam = Siswa::where('nis', $request->scanner_barcode)->first();
+            $idPeminjam = Siswa::where('barcode', $request->scanner_barcode)->first();
             if ($idPeminjam) {
                 $peminjam = Pinjaman::where('peminjam', $request->value_peminjam)->whereNull('tgl_kembali')->where('siswa_id', $idPeminjam->id)->get();
                 return response()->json([
@@ -893,7 +1023,12 @@ class PinjamanController extends Controller
             if ($type == 'Siswa') {
                 $user = Siswa::findorfail(Crypt::decryptString($id));
                 $loan = Pinjaman::where('siswa_id', $user->id)->wherenull('all_date_return')->orderBy('id', 'asc')->get();
-                $name = $user->nis . ' - ' . $user->nama_lengkap . ' - ' . $user->classes_student->school_level->level . ' ' . $user->classes_student->school_class->classes . ' ' . $user->classes_student->jurusan . ' ' . $user->classes_student->type;
+                if ($user->classes_student->school_class) {
+                    $classes = $user->classes_student->school_class->classes;
+                } else {
+                    $classes = null;
+                }
+                $name = $user->nis . ' - ' . $user->nama_lengkap . ' - ' . $user->classes_student->school_level->level . ' ' . $classes . ' ' . $user->classes_student->jurusan . ' ' . $user->classes_student->type;
             } else {
                 $user = Employee::findorfail(Crypt::decryptString($id));
                 $loan = Pinjaman::where('karyawan_id', $user->id)->wherenull('all_date_return')->orderBy('id', 'asc')->get();
@@ -912,7 +1047,7 @@ class PinjamanController extends Controller
                 $dataB = [
                     'flag' => 'detail',
                     'id' => $item->id,
-                    'kode' => $item->kode_transaksi, 'tgl_pinjam' => $item->buku->kategori->kode_kategori . ' - ' . $item->buku->judul, 'tgl_perkiraan_kembali' => $item->jml, 'tgl_kembali' => $item->tgl_kembali
+                    'kode' => $item->kode_transaksi, 'tgl_pinjam' => '[' . $item->buku->barcode . '] - [' . $item->buku->kategori->kode_kategori . '] - ' . $item->buku->judul, 'tgl_perkiraan_kembali' => $item->jml, 'tgl_kembali' => $item->tgl_kembali
                 ];
                 array_push($list, $dataB);
             }
@@ -925,6 +1060,7 @@ class PinjamanController extends Controller
                 'user' => $user,
                 'list' => $list,
                 'name' => $name,
+                'type' => $type,
             ];
             return view('pinjaman.return_book')->with($data);
         } else {
@@ -985,6 +1121,55 @@ class PinjamanController extends Controller
             }
         } else {
             return view('not_found');
+        }
+    }
+
+    public function kembalikan_buku(Request $request)
+    {
+        $buku = Buku::where('barcode', $request->scanner_barcode)->first();
+        if ($buku == null) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Data tidak terdaftar',
+            ]);
+        }
+
+        DB::beginTransaction();
+        try {
+            $matchThese = [];
+            if ($request->type == 'Siswa') {
+                $user = array('siswa_id' => $request->user);
+            } else {
+                $user = array('karyawan_id' => $request->user);
+            }
+            $buku_pinjaman = array('buku_id' => $buku->id);
+            $matchThese = $user + $buku_pinjaman;
+            $pinjaman = Pinjaman::where('peminjam', $request->type)->where($matchThese)->first();
+
+            Pinjaman::where('id', $pinjaman->id)->update(['tgl_kembali' => Carbon::now()]);
+
+            $cek_pinjaman = Pinjaman::where('kode_transaksi', $pinjaman->kode_transaksi)->wherenull('tgl_kembali')->count();
+            if ($cek_pinjaman == 0) {
+                Pinjaman::where('kode_transaksi', $pinjaman->kode_transaksi)->update(['all_date_return' => Carbon::now()]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'code' => 200,
+                'encrypt_peminjam' => Crypt::encryptString($request->user),
+                'type' => $request->type,
+            ]);
+        } catch (\Throwable $err) {
+            DB::rollback();
+            throw $err;
+
+            return response()->json([
+                'code' => 404,
+                'type' => $request->type,
+                'encrypt_peminjam' => Crypt::encryptString($request->user),
+                'message' => 'Gagal pengembalianii',
+            ]);
         }
     }
 }

@@ -84,6 +84,7 @@ class PrimessionController extends Controller
 
             $primession = DB::table('submenu')
                 ->select(
+                    'menu',
                     'submenu',
                     DB::raw("MAX(CASE WHEN type_menu like '%insert%' THEN submenu.id ELSE NULL END) AS inserts"),
                     DB::raw("MAX(CASE WHEN type_menu like '%edit%' THEN submenu.id ELSE NULL END) AS edits"),
@@ -95,6 +96,7 @@ class PrimessionController extends Controller
                 ->where([$where])
                 ->groupBy('menu_id')
                 ->groupBy('submenu.submenu')
+                ->orderBy('menu.order_menu', 'ASC')
                 ->get();
             $data = [
                 'title' => $this->title,

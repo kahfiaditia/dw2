@@ -15,10 +15,10 @@
             @if (in_array('77', $session_menu))
                 <a href class="text-danger delete_confirm"><i class="mdi mdi-delete font-size-18"></i></a>
             @endif
-        @endif
-        @if (in_array('78', $session_menu))
-            <a href="{{ route('pinjaman.approve', $id) }}" class="text-success" data-toggle="tooltip"
-                data-placement="top" title="Approve"><i class="mdi mdi-check-all font-size-18"></i></a>
+            @if (in_array('78', $session_menu))
+                <a href="{{ route('pinjaman.approve', $id) }}" class="text-success" data-toggle="tooltip"
+                    data-placement="top" title="Approve"><i class="mdi mdi-check-all font-size-18"></i></a>
+            @endif
         @endif
     </div>
 </form>

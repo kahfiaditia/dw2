@@ -15,10 +15,10 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('12', $session_menu))
-                                    <a href="{{ route('needs.create') }}" type="button"
+                                @if (in_array('93', $session_menu))
+                                    <a href="{{ route('obat.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="mdi mdi-plus me-1"></i> Tambah Kebutuhan Khusus
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Obat
                                     </a>
                                 @endif
                             </ol>
@@ -34,30 +34,32 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode</th>
-                                        <th>Nama</th>
+                                        <th>Obat</th>
+                                        <th>Jenis</th>
+                                        <th>Stok</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach ($special_needs as $special_need)
+                                    @foreach ($obat as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $special_need->kode }}</td>
-                                            <td>{{ $special_need->nama }}</td>
+                                            <td>{{ $item->obat }}</td>
+                                            <td>{{ $item->jenis->jenis_obat }}</td>
+                                            <td>{{ $item->stok }}</td>
                                             <td>
                                                 <form class="delete-form"
-                                                    action="{{ route('needs.destroy', Crypt::encryptString($special_need->id)) }}"
+                                                    action="{{ route('obat.destroy', Crypt::encryptString($item->id)) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <div class="d-flex gap-3">
-                                                        @if (in_array('13', $session_menu))
-                                                            <a href="{{ route('needs.edit', Crypt::encryptString($special_need->id)) }}"
+                                                        @if (in_array('94', $session_menu))
+                                                            <a href="{{ route('obat.edit', Crypt::encryptString($item->id)) }}"
                                                                 class="text-success"><i
                                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                                         @endif
-                                                        @if (in_array('14', $session_menu))
+                                                        @if (in_array('95', $session_menu))
                                                             <a href class="text-danger delete_confirm"><i
                                                                     class="mdi mdi-delete font-size-18"></i></a>
                                                         @endif
@@ -65,7 +67,7 @@
                                                 </form>
                                             </td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

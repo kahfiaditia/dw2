@@ -70,11 +70,15 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
+                                            <a href="{{ route('pinjaman.search_loan') }}"
+                                                class="btn btn-secondary waves-effect">Batal</a>
                                             <button type="button" class="btn btn-primary" id="save">Cari</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" id="type" value="{{ $type }}">
+                            <input type="hidden" id="user" value="{{ $user->id }}">
                             <table id="" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
@@ -158,17 +162,8 @@
                 lastResult = decodedText;
                 // Handle on success condition with the decoded message.
                 barcode = decodedText;
-                // peminjam = document.getElementById("peminjam").value;
                 // get value database 
-                getValueScanBarcodeCamera(barcode)
-
-                // var settingBarcode = {
-                //     "barcode": {
-                //         "status": 'on',
-                //         "metode": 'Scan Kamera',
-                //     }
-                // };
-                // localStorage.setItem('localPerpusDharmaBarcode', JSON.stringify(settingBarcode));
+                getValueScanBarcodeCamera(barcode, 'Buku')
             }
         }
 
@@ -180,35 +175,42 @@
         html5QrcodeScanner.render(onScanSuccess);
 
         function getValueScanBarcodeCamera(scanner_barcode, value_peminjam) {
+            var user = document.getElementById('user').value;
+            var type = document.getElementById('type').value;
+            console.log(user);
+            console.log(type);
             $.ajax({
                 type: 'POST',
-                url: '{{ route('pinjaman.getsearch') }}',
+                url: '{{ route('pinjaman.kembalikan_buku') }}',
                 data: {
                     "_token": "{{ csrf_token() }}",
                     scanner_barcode,
                     value_peminjam,
+                    user,
+                    type
                 },
                 success: (response) => {
                     if (response.code == 200) {
-                        if (response.data == 0) {
-                            var dataPerpus = {
-                                "header": {
-                                    "milisecond": response.milisecond,
-                                    "peminjam": response.peminjam,
-                                    "jenjang": response.jenjang,
-                                    "siswa": response.siswa,
-                                    "karyawan": null,
-                                    "tgl_pinjam": response.tgl_pinjam
-                                }
-                            };
-                            localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
-
-                            var APP_URL = {!! json_encode(url('/')) !!}
-                            window.location = APP_URL + '/pinjaman/create'
-                        } else if (response.data > 0) {
-                            var APP_URL = {!! json_encode(url('/')) !!}
-                            window.location = APP_URL + '/return_book/' + response.encrypt_siswa
-                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Buku berhasil dikembalikan',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            willClose: () => {
+                                var APP_URL = {!! json_encode(url('/')) !!}
+                                window.location = APP_URL + '/return_book/' + response
+                                    .encrypt_peminjam + '/' + response
+                                    .type
+                            }
+                        })
+                    } else if (response.code == 404) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `${response.message}`,
+                            showConfirmButton: false,
+                            timer: 1000,
+                        })
+                        document.getElementById('scanner_barcode').value = null;
                     }
                 },
                 error: err => console.log("Interal Server Error")
@@ -223,16 +225,21 @@
                 if (metode_scan == 'Barcode') {
                     $('.div_scan_camera').hide();
                     $('.div_barcode').show();
-                } else {
+                } else if (metode_scan == 'Scan Kamera') {
                     $('.div_scan_camera').show();
                     $('.div_barcode').hide();
                 }
             });
 
+            $(".scanner_barcode").change(function() {
+                let barcode = $(this).val();
+                // get value database 
+                getValueScanBarcodeCamera(barcode, 'Buku')
+            });
+
             $("#save").on('click', function() {
                 var scanner_barcode = document.getElementById('scanner_barcode').value;
-                var select_peminjam = document.getElementById('peminjam');
-                var value_peminjam = select_peminjam.options[select_peminjam.selectedIndex].value;
+                var value_peminjam = 'Buku';
                 if (scanner_barcode == '' || value_peminjam == '' ||
                     value_peminjam == undefined || value_peminjam == null) {
                     Swal.fire({

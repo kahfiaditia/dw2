@@ -26,6 +26,7 @@ use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
 use App\Http\Controllers\RakController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StokObatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -282,6 +283,7 @@ Route::group(
         Route::delete('/book_return/{id}/{kode}', [PinjamanController::class, 'book_return'])->name('pinjaman.book_return');
         Route::delete('/cancle_return/{id}/{kode}', [PinjamanController::class, 'cancle_return'])->name('pinjaman.cancle_return');
         Route::post('/scanBarcodeEd', [PinjamanController::class, 'scanBarcodeEd'])->name('pinjaman.scanBarcodeEd');
+        Route::post('/kembalikan_buku', [PinjamanController::class, 'kembalikan_buku'])->name('pinjaman.kembalikan_buku');
     }
 );
 
@@ -301,6 +303,10 @@ Route::group(
     ],
     function () {
         Route::resource('/obat', ObatController::class);
+        Route::resource('/stok_obat', StokObatController::class);
+        Route::get('/stok_list', [StokObatController::class, 'stok_list'])->name('stok_obat.stok_list');
+        Route::delete('/destroy_id/{id}', [StokObatController::class, 'destroy_id'])->name('stok_obat.destroy_id');
+        Route::post('/store_edit', [StokObatController::class, 'store_edit'])->name('stok_obat.store_edit');
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

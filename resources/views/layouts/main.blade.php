@@ -78,8 +78,8 @@
             <div class="mb-3">
                 <label class="d-block mb-3">Tema Menu :</label>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input radio" type="radio" name="thema" id="thema1" value="dark"
-                        <?php if (Auth::user()->menu_tema == 'dark' or Auth::user()->menu_tema == null) {
+                    <input class="form-check-input radio menu_sidebar" type="radio" name="thema" id="thema1"
+                        value="dark" <?php if (Auth::user()->menu_tema == 'dark' or Auth::user()->menu_tema == null) {
                             echo 'checked';
                         } ?>>
                     <label class="form-check-label" for="thema1">Dark</label>
@@ -193,8 +193,28 @@
     });
 
     $(document).ready(function() {
-        $('.radio').click(function() {
-            let button = $(this).val();
+        document.getElementById('thema1').addEventListener('click', function() {
+            button = document.getElementById('thema1').value;
+            rubah_sidebar(button)
+            $loading.show();
+        });
+        document.getElementById('thema2').addEventListener('click', function() {
+            button = document.getElementById('thema2').value;
+            rubah_sidebar(button)
+            $loading.show();
+        });
+        document.getElementById('menu1').addEventListener('click', function() {
+            button = document.getElementById('menu1').value;
+            rubah_sidebar(button)
+            $loading.show();
+        });
+        document.getElementById('menu2').addEventListener('click', function() {
+            button = document.getElementById('menu2').value;
+            rubah_sidebar(button)
+            $loading.show();
+        });
+
+        function rubah_sidebar(button) {
             $.ajax({
                 type: "POST",
                 url: '{{ route('dashboard.tema') }}',
@@ -210,7 +230,7 @@
 
                         Swal.fire({
                             icon: 'error',
-                            title: 'Data tidak terdaftar!',
+                            title: 'Error!',
                             showConfirmButton: false,
                             timer: 1500,
                             willClose: () => {
@@ -218,12 +238,13 @@
                             }
                         })
                     }
+                    $loading.hide();
                 },
                 error: (err) => {
                     console.log(err);
                 },
             });
-        });
+        }
     });
 </script>
 </body>
