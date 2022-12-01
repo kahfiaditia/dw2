@@ -29,7 +29,7 @@
                                             <thead>
                                                 <tr>
                                                     <th valign="middle" class="text-center">#</th>
-                                                    <th valign="middle">Menu Akses <input type="checkbox"
+                                                    <th valign="middle" colspan="2">Menu Akses <input type="checkbox"
                                                             onchange="checkAll(this)" name="chk[]"></th>
                                                     <th class="text-center">View <br>
                                                         <input type="checkbox" onchange="viewAll(this)" name="chk[]">
@@ -52,6 +52,7 @@
                                                 <?php $no=1; foreach ($primession as $item){?>
                                                 <tr>
                                                     <td class="text-center"><?php echo $no++; ?></td>
+                                                    <td class="text-left"><?php echo $item->menu; ?></td>
                                                     <td class="text-left"><?php echo $item->submenu; ?></td>
                                                     <td class="text-center">
                                                         <?php if(isset($item->views)){ ?>

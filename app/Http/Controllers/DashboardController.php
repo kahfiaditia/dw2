@@ -6,6 +6,7 @@ use App\Models\Dashboard;
 use App\Models\Employee;
 use App\Models\Invoice;
 use App\Models\Siswa;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -179,6 +180,21 @@ class DashboardController extends Controller
     public function destroy(Dashboard $Dashboard)
     {
         //
+    }
+
+    public function tema(Request $request)
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        if ($request->button == 'dark' or $request->button == 'light') {
+            $user->menu_tema = $request->button;
+        } elseif ($request->button == 'text' or $request->button == 'icon') {
+            $user->menu_icon = $request->button;
+        }
+        $user->save();
+
+        return response()->json([
+            'code' => 200,
+        ]);
     }
 
     public function phpinfo()

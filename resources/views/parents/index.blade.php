@@ -107,7 +107,7 @@
                                                                         <th class="text-center">Nama Orang Tua / Wali
                                                                         </th>
                                                                         <th class="text-center">Nama Anak</th>
-                                                                        <th class="text-center">Action</th>
+                                                                        <th class="text-center">Aksi</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>

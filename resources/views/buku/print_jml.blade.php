@@ -65,7 +65,7 @@
         function myFunction() {
             var jml = document.getElementById("jml").value;
             var jml_max = document.getElementById("jml_max").value;
-            if (jml > jml_max) {
+            if (parseInt(jml) > parseInt(jml_max)) {
                 Swal.fire(
                     'Gagal',
                     'Print melebihi dari Jumlah Buku',
@@ -78,7 +78,7 @@
             $("#jml").change(function() {
                 let jml = $(this).val();
                 var jml_max = document.getElementById("jml_max").value;
-                if (jml > jml_max) {
+                if (parseInt(jml) > parseInt(jml_max)) {
                     Swal.fire(
                         'Gagal',
                         'Print melebihi dari Jumlah Buku',

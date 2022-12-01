@@ -31,6 +31,7 @@ class EmployeeExport implements WithColumnFormatting, FromQuery, WithHeadings, W
                 'no_hp',
                 'jabatan',
                 'karyawan.aktif',
+                'tgl_resign',
             )
             ->Join('users', 'users.id', 'karyawan.user_id')
             ->whereNull('karyawan.deleted_at')
@@ -49,12 +50,22 @@ class EmployeeExport implements WithColumnFormatting, FromQuery, WithHeadings, W
         if ($search != null) {
             $employee->where(function ($where) use ($search) {
                 if ($search) {
+                    // if (strtolower($search) == 'aktif') {
+                    //     $status = 1;
+                    //     $where->orWhere('karyawan.aktif', '=', $status);
+                    // } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
+                    //     $status = 0;
+                    //     $where->orWhere('karyawan.aktif', '=', $status);
+                    // }
                     if (strtolower($search) == 'aktif') {
                         $status = 1;
                         $where->orWhere('karyawan.aktif', '=', $status);
                     } elseif (strtolower($search) == 'non aktif' or strtolower($search) == 'non') {
                         $status = 0;
                         $where->orWhere('karyawan.aktif', '=', $status);
+                        $where->WhereNull('karyawan.tgl_resign');
+                    } elseif (strtolower($search) == 'resign') {
+                        $where->orWhereNotNull('karyawan.tgl_resign');
                     }
                 }
                 $where
@@ -86,12 +97,22 @@ class EmployeeExport implements WithColumnFormatting, FromQuery, WithHeadings, W
                 $employee->where('jabatan', '=', $jabatan);
             }
             if ($stat != null) {
+                // if (strtolower($stat) == 'aktif') {
+                //     $stat = 1;
+                // } else {
+                //     $stat = 0;
+                // }
+                // $employee->where('karyawan.aktif', '=', $stat);
                 if (strtolower($stat) == 'aktif') {
                     $stat = 1;
-                } else {
+                    $employee->where('karyawan.aktif', '=', $stat);
+                } elseif (strtolower($stat) == 'non aktif' or strtolower($stat) == 'non') {
                     $stat = 0;
+                    $employee->where('karyawan.aktif', '=', $stat);
+                    $employee->WhereNull('karyawan.tgl_resign');
+                } elseif (strtolower($stat) == 'resign') {
+                    $employee->WhereNotNull('karyawan.tgl_resign');
                 }
-                $employee->where('karyawan.aktif', '=', $stat);
             }
         }
         return $employee;
@@ -112,8 +133,15 @@ class EmployeeExport implements WithColumnFormatting, FromQuery, WithHeadings, W
 
     public function map($employee): array
     {
-        if ($employee->aktif == 1) {
+        // if ($employee->aktif == 1) {
+        //     $status = 'Aktif';
+        // } else {
+        //     $status = 'Non Aktif';
+        // }
+        if ($employee->aktif == '1' and $employee->tgl_resign == null) {
             $status = 'Aktif';
+        } elseif ($employee->aktif == '0' and $employee->tgl_resign != null) {
+            $status = 'Resign';
         } else {
             $status = 'Non Aktif';
         }

@@ -67,7 +67,12 @@
                                             <div class="mb-3">
                                                 <?php
                                                 if ($pinjaman[0]->siswa) {
-                                                    $jenjang = $pinjaman[0]->siswa->classes_student->school_level->level . ' ' . $pinjaman[0]->siswa->classes_student->school_class->classes . ' ' . $pinjaman[0]->siswa->classes_student->jurusan;
+                                                    if ($pinjaman[0]->siswa->classes_student->school_class) {
+                                                        $classes = $pinjaman[0]->siswa->classes_student->school_class->classes;
+                                                    } else {
+                                                        $classes = null;
+                                                    }
+                                                    $jenjang = $pinjaman[0]->siswa->classes_student->school_level->level . ' ' . $classes . ' ' . $pinjaman[0]->siswa->classes_student->jurusan;
                                                 } else {
                                                     $jenjang = null;
                                                 }
@@ -175,7 +180,7 @@
                                     <div class="row mt-4">
                                         <div class="col-sm-12">
                                             <a href="{{ route('pinjaman.index') }}"
-                                                class="btn btn-secondary waves-effect">Batal</a>
+                                                class="btn btn-secondary waves-effect">Kembali</a>
                                         </div>
                                     </div>
                                 </div>

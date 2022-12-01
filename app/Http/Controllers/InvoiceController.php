@@ -65,7 +65,8 @@ class InvoiceController extends Controller
             )
             ->leftJoin('siswa', 'siswa.id', 'invoice_header.siswa_id')
             ->whereNull('invoice_header.deleted_at')
-            ->groupBy('invoice_header.no_invoice');
+            ->groupBy('invoice_header.no_invoice')
+            ->orderBy('invoice_header.no_invoice', 'DESC');
 
         if ($request->get('search_manual') != null) {
             $search = $request->get('search_manual');

@@ -27,7 +27,8 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Judul <code>*</code></label>
                                             <input type="text" class="form-control" id="judul" name="judul"
-                                                autofocus value="{{ old('judul') }}" required placeholder="Judul">
+                                                onkeyup="this.value = this.value.toUpperCase();" autofocus
+                                                value="{{ old('judul') }}" required placeholder="Judul">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
@@ -124,14 +125,22 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="formFile" class="form-label">Foto Buku (Max 2
-                                                Mb)</label>
-                                            <input class="form-control foto" type="file" name="foto"
-                                                id="foto">
+                                            <label for="validationCustom02" class="form-label">Rak
+                                                <code>*</code></label>
+                                            <select class="form-control select select2" name="rak_id" id="rak_id"
+                                                required>
+                                                <option value="">--Pilih Rak--
+                                                </option>
+                                                @foreach ($rak as $ra)
+                                                    <option value="{{ $ra->id }}">
+                                                        {{ $ra->rak . ' - ' . $ra->tingkatan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
-                                            {!! $errors->first('foto', '<div class="invalid-validasi">:message</div>') !!}
+                                            {!! $errors->first('rak_id', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -145,6 +154,34 @@
                                                 Data wajib diisi.
                                             </div>
                                             {!! $errors->first('jml_buku', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="formFile" class="form-label">Foto Buku (Max 2
+                                                Mb)</label>
+                                            <input class="form-control foto" type="file" name="foto"
+                                                id="foto">
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('foto', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <input class="form-check-input" name="sama" type="checkbox"
+                                                id="sama" onclick="toggleCheckbox()">
+                                            <label class="form-label" for="like">
+                                                Barcode sama dengan Kode Buku
+                                            </label>
+                                            <input type="text" class="form-control" id="barcode" name="barcode"
+                                                required placeholder="Barcode">
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -167,6 +204,17 @@
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
     <script>
+        function toggleCheckbox() {
+            sama = document.getElementById("sama").checked;
+            if (sama == true) {
+                document.getElementById("barcode").style.display = 'none';
+                document.getElementById("barcode").required = false;
+            } else {
+                document.getElementById("barcode").style.display = 'block';
+                document.getElementById("barcode").required = true;
+            }
+        }
+
         $(document).ready(function() {
             // valdasi extension
             $('#foto').bind('change', function() {

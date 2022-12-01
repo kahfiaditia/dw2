@@ -6,6 +6,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\LoginController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NeedsController;
+use App\Http\Controllers\ObatController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PenerbitController;
@@ -27,7 +29,7 @@ use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
 use App\Http\Controllers\RakController;
 use App\Http\Controllers\SettingController;
-use App\Models\Inv_pinjaman;
+use App\Http\Controllers\StokObatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -40,6 +42,9 @@ Route::get('/reverify', [LoginController::class, 'reverify'])->name('reverify');
 Route::get('/reset/{id}', [LoginController::class, 'reset'])->name('reset');
 
 Route::get('/phpinfo', [DashboardController::class, 'phpinfo'])->name('phpinfo');
+// stock buku
+Route::get('/book', [BukuController::class, 'book'])->name('book');
+Route::get('/get_book', [BukuController::class, 'get_book'])->name('get_book');
 
 Route::group(
     [
@@ -161,6 +166,7 @@ Route::group(
         // dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/history_payment/{student_id}', [DashboardController::class, 'history_payment'])->name('history_payment');
+        Route::post('/tema', [DashboardController::class, 'tema'])->name('dashboard.tema');
 
         // siswa
         Route::resource('/siswa', SiswaController::class);
@@ -259,19 +265,28 @@ Route::group(
         Route::get('/data_ajax', [BukuController::class, 'data_ajax'])->name('buku.data_ajax');
         Route::get('/print/{id}', [BukuController::class, 'print'])->name('buku.print');
         Route::post('/print_barcode', [BukuController::class, 'print_barcode'])->name('buku.print_barcode');
+        Route::post('/dropdown', [BukuController::class, 'dropdown'])->name('buku.dropdown');
+        Route::get('export_buku', [BukuController::class, 'export_buku'])->name('buku.export_buku');
 
         // pinjaman
         Route::resource('/pinjaman', PinjamanController::class);
         Route::post('/store_edit', [PinjamanController::class, 'store_edit'])->name('pinjaman.store_edit');
         Route::post('/scanBarcode', [PinjamanController::class, 'scanBarcode'])->name('pinjaman.scanBarcode');
         Route::get('/pinjaman_ajax', [PinjamanController::class, 'pinjaman_ajax'])->name('pinjaman.pinjaman_ajax');
-        Route::post('/scanBarcodeManual', [PinjamanController::class, 'scanBarcodeManual'])->name('pinjaman.scanBarcodeManual');
+        Route::post('/scanBarcodeEdit', [PinjamanController::class, 'scanBarcodeEdit'])->name('pinjaman.scanBarcodeEdit');
         Route::delete('/destroy_id/{id}', [PinjamanController::class, 'destroy_id'])->name('pinjaman.destroy_id');
         Route::post('/edit_buku', [PinjamanController::class, 'edit_buku'])->name('pinjaman.edit_buku');
         Route::post('/update_jml/{id}', [PinjamanController::class, 'update_jml'])->name('pinjaman.update_jml');
         Route::post('/post_update', [PinjamanController::class, 'post_update'])->name('pinjaman.post_update');
         Route::get('/approve/{id}', [PinjamanController::class, 'approve'])->name('pinjaman.approve');
         Route::get('export_pinjaman_buku', [PinjamanController::class, 'export_pinjaman_buku'])->name('pinjaman.export_pinjaman_buku');
+        Route::get('/search_loan', [PinjamanController::class, 'search_loan'])->name('pinjaman.search_loan');
+        Route::post('/getsearch', [PinjamanController::class, 'getsearch'])->name('pinjaman.getsearch');
+        Route::get('/return_book/{id}/{type}', [PinjamanController::class, 'return_book'])->name('pinjaman.return_book');
+        Route::delete('/book_return/{id}/{kode}', [PinjamanController::class, 'book_return'])->name('pinjaman.book_return');
+        Route::delete('/cancle_return/{id}/{kode}', [PinjamanController::class, 'cancle_return'])->name('pinjaman.cancle_return');
+        Route::post('/scanBarcodeEd', [PinjamanController::class, 'scanBarcodeEd'])->name('pinjaman.scanBarcodeEd');
+        Route::post('/kembalikan_buku', [PinjamanController::class, 'kembalikan_buku'])->name('pinjaman.kembalikan_buku');
 
         //inventaris
         Route::resource('inventaris', InventarisController::class);
@@ -288,4 +303,26 @@ Route::group(
     }
 );
 
+Route::group(
+    [
+        'prefix'     => 'cron',
+    ],
+    function () {
+        Route::get('/cron_buku', [CronController::class, 'cron_buku'])->name('cron.cron_buku');
+    }
+);
+
+Route::group(
+    [
+        'prefix' => 'uks',
+        'middleware' => 'auth',
+    ],
+    function () {
+        Route::resource('/obat', ObatController::class);
+        Route::resource('/stok_obat', StokObatController::class);
+        Route::get('/stok_list', [StokObatController::class, 'stok_list'])->name('stok_obat.stok_list');
+        Route::delete('/destroy_id/{id}', [StokObatController::class, 'destroy_id'])->name('stok_obat.destroy_id');
+        Route::post('/store_edit', [StokObatController::class, 'store_edit'])->name('stok_obat.store_edit');
+    }
+);
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

@@ -37,7 +37,7 @@
                                         <th>Tagihan</th>
                                         <th>Keterangan</th>
                                         <th>Pengulangan</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

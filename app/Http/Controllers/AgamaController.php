@@ -122,6 +122,7 @@ class AgamaController extends Controller
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;
+                AlertHelper::updateAlert(false);
                 return back();
             }
         } else {

@@ -40,6 +40,35 @@
                                                 <div class="accordion-body barcodeScanner">
                                                     <div class="row text-muted">
                                                         <div class="col-md-4"></div>
+                                                        <div class="col-md-4 text-center">
+                                                            <label class="form-label">Metode Scan</label>
+                                                            <div class="mb-3">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input radio" type="radio"
+                                                                        name="toggle" id="inlineRadio1" value="Barcode">
+                                                                    <label class="form-check-label"
+                                                                        for="inlineRadio1">Barcode</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input radio" type="radio"
+                                                                        name="toggle" id="inlineRadio2"
+                                                                        value="Scan Kamera">
+                                                                    <label class="form-check-label" for="inlineRadio2">Scan
+                                                                        Kamera</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row text-muted div_barcode">
+                                                        <div class="col-md-4"></div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" name="scanner_barcode" autofocus
+                                                                class="form-control scanner_barcode" id="scanner_barcode"
+                                                                placeholder="Barcode">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row text-muted div_scan_camera">
+                                                        <div class="col-md-4"></div>
                                                         <div class="col-md-4">
                                                             <div id="qr-reader"></div>
                                                             <div id="qr-reader-results"></div>
@@ -109,7 +138,8 @@
                                                 <div class="input-group" id="datepicker2">
                                                     <input type="text" class="form-control tgl_pinjam"
                                                         placeholder="yyyy-mm-dd" name="tgl_pinjam" id="tgl_pinjam"
-                                                        value="{{ date('Y-m-d') }}" data-date-end-date="{{ date('Y-m-d') }}"
+                                                        value="{{ date('Y-m-d') }}"
+                                                        data-date-end-date="{{ date('Y-m-d') }}"
                                                         data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
                                                         data-provide="datepicker" required data-date-autoclose="true">
                                                     <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -123,21 +153,15 @@
                                     </div>
                                     <hr>
                                     <div class="row gy-2 gx-3 align-items-center">
-                                        <h5 class="card-title">Tambah BUKU</h5>
+                                        <h5 class="card-title">Tambah Buku</h5>
                                         <div class="col-sm-auto col-md-3">
-                                            <select class="form-control select select2" id="buku_id">
+                                            <select class="form-control select select2 book" id="buku_id">
                                                 <option value="">--Pilih Buku--</option>
-                                                @foreach ($buku as $buku)
-                                                    <option value="{{ $buku->id }}"
-                                                        data-id="{{ $buku->kategori->kode_kategori . ' - ' . $buku->judul }}">
-                                                        {{ $buku->kategori->kode_kategori . ' - ' . $buku->judul }}
-                                                    </option>
-                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-auto col-md-3">
                                             <input type="text" class="form-control number-only" id="jml_buku"
-                                                placeholder="Jumlah Buku">
+                                                readonly value="1" placeholder="Jumlah Buku">
                                         </div>
                                         <div class="col-sm-auto col-md-3">
                                             <a type="submit" class="btn btn-info w-md" id="add">Tambah buku</a>
@@ -153,7 +177,7 @@
                                                         <th class="text-center" style="width: 5%">#</th>
                                                         <th class="text-center" style="width: 40%">Buku</th>
                                                         <th class="text-center" style="width: 20%">Jumlah Buku</th>
-                                                        <th class="text-center" style="width: 10%">Action</th>
+                                                        <th class="text-center" style="width: 10%">Aksi</th>
                                                         <th class="text-center" hidden>buku_id</th>
                                                     </tr>
                                                 </thead>
@@ -180,7 +204,7 @@
     </body>
     <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="{{ asset('assets/scanner/html5-qrcode.min.js') }}"></script>
     <script>
         var resultContainer = document.getElementById('qr-reader-results');
         var lastResult, countResults = 0;
@@ -192,132 +216,14 @@
                 // Handle on success condition with the decoded message.
                 barcode = decodedText;
                 peminjam = document.getElementById("peminjam").value;
-                $.ajax({
-                    type: "POST",
-                    url: '{{ route('pinjaman.scanBarcode') }}',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        barcode,
-                        peminjam
-                    },
-                    success: response => {
-                        console.log(response);
-                        // initialize header
-                        milisecond = document.getElementById("milisecond").value;
-                        peminjam = document.getElementById(
-                            "peminjam").value;
-                        tgl_pinjam = document.getElementById("tgl_pinjam").value;
-                        if (response.type == 'Siswa') {
-                            siswa = response.id;
-                            jenjang = response.jenjang;
-                            var dataPerpus = {
-                                "header": {
-                                    "milisecond": milisecond,
-                                    "peminjam": peminjam,
-                                    "jenjang": jenjang,
-                                    "siswa": siswa,
-                                    "karyawan": '',
-                                    "tgl_pinjam": tgl_pinjam
-                                }
-                            };
-                            localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
 
-                            Swal.fire({
-                                title: 'Scan Barcode',
-                                text: "Data Siswa tersimpan",
-                                icon: 'success',
-                                timer: 1000,
-                                willClose: () => {
-                                    location.reload();
-                                }
-                            })
-                        } else if (response.type == 'Guru') {
-                            guru = response.id;
-                            var dataPerpus = {
-                                "header": {
-                                    "milisecond": milisecond,
-                                    "peminjam": peminjam,
-                                    "jenjang": '',
-                                    "siswa": '',
-                                    "karyawan": guru,
-                                    "tgl_pinjam": tgl_pinjam
-                                }
-                            };
-                            localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
-
-                            Swal.fire({
-                                title: 'Scan Barcode',
-                                text: "Data Guru tersimpan",
-                                icon: 'success',
-                                timer: 1000,
-                                willClose: () => {
-                                    location.reload();
-                                }
-                            })
-                        } else if (response.type == 'Karyawan') {
-                            karyawan = response.id;
-                            var dataPerpus = {
-                                "header": {
-                                    "milisecond": milisecond,
-                                    "peminjam": peminjam,
-                                    "jenjang": '',
-                                    "siswa": '',
-                                    "karyawan": karyawan,
-                                    "tgl_pinjam": tgl_pinjam
-                                }
-                            };
-                            localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
-
-                            Swal.fire({
-                                title: 'Scan Barcode',
-                                text: "Data Karyawan tersimpan",
-                                icon: 'success',
-                                timer: 1000,
-                                willClose: () => {
-                                    location.reload();
-                                }
-                            })
-                        } else if (response.type == 'buku') {
-                            buku_id = response.id;
-                            judul = response.jenjang;
-                            var dataPerpusItems = JSON.parse(localStorage.getItem("localPerpusDharmaItems"));
-                            var item = {
-                                "buku_id": buku_id,
-                                "judul": judul,
-                                "jml_buku": 1,
-                            }
-                            dataPerpusItems.items.push(item);
-                            localStorage.setItem('localPerpusDharmaItems', JSON.stringify(dataPerpusItems));
-
-                            Swal.fire({
-                                title: 'Scan Barcode',
-                                text: "Data Buku tersimpan",
-                                icon: 'success',
-                                timer: 1000,
-                                willClose: () => {
-                                    location.reload();
-                                }
-                            })
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Data tidak terdaftar!',
-                                showConfirmButton: false,
-                                timer: 1500,
-                                willClose: () => {
-                                    location.reload();
-                                }
-                            })
-                        }
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    },
-                });
+                // get value database 
+                getValueScanBarcodeCamera(barcode, peminjam)
 
                 var settingBarcode = {
                     "barcode": {
                         "status": 'on',
+                        "metode": 'Scan Kamera',
                     }
                 };
                 localStorage.setItem('localPerpusDharmaBarcode', JSON.stringify(settingBarcode));
@@ -332,6 +238,10 @@
         html5QrcodeScanner.render(onScanSuccess);
 
         function myLoad() {
+            // area scanner dan barcode
+            $('.div_scan_camera').hide();
+            $('.div_barcode').hide();
+
             // load karyawan
             var select_peminjam = document.getElementById('peminjam');
             var peminjam = select_peminjam.options[select_peminjam.selectedIndex].value;
@@ -366,17 +276,134 @@
                 collapseOne = document.getElementById("collapseOne");
                 collapseOne.classList.add("show");
             }
+
+            if (localPerpusDharmaBarcode.barcode.metode == 'Barcode') {
+                $('.div_barcode').show();
+                document.getElementById("inlineRadio1").checked = true;
+            }
+
+            if (localPerpusDharmaBarcode.barcode.metode == 'Scan Kamera') {
+                $('.div_scan_camera').show();
+                document.getElementById("inlineRadio2").checked = true;
+            }
+        }
+
+        function getValueScanBarcodeCamera(barcode, peminjam) {
+            $.ajax({
+                type: "POST",
+                url: '{{ route('pinjaman.scanBarcode') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    barcode,
+                    peminjam
+                },
+                success: response => {
+                    // initialize header
+                    milisecond = document.getElementById("milisecond").value;
+                    peminjam = document.getElementById("peminjam").value;
+                    tgl_pinjam = document.getElementById("tgl_pinjam").value;
+                    if (response.type == 'Siswa') {
+                        siswa = response.id;
+                        jenjang = response.jenjang;
+                        var dataPerpus = {
+                            "header": {
+                                "milisecond": milisecond,
+                                "peminjam": peminjam,
+                                "jenjang": jenjang,
+                                "siswa": siswa,
+                                "karyawan": '',
+                                "tgl_pinjam": tgl_pinjam
+                            }
+                        };
+                        localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
+                        location.reload();
+                    } else if (response.type == 'Guru') {
+                        guru = response.id;
+                        var dataPerpus = {
+                            "header": {
+                                "milisecond": milisecond,
+                                "peminjam": peminjam,
+                                "jenjang": '',
+                                "siswa": '',
+                                "karyawan": guru,
+                                "tgl_pinjam": tgl_pinjam
+                            }
+                        };
+                        localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
+                        location.reload();
+                    } else if (response.type == 'Karyawan') {
+                        karyawan = response.id;
+                        var dataPerpus = {
+                            "header": {
+                                "milisecond": milisecond,
+                                "peminjam": peminjam,
+                                "jenjang": '',
+                                "siswa": '',
+                                "karyawan": karyawan,
+                                "tgl_pinjam": tgl_pinjam
+                            }
+                        };
+                        localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
+                        location.reload();
+                    } else if (response.type == 'buku') {
+                        buku_id = response.id;
+                        judul = response.jenjang;
+                        var dataPerpusItems = JSON.parse(localStorage.getItem("localPerpusDharmaItems"));
+                        var item = {
+                            "buku_id": buku_id,
+                            "judul": judul,
+                            "jml_buku": 1,
+                        }
+                        dataPerpusItems.items.push(item);
+                        localStorage.setItem('localPerpusDharmaItems', JSON.stringify(dataPerpusItems));
+                        location.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Data tidak terdaftar!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            willClose: () => {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
         }
 
         $(document).ready(function() {
-            let increment = 0;
+            $('.radio').click(function() {
+                let metode_scan = $(this).val();
+                if (metode_scan == 'Barcode') {
+                    $('.div_scan_camera').hide();
+                    $('.div_barcode').show();
+                } else {
+                    $('.div_scan_camera').show();
+                    $('.div_barcode').hide();
+                }
+            });
 
-            arr_peminjam = ['Siswa', 'Guru', 'Karyawan'];
-            for (let dropdown = 0; dropdown < arr_peminjam.length; dropdown++) {
-                $('.peminjam').append(
-                    `<option value="${arr_peminjam[dropdown]}" >${arr_peminjam[dropdown]}</option>`
-                )
-            }
+            $(".scanner_barcode").change(function() {
+                let barcode = $(this).val();
+                peminjam = document.getElementById("peminjam").value;
+                // get value database 
+                getValueScanBarcodeCamera(barcode, peminjam)
+
+                // set proses barcode
+                var settingBarcode = {
+                    "barcode": {
+                        "status": 'on',
+                        "metode": 'Barcode',
+                    }
+                };
+                localStorage.setItem('localPerpusDharmaBarcode', JSON.stringify(settingBarcode));
+            });
+
+            let increment = 0;
 
             // set localStorage awal
             defaultLocalStorage();
@@ -405,11 +432,12 @@
                     localStorage.setItem('localPerpusDharmaItems', JSON.stringify(dataPerpusItems));
                 }
 
-                var dataPerpusItems = JSON.parse(localStorage.getItem("localPerpusDharmaBarcode"));
-                if (dataPerpusItems == null) {
+                var dataPerpusItemsBarcode = JSON.parse(localStorage.getItem("localPerpusDharmaBarcode"));
+                if (dataPerpusItemsBarcode == null) {
                     var settingBarcode = {
                         "barcode": {
                             "status": 'off',
+                            "metode": '',
                         }
                     };
                     localStorage.setItem('localPerpusDharmaBarcode', JSON.stringify(settingBarcode));
@@ -419,6 +447,13 @@
             var dataPerpus = JSON.parse(localStorage.getItem("localPerpusDharma"));
             if (dataPerpus.header.siswa) {
                 getSiswa(dataPerpus.header.siswa);
+            }
+
+            arr_peminjam = ['Siswa', 'Guru', 'Karyawan'];
+            for (let dropdown = 0; dropdown < arr_peminjam.length; dropdown++) {
+                $('.peminjam').append(
+                    `<option value="${arr_peminjam[dropdown]}" >${arr_peminjam[dropdown]}</option>`
+                )
             }
 
             function getSiswa(siswa) {
@@ -654,6 +689,25 @@
                 setLocalStorage('header');
             });
 
+            // load book
+            $.ajax({
+                type: "POST",
+                url: '{{ route('buku.dropdown') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: response => {
+                    $.each(response, function(i, item) {
+                        $('.book').append(
+                            `<option value="${item.id}" data-id="${item.kode_kategori+' - '+item.judul}">${item.kode_kategori+' - '+item.judul}</option>`
+                        )
+                    })
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+
             function setLocalStorage(type) {
                 // initialize header
                 milisecond = document.getElementById("milisecond").value;
@@ -730,7 +784,7 @@
 
                     // null items
                     $('#buku_id').val("").trigger('change')
-                    $('#jml_buku').val("")
+                    // $('#jml_buku').val("")
                 }
 
                 $(".deleteItems").on('click', function() {
@@ -869,14 +923,17 @@
                                 localStorage.removeItem("localPerpusDharmaBarcode");
                                 localStorage.removeItem("localPerpusDharmaItems");
 
-                                Swal.fire(
-                                    'Success',
-                                    'Peminjaman Buku berhasil',
-                                    'success'
-                                ).then(() => {
-                                    var APP_URL = {!! json_encode(url('/')) !!}
-                                    window.location = APP_URL + '/pinjaman'
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Peminjaman Buku berhasil',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                    willClose: () => {
+                                        var APP_URL = {!! json_encode(url('/')) !!}
+                                        window.location = APP_URL + '/pinjaman'
+                                    }
                                 })
+
                             } else {
                                 Swal.fire(
                                     'Gagal',
@@ -887,7 +944,6 @@
                         },
                         error: err => console.log("Interal Server Error")
                     })
-
                 } else {
                     Swal.fire({
                         icon: 'error',

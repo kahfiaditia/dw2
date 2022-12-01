@@ -26,9 +26,9 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Kode Kategori
                                                 <code>*</code></label>
-                                            <input type="text" class="form-control" id="kode_kategori"
-                                                name="kode_kategori" autofocus value="{{ old('kode_kategori') }}" required
-                                                placeholder="Kode Kategori">
+                                            <input type="text" class="form-control" id="kode_kategori" maxlength="4"
+                                                style="text-transform:uppercase" name="kode_kategori" autofocus
+                                                value="{{ old('kode_kategori') }}" required placeholder="Kode Kategori">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
@@ -40,7 +40,8 @@
                                             <label for="validationCustom02" class="form-label">Kategori
                                                 <code>*</code></label>
                                             <input type="text" class="form-control" id="kategori" name="kategori"
-                                                value="{{ old('kategori') }}" required placeholder="Kategori">
+                                                style="text-transform:uppercase" value="{{ old('kategori') }}" required
+                                                placeholder="Kategori">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>

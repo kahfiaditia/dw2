@@ -607,7 +607,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <div class="mb-3">
                                                         <label for="validationCustom02" class="form-label">Jabatan
                                                             <code>*</code></label>
@@ -616,6 +616,30 @@
                                                             <option value="">--Pilih Jabatan--</option>
                                                             <option value="Guru">Guru</option>
                                                             <option value="Karyawan">Karyawan</option>
+                                                        </select>
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="mb-3">
+                                                        <label for="validationCustom02" class="form-label">Divisi
+                                                            <code>*</code></label>
+                                                        <select class="form-control select select2" name="divisi"
+                                                            required>
+                                                            <option value="">--Pilih Divisi--</option>
+                                                            <option value="IT">IT</option>
+                                                            <option value="LM">LM</option>
+                                                            <option value="TU">TU</option>
+                                                            <option value="PERPUS">PERPUS</option>
+                                                            <option value="Petugas Kebersihan dan Keamanan">Petugas
+                                                                Kebersihan dan Keamanan</option>
+                                                            <option value="TK">TK</option>
+                                                            <option value="SD">SD</option>
+                                                            <option value="SMP">SMP</option>
+                                                            <option value="SMK">SMK</option>
+                                                            <option value="DIREKTUR">DIREKTUR</option>
                                                         </select>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.

@@ -138,9 +138,15 @@ class PinjamanBuku implements WithColumnFormatting, FromQuery, WithHeadings, Wit
         } else {
             $nama = $pin->karyawan;
         }
+        if ($this->data['type'] == 'Detail') {
+            $kelas = $pin->judul;
+        } else {
+            $kelas = $pin->kelas;
+        }
         return [
             $pin->kode_transaksi,
             $nama,
+            $kelas,
             $pin->tgl_pinjam,
             $pin->tgl_perkiraan_kembali,
             $pin->tgl_kembali,

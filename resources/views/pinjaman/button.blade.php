@@ -7,7 +7,7 @@
         @if (in_array('74', $session_menu))
             <a href="{{ route('pinjaman.show', $id) }}" class="text-info"><i class="mdi mdi-eye font-size-18"></i></a>
         @endif
-        @if ($model->tgl_kembali == null)
+        @if ($model->all_date_return == null)
             @if (in_array('76', $session_menu))
                 <a href="{{ route('pinjaman.edit', $id) }}" class="text-success"><i
                         class="mdi mdi-pencil font-size-18"></i></a>

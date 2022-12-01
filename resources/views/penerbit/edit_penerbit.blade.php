@@ -29,8 +29,9 @@
                                             <label for="validationCustom02" class="form-label">Nama Penerbit
                                                 <code>*</code></label>
                                             <input type="text" class="form-control" id="nama_penerbit"
-                                                name="nama_penerbit" required autofocus placeholder="Nama Penerbit"
-                                                value="{{ old('nama_penerbit', $penerbit->nama_penerbit) }}">
+                                                onkeyup="this.value = this.value.toUpperCase();" name="nama_penerbit"
+                                                style="text-transform:uppercase" placeholder="Nama Penerbit" required
+                                                autofocus value="{{ old('nama_penerbit', $penerbit->nama_penerbit) }}">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>

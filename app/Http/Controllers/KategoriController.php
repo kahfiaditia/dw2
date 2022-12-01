@@ -69,7 +69,7 @@ class KategoriController extends Controller
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('59', $session_menu)) {
             $request->validate([
-                'kode_kategori' => 'required|unique:perpus_kategori_buku,kode_kategori,NULL,id,deleted_at,NULL|max:64',
+                'kode_kategori' => 'required|unique:perpus_kategori_buku,kode_kategori,NULL,id,deleted_at,NULL|max:4',
                 'kategori' => 'required|unique:perpus_kategori_buku,kategori,NULL,id,deleted_at,NULL|max:64',
             ]);
             DB::beginTransaction();
@@ -142,7 +142,7 @@ class KategoriController extends Controller
         if (in_array('60', $session_menu)) {
             $id = Crypt::decryptString($id);
             $request->validate([
-                'kode_kategori' => "required|max:64|unique:perpus_kategori_buku,kode_kategori,$id,id,deleted_at,NULL",
+                'kode_kategori' => "required|max:4|unique:perpus_kategori_buku,kode_kategori,$id,id,deleted_at,NULL",
                 'kategori' => "required|max:64|unique:perpus_kategori_buku,kategori,$id,id,deleted_at,NULL",
             ]);
             DB::beginTransaction();
@@ -159,6 +159,7 @@ class KategoriController extends Controller
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;
+                AlertHelper::updateAlert(false);
                 return back();
             }
         } else {

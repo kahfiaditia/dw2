@@ -189,20 +189,20 @@ class AkunController extends Controller
     public function edit($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('9', $session_menu)) {
-            $id_decrypted = Crypt::decryptString($id);
-            $data = [
-                'title' => $this->title,
-                'menu' => $this->sid,
-                'submenu' => $this->menu,
-                'label' => 'ubah akun',
-                'school_level' => School_level::all(),
-                'akun' => User::findorfail($id_decrypted)
-            ];
-            return view('akun.edit')->with($data);
-        } else {
-            return view('not_found');
-        }
+        // if (in_array('9', $session_menu)) {
+        $id_decrypted = Crypt::decryptString($id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->sid,
+            'submenu' => $this->menu,
+            'label' => 'ubah akun',
+            'school_level' => School_level::all(),
+            'akun' => User::findorfail($id_decrypted)
+        ];
+        return view('akun.edit')->with($data);
+        // } else {
+        //     return view('not_found');
+        // }
     }
 
     /**
@@ -215,80 +215,84 @@ class AkunController extends Controller
     public function update(Request $request, $id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('9', $session_menu)) {
-            $request->validate([
-                'username' => 'required',
-                'roles' => 'required',
-                'email' => "required|email:dns|unique:users,email,$id,id,deleted_at,NULL",
-                'password' => 'required',
-            ]);
-            DB::beginTransaction();
-            try {
-                $user = User::findorfail($id);
-                $user->name = $request->username;
-                $user->roles = $request->roles;
-                $user->email = $request->email;
-                if ($request->password_old != $request->password) {
-                    $user->password = bcrypt($request->password);
-                }
-                // set user akses
-                if ($request->roles === 'Karyawan') {
-                    $user->akses_menu = '1,2';
-                    $user->akses_submenu = '1,2,3,4,6';
-                } elseif ($request->roles === 'Tu') {
-                    $user->akses_menu = '1,10,14';
-                    $user->akses_submenu = '1,35,36,37,38,39,40,41,42';
-                } elseif ($request->roles === 'Admin') {
-                    $user->akses_menu = '1,2,3,4,5,6,7';
-                    $user->akses_submenu = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26';
-                } elseif ($request->roles === 'Administrator') {
-                    $user->akses_menu = '1,2,3,4,5,6,7,8,9,10,11,12';
-                    $user->akses_submenu = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44';
-                } elseif ($request->roles === 'Siswa') {
-                    $user->akses_menu = '1,6';
-                    $user->akses_submenu = '1,19,20,21';
-                } elseif ($request->roles === 'Alumni') {
-                    $user->tahun_lulus = $request->tahun_lulus;
-                    $user->akses_menu = '1';
-                    $user->akses_submenu = '1';
-                } elseif ($request->roles === 'Ortu') {
-                }
-                // update siswa
-                if ($request->roles === 'Siswa') {
-                    if ($request->email_old != $request->email) {
+        // if (in_array('9', $session_menu)) {
+        $request->validate([
+            'username' => 'required',
+            'roles' => 'required',
+            'email' => "required|email:dns|unique:users,email,$id,id,deleted_at,NULL",
+            'password' => 'required',
+        ]);
+        DB::beginTransaction();
+        try {
+            $user = User::findorfail($id);
+            $user->name = $request->username;
+            $user->roles = $request->roles;
+            $user->email = $request->email;
+            if ($request->password_old != $request->password) {
+                $user->password = bcrypt($request->password);
+            }
+            // set user akses
+            if ($request->roles === 'Karyawan') {
+                $user->akses_menu = '1,2';
+                $user->akses_submenu = '1,2,3,4,6';
+            } elseif ($request->roles === 'Tu') {
+                $user->akses_menu = '1,10,14';
+                $user->akses_submenu = '1,35,36,37,38,39,40,41,42';
+            } elseif ($request->roles === 'Admin') {
+                $user->akses_menu = '1,2,3,4,5,6,7';
+                $user->akses_submenu = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26';
+            } elseif ($request->roles === 'Administrator') {
+                $user->akses_menu = '1,2,3,4,5,6,7,8,9,10,11,12';
+                $user->akses_submenu = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44';
+            } elseif ($request->roles === 'Siswa') {
+                $user->akses_menu = '1,6';
+                $user->akses_submenu = '1,19,20,21';
+            } elseif ($request->roles === 'Alumni') {
+                $user->tahun_lulus = $request->tahun_lulus;
+                $user->akses_menu = '1';
+                $user->akses_submenu = '1';
+            } elseif ($request->roles === 'Ortu') {
+            }
+            // update siswa
+            if ($request->roles === 'Siswa') {
+                if ($request->email_old != $request->email) {
+                    if ($user->student != null) {
                         $siswa = Siswa::findorfail($user->student->id);
                         $siswa->email = $request->email;
                         $siswa->user_updated = Auth::user()->id;
                         $siswa->save();
                     }
                 }
-                // update karyawan
-                if ($request->roles === 'Karyawan') {
+            }
+            // update karyawan
+            if ($request->roles === 'Karyawan') {
+                if ($user->employee != null) {
                     $employee = Employee::findorfail($user->employee->id);
                     $employee->aktif = isset($request->aktif) ? 1 : 0;
                     $employee->user_updated = Auth::user()->id;
                     $employee->save();
                 }
-                $user->aktif = isset($request->aktif) ? 1 : 0;
-                $user->user_updated = Auth::user()->id;
-                $user->save();
+            }
+            $user->aktif = isset($request->aktif) ? 1 : 0;
+            $user->user_updated = Auth::user()->id;
+            $user->save();
 
-                DB::commit();
-                AlertHelper::updateAlert(true);
-                if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator') {
-                    return redirect('akun');
-                } else {
-                    return back();
-                }
-            } catch (\Exception $e) {
-                dd($e);
-                DB::rollback();
-                AlertHelper::updateAlert(false);
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator') {
+                return redirect('akun');
+            } else {
                 return back();
             }
-        } else {
-            return view('not_found');
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            AlertHelper::updateAlert(false);
+            return back();
         }
+        // } else {
+        //     return view('not_found');
+        // }
     }
 
     /**

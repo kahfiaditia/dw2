@@ -14,11 +14,16 @@ class Buku extends Model
 
     public function penerbit()
     {
-        return $this->belongsTo(Penerbit::class, 'kategori_id');
+        return $this->belongsTo(Penerbit::class, 'penerbit_id');
     }
 
     public function kategori()
     {
         return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
+
+    public function rak()
+    {
+        return $this->belongsTo(Rak::class, 'rak_id');
     }
 }

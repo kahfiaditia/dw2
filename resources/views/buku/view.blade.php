@@ -27,8 +27,10 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Kode Barcode Buku</label>
-                                            {!! DNS1D::getBarcodeHTML($buku->barcode, 'C128') !!}
-                                            {{ $buku->barcode }}
+                                            @if ($buku->barcode)
+                                                {!! DNS1D::getBarcodeHTML($buku->barcode, 'C128') !!}
+                                                {{ $buku->barcode }}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -162,7 +164,7 @@
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
                                         <a href="{{ route('buku.index') }}"
-                                            class="btn btn-secondary waves-effect">Batal</a>
+                                            class="btn btn-secondary waves-effect">Kembali</a>
                                     </div>
                                 </div>
                             </div>

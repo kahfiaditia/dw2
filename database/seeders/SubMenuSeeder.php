@@ -20,7 +20,7 @@ class SubMenuSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $sub_menus = [
             [
-                'submenu' => 'Dashboard', 'route_submenu' => 'dashboard', 'type_menu' => 'view', 'menu_id' => '1', 'display_submenu' => '1', 'order_submenu' => null,
+                'submenu' => 'Beranda', 'route_submenu' => 'dashboard', 'type_menu' => 'view', 'menu_id' => '1', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Data Pribadi', 'route_submenu' => 'employee', 'type_menu' => 'view', 'menu_id' => '2', 'display_submenu' => '1', 'order_submenu' => null,
             ], [

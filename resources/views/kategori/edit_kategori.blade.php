@@ -29,7 +29,7 @@
                                             <label for="validationCustom02" class="form-label">Kode Kategori
                                                 <code>*</code></label>
                                             <input type="text" class="form-control" id="kode_kategori"
-                                                name="kode_kategori"
+                                                name="kode_kategori" maxlength="4" style="text-transform:uppercase"
                                                 value="{{ old('kode_kategori', $kategori->kode_kategori) }}" required
                                                 placeholder="Kode Kategori" autofocus>
                                             <div class="invalid-feedback">
@@ -43,6 +43,7 @@
                                             <label for="validationCustom02" class="form-label">Kategori
                                                 <code>*</code></label>
                                             <input type="text" class="form-control" id="kategori" name="kategori"
+                                                style="text-transform:uppercase"
                                                 value="{{ old('kategori', $kategori->kategori) }}" required
                                                 placeholder="Kategori">
                                             <div class="invalid-feedback">

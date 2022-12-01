@@ -36,7 +36,7 @@
                                         <th>No</th>
                                         <th>Agama</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

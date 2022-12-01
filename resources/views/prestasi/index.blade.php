@@ -39,7 +39,7 @@
                                         <th>Siswa</th>
                                         <th>stard Date</th>
                                         <th>End Date</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
