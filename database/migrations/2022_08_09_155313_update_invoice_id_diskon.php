@@ -18,7 +18,7 @@ class UpdateInvoiceIdDiskon extends Migration
             $table->foreign('diskon_id')->references('id')->on('diskon');
             $table->double('amount_diskon_pembayaran')->nullable()->after('diskon_id');
             $table->double('amount_diskon_prestasi')->nullable()->after('amount_diskon_pembayaran');
-            $table->dateTime('date_transaksi')->after('amount_diskon_prestasi');
+            $table->dateTime('date_transaksi')->after('amount_diskon_prestasi')->nullable();
         });
     }
 
