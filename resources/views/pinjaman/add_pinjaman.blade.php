@@ -216,6 +216,7 @@
                 // Handle on success condition with the decoded message.
                 barcode = decodedText;
                 peminjam = document.getElementById("peminjam").value;
+
                 // get value database 
                 getValueScanBarcodeCamera(barcode, peminjam)
 

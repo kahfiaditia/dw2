@@ -11,6 +11,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\InvPinjamanController;
+use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SiswaController;
@@ -284,6 +287,19 @@ Route::group(
         Route::delete('/cancle_return/{id}/{kode}', [PinjamanController::class, 'cancle_return'])->name('pinjaman.cancle_return');
         Route::post('/scanBarcodeEd', [PinjamanController::class, 'scanBarcodeEd'])->name('pinjaman.scanBarcodeEd');
         Route::post('/kembalikan_buku', [PinjamanController::class, 'kembalikan_buku'])->name('pinjaman.kembalikan_buku');
+
+        //inventaris
+        Route::resource('inventaris', InventarisController::class);
+        Route::resource('ruangan', RuanganController::class);
+        Route::resource('inv_pinjaman', InvPinjamanController::class);
+        Route::get('/approvel/{id}', [InvPinjamanController::class, 'approve'])->name('inv_pinjaman.approve');
+        Route::post('/approveProses/{id}', [InvPinjamanController::class, 'approveProses'])->name('inv_pinjaman.approveProses');
+        Route::post('/edit_barang', [InvPinjamanController::class, 'edit_barang'])->name('inv_pinjaman.edit_barang');
+        Route::post('/update_inv', [InvPinjamanController::class, 'update_inv'])->name('inv_pinjaman.update_inv');
+        Route::delete('/destroy_invid/{id}', [InvPinjamanController::class, 'destroy_invid'])->name('inv_pinjaman.destroy_invid');
+        Route::get('/pengembalian/{id}', [InvPinjamanController::class, 'pengembalian'])->name('inv_pinjaman.pengembalian');
+        Route::post('/kembaliBarang', [InvPinjamanController::class, 'kembaliBarang'])->name('inv_pinjaman.kembaliBarang');
+        Route::post('/kembaliProses/{id}', [InvPinjamanController::class, 'kembaliProses'])->name('inv_pinjaman.kembaliProses');
     }
 );
 

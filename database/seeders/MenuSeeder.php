@@ -110,7 +110,7 @@ class MenuSeeder extends Seeder
                 'display' => '0',
             ], [
                 'menu' => 'Perpustakaan',
-                'icon' => 'bx bx-boox',
+                'icon' => 'bx bx-book',
                 'sub_menu' => '1',
                 'order_menu' => '5',
                 'display' => '1',
@@ -118,13 +118,13 @@ class MenuSeeder extends Seeder
                 'menu' => 'Inventaris',
                 'icon' => 'bx bx-file',
                 'sub_menu' => '1',
-                'order_menu' => '6',
+                'order_menu' => '7',
                 'display' => '1',
             ], [
-                'menu' => 'Perpustakaan',
-                'icon' => 'bx bx-boox',
+                'menu' => 'UKS',
+                'icon' => 'bx bx-band-aid',
                 'sub_menu' => '1',
-                'order_menu' => '7',
+                'order_menu' => '6',
                 'display' => '1',
             ]
         ];

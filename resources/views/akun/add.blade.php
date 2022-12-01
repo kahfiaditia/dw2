@@ -24,9 +24,9 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Username</label>
+                                            <label for="validationCustom02" class="form-label">Nama</label>
                                             <input type="text" class="form-control" id="username" name="username"
-                                                value="{{ old('username') }}" required placeholder="Username" autofocus>
+                                                value="{{ old('username') }}" required placeholder="Nama" autofocus>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
