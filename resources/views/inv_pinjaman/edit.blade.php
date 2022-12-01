@@ -88,7 +88,7 @@
                                                     <option value="" required>--Pilih Barang--</option>
                                                     @foreach ($inventaris as $inv)
                                                         <option value="{{ $inv->id }}">
-                                                            {{ $inv->nama }}</option>
+                                                            {{ $inv->nama }} - {{ $inv->idbarang }}</option>
                                                     @endforeach
                                                 </select>
                                                 <div class="invalid-feedback">

@@ -234,7 +234,8 @@
                                                 {{ $pinjam->status_transaksi }}
                                             </td>
                                             <td>
-                                                <?php $id = $pinjam->kode_transaksi; ?>
+
+                                                <?php $id = Crypt::encryptString($pinjam->kode_transaksi); ?>
                                                 <form class="delete-form"
                                                     action="{{ route('inv_pinjaman.destroy', $id) }}" method="POST">
                                                     @csrf

@@ -282,7 +282,9 @@ Route::group(
         Route::post('/edit_barang', [InvPinjamanController::class, 'edit_barang'])->name('inv_pinjaman.edit_barang');
         Route::post('/update_inv', [InvPinjamanController::class, 'update_inv'])->name('inv_pinjaman.update_inv');
         Route::delete('/destroy_invid/{id}', [InvPinjamanController::class, 'destroy_invid'])->name('inv_pinjaman.destroy_invid');
-        Route::post('/pengembalian', [InvPinjamanController::class, 'pengembalian'])->name('inv_pinjaman.pengembalian');
+        Route::get('/pengembalian/{id}', [InvPinjamanController::class, 'pengembalian'])->name('inv_pinjaman.pengembalian');
+        Route::post('/kembaliBarang', [InvPinjamanController::class, 'kembaliBarang'])->name('inv_pinjaman.kembaliBarang');
+        Route::post('/kembaliProses/{id}', [InvPinjamanController::class, 'kembaliProses'])->name('inv_pinjaman.kembaliProses');
     }
 );
 
