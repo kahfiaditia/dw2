@@ -68,10 +68,19 @@
                                     <div class="col-md-3 wajib">
                                         <div class="mb-3">
                                             <label>Rencana Pengembalian <code>*</code></label>
-
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="estimasi_kembali"
                                                     value="{{ $data_pinjaman[0]->estimasi_kembali }}">
+                                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 wajib">
+                                        <div class="mb-3">
+                                            <label>Tanggal Kembali <code>*</code></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="estimasi_kembali"
+                                                    value="{{ $data_pinjaman[0]->tgl_kembali }}" readonly>
                                                 <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                                             </div>
                                         </div>
@@ -135,6 +144,7 @@
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
+
                                                                 <div class="d-flex gap-3">
                                                                     <a href="javascript:void(0)"
                                                                         data-id="{{ $id }}"
@@ -146,6 +156,7 @@
                                                                     <a href class="text-danger delete_confirm"><i
                                                                             class="mdi mdi-delete font-size-18"></i></a>
                                                                 </div>
+
                                                             </form>
                                                         </td>
                                                     </tbody>
