@@ -19,7 +19,6 @@
                 enctype="multipart/form-data" method="POST" novalidate>
                 @method('PUT')
                 @csrf
-                {{--     --}}
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card">
@@ -225,11 +224,8 @@
                         </div>
                     </div>
                 </div>
+            </form>
         </div>
-    </div>
-    </form>
-    <br>
-    </div>
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>

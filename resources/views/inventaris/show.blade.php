@@ -110,9 +110,6 @@
             </div>
         </div>
     </div>
-    <br>
-    </div>
-    </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
 @endsection

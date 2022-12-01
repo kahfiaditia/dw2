@@ -19,7 +19,6 @@ class RuanganController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('79', $session_menu)) {
-
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
@@ -70,7 +69,6 @@ class RuanganController extends Controller
 
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('80', $session_menu)) {
-
             DB::beginTransaction();
             try {
                 $inv_ruangan = new Inv_ruangan([
@@ -114,7 +112,6 @@ class RuanganController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('81', $session_menu)) {
-
             $id_decrypted = Crypt::decryptString($id);
             $data = [
                 'title' => $this->title,
@@ -146,7 +143,6 @@ class RuanganController extends Controller
 
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('80', $session_menu)) {
-
             $id = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
@@ -178,7 +174,6 @@ class RuanganController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('82', $session_menu)) {
-
             $id_decrypted = Crypt::decryptString($id);
             DB::beginTransaction();
             try {

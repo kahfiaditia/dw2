@@ -176,7 +176,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Pinjaman', 'route_submenu' => null, 'type_menu' => 'approve', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Data Ruangan', 'route_submenu' => 'ruangan.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
+                'submenu' => 'Data Ruangan', 'route_submenu' => 'ruangan.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => 1,
             ], [
                 'submenu' => 'Data Ruangan', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
@@ -184,7 +184,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Data Ruangan', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Data Barang', 'route_submenu' => 'inventaris.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
+                'submenu' => 'Data Barang', 'route_submenu' => 'inventaris.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => 2,
             ], [
                 'submenu' => 'Data Barang', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
@@ -192,7 +192,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Data Barang', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Pinjaman Inventaris', 'route_submenu' => 'inv_pinjaman.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
+                'submenu' => 'Pinjaman Inventaris', 'route_submenu' => 'inv_pinjaman.index', 'type_menu' => 'view', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => 3,
             ], [
                 'submenu' => 'Pinjaman Inventaris', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
@@ -202,13 +202,21 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Pinjaman Inventaris', 'route_submenu' => null, 'type_menu' => 'approve', 'menu_id' => '17', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Obat', 'route_submenu' => 'obat.index', 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
+                'submenu' => 'Obat', 'route_submenu' => 'obat.index', 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => 1,
             ], [
                 'submenu' => 'Obat', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Obat', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Obat', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Tambah Stok', 'route_submenu' => 'stok_obat.index', 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => 2,
+            ], [
+                'submenu' => 'Tambah Stok', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Tambah Stok', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Tambah Stok', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ],
         ];
         DB::table('submenu')->insert($sub_menus);

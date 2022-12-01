@@ -55,7 +55,6 @@
                                             <td>{{ $inv->ketersediaan }}</td>
                                             <td>
                                                 <?php $id = Crypt::encryptString($inv->id); ?>
-
                                                 <form class="delete-form" action="{{ route('inventaris.destroy', $id) }}"
                                                     method="POST">
                                                     @csrf
