@@ -429,7 +429,8 @@ class SiswaController extends Controller
                 'kecamatan' => 'required',
                 'kode_pos' => 'required',
                 'moda_transportasi' => 'required',
-                'anak_keberapa' => 'required'
+                'anak_keberapa' => 'required',
+                'barcode' => "required|unique:siswa,barcode,$id,id,deleted_at,NULL",
             ]);
 
             DB::beginTransaction();
@@ -464,6 +465,7 @@ class SiswaController extends Controller
                 $student->is_have_kip = $request->is_have_kip;
                 $student->is_receive_kip = $request->is_receive_kip;
                 $student->reason_reject_kip = $request->reason_reject_kip;
+                $student->barcode = $validated['barcode'];
                 $student->user_updated = Auth::user()->id;
                 $student->save();
                 DB::commit();

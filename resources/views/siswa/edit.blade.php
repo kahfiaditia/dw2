@@ -202,6 +202,7 @@
                                                             <input type="text" class="form-control"
                                                                 placeholder="yyyy-mm-dd" name="tanggal_lahir"
                                                                 value="{{ old('tanggal_lahir', $student->tanggal_lahir) }}"
+                                                                data-date-end-date="{{ date('Y-m-d') }}"
                                                                 data-date-format="yyyy-mm-dd"
                                                                 data-date-container='#datepicker2'
                                                                 data-provide="datepicker" required
@@ -512,8 +513,10 @@
                                                                     Tidak
                                                                 </option>
                                                             </select>
+                                                            <div class="invalid-feedback">
+                                                                Data wajib diisi.
+                                                            </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -530,6 +533,14 @@
                                                             @endif
                                                         @endforeach
                                                     </select>
+                                                </div>
+                                                <div class="col-md-6"
+                                                    {{ Auth::user()->roles === 'Admin' or (Auth::user()->roles === 'Administrator' ? '' : 'hidden') }}>
+                                                    <div class="mb-3">
+                                                        <label for="">Barcode</label>
+                                                        <input type="text" class="form-control" name="barcode"
+                                                            placeholder="Barcode" value="{{ $student->barcode }}">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <input type="hidden" id="old_village" value="{{ $student->village }}">

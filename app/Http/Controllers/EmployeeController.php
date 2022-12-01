@@ -517,6 +517,9 @@ class EmployeeController extends Controller
                     $user = User::findorfail($employee->user_id);
                     $user->aktif = $aktif;
                     $user->user_updated = Auth::user()->id;
+                    if ($aktif == 1) {
+                        $user->deleted_at = null;
+                    }
                     $user->save();
                 }
 

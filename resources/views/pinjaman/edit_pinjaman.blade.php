@@ -190,7 +190,7 @@
                                             value="1" readonly placeholder="Jumlah Buku">
                                     </div>
                                     <div class="col-sm-auto col-md-3">
-                                        <a type="submit" class="btn btn-info w-md" id="add">Tambah buku</a>
+                                        <a type="submit" class="btn btn-info w-md" id="add">Tambah Buku</a>
                                     </div>
                                 </div>
                                 <hr>
@@ -374,15 +374,17 @@
                 },
                 success: response => {
                     if (response.code == 200) {
-                        Swal.fire(
-                            'Success',
-                            'Peminjaman Buku berhasil',
-                            'success'
-                        ).then(() => {
-                            var APP_URL = {!! json_encode(url('/')) !!}
-                            url = document.getElementById("url").value;
-                            window.location = APP_URL + '/pinjaman/' + url +
-                                '/edit'
+                        Swal.fire({
+                            title: 'Scan Barcode',
+                            text: `${response.message}`,
+                            icon: 'success',
+                            timer: 1000,
+                            willClose: () => {
+                                var APP_URL = {!! json_encode(url('/')) !!}
+                                url = document.getElementById("url").value;
+                                window.location = APP_URL + '/pinjaman/' + url +
+                                    '/edit'
+                            }
                         })
                     } else {
                         Swal.fire({
@@ -586,7 +588,6 @@
 
                     // null items
                     $('#buku_id').val("").trigger('change')
-                    $('#jml_buku').val("")
                 }
             })
 

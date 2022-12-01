@@ -65,6 +65,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
+                                            <a href="{{ route('pinjaman.index') }}"
+                                                class="btn btn-secondary waves-effect">Batal</a>
                                             <button type="button" class="btn btn-primary" id="save">Cari</button>
                                         </div>
                                     </div>
@@ -165,7 +167,7 @@
                 if (metode_scan == 'Barcode') {
                     $('.div_scan_camera').hide();
                     $('.div_barcode').show();
-                } else {
+                } else if (metode_scan == 'Scan Kamera') {
                     $('.div_scan_camera').show();
                     $('.div_barcode').hide();
                 }

@@ -27,6 +27,8 @@ class User extends Authenticatable
         'password_reset_at',
         'aktif',
         'id_school_level',
+        'user_updated',
+        'deleted_at',
     ];
 
     /**
