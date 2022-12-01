@@ -139,7 +139,7 @@ class InvPinjamanController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('87', $session_menu)) {
-            $id  = $id;
+            $id_decrypted = Crypt::decryptString($id);
 
             $data = [
                 'title' => $this->title,
@@ -148,7 +148,7 @@ class InvPinjamanController extends Controller
                 'label' => 'Data Pinjaman',
                 'karyawan' => Employee::all(),
                 'User' => User::all(),
-                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id)->get(),
+                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id_decrypted)->get(),
             ];
             return view('inv_pinjaman.show')->with($data);
         } else {
@@ -207,9 +207,8 @@ class InvPinjamanController extends Controller
             $inv_pinjaman->status_Transaksi = 'Penyerahan';
             $inv_pinjaman->save();
 
-            // Inventaris::where('id',  $request->id)->update([
-            //     'ketersediaan' => 'TERPAKAI',
-            // ]);
+            $update = Inventaris::findorfail($inv_pinjaman->id_barang);
+            Inventaris::where('id', $update->id)->update(['ketersediaan' => 'TERPAKAI']);
 
 
             DB::commit();
@@ -238,13 +237,9 @@ class InvPinjamanController extends Controller
                 $pinjaman->tgl_permintaan = $request->tgl_permintaan;
                 $pinjaman->estimasi_kembali = $request->estimasi_kembali;
                 $pinjaman->id_barang = $request->data_post[$i]['nama_barang'];
-                // $pinjaman->id_barang = $request->nama_barang;
                 $pinjaman->jumlah = 1;
                 $pinjaman->user_created =  Auth::user()->id;
                 $pinjaman->save();
-
-                // $stock = Buku::findorfail($request->data_post[$i]['buku_id']);
-                // Buku::where('id', $request->data_post[$i]['buku_id'])->update(['jml_buku' => $stock->jml_buku - $request->data_post[$i]['jml_buku']]);
             }
 
             DB::commit();
@@ -296,26 +291,26 @@ class InvPinjamanController extends Controller
 
     public function pengembalian($id)
     {
-        // $session_menu = explode(',', Auth::user()->akses_submenu);
-        // if (in_array('91', $session_menu)) {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('91', $session_menu)) {
 
-        $id_decrypted = Crypt::decryptString($id);
+            $id_decrypted = Crypt::decryptString($id);
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'pinjaman',
-            'label' => 'Pengembalian Pinjaman',
-            'karyawan' => Employee::all(),
-            'User' => User::all(),
-            'kondisi' => Inventaris::all(),
-            'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id_decrypted)->get(),
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'pinjaman',
+                'label' => 'Pengembalian Pinjaman',
+                'karyawan' => Employee::all(),
+                'User' => User::all(),
+                'kondisi' => Inventaris::all(),
+                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id_decrypted)->get(),
 
-        ];
-        return view('inv_pinjaman.pengembalian')->with($data);
-        // } else {
-        //     return view('not_found');
-        // }
+            ];
+            return view('inv_pinjaman.pengembalian')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     public function kembaliBarang(Request $request)
@@ -347,6 +342,9 @@ class InvPinjamanController extends Controller
             $inv_pinjaman->user_updated = Auth::user()->id;
             $inv_pinjaman->status_Transaksi = 'Selesai';
             $inv_pinjaman->save();
+
+            $update = Inventaris::findorfail($inv_pinjaman->id_barang);
+            Inventaris::where('id', $update->id)->update(['ketersediaan' => 'DAPAT DIPINJAM']);
 
             DB::commit();
             AlertHelper::updateAlert(true);

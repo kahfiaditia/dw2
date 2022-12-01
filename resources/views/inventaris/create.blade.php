@@ -220,14 +220,12 @@
             var desc = document.getElementById('desc').value;
             var hasildesc = desc.toUpperCase();
 
-
             document.getElementById('no_inv').value = '';
             document.getElementById('idbarang').value = '';
             document.getElementById('indikasi').value = '';
 
             document.getElementById('no_inv').value = '';
             document.getElementById('idbarang').value = '';
-
 
             if (ruang == '' || keterangan == '' || pemilik == '' || hasilnama == '' || ketersediaan == '' ||
                 hasilidbarang ==

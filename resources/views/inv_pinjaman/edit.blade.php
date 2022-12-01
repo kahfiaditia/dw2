@@ -77,8 +77,6 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    {{-- <form class="needs-validation" novalidate>
-                                        @csrf --}}
                                     <div class="row wajib">
                                         <div class="col-md-3">
                                             <div class="mb-3">
@@ -104,7 +102,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- </form> --}}
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
                                             <table class="table table-responsive table-bordered table-striped"
@@ -204,7 +201,6 @@
             var nama_barang = document.getElementById("nama_barang").value;
             var id_barang = document.getElementById("nama_barang").value;
 
-
             console.log(kode_transaksi)
             console.log(nama_peminjam)
             console.log(tgl_permintaan)
@@ -262,13 +258,7 @@
                     },
                     error: err => console.log(err)
                 })
-                // console.log(data_post)
-                // console.log(kode_transaksi)
-                // console.log(nama_peminjam)
-                // console.log(tgl_permintaan)
-                // console.log(tgl_pemakaian)
-                // console.log(estimasi_kembali)
-                // console.log(nama_barang)
+
             }
 
         })

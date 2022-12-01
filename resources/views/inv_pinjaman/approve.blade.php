@@ -96,7 +96,7 @@
                                                             <td class="text-center" style="width: 5%">
                                                                 {{ $loop->iteration }}</td>
                                                             <td class="text-center" style="width: 20%">
-                                                                {{ $item->barang->nama }} - {{ $item->barang->id }}</td>
+                                                                {{ $item->barang->nama }}</td>
                                                             <td class="text-center" style="width: 15%">
                                                                 {{ $item->barang->nomor_inventaris }}</td>
                                                             <td class="text-center" style="width: 15%">
@@ -199,7 +199,6 @@
                     );
                     $('#modal-loader').hide();
                 });
-
         });
     </script>
 @endsection
