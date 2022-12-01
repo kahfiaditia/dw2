@@ -44,22 +44,20 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Nomor Inventaris
                                                 <code>*</code></label>
-                                            <input type="text" name="nomor_inventaris"
-                                                class="form-control  @error('nomor_inventaris') is-invalid @enderror"
+                                            <input type="text" name="nomor_inventaris" class="form-control "
                                                 value="{{ old('nomor_inventaris', $inventaris->nomor_inventaris) }}"
                                                 required placeholder="Nama Inventaris">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
-                                            {!! $errors->first('owner', '<div class="invalid-validasi">:message</div>') !!}
+                                            {!! $errors->first('nomor_inventaris', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">ID Inventaris
                                                 <code>*</code></label>
-                                            <input type="text" name="idbarang"
-                                                class="form-control  @error('idbarang') is-invalid @enderror"
+                                            <input type="text" name="idbarang" class="form-control"
                                                 value="{{ old('idbarang', $inventaris->idbarang) }}" required
                                                 placeholder="Nama Inventaris">
                                             <div class="invalid-feedback">
@@ -75,8 +73,8 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Qty
                                                 <code>*</code></label>
-                                            <input type="number" class="form-control @error('qty') is-invalid @enderror"
-                                                id="qty" name="qty" value="{{ $inventaris->qty }}" min="1"
+                                            <input type="number" class="form-control" id="qty" name="qty"
+                                                value="{{ $inventaris->qty }}" min="1"
                                                 {{ old('qty', $inventaris->qty) }}" required placeholder="Jumlah Barang">
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.

@@ -27,6 +27,7 @@ use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
 use App\Http\Controllers\RakController;
 use App\Http\Controllers\SettingController;
+use App\Models\Inv_pinjaman;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -277,7 +278,11 @@ Route::group(
         Route::resource('ruangan', RuanganController::class);
         Route::resource('inv_pinjaman', InvPinjamanController::class);
         Route::get('/approvel/{id}', [InvPinjamanController::class, 'approve'])->name('inv_pinjaman.approve');
-        Route::post('/approveProses', [PinjamanController::class, 'approveProses'])->name('inv_pinjaman.approveProses');
+        Route::post('/approveProses/{id}', [InvPinjamanController::class, 'approveProses'])->name('inv_pinjaman.approveProses');
+        Route::post('/edit_barang', [InvPinjamanController::class, 'edit_barang'])->name('inv_pinjaman.edit_barang');
+        Route::post('/update_inv', [InvPinjamanController::class, 'update_inv'])->name('inv_pinjaman.update_inv');
+        Route::delete('/destroy_invid/{id}', [InvPinjamanController::class, 'destroy_invid'])->name('inv_pinjaman.destroy_invid');
+        Route::post('/pengembalian', [InvPinjamanController::class, 'pengembalian'])->name('inv_pinjaman.pengembalian');
     }
 );
 

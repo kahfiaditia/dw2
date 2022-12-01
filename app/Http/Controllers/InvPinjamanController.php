@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\AlertHelper;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\Inv_pinjaman;
@@ -138,7 +139,7 @@ class InvPinjamanController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('87', $session_menu)) {
-            $id_decrypted = Crypt::decryptString($id);
+            $id  = $id;
 
             $data = [
                 'title' => $this->title,
@@ -147,7 +148,7 @@ class InvPinjamanController extends Controller
                 'label' => 'Data Pinjaman',
                 'karyawan' => Employee::all(),
                 'User' => User::all(),
-                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id_decrypted)->get(),
+                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id)->get(),
             ];
             return view('inv_pinjaman.show')->with($data);
         } else {
@@ -159,7 +160,8 @@ class InvPinjamanController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('91', $session_menu)) {
-            $id_decrypted = Crypt::decryptString($id);
+
+            $id = $id;
 
             $data = [
                 'title' => $this->title,
@@ -169,7 +171,7 @@ class InvPinjamanController extends Controller
                 'karyawan' => Employee::all(),
                 'User' => User::all(),
                 'kondisi' => Inventaris::all(),
-                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id_decrypted)->get(),
+                'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id)->get(),
 
             ];
             return view('inv_pinjaman.approve')->with($data);
@@ -178,8 +180,87 @@ class InvPinjamanController extends Controller
         }
     }
 
-    public function approveProses($id)
+    public function edit_barang(Request $request)
     {
+        $data = [
+            'id' => $request->id,
+            'item' => Inv_Pinjaman::findorfail(Crypt::decryptString($request->id)),
+        ];
+
+        return view('inv_pinjaman.approve_barang')->with($data);
+    }
+
+    public function approveProses(Request $request, $id)
+    {
+
+        $id = Crypt::decryptString($id);
+        $request->validate([
+            'tgl_diberikan' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+
+            $inv_pinjaman = Inv_pinjaman::findOrFail($id);
+            $inv_pinjaman->tgl_diberikan = $request['tgl_diberikan'];
+            $inv_pinjaman->diberikan_oleh = Auth::user()->id;
+            $inv_pinjaman->status_Transaksi = 'Penyerahan';
+            $inv_pinjaman->save();
+
+            // Inventaris::where('id',  $request->id)->update([
+            //     'ketersediaan' => 'TERPAKAI',
+            // ]);
+
+
+            DB::commit();
+            AlertHelper::updateAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollback();
+            throw $err;
+            return back();
+        }
+    }
+
+    public function update_inv(Request $request)
+    {
+
+        DB::beginTransaction();
+        try {
+            for ($i = 0; $i < count(array($request->data_post)); $i++) {
+
+                $pinjaman = new Inv_pinjaman();
+
+                $pinjaman->kode_transaksi = $request->kode_transaksi;
+                $pinjaman->status_transaksi = 'Penyerahan';
+                $pinjaman->nama_peminjam = $request->id_peminjam;
+                $pinjaman->tgl_pemakaian = $request->tgl_pemakaian;
+                $pinjaman->tgl_permintaan = $request->tgl_permintaan;
+                $pinjaman->estimasi_kembali = $request->estimasi_kembali;
+                $pinjaman->id_barang = $request->data_post[$i]['nama_barang'];
+                // $pinjaman->id_barang = $request->nama_barang;
+                $pinjaman->jumlah = 1;
+                $pinjaman->user_created =  Auth::user()->id;
+                $pinjaman->save();
+
+                // $stock = Buku::findorfail($request->data_post[$i]['buku_id']);
+                // Buku::where('id', $request->data_post[$i]['buku_id'])->update(['jml_buku' => $stock->jml_buku - $request->data_post[$i]['jml_buku']]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'code' => 200,
+                'message' => 'Berhasil Peminjaman Buku',
+            ]);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            return response()->json([
+                'code' => 404,
+                'message' => 'Gagal Peminjaman Inventaris',
+            ]);
+        }
     }
 
     /**
@@ -188,9 +269,18 @@ class InvPinjamanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $id = $id;
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'Pinjaman Inventaris',
+            'label' => 'Tambah Pinjaman',
+            'inventaris' => Inventaris::all(),
+            'data_pinjaman' => Inv_pinjaman::where('kode_transaksi', $id)->get(),
+        ];
+        return view('inv_pinjaman.edit')->with($data);
     }
 
     /**
@@ -202,7 +292,30 @@ class InvPinjamanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+    }
+
+    public function pengembalian(Request $request, $id)
+    {
+        // $session_menu = explode(',', Auth::user()->akses_submenu);
+        // if (in_array('91', $session_menu)) {
+
+        $id = $id;
+
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'pinjaman',
+            'label' => 'Pengembalian Pinjaman',
+            'karyawan' => Employee::all(),
+            'User' => User::all(),
+            'kondisi' => Inventaris::all(),
+            'data_pinjaman' => inv_pinjaman::where('kode_transaksi', $id)->get(),
+
+        ];
+        return view('inv_pinjaman.pengembalian')->with($data);
+        // } else {
+        //     return view('not_found');
+        // }
     }
 
     /**
@@ -211,8 +324,52 @@ class InvPinjamanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function destroy_invid(Request $request, $id)
+    {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('90', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            DB::beginTransaction();
+            try {
+                $pinjaman = inv_pinjaman::findorfail($id_decrypted);
+
+                $pinjaman->user_deleted = Auth::user()->id;
+                $pinjaman->deleted_at = Carbon::now();
+                $pinjaman->save();
+
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
+        }
+    }
     public function destroy($id)
     {
-        //
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('90', $session_menu)) {
+            $id = $id;
+            DB::beginTransaction();
+            try {
+
+                $datetime = Carbon::now();
+                Inv_pinjaman::where('kode_transaksi', $id)->update(['user_deleted' => Auth::user()->id, 'deleted_at' => $datetime]);
+
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
+        }
     }
 }

@@ -25,8 +25,10 @@ class CreateInvPinjamenTable extends Migration
             $table->unsignedBigInteger('id_barang');
             $table->foreign('id_barang')->references('id')->on('inv_inventaris');
             $table->double('jumlah')->nullable();
-            $table->string('diberikan_oleh', 64)->nullable();
+            $table->unsignedBigInteger('diberikan_oleh')->nullable();
+            $table->foreign('diberikan_oleh')->references('id')->on('users');
             $table->date('tgl_diberikan')->nullable();
+            $table->enum('barang_diberikan', ['Baik', 'Lecet', 'Rusak'])->nullable();
             $table->enum('barang_kembali', ['Baik', 'Lecet', 'Rusak'])->nullable();
             $table->date('tgl_kembali')->nullable();
             $table->string('deskripsi', 100)->nullable()->nullable();

@@ -19,7 +19,6 @@
                 </div>
                 <form id="form" class="needs-validation">
                     @csrf
-                    @method('PATCH')
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="card">
@@ -108,7 +107,8 @@
                                             </div>
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
-                                                    <a class="btn btn-secondary" type="submit" id="batal">Batal</a>
+                                                    <a href="{{ route('inv_pinjaman.index') }}"
+                                                        class="btn btn-secondary waves-effect">Batal</a>
                                                 </div>
                                             </div>
 
