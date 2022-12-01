@@ -24,14 +24,14 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-3 wajib">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label class="form-label">Ruang Penyimpanan <code>*</code></label>
                                                 <select class="form-control select select2 ruang" name="ruang"
                                                     id="ruang" required>
                                                     <option value="" required>--Pilih Ruangan--</option>
                                                     @foreach ($ruangs as $ruang)
-                                                        <option value="{{ $ruang->id }}">
+                                                        <option value="{{ $ruang->id }}" data-id="{{ $ruang->nama }}">
                                                             {{ $ruang->nama }}</option>
                                                     @endforeach
                                                 </select>
@@ -41,7 +41,7 @@
                                                 {!! $errors->first('ruang', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-3 keterangan">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>Status <code>*</code></label>
                                                 <select class="form-control select select2 status" name="keterangan"
@@ -57,7 +57,7 @@
                                                 {!! $errors->first('keterangan', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-3 wajib">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <div class="mb-2">
                                                     <label>Nama Barang <code>*</code></label>
@@ -70,17 +70,17 @@
                                             </div>
                                             {!! $errors->first('nama', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
-                                        <div class="col-md-3 wajib">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="pemilik">Pemilik <code>*</code></label>
                                                 <select name="pemilik" id="pemilik"
                                                     class="form-control select select2 pemilik" required>
                                                     <option value="">-- Pemilik --</option>
-                                                    <option value="Yayasan"> YAYASAN</option>
-                                                    <option value="TK"> TK</option>
-                                                    <option value="SD"> SD</option>
-                                                    <option value="SMP"> SMP</option>
-                                                    <option value="SMK"> SMK</option>
+                                                    <option value="Yayasan" data-id="Yayasan"> YAYASAN</option>
+                                                    <option value="TK" data-id="TK"> TK</option>
+                                                    <option value="SD" data-id="SD"> SD</option>
+                                                    <option value="SMP" data-id="SMP"> SMP</option>
+                                                    <option value="SMK" data-id="SMK"> SMK</option>
                                                 </select>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
@@ -88,7 +88,7 @@
                                                 {!! $errors->first('pemilik', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-3 wajib">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="ketersediaan">Ketersediaan <code>*</code></label>
                                                 <select name="ketersediaan" id="ketersediaan"
@@ -104,7 +104,7 @@
                                                 {!! $errors->first('pemilik', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-3 wajib">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>Deskripsi</label>
                                                 <textarea type="text" class="form-control" style="text-transform:uppercase" id="desc" placeholder="Deskripsi"
@@ -117,7 +117,7 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="row wajib">
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>No Inventaris <code>*</code></label>
@@ -130,19 +130,19 @@
                                                 {!! $errors->first('no_inv', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-3 wajib">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>ID Barang <code>*</code></label>
                                                 <input type="text" class="form-control" id="idbarang"
-                                                    placeholder="ID Barang" oninput="this.value = this.value.toUpperCase()"
-                                                    required>
+                                                    placeholder="ID Barang"
+                                                    oninput="this.value = this.value.toUpperCase()" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
                                                 {!! $errors->first('idbarang', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-3 keterangan">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>Indikasi</label>
                                                 <input type="text" class="form-control "
@@ -160,9 +160,9 @@
                                                 onclick="tableBarang()">Tambah
                                                 Barang</a>
                                         </div>
+                                        <input type="hidden" id="inputArray">
                                     </div>
                                     <hr>
-
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
                                             <table class="table table-responsive table-bordered table-striped"
@@ -193,16 +193,14 @@
                                                 id="save">Simpan</a>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </form>
-                <br>
             </div>
         </div>
     </body>
-
     <script>
         function tableBarang() {
             var nama = document.getElementById('nama').value;
@@ -219,15 +217,7 @@
             var ketersediaan = document.getElementById('ketersediaan').value;
             var desc = document.getElementById('desc').value;
             var hasildesc = desc.toUpperCase();
-
-
-            document.getElementById('no_inv').value = '';
-            document.getElementById('idbarang').value = '';
-            document.getElementById('indikasi').value = '';
-
-            document.getElementById('no_inv').value = '';
-            document.getElementById('idbarang').value = '';
-
+            ruang_value = $('#ruang option:selected').data('id');
 
             if (ruang == '' || keterangan == '' || pemilik == '' || hasilnama == '' || ketersediaan == '' ||
                 hasilidbarang ==
@@ -238,7 +228,6 @@
                     showConfirmButton: false,
                     timer: 1500,
                 })
-
             } else if (keterangan == 'Rusak' && indikasi == '') {
                 Swal.fire({
                     icon: 'error',
@@ -247,43 +236,65 @@
                     timer: 1500,
                 })
             } else {
+                // set array awal
+                var inputArray = document.getElementById('inputArray').value;
+                if (inputArray == '') {
+                    var cekArr = [];
+                } else {
+                    var cekArr = [];
+                    strArray = inputArray.split(",");
+                    for (var i = 0; i < strArray.length; i++) {
+                        cekArr.push(strArray[i]);
+                    }
+                    var cekArr = cekArr;
+                }
+
+                // cek inputan
+                var cekGabungan = String(hasilnama + hasilno_inv + hasilidbarang);
+                isVal = cekArr.includes(cekGabungan)
+                if (isVal == true) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'No Inventaris dan ID Barang sudah ada',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                } else {
+                    cekArr.push(cekGabungan);
+                    // set inputan ke form
+                    document.getElementById('inputArray').value = cekArr;
+                }
+
                 $("#tableBarang tr:last").after(`
-                        <tr>
-                            <td class="text-left">${hasilnama}</td>
-                            <td class="text-left">${hasilno_inv}</td>
-                            <td class="text-left">${hasilidbarang}</td>
-                            <td class="text-left">${ruang}</td>
-                            <td class="text-left">${pemilik}</td>
-                            <td class="text-left">${keterangan}</td>
-                            <td class="text-left">${ketersediaan}</td>
-                            <td class="text-left">${hasilindikasi}</td>
-                            <td class="text-left">${hasildesc}</td>                       
-                            <td>
-                                <a class="btn btn-danger btn-sm delete-record" data-id="delete">Delete</a>    
-                            </td>
-                        </tr>
-                    `)
+                    <tr>
+                        <td class="text-left">${hasilnama}</td>
+                        <td class="text-left">${hasilno_inv}</td>
+                        <td class="text-left">${hasilidbarang}</td>
+                        <td class="text-left">${ruang_value}</td>
+                        <td class="text-left">${pemilik}</td>
+                        <td class="text-left">${keterangan}</td>
+                        <td class="text-left">${ketersediaan}</td>
+                        <td class="text-left">${hasilindikasi}</td>
+                        <td class="text-left">${hasildesc}</td>                       
+                        <td>
+                            <a class="btn btn-danger btn-sm delete-record" data-id="delete">Delete</a>    
+                        </td>
+                        <td hidden>${ruang}</td>     
+                    </tr>
+                `)
+
+                document.getElementById('no_inv').value = '';
+                document.getElementById('idbarang').value = '';
+                document.getElementById('indikasi').value = '';
             }
-            console.log(hasilno_inv)
-
-        }
-        //fungsi hapus
-        $("#tableBarang").on('click', '.delete-record', function() {
-            $(this).parent().parent().remove()
-        })
-
-        function uniqueArray3(hasilno_inv) {
-            function onlyUnique(value, index, self) {
-                return self.indexOf(value) === index;
-            }
-
-            // usage
-            var unique = hasilno_inv.filter(onlyUnique); // returns ['a', 1, 2, '1']
-
-            return unique;
         }
 
         $(document).ready(function() {
+            //fungsi hapus
+            $("#tableBarang").on('click', '.delete-record', function() {
+                $(this).parent().parent().remove()
+            })
+
             $("#save").on('click', function() {
                 let databarang = []
 
@@ -292,7 +303,7 @@
                         hasilnama = tableData.eq(0).text(),
                         hasilno_inv = tableData.eq(1).text(),
                         hasilidbarang = tableData.eq(2).text(),
-                        id = tableData.eq(3).text(),
+                        id = tableData.eq(10).text(),
                         pemilik = tableData.eq(4).text(),
                         keterangan = tableData.eq(5).text(),
                         ketersediaan = tableData.eq(6).text(),
@@ -312,30 +323,6 @@
                             hasilindikasi,
                             hasildesc
                         });
-                        console.log(databarang)
-                    } else if (Array.prototype.contains) {
-                        Array.prototype.contains = function(v) {
-                            for (var i = 0; i < this.length; i++) {
-                                if (this[i] === v) return true;
-                            }
-                            return false;
-                        };
-
-                        Array.prototype.unique = function() {
-                            var arr = [];
-                            for (var i = 0; i < this.length; i++) {
-                                if (!arr.contains(this[i])) {
-                                    arr.push(this[i]);
-                                }
-                            }
-                            return arr;
-                        }
-
-                        var cekdata = hasilno_inv;
-                        var uniques = cekdata.unique();
-
-                        console.log(uniques);
-
                     }
                 })
 
@@ -369,14 +356,12 @@
                     },
                     error: err => console.log(err)
                 });
-
             });
-        })
 
-        $("#batal").on('click', function() {
-            // hapus localStorage
-            var APP_URL = {!! json_encode(url('/')) !!}
-            window.location = APP_URL + '/inventaris'
+            $("#batal").on('click', function() {
+                var APP_URL = {!! json_encode(url('/')) !!}
+                window.location = APP_URL + '/inventaris'
+            })
         })
     </script>
 @endsection
