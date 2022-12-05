@@ -915,9 +915,6 @@ class PinjamanController extends Controller
             'menu' => $this->menu,
             'submenu' => 'pinjaman',
             'label' => 'approve pinjaman',
-            'buku' => Buku::all(),
-            'kategori' => Kategori::all(),
-            'penerbit' => Penerbit::all(),
             'pinjaman' => Pinjaman::where('kode_transaksi', $id_decrypted)->get(),
         ];
         $session_menu = explode(',', Auth::user()->akses_submenu);
@@ -1075,7 +1072,16 @@ class PinjamanController extends Controller
             $id = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
-                Pinjaman::where('id', $id)->update(['tgl_kembali' => Carbon::now()]);
+                // Pinjaman::where('id', $id)->update(['tgl_kembali' => Carbon::now()]);
+
+                $pin = Pinjaman::findorfail($id);
+
+                $buku = Buku::findorfail($pin->buku_id);
+                $buku->jml_buku = $buku->jml_buku + 1;
+                $buku->save();
+
+                $pin->tgl_kembali = Carbon::now();
+                $pin->save();
 
                 $pinjaman = Pinjaman::where('kode_transaksi', $kode)->wherenull('tgl_kembali')->count();
                 if ($pinjaman == 0) {
@@ -1103,7 +1109,17 @@ class PinjamanController extends Controller
             $id = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
-                Pinjaman::where('id', $id)->update(['tgl_kembali' => null]);
+
+                $pin = Pinjaman::findorfail($id);
+
+                $buku = Buku::findorfail($pin->buku_id);
+                $buku->jml_buku = $buku->jml_buku - 1;
+                $buku->save();
+
+                $pin->tgl_kembali = null;
+                $pin->save();
+
+                // Pinjaman::where('id', $id)->update(['tgl_kembali' => null]);
 
                 $pinjaman = Pinjaman::where('kode_transaksi', $kode)->wherenull('tgl_kembali')->count();
                 if ($pinjaman > 0) {
@@ -1146,7 +1162,25 @@ class PinjamanController extends Controller
             $matchThese = $user + $buku_pinjaman;
             $pinjaman = Pinjaman::where('peminjam', $request->type)->where($matchThese)->first();
 
-            Pinjaman::where('id', $pinjaman->id)->update(['tgl_kembali' => Carbon::now()]);
+            if ($pinjaman->tgl_kembali != null) {
+                return response()->json([
+                    'code' => 200,
+                    'encrypt_peminjam' => Crypt::encryptString($request->user),
+                    'type' => $request->type,
+                    'message' => 'Buku sudah dikembalikan',
+                ]);
+            }
+
+            // Pinjaman::where('id', $pinjaman->id)->update(['tgl_kembali' => Carbon::now()]);
+
+            $pin = Pinjaman::findorfail($pinjaman->id);
+
+            $buku = Buku::findorfail($pin->buku_id);
+            $buku->jml_buku = $buku->jml_buku + 1;
+            $buku->save();
+
+            $pin->tgl_kembali = Carbon::now();
+            $pin->save();
 
             $cek_pinjaman = Pinjaman::where('kode_transaksi', $pinjaman->kode_transaksi)->wherenull('tgl_kembali')->count();
             if ($cek_pinjaman == 0) {
@@ -1159,6 +1193,7 @@ class PinjamanController extends Controller
                 'code' => 200,
                 'encrypt_peminjam' => Crypt::encryptString($request->user),
                 'type' => $request->type,
+                'message' => 'Buku berhasil dikembalikan',
             ]);
         } catch (\Throwable $err) {
             DB::rollback();
@@ -1168,7 +1203,7 @@ class PinjamanController extends Controller
                 'code' => 404,
                 'type' => $request->type,
                 'encrypt_peminjam' => Crypt::encryptString($request->user),
-                'message' => 'Gagal pengembalianii',
+                'message' => 'Gagal Pengembalian',
             ]);
         }
     }

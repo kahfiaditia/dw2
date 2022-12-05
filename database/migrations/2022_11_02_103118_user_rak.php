@@ -14,7 +14,7 @@ class UserRak extends Migration
     public function up()
     {
         Schema::table('perpus_rak', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_created')->nullable()->after('rak');
+            $table->unsignedBigInteger('user_created')->nullable()->after('tingkatan');
             $table->foreign('user_created')->references('id')->on('users');
             $table->unsignedBigInteger('user_updated')->nullable()->after('user_created');
             $table->foreign('user_updated')->references('id')->on('users');

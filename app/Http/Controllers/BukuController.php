@@ -54,6 +54,7 @@ class BukuController extends Controller
                 'kategori',
                 'nama_penerbit',
                 'rak',
+                'tingkatan',
             )
             ->Join('perpus_kategori_buku', 'perpus_kategori_buku.id', 'perpus_buku.kategori_id')
             ->Join('perpus_penerbit', 'perpus_penerbit.id', 'perpus_buku.penerbit_id')
@@ -179,7 +180,7 @@ class BukuController extends Controller
             })
             ->addColumn('rak', function ($model) {
                 if ($model->rak) {
-                    $rak = $model->rak->rak . ' - ' . $model->rak->tingkatan;
+                    $rak = $model->rak . ' - ' . $model->tingkatan;
                 } else {
                     $rak = null;
                 }

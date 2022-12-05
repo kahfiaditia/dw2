@@ -433,8 +433,8 @@
                                                                         <code>*</code></label>
                                                                     <input type="number" class="form-control"
                                                                         id="validationCustom02" name="rt_asal"
-                                                                        value="{{ $item->rt_asal }}" placeholder="RT"
-                                                                        required>
+                                                                        min="1" value="{{ $item->rt_asal }}"
+                                                                        placeholder="RT" required>
                                                                     <div class="invalid-feedback">
                                                                         Data wajib diisi.
                                                                     </div>
@@ -446,8 +446,8 @@
                                                                         <code>*</code></label>
                                                                     <input type="number" class="form-control"
                                                                         id="validationCustom02" name="rw_asal"
-                                                                        value="{{ $item->rw_asal }}" placeholder="RW"
-                                                                        required>
+                                                                        min="1" value="{{ $item->rw_asal }}"
+                                                                        placeholder="RW" required>
                                                                     <div class="invalid-feedback">
                                                                         Data wajib diisi.
                                                                     </div>
@@ -573,8 +573,8 @@
                                                                         <code>*</code></label>
                                                                     <input type="number" class="form-control alamat-sama"
                                                                         id="validationCustom02" name="rt"
-                                                                        value="{{ $item->rt }}" placeholder="RT"
-                                                                        required>
+                                                                        min="1" value="{{ $item->rt }}"
+                                                                        placeholder="RT" required>
                                                                     <div class="invalid-feedback">
                                                                         Data wajib diisi.
                                                                     </div>
@@ -586,8 +586,8 @@
                                                                         <code>*</code></label>
                                                                     <input type="number" class="form-control alamat-sama"
                                                                         id="validationCustom02" name="rw"
-                                                                        value="{{ $item->rw }}" placeholder="RW"
-                                                                        required>
+                                                                        min="1" value="{{ $item->rw }}"
+                                                                        placeholder="RW" required>
                                                                     <div class="invalid-feedback">
                                                                         Data wajib diisi.
                                                                     </div>
@@ -810,8 +810,11 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2"
-                                                        {{ Auth::user()->roles === 'Admin' or (Auth::user()->roles === 'Administrator' ? '' : 'hidden') }}>
+                                                    <div class="col-md-2" <?php if (Auth::user()->roles != 'Admin' or Auth::user()->roles != 'Administrator') {
+                                                        echo 'hidden';
+                                                    } ?>>
+                                                        <input type="text" id="roles"
+                                                            value="{{ Auth::user()->roles }}">
                                                         <div class="mb-3">
                                                             <label for="validationCustom02" class="form-label">Status
                                                                 Aktif</label>
@@ -915,21 +918,27 @@
     <script>
         function myLoad() {
             switchButton = document.getElementById('switch1');
-            if (switchButton.checked == true) {
+            roles = document.getElementById('roles').value;
+            if (roles == 'Admin' || roles == 'Administrator') {
+                if (switchButton.checked == true) {
+                    $('#div_resign').hide();
+                    $('#div_tgl_resign').hide();
+                } else {
+                    $('#div_resign').show();
+                    resign = document.getElementById("resign").checked;
+                    if (resign == true) {
+                        $('#div_tgl_resign').show();
+                        document.getElementById("tgl_resign").required = true;
+                        document.getElementById("alasan_resign").required = true;
+                    } else {
+                        $('#div_tgl_resign').hide();
+                        document.getElementById("tgl_resign").required = false;
+                        document.getElementById("alasan_resign").required = false;
+                    }
+                }
+            } else {
                 $('#div_resign').hide();
                 $('#div_tgl_resign').hide();
-            } else {
-                $('#div_resign').show();
-                resign = document.getElementById("resign").checked;
-                if (resign == true) {
-                    $('#div_tgl_resign').show();
-                    document.getElementById("tgl_resign").required = true;
-                    document.getElementById("alasan_resign").required = true;
-                } else {
-                    $('#div_tgl_resign').hide();
-                    document.getElementById("tgl_resign").required = false;
-                    document.getElementById("alasan_resign").required = false;
-                }
             }
         }
 

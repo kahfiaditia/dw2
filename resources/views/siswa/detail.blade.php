@@ -164,7 +164,8 @@
                                                             {{ $student->tempat_lahir . ', ' }}
                                                         @endif
                                                         @if ($student->tanggal_lahir)
-                                                            {{ \Carbon\Carbon::parse($student->tanggal_lahir)->format('d F Y') . '<br> (' . hitung_umur($student->tanggal_lahir) . ')' }}
+                                                            {{ \Carbon\Carbon::parse($student->tanggal_lahir)->format('d F Y') }}<br>
+                                                            ({{ hitung_umur($student->tanggal_lahir) }})
                                                         @endif
                                                     </p>
                                                     <a href="javascript:void(0)" data-id="" id="get_data"

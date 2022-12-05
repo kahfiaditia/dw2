@@ -177,8 +177,6 @@
         function getValueScanBarcodeCamera(scanner_barcode, value_peminjam) {
             var user = document.getElementById('user').value;
             var type = document.getElementById('type').value;
-            console.log(user);
-            console.log(type);
             $.ajax({
                 type: 'POST',
                 url: '{{ route('pinjaman.kembalikan_buku') }}',
@@ -193,7 +191,7 @@
                     if (response.code == 200) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Buku berhasil dikembalikan',
+                            title: `${response.message}`,
                             showConfirmButton: false,
                             timer: 1500,
                             willClose: () => {

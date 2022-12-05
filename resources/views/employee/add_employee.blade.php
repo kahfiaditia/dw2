@@ -360,7 +360,7 @@
                                                                 <label for="validationCustom02" class="form-label">RT
                                                                     <code>*</code></label>
                                                                 <input type="number" class="form-control"
-                                                                    id="validationCustom02" name="rt_asal"
+                                                                    id="validationCustom02" name="rt_asal" min="1"
                                                                     value="{{ old('rt_asal') }}" placeholder="RT"
                                                                     required>
                                                                 <div class="invalid-feedback">
@@ -373,7 +373,7 @@
                                                                 <label for="validationCustom02" class="form-label">RW
                                                                     <code>*</code></label>
                                                                 <input type="number" class="form-control"
-                                                                    id="validationCustom02" name="rw_asal"
+                                                                    id="validationCustom02" name="rw_asal" min="1"
                                                                     value="{{ old('rw_asal') }}" placeholder="RW"
                                                                     required>
                                                                 <div class="invalid-feedback">
@@ -492,7 +492,7 @@
                                                                 <label for="validationCustom02" class="form-label">RT
                                                                     <code>*</code></label>
                                                                 <input type="number" class="form-control alamat-sama"
-                                                                    id="validationCustom02" name="rt"
+                                                                    id="validationCustom02" name="rt" min="1"
                                                                     value="{{ old('rt') }}" placeholder="RT"
                                                                     required>
                                                                 <div class="invalid-feedback">
@@ -505,7 +505,7 @@
                                                                 <label for="validationCustom02" class="form-label">RW
                                                                     <code>*</code></label>
                                                                 <input type="number" class="form-control alamat-sama"
-                                                                    id="validationCustom02" name="rw"
+                                                                    id="validationCustom02" name="rw" min="1"
                                                                     value="{{ old('rw') }}" placeholder="RW"
                                                                     required>
                                                                 <div class="invalid-feedback">
