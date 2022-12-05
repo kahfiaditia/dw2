@@ -72,7 +72,26 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div class="col-md-3 wajib">
+                                            <div class="mb-3">
+                                                <label>Tanggal Diberikan <code>*</code></label>
+                                                <div class="input-group" id="datepicker3">
+                                                    <input type="disable" class="form-control"
+                                                        value="{{ $data_pinjaman[0]->tgl_diberikan }}" readonly>
+                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 wajib">
+                                            <div class="mb-3">
+                                                <label>Tanggal Pengembalian Barang<code>*</code></label>
+                                                <div class="input-group" id="datepicker3">
+                                                    <input type="disable" class="form-control"
+                                                        value="{{ $data_pinjaman[0]->tgl_kembali }}" readonly>
+                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <hr>
                                         <div class="card-body">
                                             <div class="row">
@@ -82,9 +101,10 @@
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center" style="width: 10%">No</th>
-                                                                <th class="text-center" style="width: 30%">Nama Barang</th>
-                                                                <th class="text-center" style="width: 30%">No Inv</th>
-                                                                <th class="text-center" style="width: 30%">ID Barang</th>
+                                                                <th class="text-center" style="width: 15%">Nama Barang</th>
+                                                                <th class="text-center" style="width: 15%">No Inv</th>
+                                                                <th class="text-center" style="width: 15%">ID Barang</th>
+                                                                <th class="text-center" style="width: 15%">Kembali</th>
                                                                 <th class="text-center" hidden>{{ Auth::user()->id }}</th>
                                                             </tr>
                                                         </thead>
@@ -92,13 +112,14 @@
                                                             <tbody>
                                                                 <td class="text-center" style="width: 10%">
                                                                     {{ $loop->iteration }}</td>
-                                                                <td class="text-center" style="width: 30%">
+                                                                <td class="text-center" style="width: 15%">
                                                                     {{ $item->barang->nama }}</td>
-                                                                <td class="text-center" style="width: 30%">
+                                                                <td class="text-center" style="width: 15%">
                                                                     {{ $item->barang->nomor_inventaris }}</td>
-                                                                <td class="text-center" style="width: 30%">
+                                                                <td class="text-center" style="width: 15%">
                                                                     {{ $item->barang->idbarang }}</td>
-
+                                                                <td class="text-center" style="width: 15%">
+                                                                    {{ $item->tgl_kembali }}</td>
                                                             </tbody>
                                                         @endforeach
 
@@ -108,7 +129,7 @@
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('inv_pinjaman.index') }}"
-                                                        class="btn btn-secondary waves-effect">Batal</a>
+                                                        class="btn btn-secondary waves-effect">Kembali</a>
                                                 </div>
                                             </div>
 

@@ -75,16 +75,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 wajib">
-                                        <div class="mb-3">
-                                            <label>Tanggal Kembali <code>*</code></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="estimasi_kembali"
-                                                    value="{{ $data_pinjaman[0]->tgl_kembali }}" readonly>
-                                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <hr>
                                     <div class="row wajib">
                                         <div class="col-md-3">
@@ -146,13 +137,6 @@
                                                                 @method('DELETE')
 
                                                                 <div class="d-flex gap-3">
-                                                                    <a href="javascript:void(0)"
-                                                                        data-id="{{ $id }}"
-                                                                        class="text-success" id="get_data_edit"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target=".bs-example-modal-lg-edit">
-                                                                        <i class="mdi mdi-pencil font-size-18"></i>
-                                                                    </a>
                                                                     <a href class="text-danger delete_confirm"><i
                                                                             class="mdi mdi-delete font-size-18"></i></a>
                                                                 </div>

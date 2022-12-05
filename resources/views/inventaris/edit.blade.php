@@ -131,20 +131,17 @@
                                                 class="form-control select select2 ketersediaan
                                                 id="ketersediaan"
                                                 name="ketersediaan">
-                                                <option
-                                                    {{ old('ketersediaan', $inventaris->ketersediaan) == 'TERPAKAI' ? 'selected' : null }}
-                                                    value="TERPAKAI">
-                                                    TERPAKAI
+                                                <option value="">-- Ketersediaan --</option>
+                                                <option value="TERPAKAI" @if ($inventaris->ketersediaan == 'TERPAKAI') selected @endif
+                                                    {{ old('ketersediaan') == 'TERPAKAI' ? 'selected' : '' }}>
+                                                    Yayasan</option>
+                                                <option value="TIDAK TERPAKAI"
+                                                    @if ($inventaris->ketersediaan == 'TIDAK TERPAKAI') selected @endif
+                                                    {{ old('ketersediaan') == 'TIDAK TERPAKAI' ? 'selected' : '' }}>TK
                                                 </option>
-                                                <option
-                                                    {{ old('ketersediaan', $inventaris->ketersediaan) == 'TIDAK TERPAKAI' ? 'selected' : null }}
-                                                    value="TIDAK TERPAKAI">
-                                                    TIDAK TERPAKAI
-                                                </option>
-                                                <option
-                                                    {{ old('ketersediaan', $inventaris->ketersediaan) == 'DAPAT DIPINJAM' ? 'selected' : null }}
-                                                    value="DAPAT DIPINJAM">
-                                                    DAPAT DIPINJAM
+                                                <option value="DAPAT DIPINJAM"
+                                                    @if ($inventaris->ketersediaan == 'DAPAT DIPINJAM') selected @endif
+                                                    {{ old('ketersediaan') == 'DAPAT DIPINJAM' ? 'selected' : '' }}>SD
                                                 </option>
                                             </select>
                                             <div class="invalid-feedback">
@@ -170,25 +167,23 @@
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Pemilik <code>*</code></label>
-                                            <select
-                                                class="form-control select select2 pemilik
-                                                name="pemilik"
-                                                required>
-                                                <option
-                                                    {{ old('pemilik', $inventaris->indikasi) == 'Yayasan' ? 'selected' : '' }}
-                                                    value="Yayasan">Yayasan</option>
-                                                <option
-                                                    {{ old('pemilik', $inventaris->indikasi) == 'TK' ? 'selected' : '' }}
-                                                    value="TK">TK</option>
-                                                <option
-                                                    {{ old('pemilik', $inventaris->indikasi) == 'SD' ? 'selected' : '' }}
-                                                    value="SD">SD</option>
-                                                <option
-                                                    {{ old('pemilik', $inventaris->indikasi) == 'SMP' ? 'selected' : '' }}
-                                                    value="SMP">SMP</option>
-                                                <option
-                                                    {{ old('pemilik', $inventaris->indikasi) == 'SMK' ? 'selected' : '' }}
-                                                    value="SMK">SMK</option>
+                                            <select class="form-control select select2 pemilik" name="pemilik" required>
+                                                <option value="">-- Pemilik --</option>
+                                                <option value="Yayasan" @if ($inventaris->pemilik == 'Yayasan') selected @endif
+                                                    {{ old('pemilik') == 'Yayasan' ? 'selected' : '' }}>
+                                                    Yayasan</option>
+                                                <option value="TK" @if ($inventaris->pemilik == 'TK') selected @endif
+                                                    {{ old('pemilik') == 'TK' ? 'selected' : '' }}>TK
+                                                </option>
+                                                <option value="SD" @if ($inventaris->pemilik == 'SD') selected @endif
+                                                    {{ old('pemilik') == 'SD' ? 'selected' : '' }}>SD
+                                                </option>
+                                                <option value="SMP" @if ($inventaris->pemilik == 'SMP') selected @endif
+                                                    {{ old('pemilik') == 'SMP' ? 'selected' : '' }}>
+                                                    SMP</option>
+                                                <option value="SMK" @if ($inventaris->pemilik == 'SMK') selected @endif
+                                                    {{ old('pemilik') == 'SMK' ? 'selected' : '' }}>
+                                                    SMK</option>
                                             </select>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.

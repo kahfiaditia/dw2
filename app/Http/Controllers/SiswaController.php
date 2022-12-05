@@ -400,6 +400,7 @@ class SiswaController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('21', $session_menu)) {
             $id = Crypt::decryptString($id);

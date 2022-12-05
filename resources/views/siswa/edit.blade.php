@@ -123,11 +123,9 @@
                                                     <label for="validationCustom02" class="form-label">NIS (No Induk
                                                         Sekolah)
                                                         <code>*</code></label>
-                                                    <input type="text" class="form-control input-mask" name=""
-                                                        id="nis_mask" maxlength="20" required
+                                                    <input type="text" class="form-control input-mask" name="nis"
+                                                        id="nis" maxlength="20" required
                                                         value="{{ old('nis', $student->nis) }}" placeholder="NIS">
-                                                    <input type="hidden" name="nis" id="nis"
-                                                        value="{{ str_replace('-', '', $student->nis) }}">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
