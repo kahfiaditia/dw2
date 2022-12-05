@@ -247,7 +247,7 @@
                                                                 <i class="mdi mdi-eye font-size-18"></i>
                                                             </a>
                                                         @endif
-                                                        <?php if($pinjam->tgl_diberikan && $pinjam->tgl_diberikan == NULL) { ?>
+                                                        <?php if($pinjam->status_transaksi == 'Proses') { ?>
                                                         @if (in_array('88', $session_menu))
                                                             <a href="{{ route('inv_pinjaman.edit', $id) }}"
                                                                 class="text-success" title="Edit">
@@ -259,18 +259,22 @@
                                                                     class="mdi mdi-delete font-size-18"></i></a>
                                                         @endif
                                                         <?php } ?>
+                                                        <?php if($pinjam->tgl_diberikan == NULL ) { ?>
                                                         @if (in_array('88', $session_menu))
                                                             <a href="{{ route('inv_pinjaman.approve', $id) }}"
                                                                 class="text-success" title="Penyerahan">
                                                                 <i class="mdi mdi-check-all font-size-18"></i>
                                                             </a>
                                                         @endif
+                                                        <?php } ?>
+                                                        <?php if($pinjam->tgl_kembali == NULL ) { ?>
                                                         @if (in_array('88', $session_menu))
                                                             <a href="{{ route('inv_pinjaman.pengembalian', $id) }}"
                                                                 class="text-success" title="Pengembalian">
                                                                 <i class="mdi mdi-orbit-variant font-size-18"></i>
                                                             </a>
                                                         @endif
+                                                        <?php } ?>
                                                     </div>
                                                 </form>
                                             </td>

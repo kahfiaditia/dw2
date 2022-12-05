@@ -114,6 +114,8 @@
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <div class="d-flex gap-3">
+                                                                        <?php
+                                                                        if($item->tgl_diberikan == null){ ?>
                                                                         <a href="javascript:void(0)"
                                                                             data-id="{{ $id }}"
                                                                             class="text-success" id="get_data_edit"
@@ -121,14 +123,12 @@
                                                                             data-bs-target=".bs-example-modal-lg-edit">
                                                                             <i class="mdi mdi-pencil font-size-18"></i>
                                                                         </a>
-                                                                        <?php
-                                                                        if($item->tgl_diberikan == null){ ?>
                                                                         <a href class="text-danger delete_confirm"><i
                                                                                 class="mdi mdi-delete font-size-18"></i></a>
                                                                         <?php
-                                                                        }?>
-
-
+                                                                        } 
+                                                                            echo "Barang Telah diserahkan"
+                                                                        ?>
                                                                     </div>
                                                                 </form>
                                                             </td>
@@ -142,8 +142,9 @@
                                             <div class="col-sm-12">
                                                 <a href="{{ route('inv_pinjaman.index') }}"
                                                     class="btn btn-secondary waves-effect">Kembali</a>
-                                                <a class="btn btn-primary" type="submit" style="float: right"
-                                                    id="submit">Simpan</a>
+
+                                                <a href="{{ route('inv_pinjaman.index') }}"
+                                                    class="btn btn-primary waves-effect" style="float: right">Simpan</a>
                                             </div>
                                         </div>
                                     </div>

@@ -104,8 +104,7 @@
                                                             </th>
                                                             <th class="text-center" style="width: 15%">No Inv</th>
                                                             <th class="text-center" style="width: 15%">ID Barang</th>
-                                                            <th class="text-center" style="width: 15%">Tangal Kembali</th>
-                                                            <th class="text-center" style="width: 15%">Diberikan Oleh</th>
+                                                            <th class="text-center" style="width: 15%">Tanggal Kembali</th>
                                                             <th class="text-center" style="width: 15%">Aksi</th>
                                                             <th class="text-center" hidden>{{ Auth::user()->id }}</th>
                                                         </tr>
@@ -122,8 +121,6 @@
                                                                 {{ $item->barang->idbarang }}</td>
                                                             <td class="text-center" style="width: 15%">
                                                                 {{ $item->tgl_kembali }}</td>
-                                                            <td class="text-center" style="width: 15%">
-                                                                {{ $item->diberikan_oleh }}</td>
                                                             <td class="text-center">
 
                                                                 <?php $id = Crypt::encryptString($item->id); ?>

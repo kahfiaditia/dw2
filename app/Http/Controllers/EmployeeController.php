@@ -50,6 +50,7 @@ class EmployeeController extends Controller
                         'no_hp',
                         'jabatan',
                         'karyawan.aktif',
+                        'tgl_resign',
                     )
                     ->Join('users', 'users.id', 'karyawan.user_id')
                     ->where('karyawan.user_id', Auth::user()->id)

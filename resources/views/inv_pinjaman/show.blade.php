@@ -72,7 +72,26 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div class="col-md-3 wajib">
+                                            <div class="mb-3">
+                                                <label>Tanggal Diberikann <code>*</code></label>
+                                                <div class="input-group" id="datepicker3">
+                                                    <input type="disable" class="form-control"
+                                                        value="{{ $data_pinjaman[0]->tgl_diberikan }}" readonly>
+                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 wajib">
+                                            <div class="mb-3">
+                                                <label>Tanggal Pengembalian Barang<code>*</code></label>
+                                                <div class="input-group" id="datepicker3">
+                                                    <input type="disable" class="form-control"
+                                                        value="{{ $data_pinjaman[0]->tgl_kembali }}" readonly>
+                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <hr>
                                         <div class="card-body">
                                             <div class="row">
@@ -108,7 +127,7 @@
                                             <div class="row mt-4">
                                                 <div class="col-sm-12">
                                                     <a href="{{ route('inv_pinjaman.index') }}"
-                                                        class="btn btn-secondary waves-effect">Batal</a>
+                                                        class="btn btn-secondary waves-effect">Kembali</a>
                                                 </div>
                                             </div>
 

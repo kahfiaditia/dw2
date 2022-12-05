@@ -97,7 +97,7 @@ class InvPinjamanController extends Controller
                     $invpinjaman = new Inv_pinjaman;
                     $invpinjaman->kode_transaksi = $kode_transaksi;
                     $invpinjaman->status_transaksi = 'Proses';
-                    $invpinjaman->nama_peminjam = $request->datapinjam[$i]['nama_peminjam'];
+                    $invpinjaman->nama_peminjam = $request->datapinjam[$i]['kode_peminjam'];
                     $invpinjaman->tgl_pemakaian = $request->datapinjam[$i]['tgl_pemakaian'];
                     $invpinjaman->tgl_permintaan = $request->datapinjam[$i]['tgl_permintaan'];
                     $invpinjaman->estimasi_kembali = $request->datapinjam[$i]['tgl_renc_pengembalian'];
@@ -271,7 +271,7 @@ class InvPinjamanController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'Pinjaman Inventaris',
-            'label' => 'Tambah Pinjaman',
+            'label' => 'Edit Data Pinjaman',
             'inventaris' => Inventaris::all(),
             'data_pinjaman' => Inv_pinjaman::where('kode_transaksi', $id)->get(),
         ];
@@ -391,12 +391,12 @@ class InvPinjamanController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('90', $session_menu)) {
-            $id = $id;
+            $id_decrypted = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
 
                 $datetime = Carbon::now();
-                Inv_pinjaman::where('kode_transaksi', $id)->update(['user_deleted' => Auth::user()->id, 'deleted_at' => $datetime]);
+                Inv_pinjaman::where('kode_transaksi', $id_decrypted)->update(['user_deleted' => Auth::user()->id, 'deleted_at' => $datetime]);
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);

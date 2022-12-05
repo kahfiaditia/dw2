@@ -27,15 +27,15 @@
                                         <div class="col-md-3 peminjam">
                                             <div class="mb-3">
                                                 <label>Peminjam <code>*</code></label>
-                                                <input type="disable" class="form-control" name="peminjam1" id="peminjam1"
-                                                    value="{{ Auth::user()->name }}" readonly>
+                                                <input type="disable" class="form-control" name="nama_peminjam"
+                                                    id="nama_peminjam" value="{{ Auth::user()->name }}" readonly>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
-                                                {!! $errors->first('peminjam', '<div class="invalid-validasi">:message</div>') !!}
+                                                {!! $errors->first('nama_peminjam', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <input type="hidden" id="nama_peminjam" name="nama_peminjam"
+                                        <input type="hidden" id="kode_peminjam" name="kode_peminjam"
                                             value="{{ Auth::user()->id }}">
                                         <div class="col-md-3 wajib">
                                             <div class="mb-3">
@@ -91,17 +91,19 @@
                                     </div>
                                     <hr>
                                     <div class="row wajib">
-                                        <div class="col-md-3">
-                                            <div class="mb-3">
+                                        <div class="col-md-6">
+                                            <div class="mb-6">
                                                 <label class="form-label">Inventaris <code>*</code></label>
                                                 <select class="form-control select select2 nama_barang" name="nama_barang"
                                                     id="nama_barang" required>
                                                     <option value="" required>--Pilih Barang--</option>
                                                     @foreach ($inventaris as $inv)
                                                         <option value="{{ $inv->id }}">
-                                                            {{ $inv->nama }} - {{ $inv->idbarang }}</option>
+                                                            {{ $inv->nama }} - {{ $inv->nomor_inventaris }} -
+                                                            {{ $inv->idbarang }}</option>
                                                     @endforeach
                                                 </select>
+
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -110,7 +112,7 @@
                                         </div>
                                         <div class="col-md-3 wajib">
                                             <div class="mb-3">
-                                                <label>Keterangan</label>
+                                                <label>Keterangan<code>*</code></label>
                                                 <textarea type="text" class="form-control" style="text-transform:uppercase" id="desc" name="desc"
                                                     placeholder="Alasan Peminjaman" style="text-transform:uppercase" required></textarea>
                                                 <div class="invalid-feedback">
@@ -141,6 +143,7 @@
                                                         <th class="text-center" style="width: 10%">Keterangan</th>
                                                         <th class="text-center" style="width: 10%">Aksi</th>
                                                         <th class="text-center" hidden>{{ Auth::user()->id }}</th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -169,6 +172,7 @@
     <script>
         function tablePinjam() {
             var nama_peminjam = document.getElementById('nama_peminjam').value;
+            var kode_peminjam = document.getElementById('kode_peminjam').value;
             var tgl_pemakaian = document.getElementById('tgl_pemakaian').value;
             var tgl_permintaan = document.getElementById('tgl_permintaan').value;
             var tgl_renc_pengembalian = document.getElementById('tgl_renc_pengembalian').value;
@@ -180,6 +184,7 @@
             document.getElementById('nama_barang').value = '';
 
             console.log(nama_peminjam)
+            console.log(kode_peminjam)
             console.log(tgl_pemakaian)
             console.log(tgl_permintaan)
             console.log(tgl_renc_pengembalian)
@@ -206,6 +211,7 @@
                 $("#tablePinjam tr:last").after(`
                         <tr>
                             <td class="text-left">${nama_peminjam}</td>
+                            <td class="text-center" hidden>${kode_peminjam}</td>
                             <td class="text-left">${tgl_pemakaian}</td>
                             <td class="text-left">${tgl_permintaan}</td>
                             <td class="text-left">${tgl_renc_pengembalian}</td>
@@ -224,16 +230,19 @@
             $("#tablePinjam").find("tr").each(function(index, element) {
                 let tableData = $(this).find('td'),
                     nama_peminjam = tableData.eq(0).text(),
-                    tgl_pemakaian = tableData.eq(1).text(),
-                    tgl_permintaan = tableData.eq(2).text(),
-                    tgl_renc_pengembalian = tableData.eq(3).text(),
-                    nama_barang = tableData.eq(4).text(),
-                    desc = tableData.eq(5).text()
+                    kode_peminjam = tableData.eq(1).text(),
+                    tgl_pemakaian = tableData.eq(2).text(),
+                    tgl_permintaan = tableData.eq(3).text(),
+                    tgl_renc_pengembalian = tableData.eq(4).text(),
+                    nama_barang = tableData.eq(5).text(),
+                    desc = tableData.eq(6).text()
+
 
                 //ini filter data null
                 if (nama_barang != '') {
                     datapinjam.push({
                         nama_peminjam,
+                        kode_peminjam,
                         tgl_pemakaian,
                         tgl_permintaan,
                         tgl_renc_pengembalian,

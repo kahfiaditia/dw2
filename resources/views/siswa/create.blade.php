@@ -192,7 +192,7 @@
                                                         <input type="text" class="form-control input-mask"
                                                             name="nis" id="nis_mask" value="{{ old('nis') }}"
                                                             maxlength="20" onkeyup="replaceNis()" required
-                                                            data-inputmask="'mask': 'AA-99-99999'" placeholder="NIS">
+                                                            placeholder="NIS">
                                                         <input type="hidden" name="nis" id="nis"
                                                             value="{{ old('nis') }}">
                                                         <div class="invalid-feedback">
