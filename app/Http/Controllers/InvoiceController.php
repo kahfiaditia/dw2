@@ -205,6 +205,7 @@ class InvoiceController extends Controller
             ->select('siswa.id', 'siswa.nama_lengkap')
             ->join('classes', 'classes.id', '=', 'siswa.class_id')
             ->where('classes.id', '=', $request->class_jenjang)
+            ->whereNull('siswa.deleted_at')
             ->get();
         if (count($siswa) > 0) {
             return response()->json([

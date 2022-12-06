@@ -231,6 +231,11 @@ class SiswaController extends Controller
             ]);
             DB::beginTransaction();
             try {
+                if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator') {
+                    $user_id = $request->user_id;
+                } else {
+                    $user_id = Auth::user()->id;
+                }
                 Siswa::create([
                     'nis' => $validated['nis'],
                     'nisn' => $validated['nisn'],
@@ -261,7 +266,7 @@ class SiswaController extends Controller
                     'is_have_kip' => $request->is_have_kip,
                     'is_receive_kip' => $request->is_receive_kip,
                     'reason_reject_kip' => $request->reason_reject_kip,
-                    'user_id' => Auth::user()->id,
+                    'user_id' => $user_id,
                     'user_created' => Auth::user()->id,
                 ]);
                 DB::commit();
@@ -1255,14 +1260,13 @@ class SiswaController extends Controller
         if (in_array('56', $session_menu)) {
             $decrypted_id = Crypt::decryptString($id);
             $cek_user = Siswa::findOrFail($decrypted_id);
-
             $validated = $request->validate([
                 // 'formulir' => 'required',
                 // 'pangkal' => 'required',
                 // 'spp' => 'required',
                 // 'kegiatan' => 'required',
                 'kelas' => 'required',
-                'email' => 'required|email|unique:users,email,' . $cek_user->user_id,
+                'email' => 'required|email:dns|unique:users,email,' . $cek_user->user_id . ',id,deleted_at,NULL',
                 'nis' => "required|unique:siswa,nis,$decrypted_id,id,deleted_at,NULL",
                 'nisn' => "required|unique:siswa,nisn,$decrypted_id,id,deleted_at,NULL",
                 'nik' => "required|unique:siswa,nik,$decrypted_id,id,deleted_at,NULL",

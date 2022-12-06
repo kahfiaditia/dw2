@@ -672,7 +672,7 @@
             $("#is_receive_kip").bind('change', function() {
                 let result = $(this).val()
 
-                if (result == 'Ya') {
+                if (result == 'Tidak') {
                     $("#reason_reject_kip").show()
                 } else {
                     $("#select_reason").val("");

@@ -875,23 +875,16 @@ class PinjamanController extends Controller
             if ($request['jml'] > $request->jml_old) {
                 $stock = Buku::findorfail($request->buku_id);
                 $kurang = $request['jml'] - $request->jml_old;
-                dd($kurang);
-                if ($kurang < 0) {
-                    AlertHelper::updateAlert(true);
+                if ($stock->jml_buku - $kurang < 0) {
+                    AlertHelper::updateAlert(false);
                     return back();
                 } else {
                     Buku::where('id', $request->buku_id)->update(['jml_buku' => $stock->jml_buku - $kurang]);
                 }
             } elseif ($request['jml'] < $request->jml_old) {
-                // dd('xq');
                 $stock = Buku::findorfail($request->buku_id);
                 $tambah = $request->jml_old - $request['jml'];
-                if ($tambah < 0) {
-                    AlertHelper::updateAlert(true);
-                    return back();
-                } else {
-                    Buku::where('id', $request->buku_id)->update(['jml_buku' => $stock->jml_buku + $tambah]);
-                }
+                Buku::where('id', $request->buku_id)->update(['jml_buku' => $stock->jml_buku + $tambah]);
             }
             $pinjaman = Pinjaman::findOrFail($id);
             $pinjaman->jml = $request['jml'];
