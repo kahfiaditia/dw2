@@ -24,6 +24,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
+
         if (Auth::user()->roles == 'Orang Tua') {
         } elseif (Auth::user()->roles == 'Siswa') {
             if (Auth::user()->student != null) {
@@ -53,6 +54,14 @@ class DashboardController extends Controller
                 $count_karyawan = null;
                 $count_guru = null;
                 $count_siswa = null;
+            } else {
+                $siswa = [];
+                $invoice = [];
+                $invoice_tahunan = [];
+                $invoice_bulan = [];
+                $count_karyawan = null;
+                $count_guru = null;
+                $count_siswa = null;
             }
         } else {
             $siswa = [];
@@ -63,6 +72,7 @@ class DashboardController extends Controller
             $count_guru = Employee::where('jabatan', 'Guru')->count('id');
             $count_siswa = Siswa::count();
         }
+
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
