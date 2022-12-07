@@ -160,8 +160,11 @@
                                                 onclick="tableBarang()">Tambah
                                                 Barang</a>
                                         </div>
-                                        <input type="hidden" id="inputArray">
                                     </div>
+                                    <input type="hidden" id="inputArray">
+                                    <input type="hidden" id="inputArrayNoID">
+                                    <input type="hidden" id="inputArrayNo">
+                                    <input type="hidden" id="inputArrayID">
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
@@ -237,6 +240,7 @@
                 })
             } else {
                 // set array awal
+                // Nama Barang + NO + ID
                 var inputArray = document.getElementById('inputArray').value;
                 if (inputArray == '') {
                     var cekArr = [];
@@ -249,10 +253,61 @@
                     var cekArr = cekArr;
                 }
 
+                // NO + ID
+                var inputArrayNoID = document.getElementById('inputArrayNoID').value;
+                if (inputArrayNoID == '') {
+                    var cekArrNoID = [];
+                } else {
+                    var cekArrNoID = [];
+                    strArray = inputArrayNoID.split(",");
+                    for (var i = 0; i < strArray.length; i++) {
+                        cekArrNoID.push(strArray[i]);
+                    }
+                    var cekArrNoID = cekArrNoID;
+                }
+
+                // NO 
+                var inputArrayNo = document.getElementById('inputArrayNo').value;
+                if (inputArrayNo == '') {
+                    var cekArrNo = [];
+                } else {
+                    var cekArrNo = [];
+                    strArray = inputArrayNo.split(",");
+                    for (var i = 0; i < strArray.length; i++) {
+                        cekArrNo.push(strArray[i]);
+                    }
+                    var cekArrNo = cekArrNo;
+                }
+
+                // ID
+                var inputArrayID = document.getElementById('inputArrayID').value;
+                if (inputArrayID == '') {
+                    var cekArrID = [];
+                } else {
+                    var cekArrID = [];
+                    strArray = inputArrayID.split(",");
+                    for (var i = 0; i < strArray.length; i++) {
+                        cekArrID.push(strArray[i]);
+                    }
+                    var cekArrID = cekArrID;
+                }
+
                 // cek inputan
+                // Nama Barang + NO + ID
                 var cekGabungan = String(hasilnama + hasilno_inv + hasilidbarang);
                 isVal = cekArr.includes(cekGabungan)
-                if (isVal == true) {
+                // NO + ID
+                var cekGabunganNoID = String(hasilno_inv + hasilidbarang);
+                isValNoID = cekArrNoID.includes(cekGabunganNoID)
+                // NO
+                var cekGabunganNo = String(hasilno_inv);
+                isValNo = cekArrNo.includes(cekGabunganNo)
+                // ID
+                var cekGabunganID = String(hasilidbarang);
+                isValID = cekArrID.includes(cekGabunganID)
+
+                // cek salah satu validasi
+                if (isVal == true || isValNoID == true || isValNo == true || isValID == true) {
                     Swal.fire({
                         icon: 'error',
                         title: 'No Inventaris dan ID Barang sudah ada',
@@ -260,32 +315,39 @@
                         timer: 1500,
                     })
                 } else {
+                    // push ke array
                     cekArr.push(cekGabungan);
+                    cekArrNoID.push(cekGabunganNoID);
+                    cekArrNo.push(cekGabunganNo);
+                    cekArrID.push(cekGabunganID);
                     // set inputan ke form
                     document.getElementById('inputArray').value = cekArr;
+                    document.getElementById('inputArrayNoID').value = cekArrNoID;
+                    document.getElementById('inputArrayNo').value = cekArrNo;
+                    document.getElementById('inputArrayID').value = cekArrID;
+
+                    $("#tableBarang tr:last").after(`
+                        <tr>
+                            <td class="text-left">${hasilnama}</td>
+                            <td class="text-left">${hasilno_inv}</td>
+                            <td class="text-left">${hasilidbarang}</td>
+                            <td class="text-left">${ruang_value}</td>
+                            <td class="text-left">${pemilik}</td>
+                            <td class="text-left">${keterangan}</td>
+                            <td class="text-left">${ketersediaan}</td>
+                            <td class="text-left">${hasilindikasi}</td>
+                            <td class="text-left">${hasildesc}</td>                       
+                            <td>
+                                <a class="btn btn-danger btn-sm delete-record" data-id="delete">Delete</a>    
+                            </td>
+                            <td hidden>${ruang}</td>     
+                        </tr>
+                    `)
+
+                    document.getElementById('no_inv').value = '';
+                    document.getElementById('idbarang').value = '';
+                    document.getElementById('indikasi').value = '';
                 }
-
-                $("#tableBarang tr:last").after(`
-                    <tr>
-                        <td class="text-left">${hasilnama}</td>
-                        <td class="text-left">${hasilno_inv}</td>
-                        <td class="text-left">${hasilidbarang}</td>
-                        <td class="text-left">${ruang_value}</td>
-                        <td class="text-left">${pemilik}</td>
-                        <td class="text-left">${keterangan}</td>
-                        <td class="text-left">${ketersediaan}</td>
-                        <td class="text-left">${hasilindikasi}</td>
-                        <td class="text-left">${hasildesc}</td>                       
-                        <td>
-                            <a class="btn btn-danger btn-sm delete-record" data-id="delete">Delete</a>    
-                        </td>
-                        <td hidden>${ruang}</td>     
-                    </tr>
-                `)
-
-                document.getElementById('no_inv').value = '';
-                document.getElementById('idbarang').value = '';
-                document.getElementById('indikasi').value = '';
             }
         }
 
