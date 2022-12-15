@@ -25,6 +25,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PenerbitController;
 use App\Http\Controllers\PinjamanController;
 use App\Http\Controllers\PrestasiController;
+use App\Http\Controllers\PerawatanController;
 use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
 use App\Http\Controllers\RakController;
@@ -323,6 +324,14 @@ Route::group(
         Route::get('/stok_list', [StokObatController::class, 'stok_list'])->name('stok_obat.stok_list');
         Route::delete('/destroy_id/{id}', [StokObatController::class, 'destroy_id'])->name('stok_obat.destroy_id');
         Route::post('/store_edit', [StokObatController::class, 'store_edit'])->name('stok_obat.store_edit');
+
+        Route::resource('/perawatan', PerawatanController::class);
+        Route::post('/update_obat', [PerawatanController::class, 'update_obat'])->name('perawatan.update_obat');
+        Route::delete('/destroy_obat/{id}', [PerawatanController::class, 'destroy_obat'])->name('perawatan.destroy_obat');
+        Route::post('/get_obat', [PerawatanController::class, 'get_obat'])->name('perawatan.get_obat');
+        Route::post('/get_exp', [PerawatanController::class, 'get_exp'])->name('perawatan.get_exp');
+        Route::get('/kembali_keluar/{id}', [PerawatanController::class, 'kembali_keluar'])->name('perawatan.kembali_keluar');
+        Route::post('/uksProses/{id}', [PerawatanController::class, 'uksProses'])->name('perawatan.uksProses');
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

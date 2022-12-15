@@ -25,70 +25,64 @@
                                 <div class="row">
                                     <div class="col-md-3 peminjam">
                                         <div class="mb-3">
-                                            <label>Kode Transaksi <code>*</code></label>
-                                            <input type="disable" class="form-control" id="kode_transaksi"
-                                                name="kode_transaksi" value="{{ $data_pinjaman[0]->kode_transaksi }}"
-                                                disabled>
+                                            <label>Kode Perawatan <code>*</code></label>
+                                            <input type="disable" class="form-control" id="kode_perawatan"
+                                                name="kode_perawatan" value="{{ $perawatan[0]->kode_perawatan }}" disabled>
                                             <input type="hidden" name="url" id="url"
-                                                value="{{ $data_pinjaman[0]->kode_transaksi }}">
+                                                value="{{ $perawatan[0]->kode_perawatan }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3 peminjam">
                                         <div class="mb-3">
-                                            <label>Peminjam <code>*</code></label>
-                                            <input type="disable" class="form-control" name="nama_peminjam"
-                                                id="nama_peminjam" value="{{ $data_pinjaman[0]->users->name }}" readonly>
-                                            <input type="disable" class="form-control" name="id_peminjam" id="id_peminjam"
-                                                value="{{ $data_pinjaman[0]->users->id }}" hidden>
+                                            <label>Siswa <code>*</code></label>
+                                            <input type="disable" class="form-control" name="siswa" id="siswa"
+                                                value="{{ $perawatan[0]->siswa->nama_lengkap }}" readonly>
+                                            {{-- <input type="disable" class="form-control" name="siswa" id="siswa"
+                                                value="{{ $perawatan[0]->users->id }}" hidden> --}}
                                             {!! $errors->first('nama_peminjam', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                     <div class="col-md-3 wajib">
                                         <div class="mb-3">
-                                            <label>Tanggal Permintaan <code>*</code></label>
+                                            <label>Tanggal<code>*</code></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control" name="tgl_permintaan"
-                                                    id="tgl_permintaan" value="{{ $data_pinjaman[0]->tgl_permintaan }}">
+                                                <input type="text" class="form-control" name="tgl" id="tgl"
+                                                    value="{{ $perawatan[0]->tgl }}" disabled>
                                                 <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 
                                             </div>
-                                            {!! $errors->first('tgl_permintaan', '<div class="invalid-validasi">:message</div>') !!}
+                                            {!! $errors->first('tgl', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                     <div class="col-md-3 wajib">
                                         <div class="mb-3">
-                                            <label>Tanggal Pemakaian <code>*</code></label>
+                                            <label>Jam Masuk<code>*</code></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control" name="tgl_pemakaian"
-                                                    id="tgl_pemakaian" value="{{ $data_pinjaman[0]->tgl_pemakaian }}">
+                                                <input type="text" class="form-control" name="masuk" id="masuk"
+                                                    value="{{ $perawatan[0]->masuk }}" disabled>
+                                                <input type="text" class="form-control" name="id_stok_obat"
+                                                    id="id_stok_obat" value="{{ $perawatan[0]->id_stok_obat }}" hidden>
+                                                <input type="text" class="form-control" name="qty" id="qty"
+                                                    value="{{ $perawatan[0]->qty }}" hidden>
                                                 <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 wajib">
-                                        <div class="mb-3">
-                                            <label>Rencana Pengembalian <code>*</code></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="estimasi_kembali"
-                                                    value="{{ $data_pinjaman[0]->estimasi_kembali }}">
-                                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <hr>
                                     <div class="row wajib">
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label class="form-label">Inventaris <code>*</code></label>
-                                                <select class="form-control select select2 nama_barang" name="nama_barang"
-                                                    id="nama_barang" required>
-                                                    <option value="" required>--Pilih Barang--</option>
-                                                    @foreach ($inventaris as $inv)
-                                                        <option value="{{ $inv->id }}">
-                                                            {{ $inv->nama }} - {{ $inv->idbarang }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <label>Jam Keluar <code>*</code></label>
+                                                <div class="input-group" id="datepicker3">
+                                                    <input type="time" class="form-control" name="keluar" id="keluar"
+                                                        value="13:45:00" data-date-format="H:i:s"
+                                                        data-date-container='#datepicker3' data-provide="datepicker"
+                                                        required data-date-autoclose="true">
+                                                    <span class="input-group-text"><i class="mdi mdi-watch"></i></span>
+                                                    <div class="invalid-feedback">
+                                                        Data wajib diisi.
+                                                    </div>
+                                                </div>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -97,8 +91,8 @@
                                         </div>
                                         <div class="row modal-footer">
                                             <div class="col-sm-12">
-                                                <button class="btn btn-primary" type="submit" style="float: left"
-                                                    id="add">Tambah Inventaris</button>
+                                                {{-- <button class="btn btn-primary" type="submit" style="float: left"
+                                                    id="add">Siswa Keluar</button> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -109,40 +103,23 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-center" style="width: 5%">No</th>
-                                                        <th class="text-center" style="width: 20%">Nama Barang
+                                                        <th class="text-center" style="width: 20%">Obat
                                                         </th>
-                                                        <th class="text-center" style="width: 15%">No Inv</th>
-                                                        <th class="text-center" style="width: 15%">ID Barang</th>
-                                                        <th class="text-center" style="width: 15%">Aksi</th>
-                                                        <th class="text-center" hidden>{{ Auth::user()->id }}</th>
+                                                        <th class="text-center" style="width: 15%">Qty</th>
+                                                        <th class="text-center" style="width: 15%">Kadaluarsa</th>
+
                                                     </tr>
                                                 </thead>
-                                                @foreach ($data_pinjaman as $item)
+                                                @foreach ($perawatan as $item)
                                                     <tbody>
                                                         <td class="text-center" style="width: 5%">
                                                             {{ $loop->iteration }}</td>
                                                         <td class="text-center" style="width: 20%">
-                                                            {{ $item->barang->nama }}</td>
+                                                            {{ $item->uks_obat->obat }}</td>
                                                         <td class="text-center" style="width: 15%">
-                                                            {{ $item->barang->nomor_inventaris }}</td>
+                                                            {{ $item->qty }}</td>
                                                         <td class="text-center" style="width: 15%">
-                                                            {{ $item->barang->idbarang }}</td>
-                                                        <td class="text-center">
-
-                                                            <?php $id = Crypt::encryptString($item->id); ?>
-                                                            <form class="delete-form"
-                                                                action="{{ route('inv_pinjaman.destroy_invid', $id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-
-                                                                <div class="d-flex gap-3">
-                                                                    <a href class="text-danger delete_confirm"><i
-                                                                            class="mdi mdi-delete font-size-18"></i></a>
-                                                                </div>
-
-                                                            </form>
-                                                        </td>
+                                                            {{ $item->stok_obat->tgl_ed }}</td>
                                                     </tbody>
                                                 @endforeach
 
@@ -151,10 +128,12 @@
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-sm-12">
-                                            <a href="{{ route('inv_pinjaman.index') }}"
+                                            <a href="{{ route('perawatan.index') }}"
                                                 class="btn btn-secondary waves-effect">Kembali</a>
-                                            <a href="{{ route('inv_pinjaman.index') }}" class="btn btn-primary"
-                                                type="submit" style="float: right">Simpan</a>
+                                            {{-- <a href="{{ route('perawatan.index') }}" class="btn btn-primary"
+                                                type="submit" style="float: right">Simpan</a> --}}
+                                            <button class="btn btn-primary" type="submit" style="float: right"
+                                                id="add">Siswa Keluar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -187,59 +166,52 @@
     <script>
         $("#add").on('click', function() {
 
-            var kode_transaksi = document.getElementById('kode_transaksi').value;
-            var nama_peminjam = document.getElementById("nama_peminjam").value;
-            var id_peminjam = document.getElementById("id_peminjam").value;
-            var tgl_permintaan = document.getElementById('tgl_permintaan').value;;
-            var tgl_pemakaian = document.getElementById('tgl_pemakaian').value;;
-            var estimasi_kembali = document.getElementById("estimasi_kembali").value;
-            var nama_barang = document.getElementById("nama_barang").value;
-            var id_barang = document.getElementById("nama_barang").value;
+            var keluar = document.getElementById('keluar').value;
+            var kode_perawatan = document.getElementById('kode_perawatan').value;
+            var id_stok_obat = document.getElementById('id_stok_obat').value;
+            var qty = document.getElementById('qty').value;
 
-            console.log(kode_transaksi)
-            console.log(nama_peminjam)
-            console.log(tgl_permintaan)
-            console.log(tgl_pemakaian)
-            console.log(estimasi_kembali)
-            console.log(nama_barang)
-            console.log(id_peminjam)
+            console.log(keluar)
+            console.log(kode_perawatan)
+            console.log(id_stok_obat)
+            console.log(qty)
 
-            if (nama_barang === '') {
+
+            if (keluar === '') {
                 Swal.fire(
                     'Gagal',
                     'Inventaris yang dipinjam wajib diisi',
                     'error'
                 )
             } else {
-                let data_post = []
-                data_post.push({
-                    nama_barang,
+                let data_keluar = []
+                data_keluar.push({
+                    keluar,
+                    kode_perawatan,
+                    id_stok_obat,
+                    qty
                 })
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('inv_pinjaman.update_inv') }}',
+                    url: '{{ route('perawatan.uksProses', $perawatan[0]->kode_perawatan) }}',
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        data_post,
-                        kode_transaksi,
-                        id_peminjam,
-                        tgl_permintaan,
-                        tgl_pemakaian,
-                        estimasi_kembali,
-                        nama_barang,
+                        data_keluar,
+                        keluar,
                     },
 
                     success: (response) => {
+                        console.log(response)
                         if (response.code === 200) {
                             Swal.fire(
                                 'Success',
-                                'Peminjaman Inventaris berhasil',
+                                'Jam Keluar telah berhasil di input',
                                 'success'
                             ).then(() => {
                                 var APP_URL = {!! json_encode(url('/')) !!}
                                 url = document.getElementById("url").value;
-                                window.location = APP_URL + '/inv_pinjaman/'
+                                window.location = APP_URL + '/uks/perawatan/'
                             })
                         } else {
                             Swal.fire(
