@@ -105,19 +105,20 @@
                                                                 <th class="text-center" hidden>{{ Auth::user()->id }}</th>
                                                             </tr>
                                                         </thead>
-                                                        @foreach ($perawatan as $item)
-                                                            <tbody>
-                                                                <td class="text-center" style="width: 10%">
-                                                                    {{ $loop->iteration }}</td>
-                                                                <td class="text-center" style="width: 15%">
-                                                                    {{ $item->uks_obat->obat }}</td>
-                                                                <td class="text-center" style="width: 15%">
-                                                                    {{ $item->stok_obat->tgl_ed }}</td>
-                                                                <td class="text-center" style="width: 15%">
-                                                                    {{ $item->qty }}</td>
-                                                            </tbody>
-                                                        @endforeach
-
+                                                        <tbody>
+                                                            @foreach ($perawatan as $item)
+                                                                <tr>
+                                                                    <td class="text-center" style="width: 10%">
+                                                                        {{ $loop->iteration }}</td>
+                                                                    <td class="text-center" style="width: 15%">
+                                                                        {{ $item->uks_obat->obat }}</td>
+                                                                    <td class="text-center" style="width: 15%">
+                                                                        {{ $item->stok_obat->tgl_ed }}</td>
+                                                                    <td class="text-center" style="width: 15%">
+                                                                        {{ $item->qty }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                             </div>

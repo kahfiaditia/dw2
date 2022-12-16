@@ -57,14 +57,38 @@
                                     <div class="col-md-3 wajib">
                                         <div class="mb-3">
                                             <label>Jam Masuk <code>*</code></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="jam_masuk" id="jam_masuk"
-                                                    value="{{ $perawatan[0]->masuk }}">
-                                                <span class="input-group-text"><i class="mdi mdi-watch"></i></span>
+                                            <div class="input-group" id="timepicker-input-group2">
+                                                <input id="timepicker2" type="text" class="form-control"
+                                                    data-provide="timepicker">
+                                                <span class="input-group-text"><i class="mdi mdi-clock-outline"></i></span>
+                                                <div class="invalid-feedback">
+                                                    Data wajib diisi.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label>Gejala</label>
+                                            <textarea type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" name="gejala"
+                                                id="gejala" name="gejala" value="{{ $perawatan[0]->gejala }}" required>{{ $perawatan[0]->gejala }}</textarea>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('gejala', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label>Deskripsi Perawatan</label>
+                                            <textarea type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" name="desc"
+                                                id="desc" name="desc" required>{{ $perawatan[0]->deksripsi }}</textarea>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('gejala', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
                                     <hr>
                                     <div class="row wajib">
                                         <div class="col-md-3">
@@ -82,7 +106,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label class="form-label">Exp <code>*</code></label>
+                                                <label class="form-label">Kadaluarsa <code>*</code></label>
                                                 <select class="form-control select select2 exp" name="exp"
                                                     id="exp" required>
                                                     <option value="" required>--Pilih Expired--</option>
@@ -95,33 +119,11 @@
                                         </div>
                                         <div class="col-md-3 wajib">
                                             <div class="mb-3">
-                                                <label>Qty <code>*</code></label>
+                                                <label>Kuantiti Obat <code>*</code></label>
                                                 <div class="input-group">
                                                     <input type="number" min=1 class="form-control" name="qty"
-                                                        id="qty">
+                                                        id="qty" placeholder="Masukan jumlah obat">
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="mb-3">
-                                                <label>Gejala</label>
-                                                <textarea type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" name="gejala"
-                                                    id="gejala" name="gejala" value="{{ $perawatan[0]->gejala }}" required>{{ $perawatan[0]->gejala }}</textarea>
-                                                <div class="invalid-feedback">
-                                                    Data wajib diisi.
-                                                </div>
-                                                {!! $errors->first('gejala', '<div class="invalid-validasi">:message</div>') !!}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="mb-3">
-                                                <label>Deskripsi Perawatan</label>
-                                                <textarea type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" name="desc"
-                                                    id="desc" name="desc" required>{{ $perawatan[0]->deksripsi }}</textarea>
-                                                <div class="invalid-feedback">
-                                                    Data wajib diisi.
-                                                </div>
-                                                {!! $errors->first('gejala', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
                                         <div class="row modal-footer">
@@ -133,7 +135,8 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-responsive table-bordered table-striped nowrap w-100"
+                                            <table
+                                                class="table table-responsive table-bordered table table-striped nowrap w-100"
                                                 id="tableList">
                                                 <thead>
                                                     <tr>
@@ -146,34 +149,41 @@
                                                         <th class="text-center" hidden>{{ Auth::user()->id }}></th>
                                                     </tr>
                                                 </thead>
-                                                @foreach ($perawatan as $item)
-                                                    <tbody>
-                                                        <td class="text-center" style="width: 10%">
-                                                            {{ $loop->iteration }}</td>
-                                                        <td class="text-center" style="width: 15%">
-                                                            {{ $item->uks_obat->obat }}</td>
-                                                        <td class="text-center" style="width: 15%">
-                                                            {{ $item->stok_obat->tgl_ed }}</td>
-                                                        <td class="text-center" style="width: 15%">
-                                                            {{ $item->qty }}</td>
-                                                        <td class="text-center">
+                                                <tbody>
+                                                    @foreach ($perawatan as $item)
+                                                        <tr>
+                                                            <td class="text-center" style="width: 10%">
+                                                                {{ $loop->iteration }}</td>
 
-                                                            <?php $id = $item->id; ?>
-                                                            <form class="delete-form"
-                                                                action="{{ route('perawatan.destroy_obat', $id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
+                                                            <td class="text-center" style="width: 15%">
+                                                                {{ $item->uks_obat->obat }}</td>
 
-                                                                <div class="d-flex gap-3">
-                                                                    <a href class="text-danger delete_confirm"><i
-                                                                            class="mdi mdi-delete font-size-18"></i></a>
-                                                                </div>
+                                                            <td class="text-center" style="width: 15%">
+                                                                {{ $item->stok_obat->tgl_ed }}</td>
 
-                                                            </form>
-                                                        </td>
-                                                    </tbody>
-                                                @endforeach
+                                                            <td class="text-center" style="width: 15%">
+                                                                {{ $item->qty }}</td>
+
+                                                            <td class="text-center">
+
+                                                                <?php $id = $item->id; ?>
+                                                                <form class="delete-form"
+                                                                    action="{{ route('perawatan.destroy_obat', $id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+
+                                                                    <div class="d-flex gap-3">
+                                                                        <a href class="text-danger delete_confirm"><i
+                                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                                    </div>
+
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+
 
                                             </table>
                                         </div>
@@ -222,7 +232,7 @@
             var desc = document.getElementById("desc").value;
             var id_siswa = document.getElementById("id_siswa").value;
             var tgl = document.getElementById('tgl').value;;
-            var jam_masuk = document.getElementById('jam_masuk').value;;
+            var jam_masuk = document.getElementById('timepicker2').value;;
             var qty = document.getElementById("qty").value;
             var obat = document.getElementById("obat").value;
             var exp = document.getElementById("exp").value;

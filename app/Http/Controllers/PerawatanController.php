@@ -37,7 +37,7 @@ class PerawatanController extends Controller
             'menu' => $this->menu,
             'submenu' => $this->submenu,
             'label' => 'data perawatan',
-            'perawatan' => PerawatanModel::groupBy('kode_perawatan')->get(),
+            'perawatan' => PerawatanModel::groupBy('kode_perawatan')->orderBy('kode_perawatan', 'desc')->get(),
         ];
         return view('uks/perawatan.index')->with($data);
     }
@@ -53,7 +53,7 @@ class PerawatanController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'data perawatan',
+            'label' => 'Tambah Perawatan',
             'obat' => ObatModel::all(),
             'siswa' => Siswa::all(),
             'stok_obat' => StokObatModel::all(),
@@ -149,7 +149,7 @@ class PerawatanController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'view perawatan',
+            'label' => 'data perawatan',
             'obat_expired' => StokObatModel::where('id_obat', $id)->get(),
             'perawatan' => PerawatanModel::where('kode_perawatan', $id_decrypted)->get(),
             // 'obat' => $this->PerawatanModel->data_obat::where('kode_perawatan', $id_decrypted)->get(),
@@ -170,7 +170,7 @@ class PerawatanController extends Controller
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => $this->submenu,
-            'label' => 'Edit Data Perawatan',
+            'label' => 'Edit Perawatan',
             'stok_obat' => StokObatModel::all(),
             'perawatan' => PerawatanModel::where('kode_perawatan', $id_decrypted)->get(),
         ];
@@ -194,10 +194,30 @@ class PerawatanController extends Controller
      * @param  \App\Models\PerawatanModel  $perawatan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PerawatanModel $perawatan)
+    public function destroy($id)
     {
-        //
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('103', $session_menu)) {
+            $id_decrypted = $id;
+            DB::beginTransaction();
+            try {
+
+                $datetime = Carbon::now();
+                PerawatanModel::where('kode_perawatan', $id_decrypted)->update(['user_deleted' => Auth::user()->id, 'deleted_at' => $datetime]);
+
+                DB::commit();
+                AlertHelper::deleteAlert(true);
+                return back();
+            } catch (\Throwable $err) {
+                DB::rollBack();
+                AlertHelper::deleteAlert(false);
+                return back();
+            }
+        } else {
+            return view('not_found');
+        }
     }
+
 
     public function destroy_obat(Request $request, $id)
     {
@@ -273,6 +293,8 @@ class PerawatanController extends Controller
                 'submenu' => $this->submenu,
                 'label' => 'Keluar Perawatan',
                 'perawatan' => PerawatanModel::where('kode_perawatan', $id)->get(),
+
+                // 'data' => PerawatanModel::   (`kode_perawatan`,`id_stok_obat`, `id_obat`, SUM(`qty`) AS total FROM (`uks_perawatan` GROUP BY `kode_perawatan`, `id_obat`,`id_stok_obat`)
 
             ];
             return view('uks/perawatan.keluar')->with($data);

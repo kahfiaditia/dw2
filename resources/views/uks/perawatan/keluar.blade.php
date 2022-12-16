@@ -73,12 +73,11 @@
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>Jam Keluar <code>*</code></label>
-                                                <div class="input-group" id="datepicker3">
-                                                    <input type="time" class="form-control" name="keluar" id="keluar"
-                                                        value="13:45:00" data-date-format="H:i:s"
-                                                        data-date-container='#datepicker3' data-provide="datepicker"
-                                                        required data-date-autoclose="true">
-                                                    <span class="input-group-text"><i class="mdi mdi-watch"></i></span>
+                                                <div class="input-group" id="timepicker-input-group2">
+                                                    <input id="timepicker2" name="keluar" type="text"
+                                                        class="form-control" data-provide="timepicker">
+                                                    <span class="input-group-text"><i
+                                                            class="mdi mdi-clock-outline"></i></span>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -110,19 +109,21 @@
 
                                                     </tr>
                                                 </thead>
-                                                @foreach ($perawatan as $item)
-                                                    <tbody>
-                                                        <td class="text-center" style="width: 5%">
-                                                            {{ $loop->iteration }}</td>
-                                                        <td class="text-center" style="width: 20%">
-                                                            {{ $item->uks_obat->obat }}</td>
-                                                        <td class="text-center" style="width: 15%">
-                                                            {{ $item->qty }}</td>
-                                                        <td class="text-center" style="width: 15%">
-                                                            {{ $item->stok_obat->tgl_ed }}</td>
-                                                    </tbody>
-                                                @endforeach
+                                                <tbody>
+                                                    @foreach ($perawatan as $item)
+                                                        <tr>
+                                                            <td class="text-center" style="width: 5%">
+                                                                {{ $loop->iteration }}</td>
+                                                            <td class="text-center" style="width: 20%">
+                                                                {{ $item->uks_obat->obat }}</td>
+                                                            <td class="text-center" style="width: 15%">
+                                                                {{ $item->qty }}</td>
+                                                            <td class="text-center" style="width: 15%">
+                                                                {{ $item->stok_obat->tgl_ed }}</td>
+                                                        </tr>
+                                                    @endforeach
 
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -166,7 +167,7 @@
     <script>
         $("#add").on('click', function() {
 
-            var keluar = document.getElementById('keluar').value;
+            var keluar = document.getElementById('timepicker2').value;
             var kode_perawatan = document.getElementById('kode_perawatan').value;
             var id_stok_obat = document.getElementById('id_stok_obat').value;
             var qty = document.getElementById('qty').value;

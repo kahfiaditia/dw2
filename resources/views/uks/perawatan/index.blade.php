@@ -67,11 +67,13 @@
                                                                 title="View">
                                                                 <i class="mdi mdi-eye font-size-18"></i>
                                                             </a>
-                                                            {{-- <a href="{{ route('perawatan.uksProses', $id) }}"
-                                                                class="text-warning" title="Siswa Keluar UKS"><i
-                                                                    class="mdi mdi-orbit-variant font-size-18"></i></a> --}}
                                                         @endif
+
                                                         <?php if($nama->keluar == NULL) {?>
+                                                        @if (in_array('103', $session_menu))
+                                                            <a href class="text-danger delete_confirm" title="Hapus"><i
+                                                                    class="mdi mdi-delete font-size-18"></i></a>
+                                                        @endif
                                                         @if (in_array('102', $session_menu))
                                                             <a href="{{ route('perawatan.edit', $id) }}"
                                                                 class="text-success" title="Edit"><i

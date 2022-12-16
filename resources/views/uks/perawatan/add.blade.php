@@ -69,17 +69,16 @@
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>Jam Masuk <code>*</code></label>
-                                                <div class="input-group" id="datepicker3">
-                                                    <input type="time" class="form-control" name="jam_masuk"
-                                                        id="jam_masuk" value="13:45:00" data-date-format="H:i:s"
-                                                        data-date-container='#datepicker3' data-provide="datepicker"
-                                                        required data-date-autoclose="true">
-                                                    <span class="input-group-text"><i class="mdi mdi-watch"></i></span>
+                                                <div class="input-group" id="timepicker-input-group2">
+                                                    <input id="timepicker2" type="text" class="form-control"
+                                                        data-provide="timepicker">
+                                                    <span class="input-group-text"><i
+                                                            class="mdi mdi-clock-outline"></i></span>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
                                                 </div>
-                                                {!! $errors->first('jam_masuk', '<div class="invalid-validasi">:message</div>') !!}
+                                                {!! $errors->first('timepicker2', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -197,7 +196,7 @@
 
             var siswa = document.getElementById('siswa').value;
             var tgl = document.getElementById('tgl').value;
-            var jam_masuk = document.getElementById('jam_masuk').value;
+            var jam_masuk = document.getElementById('timepicker2').value;
             var gejala = document.getElementById('gejala').value;
             var desc = document.getElementById('desc').value;
             var obat = document.getElementById('obat').value;
