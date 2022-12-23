@@ -9,6 +9,7 @@ use App\Models\PerawatanModel;
 use App\Models\Siswa;
 use App\Models\StokObatModel;
 use Carbon\Carbon;
+use CreateUksStokObat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -106,7 +107,7 @@ class PerawatanController extends Controller
                     $uksperawatan->masuk = $request->dataperawatan[$i]['jam_masuk'];
                     $uksperawatan->gejala = $request->dataperawatan[$i]['gejala'];
                     $uksperawatan->deksripsi = $request->dataperawatan[$i]['desc'];
-                    $uksperawatan->id_obat = $request->dataperawatan[$i]['obat'];
+                    $uksperawatan->id_obat = $request->dataperawatan[$i]['id_obat'];
                     $uksperawatan->id_stok_obat = $request->dataperawatan[$i]['exp'];
                     $uksperawatan->qty = $request->dataperawatan[$i]['qty'];
                     $uksperawatan->user_created =  Auth::user()->id;
@@ -284,6 +285,13 @@ class PerawatanController extends Controller
 
     public function kembali_keluar(Request $request, $id)
     {
+        $obat_keluar = DB::table('uks_perawatan')
+            ->select('obat', 'qty', 'uks_stok_obat.id', 'tgl_ed', DB::raw('SUM(qty) AS total'))
+            ->join('uks_stok_obat', 'uks_stok_obat.id', '=', 'uks_perawatan.id_stok_obat')
+            ->join('uks_obat', 'uks_obat.id', '=', 'uks_stok_obat.id_obat')
+            ->where('kode_perawatan', '=', $id)
+            ->groupBy('id_stok_obat')->get();
+
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('100', $session_menu)) {
 
@@ -293,9 +301,7 @@ class PerawatanController extends Controller
                 'submenu' => $this->submenu,
                 'label' => 'Keluar Perawatan',
                 'perawatan' => PerawatanModel::where('kode_perawatan', $id)->get(),
-
-                // 'data' => PerawatanModel::   (`kode_perawatan`,`id_stok_obat`, `id_obat`, SUM(`qty`) AS total FROM (`uks_perawatan` GROUP BY `kode_perawatan`, `id_obat`,`id_stok_obat`)
-
+                'obat_keluar' => $obat_keluar,
             ];
             return view('uks/perawatan.keluar')->with($data);
         } else {
@@ -303,45 +309,37 @@ class PerawatanController extends Controller
         }
     }
 
-    public function uksProses(Request $request, $id)
+    public function uksProses(Request $request, $kode_perawatan)
     {
-        // echo $request['keluar'];
         DB::beginTransaction();
         try {
-            for ($i = 0; $i < count($request->data_keluar); $i++) {
-                $cek_qty = ObatModel::findorfail('id', $request['id_obat']);
-                if ($request['stok'] > $cek_qty->qty) {
-                    return response()->json([
-                        'code' => 404,
-                        'message' => 'Stock Obat <strong> </strong> hanya <strong>' . $cek_qty->qty . '</strong>',
-                    ]);
-                }
+
+            $push = DB::table('uks_perawatan')
+                ->select('uks_obat.id', 'obat', 'jml_keluar', 'stok', 'qty', 'uks_stok_obat.id as id_stok', 'tgl_ed', DB::raw('SUM(qty) AS total'))
+                ->join('uks_stok_obat', 'uks_stok_obat.id', '=', 'uks_perawatan.id_stok_obat')
+                ->join('uks_obat', 'uks_obat.id', '=', 'uks_stok_obat.id_obat')
+                ->where('kode_perawatan', '=', $kode_perawatan)
+                ->whereNull('uks_perawatan.deleted_at')
+                ->groupBy('id_stok_obat')
+                ->get();
+
+
+            foreach ($push as $value) {
+                $jml_keluar = StokObatModel::findorfail($value->id_stok);
+                StokObatModel::where('id', $value->id)->update(['jml_keluar' => $value->jml_keluar + $value->total]);
+
+                $kurangin = ObatModel::findorfail($value->id);
+                ObatModel::where('id', $value->id)->update(['stok' => $value->stok - $value->total]);
             }
 
-            for ($i = 0; $i < count(array($request->data_keluar)); $i++) {
-
-                PerawatanModel::where('kode_perawatan', $id)->update([
-                    'user_updated' => Auth::user()->id,
-                    'keluar' => $request['keluar'],
-                ]);
-
-
-                // $stock = Buku::findorfail($request->data_post[$i]['buku_id']);
-                // Buku::where('id', $request->data_post[$i]['buku_id'])->update(['jml_buku' => $stock->jml_buku - $request->data_post[$i]['jml_buku']]);
-                // $stock = ObatModel::findorfail($request->data_post[$i]['buku_id']);
-                // ObatModel::where('id', $request->data_post[$i]['buku_id'])->update(['jml_buku' => $stock->jml_buku - $request->data_post[$i]['jml_buku']]);
-
-                $stock = ObatModel::findorfail($request->id_obat);
-                // echo $tock;
-                ObatModel::where('id', $request->id_obat)->update(['stok' => $stock->qty - $request->stok]);
-            }
+            PerawatanModel::where('kode_perawatan', $kode_perawatan)->update([
+                'user_updated' => Auth::user()->id,
+                'keluar' => $request['keluar'],
+            ]);
 
             DB::commit();
-
-            return response()->json([
-                'code' => 200,
-                'message' => 'Berhasil Input Data Keluar UKS',
-            ]);
+            AlertHelper::addAlert(true);
+            return redirect('uks/perawatan');
         } catch (\Throwable $err) {
             DB::rollBack();
             throw $err;
@@ -356,9 +354,11 @@ class PerawatanController extends Controller
     {
 
         $obat = DB::table('uks_obat')
-            ->select('uks_obat.id', 'uks_stok_obat.id_obat', 'obat')
-            ->leftjoin('uks_stok_obat', 'uks_stok_obat.id', '=', 'uks_obat.id')
+            ->select('uks_obat.id', 'stok', 'obat')
+            ->where('stok', '>', 0)
+            ->whereNull('uks_obat.deleted_at')
             ->get();
+
         if (count($obat) > 0) {
             return response()->json([
                 'code' => 200,

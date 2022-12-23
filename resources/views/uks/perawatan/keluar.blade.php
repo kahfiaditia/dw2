@@ -22,143 +22,132 @@
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3 peminjam">
-                                        <div class="mb-3">
-                                            <label>Kode Perawatan <code>*</code></label>
-                                            <input type="disable" class="form-control" id="kode_perawatan"
-                                                name="kode_perawatan" value="{{ $perawatan[0]->kode_perawatan }}" disabled>
-                                            <input type="hidden" name="url" id="url"
-                                                value="{{ $perawatan[0]->kode_perawatan }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 peminjam">
-                                        <div class="mb-3">
-                                            <label>Siswa <code>*</code></label>
-                                            <input type="disable" class="form-control" name="siswa" id="siswa"
-                                                value="{{ $perawatan[0]->siswa->nama_lengkap }}" readonly>
-                                            {{-- <input type="disable" class="form-control" name="siswa" id="siswa"
-                                                value="{{ $perawatan[0]->users->id }}" hidden> --}}
-                                            {!! $errors->first('nama_peminjam', '<div class="invalid-validasi">:message</div>') !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 wajib">
-                                        <div class="mb-3">
-                                            <label>Tanggal<code>*</code></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="tgl" id="tgl"
-                                                    value="{{ $perawatan[0]->tgl }}" disabled>
-                                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-
-                                            </div>
-                                            {!! $errors->first('tgl', '<div class="invalid-validasi">:message</div>') !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 wajib">
-                                        <div class="mb-3">
-                                            <label>Jam Masuk<code>*</code></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="masuk" id="masuk"
-                                                    value="{{ $perawatan[0]->masuk }}" disabled>
-                                                <input type="text" class="form-control" name="id_stok_obat"
-                                                    id="id_stok_obat" value="{{ $perawatan[0]->id_stok_obat }}" hidden>
-                                                <input type="text" class="form-control" name="qty" id="qty"
-                                                    value="{{ $perawatan[0]->qty }}" hidden>
-                                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row wajib">
-                                        <div class="col-md-3">
+                                <form class="needs-validation"
+                                    action="{{ route('perawatan.uksProses', $perawatan[0]->kode_perawatan) }}"
+                                    method="POST" novalidate>
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-3 peminjam">
                                             <div class="mb-3">
-                                                <label>Jam Keluar <code>*</code></label>
-                                                <div class="input-group" id="timepicker-input-group2">
-                                                    <input id="timepicker2" name="keluar" type="text"
-                                                        class="form-control" data-provide="timepicker">
-                                                    <span class="input-group-text"><i
-                                                            class="mdi mdi-clock-outline"></i></span>
+                                                <label>Kode Perawatan <code>*</code></label>
+                                                <input type="disable" class="form-control" id="kode_perawatan"
+                                                    name="kode_perawatan" value="{{ $perawatan[0]->kode_perawatan }}"
+                                                    disabled>
+                                                <input type="hidden" name="url" id="url"
+                                                    value="{{ $perawatan[0]->kode_perawatan }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 peminjam">
+                                            <div class="mb-3">
+                                                <label>Siswa <code>*</code></label>
+                                                <input type="disable" class="form-control" name="siswa" id="siswa"
+                                                    value="{{ $perawatan[0]->siswa->nama_lengkap }}" readonly>
+                                                {{-- <input type="disable" class="form-control" name="siswa" id="siswa"
+                                                    value="{{ $perawatan[0]->users->id }}" hidden> --}}
+                                                {!! $errors->first('nama_peminjam', '<div class="invalid-validasi">:message</div>') !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 wajib">
+                                            <div class="mb-3">
+                                                <label>Tanggal<code>*</code></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="tgl" id="tgl"
+                                                        value="{{ $perawatan[0]->tgl }}" disabled>
+                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+
+                                                </div>
+                                                {!! $errors->first('tgl', '<div class="invalid-validasi">:message</div>') !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 wajib">
+                                            <div class="mb-3">
+                                                <label>Jam Masuk<code>*</code></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="masuk" id="masuk"
+                                                        value="{{ $perawatan[0]->masuk }}" disabled>
+                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row wajib">
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label>Jam Keluar <code>*</code></label>
+                                                    <div class="input-group" id="timepicker-input-group2">
+                                                        <input id="timepicker2" name="keluar" type="text"
+                                                            class="form-control" data-provide="timepicker">
+                                                        <span class="input-group-text"><i
+                                                                class="mdi mdi-clock-outline"></i></span>
+                                                        <div class="invalid-feedback">
+                                                            Data wajib diisi.
+                                                        </div>
+                                                    </div>
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
+                                                    {!! $errors->first('nama_barang', '<div class="invalid-validasi">:message</div>') !!}
                                                 </div>
-                                                <div class="invalid-feedback">
-                                                    Data wajib diisi.
+                                            </div>
+                                            <div class="row modal-footer">
+                                                <div class="col-sm-12">
+                                                    {{-- <button class="btn btn-primary" type="submit" style="float: left"
+                                                        id="add">Siswa Keluar</button> --}}
                                                 </div>
-                                                {!! $errors->first('nama_barang', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="row modal-footer">
-                                            <div class="col-sm-12">
-                                                {{-- <button class="btn btn-primary" type="submit" style="float: left"
-                                                    id="add">Siswa Keluar</button> --}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-responsive table-bordered table-striped"
-                                                id="tableList">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center" style="width: 5%">No</th>
-                                                        <th class="text-center" style="width: 20%">Obat
-                                                        </th>
-                                                        <th class="text-center" style="width: 15%">Qty</th>
-                                                        <th class="text-center" style="width: 15%">Kadaluarsa</th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($perawatan as $item)
+                                        <div class="row">
+                                            <div class="col-md-12 table-responsive">
+                                                <table class="table table-responsive table-bordered table-striped"
+                                                    id="tableList">
+                                                    <thead>
                                                         <tr>
-                                                            <td class="text-center" style="width: 5%">
-                                                                {{ $loop->iteration }}</td>
-                                                            <td class="text-center" style="width: 20%">
-                                                                {{ $item->uks_obat->obat }}</td>
-                                                            <td class="text-center" style="width: 15%">
-                                                                {{ $item->qty }}</td>
-                                                            <td class="text-center" style="width: 15%">
-                                                                {{ $item->stok_obat->tgl_ed }}</td>
+                                                            <th class="text-center" style="width: 5%">No</th>
+                                                            <th class="text-center" style="width: 20%">Obat
+                                                            </th>
+                                                            <th class="text-center" style="width: 20%">Qty
+                                                            </th>
+                                                            <th class="text-center" style="width: 15%">Kadaluarsa</th>
                                                         </tr>
-                                                    @endforeach
+                                                    </thead>
+                                                    <tbody>
 
-                                                </tbody>
-                                            </table>
+                                                        @foreach ($obat_keluar as $item)
+                                                            <tr>
+                                                                <td class="text-center" style="width: 5%">
+                                                                    {{ $loop->iteration }}</td>
+                                                                <td class="text-center" style="width: 20%">
+                                                                    {{ $item->obat }} </td>
+                                                                <td class="text-center" style="width: 15%">
+                                                                    {{ $item->total }}</td>
+                                                                <td class="text-center" style="width: 15%">
+                                                                    {{ $item->tgl_ed }} </td>
+                                                                {{-- <td data-target="id_stok_obat" class="text-center hidden"
+                                                                    style="width: 20%" hidden>
+                                                                    {{ $item->id_obat }} </td> --}}
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-sm-12">
+                                                <a href="{{ route('perawatan.index') }}"
+                                                    class="btn btn-secondary waves-effect">Kembali</a>
+                                                {{-- <a href="{{ route('perawatan.index') }}" class="btn btn-primary"
+                                                    type="submit" style="float: right">Simpan</a> --}}
+                                                <button class="btn btn-primary" type="submit" style="float: right"
+                                                    id="add">Siswa Keluar</button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-4">
-                                        <div class="col-sm-12">
-                                            <a href="{{ route('perawatan.index') }}"
-                                                class="btn btn-secondary waves-effect">Kembali</a>
-                                            {{-- <a href="{{ route('perawatan.index') }}" class="btn btn-primary"
-                                                type="submit" style="float: right">Simpan</a> --}}
-                                            <button class="btn btn-primary" type="submit" style="float: right"
-                                                id="add">Siswa Keluar</button>
-                                        </div>
-                                    </div>
-                                </div>
+                                </form>
+
                             </div>
                         </div>
                     </div>
                     <br>
-                </div>
-            </div>
-
-            <!-- modal -->
-            <div class="modal fade bs-example-modal-lg-edit" tabindex="-1" role="dialog"
-                aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myExtraLargeModalLabel">Edit Barang</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div id="dynamic-content-edit"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
     </body>
@@ -169,7 +158,7 @@
 
             var keluar = document.getElementById('timepicker2').value;
             var kode_perawatan = document.getElementById('kode_perawatan').value;
-            var id_stok_obat = document.getElementById('id_stok_obat').value;
+            // var id_stok_obat = document.getElementById('id_stok_obat').value;
             var qty = document.getElementById('qty').value;
 
             console.log(keluar)
@@ -181,7 +170,7 @@
             if (keluar === '') {
                 Swal.fire(
                     'Gagal',
-                    'Inventaris yang dipinjam wajib diisi',
+                    'Perawatan yang dipinjam wajib diisi',
                     'error'
                 )
             } else {
@@ -255,6 +244,16 @@
                     $('#modal-loader').hide();
                 });
 
+        });
+
+        $(document).on('click', '#btnEditPublisher', function(event) {
+            var qty = document.getElementById('qty').value;
+            console.log(qty)
+            event.preventDefault();
+            var dataId = $(this).data('id');
+            // var publisher = $('#' + dataId).children('td[data-target-namePublisher]').text();
+            var qty = $('#' + dataId).children('td[data-target-qty]').attr("qty");
+            console.log(city);
         });
     </script>
 @endsection

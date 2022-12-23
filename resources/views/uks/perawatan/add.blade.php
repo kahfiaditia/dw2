@@ -135,7 +135,7 @@
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label>Kuantiti <code>*</code></label>
-                                                <input type="number" min=1 class="form-control" id="qty"
+                                                <input type="number" min="1" class="form-control" id="qty"
                                                     name="qty" placeholder="Qty Obat" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
@@ -150,7 +150,7 @@
                                                 onclick="tableObat()">Tambah
                                                 Obat</a>
                                         </div>
-                                        <input type="hidden" id="inputArray">
+
                                     </div>
                                     <hr>
                                     <div class="row">
@@ -199,11 +199,13 @@
             var jam_masuk = document.getElementById('timepicker2').value;
             var gejala = document.getElementById('gejala').value;
             var desc = document.getElementById('desc').value;
-            var obat = document.getElementById('obat').value;
+            var id_obat = document.getElementById('obat').value;
             var exp = document.getElementById('exp').value;
             var qty = document.getElementById('qty').value;
+            obat = $('#obat option:selected').data('id');
 
             console.log(siswa);
+            console.log(id_obat);
             console.log(tgl);
             console.log(jam_masuk);
             console.log(gejala);
@@ -211,19 +213,21 @@
             console.log(obat);
             console.log(exp);
             console.log(qty);
+            console.log(obat);
 
-            document.getElementById('obat').value = '';
             document.getElementById('qty').value = '';
 
 
 
-            if (obat == '' || exp == '' || qty == '') {
+
+            if (id_obat == '' || exp == '' || qty == '' || qty <= 0) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Tanda * (bintang) wajib Diisi',
+                    title: 'Tanda * (bintang) wajib Diisi dan Kuantiti Min 1',
                     showConfirmButton: false,
                     timer: 1900,
                 })
+
             } else if (siswa == '' || gejala == '' || desc == '') {
                 Swal.fire({
                     icon: 'error',
@@ -240,7 +244,7 @@
                         <td class="text-left">${jam_masuk}</td>
                         <td class="text-left">${gejala}</td>
                         <td class="text-left">${desc}</td>
-                        <td class="text-left">${obat}</td>
+                        <td class="text-left">${id_obat}</td>
                         <td class="text-left">${exp}</td>
                         <td class="text-left">${qty}</td>      
                         <td>
@@ -270,10 +274,9 @@
                         jam_masuk = tableData.eq(2).text(),
                         gejala = tableData.eq(3).text(),
                         desc = tableData.eq(4).text(),
-                        obat = tableData.eq(5).text(),
+                        id_obat = tableData.eq(5).text(),
                         qty = tableData.eq(7).text(),
                         exp = tableData.eq(6).text()
-
 
                     //ini filter data null
                     if (siswa != '') {
@@ -283,13 +286,15 @@
                             jam_masuk,
                             gejala,
                             desc,
-                            obat,
+                            id_obat,
                             exp,
                             qty
                         });
                     }
                     console.log(dataperawatan)
                 })
+
+                $('#obat').val("").trigger('change')
 
                 jQuery.ajax({
                     type: "POST",
