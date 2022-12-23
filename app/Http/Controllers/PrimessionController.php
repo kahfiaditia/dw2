@@ -97,6 +97,7 @@ class PrimessionController extends Controller
                 ->groupBy('menu_id')
                 ->groupBy('submenu.submenu')
                 ->orderBy('menu.order_menu', 'ASC')
+                ->orderBy('submenu.order_submenu', 'ASC')
                 ->get();
             $data = [
                 'title' => $this->title,

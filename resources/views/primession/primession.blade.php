@@ -28,6 +28,11 @@
                                         <table class="table table-striped table-bordered border-success mb-0">
                                             <thead>
                                                 <tr>
+                                                    <td colspan="8">
+                                                        {{ strtoupper($user->name . ' [' . $user->email . '] - ' . $user->roles) }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <th valign="middle" class="text-center">#</th>
                                                     <th valign="middle" colspan="2">Menu Akses <input type="checkbox"
                                                             onchange="checkAll(this)" name="chk[]"></th>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\ObatModel;
-use App\Models\StokObatModel;
+use App\Models\OpnameStokModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
-class StokObatController extends Controller
+class OpnameObatController extends Controller
 {
     protected $title = 'dharmawidya';
     protected $menu = 'uks';
-    protected $submenu = 'tambah stok';
+    protected $submenu = 'opname';
 
     /**
      * Display a listing of the resource.
@@ -26,40 +26,54 @@ class StokObatController extends Controller
     public function index()
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('96', $session_menu)) {
+        if (in_array('104', $session_menu)) {
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
                 'submenu' => $this->submenu,
-                'label' => 'data ' . $this->submenu,
+                'label' => 'data opname',
             ];
-            return view('uks.stok.index')->with($data);
+            return view('uks.opname.index')->with($data);
         } else {
             return view('not_found');
         }
     }
 
-    public function stok_list(Request $request)
+    public function opname_list(Request $request)
     {
         // querynya
-        $list = DB::table('uks_stok_obat')
+        $list = DB::table('uks_opname_stok')
             ->select(
                 'kode_transaksi',
-                'uks_stok_obat.created_at',
-                'users.name as user'
+                'tgl_opname',
+                'uks_opname_stok.created_at',
+                'users.name as user',
+                'status',
             )
             ->selectRaw('count(DISTINCT id_obat) as jml_jenis_obat')
             ->selectRaw('SUM(jml) as jml')
-            ->selectRaw("GROUP_CONCAT(DISTINCT tgl_ed SEPARATOR ', ') as ed")
-            ->Join('users', 'users.id', 'uks_stok_obat.user_created')
-            ->whereNull('uks_stok_obat.deleted_at')
-            ->groupBy('uks_stok_obat.kode_transaksi')
-            ->orderBy('uks_stok_obat.kode_transaksi', 'DESC');
+            ->Join('users', 'users.id', 'uks_opname_stok.user_created')
+            ->whereNull('uks_opname_stok.deleted_at')
+            ->groupBy('uks_opname_stok.kode_transaksi')
+            ->orderBy('uks_opname_stok.kode_transaksi', 'DESC');
 
         return DataTables::of($list)
             ->addIndexColumn()
-            ->addColumn('action', 'uks.stok.button')
-            ->rawColumns(['action'])
+            ->addColumn('status', function ($model) {
+                if ($model->status == 'C') {
+                    $status = 'Create';
+                    $flag = 'info';
+                } elseif ($model->status == 'A') {
+                    $status = 'Approve';
+                    $flag = 'warning';
+                } elseif ($model->status == 'D') {
+                    $status = 'Done';
+                    $flag = 'success';
+                }
+                return '<span  class="badge badge-pill badge-soft-' . $flag . ' font-size-12">' . $status . '</span>';
+            })
+            ->addColumn('action', 'uks.opname.button')
+            ->rawColumns(['status', 'action'])
             ->make(true);
     }
 
@@ -71,7 +85,7 @@ class StokObatController extends Controller
     public function create()
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('97', $session_menu)) {
+        if (in_array('105', $session_menu)) {
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
@@ -79,7 +93,7 @@ class StokObatController extends Controller
                 'label' => 'tambah ' . $this->submenu,
                 'obat' => ObatModel::all(),
             ];
-            return view('uks.stok.add')->with($data);
+            return view('uks.opname.add')->with($data);
         } else {
             return view('not_found');
         }
@@ -94,52 +108,49 @@ class StokObatController extends Controller
     public function store(Request $request)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('97', $session_menu)) {
+        if (in_array('105', $session_menu)) {
             DB::beginTransaction();
             try {
-                $registration_number = StokObatModel::pluck('kode_transaksi')->last();
+                $registration_number = OpnameStokModel::pluck('kode_transaksi')->last();
                 $no_date = Carbon::now()->format('ymd');
                 if (!$registration_number) {
-                    $no_stok = "STK" . $no_date . sprintf('%04d', 1);
+                    $no_stok = "OPN" . $no_date . sprintf('%04d', 1);
                 } else {
                     $last_number = (int)substr($registration_number, 9);
                     $moon = (int)substr($registration_number, 5, 2);
                     $moon_now = Carbon::now()->format('m');
                     if ($moon != $moon_now) {
-                        $no_stok = "STK" . $no_date . sprintf('%04d', 1);
+                        $no_stok = "OPN" . $no_date . sprintf('%04d', 1);
                     } else {
-                        $no_stok = "STK" . $no_date . sprintf('%04d', $last_number + 1);
+                        $no_stok = "OPN" . $no_date . sprintf('%04d', $last_number + 1);
                     }
                 }
 
                 $created_at = Carbon::now();
                 for ($i = 0; $i < count($request->data_post); $i++) {
-                    $store = new StokObatModel();
+                    $store = new OpnameStokModel();
                     $store->kode_transaksi = $no_stok;
+                    $store->tgl_opname = $request->data_post[$i]['tanggal'];
                     $store->id_obat = $request->data_post[$i]['id_obat'];
-                    $store->tgl_ed = $request->data_post[$i]['tanggal'];
                     $store->jml = $request->data_post[$i]['jumlah'];
-                    $store->keterangan = $request->data_post[$i]['keterangan'];
+                    $store->status = 'C';
                     $store->user_created = Auth::user()->id;
                     $store->created_at = $created_at;
                     $store->save();
-
-                    $stock = ObatModel::findorfail($request->data_post[$i]['id_obat']);
-                    ObatModel::where('id', $request->data_post[$i]['id_obat'])->update(['stok' => $stock->stok + $request->data_post[$i]['jumlah']]);
                 }
 
                 DB::commit();
 
                 return response()->json([
                     'code' => 200,
-                    'message' => 'Berhasil Tambah Stok',
+                    'message' => 'Berhasil Opname',
                 ]);
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;
                 return response()->json([
                     'code' => 404,
-                    'message' => 'Gagal Tambah Stok',
+                    'message' => 'Gagal Opname',
                 ]);
             }
         } else {
@@ -156,16 +167,16 @@ class StokObatController extends Controller
     public function show($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('96', $session_menu)) {
+        if (in_array('104', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
                 'submenu' => $this->submenu,
                 'label' => 'lihat ' . $this->submenu,
-                'data' => StokObatModel::where('kode_transaksi', $id_decrypted)->get(),
+                'data' => OpnameStokModel::where('kode_transaksi', $id_decrypted)->get(),
             ];
-            return view('uks.stok.show')->with($data);
+            return view('uks.opname.show')->with($data);
         } else {
             return view('not_found');
         }
@@ -180,7 +191,7 @@ class StokObatController extends Controller
     public function edit($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('98', $session_menu)) {
+        if (in_array('106', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
             $data = [
                 'title' => $this->title,
@@ -188,9 +199,9 @@ class StokObatController extends Controller
                 'submenu' => $this->submenu,
                 'label' => 'ubah ' . $this->submenu,
                 'obat' => ObatModel::all(),
-                'data' => StokObatModel::where('kode_transaksi', $id_decrypted)->get(),
+                'data' => OpnameStokModel::where('kode_transaksi', $id_decrypted)->get(),
             ];
-            return view('uks.stok.edit')->with($data);
+            return view('uks.opname.edit')->with($data);
         } else {
             return view('not_found');
         }
@@ -206,26 +217,23 @@ class StokObatController extends Controller
     public function update(Request $request, $id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('98', $session_menu)) {
+        if (in_array('106', $session_menu)) {
             $id = Crypt::decryptString($id);
             $request->validate([
-                'obat' => 'required',
-                'tanggal' => 'required',
-                'jumlah' => 'required',
+                'obat' => "required|max:64|unique:uks_obat,obat,$id,id,deleted_at,NULL",
+                'jenis' => 'required|max:64',
             ]);
             DB::beginTransaction();
             try {
-                $update = StokObatModel::findOrFail($id);
-                $update->id_obat = $request['obat'];
-                $update->tgl_ed = $request['tanggal'];
-                $update->jml = $request['jumlah'];
-                $update->keterangan = $request->keterangan;
-                $update->user_updated = Auth::user()->id;
-                $update->save();
+                $rak = ObatModel::findOrFail($id);
+                $rak->obat = $request['obat'];
+                $rak->id_jenis_obat = $request['jenis'];
+                $rak->user_updated = Auth::user()->id;
+                $rak->save();
 
                 DB::commit();
                 AlertHelper::updateAlert(true);
-                return redirect('uks/stok_obat');
+                return redirect('uks/obat');
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;
@@ -233,6 +241,40 @@ class StokObatController extends Controller
             }
         } else {
             return view('not_found');
+        }
+    }
+
+    public function opname_store(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            for ($i = 0; $i < count($request->data_post); $i++) {
+
+                $store = new OpnameStokModel();
+                $store->kode_transaksi = $request->kode_transaksi;
+                $store->id_obat = $request->data_post[$i]['obat_id'];
+                $store->tgl_opname = $request->data_post[$i]['tanggal'];
+                $store->jml = $request->data_post[$i]['jml_obat'];
+                $store->status = 'C';
+                $store->user_created = Auth::user()->id;
+                $store->created_at = Carbon::now();
+                $store->save();
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'code' => 200,
+                'message' => 'Berhasil Opname',
+                'kode_transaksi' => Crypt::encryptString($request->kode_transaksi),
+            ]);
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            throw $err;
+            return response()->json([
+                'code' => 404,
+                'message' => 'Gagal Opname',
+            ]);
         }
     }
 
@@ -245,17 +287,12 @@ class StokObatController extends Controller
     public function destroy($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('99', $session_menu)) {
+        if (in_array('107', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
 
-                $stok = StokObatModel::where('kode_transaksi', $id_decrypted)->get();
-                foreach ($stok as $value) {
-                    $stock = ObatModel::findorfail($value->id_obat);
-                    ObatModel::where('id', $value->id_obat)->update(['stok' => $stock->stok - $value->jml]);
-                }
-                StokObatModel::where('kode_transaksi', $id_decrypted)->update(['user_deleted' => Auth::user()->id, 'deleted_at' => Carbon::now()]);
+                OpnameStokModel::where('kode_transaksi', $id_decrypted)->update(['user_deleted' => Auth::user()->id, 'deleted_at' => Carbon::now()]);
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);
@@ -270,10 +307,10 @@ class StokObatController extends Controller
         }
     }
 
-    public function destroy_id(Request $request, $id)
+    public function opname_destroy_id(Request $request, $id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('98', $session_menu)) {
+        if (in_array('106', $session_menu)) {
             $variabel = Crypt::decryptString($id);
             $dat = explode("|", $variabel);
             $id_decrypted = $dat[0];
@@ -281,11 +318,7 @@ class StokObatController extends Controller
 
             DB::beginTransaction();
             try {
-                $delete = StokObatModel::findorfail($id_decrypted);
-                // update stock
-                $stock = ObatModel::findorfail($delete->id_obat);
-                ObatModel::where('id', $stock->id)->update(['stok' => $stock->stok - $delete->jml]);
-                // delete pinjaman
+                $delete = OpnameStokModel::findorfail($id_decrypted);
                 $delete->user_deleted = Auth::user()->id;
                 $delete->deleted_at = Carbon::now();
                 $delete->save();
@@ -293,9 +326,9 @@ class StokObatController extends Controller
                 DB::commit();
                 AlertHelper::deleteAlert(true);
 
-                $count = StokObatModel::where('kode_transaksi', $kode_transaksi)->count();
+                $count = OpnameStokModel::where('kode_transaksi', $kode_transaksi)->count();
                 if ($count == 0) {
-                    return redirect('uks/stok_obat');
+                    return redirect('uks/opname_obat');
                 } else {
                     return back();
                 }
@@ -309,40 +342,20 @@ class StokObatController extends Controller
         }
     }
 
-    public function store_edit(Request $request)
+    public function approve_opname(Request $request, $kode, $type)
     {
         DB::beginTransaction();
         try {
-            for ($i = 0; $i < count($request->data_post); $i++) {
 
-                $store = new StokObatModel();
-                $store->kode_transaksi = $request->kode_transaksi;
-                $store->id_obat = $request->data_post[$i]['obat_id'];
-                $store->tgl_ed = $request->data_post[$i]['tanggal'];
-                $store->jml = $request->data_post[$i]['jml_obat'];
-                $store->keterangan = $request->data_post[$i]['keterangan'];
-                $store->user_created = Auth::user()->id;
-                $store->created_at = Carbon::now();
-                $store->save();
-
-                $stock = ObatModel::findorfail($request->data_post[$i]['obat_id']);
-                ObatModel::where('id', $request->data_post[$i]['obat_id'])->update(['stok' => $stock->stok + $request->data_post[$i]['jml_obat']]);
-            }
+            OpnameStokModel::where('kode_transaksi', $kode)->update(['status' => $type]);
 
             DB::commit();
-
-            return response()->json([
-                'code' => 200,
-                'message' => 'Berhasil Tambah Stok',
-                'kode_transaksi' => Crypt::encryptString($request->kode_transaksi),
-            ]);
+            AlertHelper::updateAlert(true);
+            return back();
         } catch (\Throwable $err) {
-            DB::rollBack();
+            DB::rollback();
             throw $err;
-            return response()->json([
-                'code' => 404,
-                'message' => 'Gagal Tambah Stok',
-            ]);
+            return back();
         }
     }
 }

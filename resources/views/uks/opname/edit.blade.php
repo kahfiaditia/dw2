@@ -50,7 +50,7 @@
                             <div class="row">
                                 <div class="row gy-2 gx-3 align-items-center">
                                     <h5 class="card-title">Tambah Obat</h5>
-                                    <div class="col-sm-auto col-md-2">
+                                    <div class="col-sm-auto col-md-3">
                                         <select class="form-control select select2 obat" id="obat_id">
                                             <option value="">--Pilih Obat--</option>
                                             @foreach ($obat as $item)
@@ -59,26 +59,24 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-sm-auto col-md-2">
+                                    <div class="col-sm-auto col-md-3">
                                         <div class="input-group" id="datepicker2">
                                             <input type="text" class="form-control" placeholder="Expired Date"
-                                                id="tanggal" name="tanggal" value="{{ old('tanggal') }}"
-                                                data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
-                                                data-provide="datepicker" required data-date-autoclose="true">
+                                                id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}"
+                                                data-date-end-date="{{ date('Y-m-d') }}" data-date-format="yyyy-mm-dd"
+                                                data-date-container='#datepicker2' data-provide="datepicker" required
+                                                data-date-autoclose="true">
                                             <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-auto col-md-2">
+                                    <div class="col-sm-auto col-md-3">
                                         <input type="text" class="form-control number-only" id="jml_obat"
                                             placeholder="Jumlah PCS">
                                     </div>
-                                    <div class="col-sm-auto col-md-2">
-                                        <textarea name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan"></textarea>
-                                    </div>
-                                    <div class="col-sm-auto col-md-2">
+                                    <div class="col-sm-auto col-md-3">
                                         <a type="submit" class="btn btn-info w-md" id="add">Tambah Obat</a>
                                     </div>
                                 </div>
@@ -92,8 +90,7 @@
                                                 <th class="text-center" style="width: 5%">#</th>
                                                 <th class="text-center" style="width: 20%">Obat</th>
                                                 <th class="text-center" style="width: 10%">Jumlah Obat</th>
-                                                <th class="text-center" style="width: 15%">Tanggal Expired Date</th>
-                                                <th class="text-center" style="width: 25%">Keterangan</th>
+                                                <th class="text-center" style="width: 15%">Tanggal Opname</th>
                                                 <th class="text-center" style="width: 5%">Aksi</th>
                                             </tr>
                                         </thead>
@@ -104,12 +101,11 @@
                                                     <td>{{ $list->obat->obat . ' - ' . $list->obat->jenis->jenis_obat }}
                                                     </td>
                                                     <td class="text-center">{{ $list->jml }}</td>
-                                                    <td class="text-center">{{ $list->tgl_ed }}</td>
-                                                    <td class="text-center">{{ $list->keterangan }}</td>
+                                                    <td class="text-center">{{ $list->tgl_opname }}</td>
                                                     <td class="text-center">
                                                         <?php $id = Crypt::encryptString($list->id . '|' . $list->kode_transaksi); ?>
                                                         <form class="delete-form"
-                                                            action="{{ route('stok_obat.destroy_id', $id) }}"
+                                                            action="{{ route('opname_obat.opname_destroy_id', $id) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('DELETE')
@@ -127,7 +123,7 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-sm-12">
-                                    <a href="{{ route('stok_obat.index') }}"
+                                    <a href="{{ route('opname_obat.index') }}"
                                         class="btn btn-secondary waves-effect">Batal</a>
                                 </div>
                             </div>
@@ -146,12 +142,11 @@
                 obat_id = document.getElementById("obat_id").value;
                 tanggal = document.getElementById("tanggal").value;
                 jml_obat = document.getElementById("jml_obat").value;
-                keterangan = document.getElementById("keterangan").value;
 
                 if (obat_id == '' || tanggal == '' || jml_obat == '') {
                     Swal.fire(
                         'Gagal',
-                        'Obat, Expired Date dan Jumlah wajib diisi',
+                        'Obat dan Jumlah wajib diisi',
                         'error'
                     )
                 } else {
@@ -160,12 +155,11 @@
                         obat_id,
                         tanggal,
                         jml_obat,
-                        keterangan
                     })
 
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('stok_obat.store_edit') }}',
+                        url: '{{ route('opname_obat.opname_store') }}',
                         data: {
                             "_token": "{{ csrf_token() }}",
                             data_post,
@@ -179,7 +173,7 @@
                                     'success'
                                 ).then(() => {
                                     var APP_URL = {!! json_encode(url('/')) !!}
-                                    window.location = APP_URL + '/uks/stok_obat/' +
+                                    window.location = APP_URL + '/uks/opname_obat/' +
                                         response.kode_transaksi +
                                         '/edit'
                                 })

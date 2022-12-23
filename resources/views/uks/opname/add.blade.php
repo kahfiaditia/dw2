@@ -21,8 +21,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="row gy-2 gx-3 align-items-center">
-                                    <h5 class="card-title">Tambah Obat</h5>
-                                    <div class="col-sm-auto col-md-2">
+                                    <h5 class="card-title">Tambah Opname Obat</h5>
+                                    <div class="col-sm-auto col-md-3">
                                         <select class="form-control select select2 obat" id="obat_id">
                                             <option value="">--Pilih Obat--</option>
                                             @foreach ($obat as $item)
@@ -31,27 +31,25 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-sm-auto col-md-2">
+                                    <div class="col-sm-auto col-md-3">
                                         <div class="input-group" id="datepicker2">
-                                            <input type="text" class="form-control" placeholder="Expired Date"
-                                                id="tanggal" name="tanggal" value="{{ old('tanggal') }}"
-                                                data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
-                                                data-provide="datepicker" required data-date-autoclose="true">
+                                            <input type="text" class="form-control" placeholder="Tanggal Opname"
+                                                id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}"
+                                                data-date-end-date="{{ date('Y-m-d') }}" data-date-format="yyyy-mm-dd"
+                                                data-date-container='#datepicker2' data-provide="datepicker" required
+                                                data-date-autoclose="true">
                                             <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-auto col-md-2">
+                                    <div class="col-sm-auto col-md-3">
                                         <input type="text" class="form-control number-only" id="jml_obat"
                                             placeholder="Jumlah PCS">
                                     </div>
-                                    <div class="col-sm-auto col-md-2">
-                                        <textarea name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan"></textarea>
-                                    </div>
-                                    <div class="col-sm-auto col-md-2">
-                                        <a type="submit" class="btn btn-info w-md" id="add">Tambah buku</a>
+                                    <div class="col-sm-auto col-md-3">
+                                        <a type="submit" class="btn btn-info w-md" id="add">Tambah Stok Opname</a>
                                     </div>
                                 </div>
                             </div>
@@ -63,9 +61,8 @@
                                             <tr>
                                                 <th class="text-center" style="width: 5%">#</th>
                                                 <th class="text-center" style="width: 20%">Obat</th>
-                                                <th class="text-center" style="width: 20%">Tanggal Expired Date</th>
-                                                <th class="text-center" style="width: 20%">Jumlah Obat</th>
-                                                <th class="text-center" style="width: 25%">Keterangan</th>
+                                                <th class="text-center" style="width: 20%">Tanggal Opname</th>
+                                                <th class="text-center" style="width: 20%">Jumlah PCS</th>
                                                 <th class="text-center" style="width: 10%">Aksi</th>
                                             </tr>
                                         </thead>
@@ -76,8 +73,7 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-sm-12">
-                                    <a href="{{ route('stok_obat.index') }}"
-                                        class="btn btn-secondary waves-effect">Batal</a>
+                                    <a href="{{ route('obat.index') }}" class="btn btn-secondary waves-effect">Batal</a>
                                     <button class="btn btn-primary" type="submit" style="float: right"
                                         id="save">Simpan</button>
                                 </div>
@@ -99,13 +95,12 @@
                 obat_id = document.getElementById("obat_id").value;
                 tanggal = document.getElementById("tanggal").value;
                 jml_obat = document.getElementById("jml_obat").value;
-                keterangan = document.getElementById("keterangan").value;
                 obat = $('#obat_id option:selected').data('id');
 
                 if (obat_id == '' || tanggal == '' || jml_obat == '') {
                     Swal.fire(
                         'Gagal',
-                        'Obat, Expired Date dan Jumlah wajib diisi',
+                        'Obat dan Jumlah wajib diisi',
                         'error'
                     )
                 } else {
@@ -113,9 +108,8 @@
                         <tr>
                             <td class="text-center">${increment}</td>   
                             <td class="">${obat}</td>    
-                            <td class="">${tanggal}</td>    
+                            <td class="text-center">${tanggal}</td>    
                             <td class="text-center">${jml_obat}</td>
-                            <td class="">${keterangan}</td>
                             <td class="text-center">
                                 <a class="btn btn-danger btn-sm deleteItems" id="deleteItems">Delete</a>    
                                 </td>
@@ -131,9 +125,7 @@
 
                     // null items
                     $('#obat_id').val("").trigger('change')
-                    $('#tanggal').val("")
                     $('#jml_obat').val("")
-                    $('#keterangan').val("")
                 }
 
                 $(".deleteItems").on('click', function() {
@@ -142,17 +134,6 @@
                     // looping no
                     $("#table_pinjaman").find("tr").each(function(index, element) {
                         let tableData = $(this).find('td')
-                        tableData.eq(0).text(index)
-                    })
-
-                    // looping no
-                    $("#table_pinjaman").find("tr").each(function(index, element) {
-                        let tableData = $(this).find('td'),
-                            obat = tableData.eq(1).text(),
-                            tanggal = tableData.eq(2).text(),
-                            keterangan = tableData.eq(3).text(),
-                            obat_id = tableData.eq(4).text()
-
                         tableData.eq(0).text(index)
                     })
                 })
@@ -164,21 +145,19 @@
                     let tableData = $(this).find('td'),
                         tanggal = tableData.eq(2).text(),
                         jumlah = tableData.eq(3).text(),
-                        keterangan = tableData.eq(4).text(),
-                        id_obat = tableData.eq(6).text()
+                        id_obat = tableData.eq(5).text()
 
                     datas.push({
                         id_obat,
                         tanggal,
                         jumlah,
-                        keterangan
                     })
                 })
                 let data_post = datas.filter(data => data.id_obat !== "")
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('stok_obat.store') }}',
+                    url: '{{ route('opname_obat.store') }}',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         data_post,
@@ -191,7 +170,7 @@
                                 'success'
                             ).then(() => {
                                 var APP_URL = {!! json_encode(url('/')) !!}
-                                window.location = APP_URL + '/uks/stok_obat'
+                                window.location = APP_URL + '/uks/opname_obat'
                             })
 
                         } else {

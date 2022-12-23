@@ -18,8 +18,10 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
+use App\Http\Controllers\KomparasiController;
 use App\Http\Controllers\NeedsController;
 use App\Http\Controllers\ObatController;
+use App\Http\Controllers\OpnameObatController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PenerbitController;
@@ -321,8 +323,18 @@ Route::group(
         Route::resource('/obat', ObatController::class);
         Route::resource('/stok_obat', StokObatController::class);
         Route::get('/stok_list', [StokObatController::class, 'stok_list'])->name('stok_obat.stok_list');
-        Route::delete('/destroy_id/{id}', [StokObatController::class, 'destroy_id'])->name('stok_obat.destroy_id');
         Route::post('/store_edit', [StokObatController::class, 'store_edit'])->name('stok_obat.store_edit');
+        Route::delete('/destroy_id/{id}', [StokObatController::class, 'destroy_id'])->name('stok_obat.destroy_id');
+
+        Route::resource('/opname_obat', OpnameObatController::class);
+        Route::get('/opname_list', [OpnameObatController::class, 'opname_list'])->name('opname_obat.opname_list');
+        Route::post('/opname_store', [OpnameObatController::class, 'opname_store'])->name('opname_obat.opname_store');
+        Route::delete('/opname_destroy_id/{id}', [OpnameObatController::class, 'opname_destroy_id'])->name('opname_obat.opname_destroy_id');
+        Route::delete('/approve_opname/{kode}/{type}', [OpnameObatController::class, 'approve_opname'])->name('opname_obat.approve_opname');
+
+        Route::get('/komparasi', [KomparasiController::class, 'index'])->name('komparasi');
+        Route::get('/komparasi_list', [KomparasiController::class, 'komparasi_list'])->name('komparasi.komparasi_list');
+        Route::post('/hitung_komparasi', [KomparasiController::class, 'hitung_komparasi'])->name('komparasi.hitung_komparasi');
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');
