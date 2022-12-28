@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KomparasiModel;
 use App\Models\ObatModel;
 use App\Models\OpnameStokModel;
+use App\Models\StokObatModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,11 +24,11 @@ class KomparasiController extends Controller
         if (in_array('108', $session_menu)) {
             // cek data yang belum opname
             $count = DB::table('uks_obat')
-                ->select('stok')
-                ->selectRaw('ifnull(SUM(jml),0) - stok as selisih')
+                ->select('status', 'obat')
                 ->leftJoin('uks_opname_stok', function ($join) {
                     $join->on('uks_opname_stok.id_obat', '=', 'uks_obat.id')
-                        ->where('uks_opname_stok.status', '!=', 'D');
+                        ->where('uks_opname_stok.status', '!=', 'D')
+                        ->whereNull('uks_opname_stok.deleted_at');
                 })
                 ->whereNull('uks_opname_stok.deleted_at')
                 ->whereNull('kode_transaksi')
@@ -36,9 +37,10 @@ class KomparasiController extends Controller
                         ->orwhereNull('uks_opname_stok.status');
                 })
                 ->groupBy('uks_obat.id')
+                ->havingRaw('CASE WHEN status = "A" THEN sum(jml) ELSE 0 END > 0 or SUM(stok) > 0')
                 ->count();
 
-            // cek data jml opname > jml Sistem silisih > 0 (tambah stok manual)
+            // cek data jml opname > jml Sistem = silisih > 0 (tambah stok manual) ]
             $count_manual = DB::table('uks_obat')
                 ->select('stok')
                 ->selectRaw('ifnull(SUM(jml),0) - stok as selisih')
@@ -88,7 +90,8 @@ class KomparasiController extends Controller
             ->Join('uks_jenis_obat', 'uks_jenis_obat.id', 'uks_obat.id_jenis_obat')
             ->leftJoin('uks_opname_stok', function ($join) {
                 $join->on('uks_opname_stok.id_obat', '=', 'uks_obat.id')
-                    ->where('uks_opname_stok.status', '!=', 'D');
+                    ->where('uks_opname_stok.status', '!=', 'D')
+                    ->whereNull('uks_opname_stok.deleted_at');
             })
             ->leftJoin('users', 'users.id', 'uks_opname_stok.user_created')
             ->where(function ($query) {
@@ -97,7 +100,8 @@ class KomparasiController extends Controller
                     ->orwhereNull('uks_opname_stok.status');
             })
             ->groupBy('uks_obat.id')
-            ->orderByRaw('stok = CASE WHEN status = "A" THEN sum(jml) ELSE 0 END ASC');
+            ->havingRaw('CASE WHEN status = "A" THEN sum(jml) ELSE 0 END > 0 or SUM(stok) > 0')
+            ->orderByRaw("FIELD(status, '', 'C', 'A'), SUM(stok) - CASE WHEN status = 'A' THEN sum(jml) ELSE 0 END DESC");
 
         return DataTables::of($list)
             ->addIndexColumn()
@@ -174,11 +178,16 @@ class KomparasiController extends Controller
                 ->whereNull('uks_opname_stok.deleted_at')
                 ->Where('uks_opname_stok.status', '=', 'A')
                 ->groupBy('uks_obat.id')
-                // ->havingRaw('CASE WHEN status = "A" THEN sum(jml) ELSE 0 END - stok < 0')
+                ->orderByRaw("FIELD(status, '', 'C', 'A'), SUM(stok) - CASE WHEN status = 'A' THEN sum(jml) ELSE 0 END DESC")
                 ->get();
 
             foreach ($list as $item) {
                 $selisih = $item->jml_opname - $item->jml_sistem;
+                if ($item->jml_opname < $item->jml_sistem) {
+                    $type_adjust = 'kurang';
+                } else {
+                    $type_adjust = null;
+                }
 
                 $store = new KomparasiModel();
                 $store->kode_komparasi = $kode_komparasi; // komparasi stok
@@ -188,20 +197,38 @@ class KomparasiController extends Controller
                 $store->stok_opname = $item->jml_opname;
                 $store->stok_sistem = $item->jml_sistem;
                 $store->adjust_stok = abs($selisih);
+                $store->type_adjust = $type_adjust;
                 $store->user_opname = $item->user;
                 $store->user_created = Auth::user()->id;
                 $store->save();
 
-                // selisih > 0 harus tambah stok manual dari admin (jml opname > jml sistem)
+                // selisih > 0 atau ($item->jml_opname - $item->jml_sistem) harus tambah stok manual dari admin (jml opname > jml sistem)
                 // jika < 0 kurangin sistemnya (jml opname < jml sistem)
                 if ($selisih < 0) {
                     // kurang stok obat [uks_obat]
                     $stock = ObatModel::findorfail($item->id_obat);
                     ObatModel::where('id', $item->id_obat)->update(['stok' => $stock->stok - abs($selisih)]);
 
-                    // BUG :: belum ngurangin
-                    // kurangin stok insert di perawatan siswa []
                     // kurangin stok jml tambah stok di jml_out tabel uks_stok_obat
+                    for ($i = 0; $i < abs($selisih); $i++) {
+                        $list_stok = DB::table('uks_stok_obat')
+                            ->select(
+                                'id',
+                                'jml',
+                                'jml_keluar',
+                            )
+                            ->whereNull('deleted_at')
+                            ->Where('id_obat', '=', $item->id_obat)
+                            ->whereRaw('jml-IFNULL(jml_keluar, 0) > 0')
+                            ->groupBy('id')
+                            ->orderByRaw("tgl_ed ASC")
+                            ->limit(1)
+                            ->get();
+                        foreach ($list_stok as $item_stok) {
+                            // pengurangan di stok obat
+                            StokObatModel::where('id', $item_stok->id)->update(['jml_keluar' => $item_stok->jml_keluar + 1]);
+                        }
+                    }
                 }
 
                 // update flag opname stok jadi "D"
@@ -213,7 +240,6 @@ class KomparasiController extends Controller
             return response()->json([
                 'code' => 200,
                 'message' => 'Menyesuaikan Stok Berhasil',
-                'data' => $list,
             ]);
         } catch (\Throwable $err) {
             return response()->json([

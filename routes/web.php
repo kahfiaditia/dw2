@@ -27,6 +27,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PenerbitController;
 use App\Http\Controllers\PinjamanController;
 use App\Http\Controllers\PrestasiController;
+use App\Http\Controllers\PerawatanController;
 use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
 use App\Http\Controllers\RakController;
@@ -335,6 +336,15 @@ Route::group(
         Route::get('/komparasi', [KomparasiController::class, 'index'])->name('komparasi');
         Route::get('/komparasi_list', [KomparasiController::class, 'komparasi_list'])->name('komparasi.komparasi_list');
         Route::post('/hitung_komparasi', [KomparasiController::class, 'hitung_komparasi'])->name('komparasi.hitung_komparasi');
+
+        Route::resource('/perawatan', PerawatanController::class);
+        Route::post('/update_obat', [PerawatanController::class, 'update_obat'])->name('perawatan.update_obat');
+        Route::delete('/destroy_obat/{id}', [PerawatanController::class, 'destroy_obat'])->name('perawatan.destroy_obat');
+        Route::post('/get_obat', [PerawatanController::class, 'get_obat'])->name('perawatan.get_obat');
+        Route::post('/get_exp', [PerawatanController::class, 'get_exp'])->name('perawatan.get_exp');
+        Route::get('/kembali_keluar/{id}', [PerawatanController::class, 'kembali_keluar'])->name('perawatan.kembali_keluar');
+        Route::post('/uksProses/{id}', [PerawatanController::class, 'uksProses'])->name('perawatan.uksProses');
+        Route::post('/edit_perawatan', [PerawatanController::class, 'update'])->name('perawatan.edit_perawatan');
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

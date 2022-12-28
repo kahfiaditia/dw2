@@ -16,4 +16,9 @@ class ObatModel extends Model
     {
         return $this->belongsTo(JenisObatModel::class, 'id_jenis_obat')->withTrashed();
     }
+
+    public function perawatan()
+    {
+        return $this->hasMany(PerawatanModel::class, 'id_obat');
+    }
 }

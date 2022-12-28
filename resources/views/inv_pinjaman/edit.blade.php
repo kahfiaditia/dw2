@@ -228,7 +228,6 @@
                         tgl_pemakaian,
                         estimasi_kembali,
                         nama_barang,
-
                     },
 
                     success: (response) => {
@@ -240,8 +239,7 @@
                             ).then(() => {
                                 var APP_URL = {!! json_encode(url('/')) !!}
                                 url = document.getElementById("url").value;
-                                window.location = APP_URL + '/inv_pinjaman/' + url +
-                                    '/edit'
+                                window.location = APP_URL + '/inv_pinjaman/'
                             })
                         } else {
                             Swal.fire(

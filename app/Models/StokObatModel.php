@@ -21,4 +21,9 @@ class StokObatModel extends Model
     {
         return $this->belongsTo(User::class, 'user_created')->withTrashed();
     }
+
+    public function perawatan_obat()
+    {
+        return $this->hasMany(PerawatanModel::class, 'id');
+    }
 }

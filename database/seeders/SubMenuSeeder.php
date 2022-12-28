@@ -218,7 +218,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Tambah Stok', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Perawatan', 'route_submenu' => 'opname_obat.index', 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => 3,
+                'submenu' => 'Perawatan', 'route_submenu' => 'perawatan.index', 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => 3,
             ], [
                 'submenu' => 'Perawatan', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ], [

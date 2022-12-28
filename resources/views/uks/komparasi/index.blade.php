@@ -18,7 +18,7 @@
                                 @if (in_array('109', $session_menu))
                                     @if ($count > 0 or $count_manual > 0)
                                         <button type="button"
-                                            class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+                                            class="float-end btn btn-secondary btn-rounded waves-effect waves-light mb-2 me-2"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                             data-bs-original-title="Wajib Stok Opame Semua dan Tambah Stok Manual">
                                             Menyesuaikan Stok
@@ -77,7 +77,6 @@
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    console.log('xxxx');
                     $.ajax({
                         type: "POST",
                         url: '{{ route('komparasi.hitung_komparasi') }}',
@@ -85,14 +84,21 @@
                             "_token": "{{ csrf_token() }}",
                         },
                         success: response => {
-                            console.log(response);
-                            // $('.siswa').append(`<option value="">-- Pilih Siswa --</option>`)
-                            // $.each(response.data, function(i, item) {
-                            //     $('.siswa').append(
-                            //         `<option value="${item.id}">${item.nama_lengkap}</option>`
-                            //     )
-                            // })
-                            // $('#siswa').val("").trigger('change')
+                            if (response.code === 200) {
+                                Swal.fire(
+                                    'Success',
+                                    `${response.message}`,
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                })
+                            } else {
+                                Swal.fire(
+                                    'Gagal',
+                                    `${response.message}`,
+                                    'error',
+                                )
+                            }
                         },
                         error: (err) => {
                             console.log(err);
