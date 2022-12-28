@@ -33,7 +33,7 @@
                 method="POST">
                 @csrf
                 @method('DELETE')
-                <a href class="text-danger approve_confirm"><i class="mdi mdi-close font-size-18"></i></a>
+                <a href class="text-danger approve_cancel"><i class="mdi mdi-close font-size-18"></i></a>
             </form>
         @endif
     @endif
@@ -61,6 +61,23 @@
         Swal.fire({
             title: 'Approve Data',
             text: 'Ingin approve opname?',
+            icon: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+            cancelButtonText: "Batal",
+            focusConfirm: false,
+        }).then((value) => {
+            if (value.isConfirmed) {
+                $(this).closest("form").submit()
+            }
+        });
+    });
+
+    $('.approve_cancel').on('click', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: 'Batal Approve Data',
+            text: 'Ingin batal approve opname?',
             icon: 'question',
             showCloseButton: true,
             showCancelButton: true,

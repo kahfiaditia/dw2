@@ -73,7 +73,8 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-sm-12">
-                                    <a href="{{ route('obat.index') }}" class="btn btn-secondary waves-effect">Batal</a>
+                                    <a href="{{ route('opname_obat.index') }}"
+                                        class="btn btn-secondary waves-effect">Batal</a>
                                     <button class="btn btn-primary" type="submit" style="float: right"
                                         id="save">Simpan</button>
                                 </div>
