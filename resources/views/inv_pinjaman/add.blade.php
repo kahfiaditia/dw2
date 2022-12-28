@@ -191,7 +191,6 @@
             console.log(nama_barang)
             console.log(desc)
 
-
             if (nama_barang == '' || desc == '') {
                 Swal.fire({
                     icon: 'error',
@@ -236,7 +235,6 @@
                     tgl_renc_pengembalian = tableData.eq(4).text(),
                     nama_barang = tableData.eq(5).text(),
                     desc = tableData.eq(6).text()
-
 
                 //ini filter data null
                 if (nama_barang != '') {

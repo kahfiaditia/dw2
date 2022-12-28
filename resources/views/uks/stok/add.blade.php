@@ -51,7 +51,7 @@
                                         <textarea name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan"></textarea>
                                     </div>
                                     <div class="col-sm-auto col-md-2">
-                                        <a type="submit" class="btn btn-info w-md" id="add">Tambah buku</a>
+                                        <a type="submit" class="btn btn-info w-md" id="add">Tambah Obat</a>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                                             <tr>
                                                 <th class="text-center" style="width: 5%">#</th>
                                                 <th class="text-center" style="width: 20%">Obat</th>
-                                                <th class="text-center" style="width: 20%">Tanggal Expired Date</th>
+                                                <th class="text-center" style="width: 20%">Tanggal Kadaluarsa</th>
                                                 <th class="text-center" style="width: 20%">Jumlah Obat</th>
                                                 <th class="text-center" style="width: 25%">Keterangan</th>
                                                 <th class="text-center" style="width: 10%">Aksi</th>

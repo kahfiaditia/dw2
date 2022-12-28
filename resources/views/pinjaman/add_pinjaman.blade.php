@@ -726,7 +726,6 @@
                             "siswa": siswa,
                             "karyawan": karyawan,
                             "tgl_pinjam": tgl_pinjam
-
                         }
                     };
                     localStorage.setItem('localPerpusDharma', JSON.stringify(dataPerpus));
@@ -784,7 +783,6 @@
 
                     // null items
                     $('#buku_id').val("").trigger('change')
-                    // $('#jml_buku').val("")
                 }
 
                 $(".deleteItems").on('click', function() {
