@@ -336,6 +336,9 @@ Route::group(
         Route::get('/komparasi', [KomparasiController::class, 'index'])->name('komparasi');
         Route::get('/komparasi_list', [KomparasiController::class, 'komparasi_list'])->name('komparasi.komparasi_list');
         Route::post('/hitung_komparasi', [KomparasiController::class, 'hitung_komparasi'])->name('komparasi.hitung_komparasi');
+        Route::get('/hasil_komparasi', [KomparasiController::class, 'hasil_komparasi'])->name('komparasi.hasil_komparasi');
+        Route::get('/hasil_komparasi_list', [KomparasiController::class, 'hasil_komparasi_list'])->name('komparasi.hasil_komparasi_list');
+        Route::get('/show/{id}', [KomparasiController::class, 'show'])->name('komparasi.show');
 
         Route::resource('/perawatan', PerawatanController::class);
         Route::post('/update_obat', [PerawatanController::class, 'update_obat'])->name('perawatan.update_obat');

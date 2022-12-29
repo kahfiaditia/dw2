@@ -239,8 +239,6 @@ class SubMenuSeeder extends Seeder
                 'submenu' => 'Komparasi Stok', 'route_submenu' => null, 'type_menu' => 'approve', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Hasil Komparasi Opname', 'route_submenu' => null, 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => 6,
-            ], [
-                'submenu' => 'Hasil Komparasi Opname', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ],
         ];
         DB::table('submenu')->insert($sub_menus);

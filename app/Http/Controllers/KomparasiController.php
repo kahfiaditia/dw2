@@ -9,6 +9,7 @@ use App\Models\StokObatModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -184,7 +185,7 @@ class KomparasiController extends Controller
             foreach ($list as $item) {
                 $selisih = $item->jml_opname - $item->jml_sistem;
                 if ($item->jml_opname < $item->jml_sistem) {
-                    $type_adjust = 'kurang';
+                    $type_adjust = 'lebih';
                 } else {
                     $type_adjust = null;
                 }
@@ -247,6 +248,61 @@ class KomparasiController extends Controller
                 'message' => 'Menyesuaikan Stok Gagal',
                 'err' => $err,
             ]);
+        }
+    }
+
+    public function hasil_komparasi()
+    {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('110', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'hasil ' . $this->submenu,
+                'label' => 'hasil ' . $this->submenu,
+            ];
+            return view('uks.komparasi.hasil')->with($data);
+        } else {
+            return view('not_found');
+        }
+    }
+
+    public function hasil_komparasi_list(Request $request)
+    {
+        // querynya
+        $list = DB::table('uks_komparasi')
+            ->select(
+                'kode_komparasi',
+                'tgl_komparasi',
+                'users.name as user',
+            )
+            ->selectRaw('count(id_obat) as jml')
+            ->leftJoin('users', 'users.id', 'uks_komparasi.user_created')
+            ->groupBy('kode_komparasi')
+            ->orderBy('kode_komparasi', 'DESC');
+
+        return DataTables::of($list)
+            ->addIndexColumn()
+            ->addColumn('action', 'uks.komparasi.button')
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function show($id)
+    {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('110', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'lihat ' . $this->submenu,
+                'data' => KomparasiModel::where('kode_komparasi', $id_decrypted)->get(),
+            ];
+            return view('uks.komparasi.show')->with($data);
+        } else {
+            return view('not_found');
         }
     }
 }
