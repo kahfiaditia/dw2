@@ -94,6 +94,7 @@ class PrimessionController extends Controller
                 )
                 ->Join('menu', 'menu.id', 'submenu.menu_id')
                 ->where([$where])
+                ->where('menu.display', '1')
                 ->groupBy('menu_id')
                 ->groupBy('submenu.submenu')
                 ->orderBy('menu.order_menu', 'ASC')

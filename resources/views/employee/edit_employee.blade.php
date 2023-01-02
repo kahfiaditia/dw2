@@ -147,6 +147,7 @@
                                                             <div class="invalid-feedback">
                                                                 Data wajib diisi.
                                                             </div>
+                                                            {!! $errors->first('no_hp', '<div class="invalid-validasi">:message</div>') !!}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -810,39 +811,20 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2" <?php if (Auth::user()->roles != 'Admin' or Auth::user()->roles != 'Administrator') {
+                                                    <div class="col-md-6" <?php if (Auth::user()->roles != 'Admin' and Auth::user()->roles != 'Administrator') {
                                                         echo 'hidden';
                                                     } ?>>
-                                                        <input type="text" id="roles"
-                                                            value="{{ Auth::user()->roles }}">
                                                         <div class="mb-3">
-                                                            <label for="validationCustom02" class="form-label">Status
-                                                                Aktif</label>
-                                                            <div>
-                                                                <input type="hidden" name="aktif_old"
-                                                                    value="{{ $item->aktif }}">
-                                                                <input type="checkbox" id="switch1" switch="none"
-                                                                    name="aktif" id="switch1"
-                                                                    {{ $item->aktif === '1' ? 'checked' : '' }} />
-                                                                <label for="switch1" data-on-label="On"
-                                                                    data-off-label="Off"></label>
-                                                                <div class="invalid-feedback">
-                                                                    Data wajib diisi.
-                                                                </div>
+                                                            <label for="validationCustom02" class="form-label">ID
+                                                                Fingerprint <code>*</code></label>
+                                                            <input type="number" class="form-control"
+                                                                id="id_fingerprint" name="id_fingerprint"
+                                                                value="{{ $item->id_fingerprint }}" required
+                                                                placeholder="ID Fingerprint">
+                                                            <div class="invalid-feedback">
+                                                                Data wajib diisi.
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2" id="div_resign">
-                                                        <div class="mb-3">
-                                                            <label class="form-check-label" for="resign">
-                                                                Resign
-                                                            </label>
-                                                            <div>
-                                                                <input class="form-check-input" name="resign"
-                                                                    type="checkbox" id="resign"
-                                                                    {{ $item->tgl_resign ? 'checked' : '' }}
-                                                                    onclick="toggleCheckbox()">
-                                                            </div>
+                                                            {!! $errors->first('id_fingerprint', '<div class="invalid-validasi">:message</div>') !!}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -872,6 +854,46 @@
                                                             <label class="form-label">Alasan Resign <code>*</code></label>
                                                             <div>
                                                                 <textarea class="form-control" name="alasan_resign" id="alasan_resign" placeholder="Alasan Resign" rows="3">{{ $item->alasan_resign }}</textarea>
+                                                                <div class="invalid-feedback">
+                                                                    Data wajib diisi.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2" <?php if (Auth::user()->roles != 'Admin' and Auth::user()->roles != 'Administrator') {
+                                                        echo 'hidden';
+                                                    } ?>>
+                                                        <input type="hidden" id="roles"
+                                                            value="{{ Auth::user()->roles }}">
+                                                        <div class="mb-3">
+                                                            <label for="validationCustom02" class="form-label">Status
+                                                                Aktif</label>
+                                                            <div>
+                                                                <input type="hidden" name="aktif_old"
+                                                                    value="{{ $item->aktif }}">
+                                                                <input type="checkbox" id="switch1" switch="none"
+                                                                    name="aktif" id="switch1"
+                                                                    {{ $item->aktif === '1' ? 'checked' : '' }} />
+                                                                <label for="switch1" data-on-label="On"
+                                                                    data-off-label="Off"></label>
+                                                                <div class="invalid-feedback">
+                                                                    Data wajib diisi.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" id="div_resign">
+                                                        <div class="mb-3">
+                                                            <label class="form-check-label" for="resign">
+                                                                Resign
+                                                            </label>
+                                                            <div>
+                                                                <input class="form-check-input" name="resign"
+                                                                    type="checkbox" id="resign" required
+                                                                    {{ $item->tgl_resign ? 'checked' : '' }}
+                                                                    onclick="toggleCheckbox()">
                                                                 <div class="invalid-feedback">
                                                                     Data wajib diisi.
                                                                 </div>
@@ -920,9 +942,12 @@
             switchButton = document.getElementById('switch1');
             roles = document.getElementById('roles').value;
             if (roles == 'Admin' || roles == 'Administrator') {
+                document.getElementById("id_fingerprint").required = true;
+                document.getElementById("resign").required = true;
                 if (switchButton.checked == true) {
                     $('#div_resign').hide();
                     $('#div_tgl_resign').hide();
+                    document.getElementById("resign").required = false;
                 } else {
                     $('#div_resign').show();
                     resign = document.getElementById("resign").checked;
@@ -930,6 +955,7 @@
                         $('#div_tgl_resign').show();
                         document.getElementById("tgl_resign").required = true;
                         document.getElementById("alasan_resign").required = true;
+                        document.getElementById("resign").required = false;
                     } else {
                         $('#div_tgl_resign').hide();
                         document.getElementById("tgl_resign").required = false;
@@ -939,6 +965,8 @@
             } else {
                 $('#div_resign').hide();
                 $('#div_tgl_resign').hide();
+                document.getElementById("id_fingerprint").required = false;
+                document.getElementById("resign").required = false;
             }
         }
 
@@ -952,6 +980,7 @@
                 $('#div_tgl_resign').hide();
                 document.getElementById("tgl_resign").required = false;
                 document.getElementById("alasan_resign").required = false;
+                document.getElementById("resign").required = true;
             }
         }
 
@@ -961,6 +990,10 @@
                 if (switchButton.checked == true) {
                     $('#div_resign').hide();
                     $('#div_tgl_resign').hide();
+                    document.getElementById("resign").required = false;
+                    document.getElementById("tgl_resign").required = false;
+                    document.getElementById("alasan_resign").required = false;
+                    document.getElementById("resign").checked = false;
                 } else {
                     $('#div_resign').show();
                     $('#div_tgl_resign').hide();

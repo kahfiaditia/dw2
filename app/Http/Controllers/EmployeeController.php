@@ -246,6 +246,7 @@ class EmployeeController extends Controller
                 'dok_npwp' => 'mimes:png,jpeg,jpg,pdf|max:2048',
                 'dok_kk' => 'mimes:png,jpeg,jpg,pdf|max:2048',
                 'foto' => 'mimes:png,jpeg,jpg|max:2048',
+                'no_hp' => 'max:15',
             ]);
             DB::beginTransaction();
             try {
@@ -411,6 +412,8 @@ class EmployeeController extends Controller
                 'nik' => 'required|max:20',
                 'niks' => "required|max:20|unique:karyawan,niks,$id,id,deleted_at,NULL",
                 'kk' => 'required|max:20',
+                'id_fingerprint' => 'max:11',
+                'no_hp' => 'max:15',
             ]);
             DB::beginTransaction();
             try {
@@ -503,6 +506,7 @@ class EmployeeController extends Controller
                 $employee->divisi = $request->divisi;
                 $employee->masuk_kerja = $request->masuk_kerja;
                 $employee->user_id = $request->user_id;
+                $employee->id_fingerprint = $request->id_fingerprint;
 
                 $resign = isset($request->resign) ? 1 : 0;
                 if ($resign == 0) {
