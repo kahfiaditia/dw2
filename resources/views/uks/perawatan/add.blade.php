@@ -436,9 +436,5 @@
                 document.getElementById("jml_stok").value = jml_stok;
             });
         })
-
-        $("#tablePinjam").on('click', '.delete-record', function() {
-            $(this).parent().parent().remove()
-        })
     </script>
 @endsection
