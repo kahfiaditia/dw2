@@ -188,8 +188,6 @@ class AkunController extends Controller
      */
     public function edit($id)
     {
-        $session_menu = explode(',', Auth::user()->akses_submenu);
-        // if (in_array('9', $session_menu)) {
         $id_decrypted = Crypt::decryptString($id);
         $data = [
             'title' => $this->title,
@@ -200,9 +198,6 @@ class AkunController extends Controller
             'akun' => User::findorfail($id_decrypted)
         ];
         return view('akun.edit')->with($data);
-        // } else {
-        //     return view('not_found');
-        // }
     }
 
     /**
@@ -214,8 +209,6 @@ class AkunController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $session_menu = explode(',', Auth::user()->akses_submenu);
-        // if (in_array('9', $session_menu)) {
         $request->validate([
             'username' => 'required',
             'roles' => 'required',
@@ -290,9 +283,6 @@ class AkunController extends Controller
             AlertHelper::updateAlert(false);
             return back();
         }
-        // } else {
-        //     return view('not_found');
-        // }
     }
 
     /**
@@ -315,6 +305,10 @@ class AkunController extends Controller
                     $employee->user_deleted = Auth::user()->id;
                     $employee->deleted_at = $date;
                     $employee->save();
+                }
+                if ($user->roles == 'Siswa') {
+                    AlertHelper::alertDinamis(false, 'Siswa tidak dapat dihapus, Silahkan Non Aktif-kan Status Akun');
+                    return back();
                 }
                 $user->user_deleted = Auth::user()->id;
                 $user->deleted_at = $date;

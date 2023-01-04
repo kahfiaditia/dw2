@@ -30,7 +30,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
+                            <table id="table" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -39,31 +39,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($lists as $list)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $list->nama_penerbit }}</td>
-                                            <td>
-                                                <?php $id = Crypt::encryptString($list->id); ?>
-                                                <form class="delete-form" action="{{ route('penerbit.destroy', $id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <div class="d-flex gap-3">
-                                                        @if (in_array('68', $session_menu))
-                                                            <a href="{{ route('penerbit.edit', $id) }}"
-                                                                class="text-success"><i
-                                                                    class="mdi mdi-pencil font-size-18"></i></a>
-                                                        @endif
-                                                        @if (in_array('69', $session_menu))
-                                                            <a href class="text-danger delete_confirm"><i
-                                                                    class="mdi mdi-delete font-size-18"></i></a>
-                                                        @endif
-                                                    </div>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -72,4 +47,37 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/alert.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: {
+                    url: "{{ route('penerbit.list_penerbit') }}",
+                },
+                columns: [{
+                        data: null,
+                        sortable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'nama_penerbit',
+                        name: 'nama_penerbit'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+        });
+    </script>
 @endsection

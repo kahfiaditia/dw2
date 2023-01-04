@@ -263,6 +263,7 @@ Route::group(
         Route::post('/dropdown', [KategoriController::class, 'dropdown'])->name('kategori.dropdown');
         Route::post('/get_kode', [KategoriController::class, 'get_kode'])->name('kategori.get_kode');
         Route::resource('/penerbit', PenerbitController::class);
+        Route::get('/list_penerbit', [PenerbitController::class, 'list_penerbit'])->name('penerbit.list_penerbit');
         Route::post('/dropdown', [PenerbitController::class, 'dropdown'])->name('kategori.dropdown');
         Route::resource('/buku', BukuController::class);
         Route::get('/data_ajax', [BukuController::class, 'data_ajax'])->name('buku.data_ajax');
