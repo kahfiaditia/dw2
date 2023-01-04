@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class PenerbitController extends Controller
 {
@@ -35,6 +36,14 @@ class PenerbitController extends Controller
         } else {
             return view('not_found');
         }
+    }
+
+    public function list_penerbit(Request $request)
+    {
+        $penerbit = Penerbit::select(['*']);
+        return DataTables::of($penerbit)
+            ->addColumn('action', 'penerbit.button')
+            ->make(true);
     }
 
     /**

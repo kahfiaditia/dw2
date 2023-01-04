@@ -47,6 +47,8 @@
                                                     <input type="text" class="form-control" name="nama_lengkap"
                                                         placeholder="Nama Lengkap" required
                                                         value="{{ old('nama_lengkap', $student->nama_lengkap) }}">
+                                                    <input type="hidden" name="nama_lengkap_old"
+                                                        value="{{ $student->nama_lengkap }}">
                                                     <div class="invalid-feedback">
                                                         Data wajib diisi.
                                                     </div>
@@ -533,7 +535,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6"
-                                                    {{ Auth::user()->roles === 'Admin' or (Auth::user()->roles === 'Administrator' ? '' : 'hidden') }}>
+                                                    {{ Auth::user()->roles === 'Admin' || Auth::user()->roles === 'Administrator' ? '' : 'hidden' }}>
                                                     <div class="mb-3">
                                                         <label for="">Barcode</label>
                                                         <input type="text" class="form-control" name="barcode"

@@ -405,7 +405,6 @@ class SiswaController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('21', $session_menu)) {
             $id = Crypt::decryptString($id);
@@ -440,8 +439,8 @@ class SiswaController extends Controller
             ]);
 
             DB::beginTransaction();
-            $student = Siswa::findOrFail($id);
             try {
+                $student = Siswa::findOrFail($id);
                 $student->nis = $validated['nis'];
                 $student->nisn = $validated['nisn'];
                 $student->nik = $validated['nik'];
@@ -473,8 +472,19 @@ class SiswaController extends Controller
                 $student->reason_reject_kip = $request->reason_reject_kip;
                 $student->barcode = $validated['barcode'];
                 $student->user_updated = Auth::user()->id;
+
+                if ($request->nama_lengkap_old != $request->nama_lengkap) {
+                    $user_id = $student->user_id;
+                    $user = User::findorfail($user_id);
+                    $user->name = $validated['nama_lengkap'];
+                    $user->user_updated = Auth::user()->id;
+                    $user->save();
+                }
+
                 $student->save();
+
                 DB::commit();
+
                 AlertHelper::updateAlert(true);
                 return redirect('show_parents/' . Crypt::encryptString($student->id));
             } catch (\Throwable $err) {
