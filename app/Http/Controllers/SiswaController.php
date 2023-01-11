@@ -407,6 +407,11 @@ class SiswaController extends Controller
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('21', $session_menu)) {
+            if ($request->barcode == null) {
+                AlertHelper::alertDinamis(false, 'Barcode wajib diisi');
+                return back();
+            }
+
             $id = Crypt::decryptString($id);
             $validated = $request->validate([
                 'nis' => "required|unique:siswa,nis,$id,id,deleted_at,NULL",

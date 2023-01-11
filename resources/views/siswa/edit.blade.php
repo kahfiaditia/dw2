@@ -540,6 +540,9 @@
                                                         <label for="">Barcode</label>
                                                         <input type="text" class="form-control" name="barcode"
                                                             placeholder="Barcode" value="{{ $student->barcode }}">
+                                                        @error('barcode')
+                                                            <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                             </div>
