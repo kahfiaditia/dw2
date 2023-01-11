@@ -21,4 +21,9 @@ class ObatModel extends Model
     {
         return $this->hasMany(PerawatanModel::class, 'id_obat');
     }
+
+    public function kategori()
+    {
+        return $this->belongsTo(KategoriModel::class, 'id_kategori');
+    }
 }

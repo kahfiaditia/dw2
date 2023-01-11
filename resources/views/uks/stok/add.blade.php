@@ -23,12 +23,21 @@
                                 <div class="row gy-2 gx-3 align-items-center">
                                     <h5 class="card-title">Tambah Obat</h5>
                                     <div class="col-sm-auto col-md-2">
+                                        <select class="form-control select select2 kategori" id="kategori">
+                                            <option value="">--Pilih Kategori--</option>
+                                            @foreach ($kategori as $item)
+                                                <option value="{{ $item->id }}" data-id="{{ $item->kategori }}">
+                                                    {{ $item->kategori }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-auto col-md-2">
                                         <select class="form-control select select2 obat" id="obat_id">
                                             <option value="">--Pilih Obat--</option>
-                                            @foreach ($obat as $item)
+                                            {{-- @foreach ($obat as $item)
                                                 <option value="{{ $item->id }}" data-id="{{ $item->obat }}">
                                                     {{ $item->obat . ' - [' . $item->jenis->jenis_obat . ']' }}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                     <div class="col-sm-auto col-md-2">
@@ -92,6 +101,31 @@
         $(document).ready(function() {
             let increment = 0;
 
+            $(".kategori").change(function() {
+                let id_kategori = $(this).val();
+                $(".obat option").remove();
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('stok_obat.get_obat_id') }}',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id_kategori
+                    },
+                    success: response => {
+                        $('.obat').append(`<option value="">-- Pilih Obat --</option>`)
+                        $.each(response.data, function(i, item) {
+                            $('.obat').append(
+                                `<option value="${item.id}" data-id="${item.obat}">${item.obat}</option>`
+                            )
+                        })
+                        $('#obat').val("").trigger('change')
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            });
+
             $("#add").on('click', function() {
                 increment++;
 
@@ -130,6 +164,7 @@
                     })
 
                     // null items
+                    $('#kategori').val("").trigger('change')
                     $('#obat_id').val("").trigger('change')
                     $('#tanggal').val("")
                     $('#jml_obat').val("")

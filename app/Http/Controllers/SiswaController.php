@@ -1327,6 +1327,6 @@ class SiswaController extends Controller
             'search' => $request->search,
             'like' => $request->like,
         ];
-        return Excel::download(new StudentExport($data), 'siswa.xlsx');
+        return Excel::download(new StudentExport($data), 'siswa_' . date('YmdH') . '.xlsx');
     }
 }

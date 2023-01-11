@@ -29,7 +29,7 @@ class KategoriController extends Controller
                 'menu' => $this->menu,
                 'submenu' => 'kategori',
                 'label' => 'data kategori',
-                'lists' => Kategori::orderBy('id', 'ASC')->get()
+                'lists' => Kategori::orderBy('kategori', 'ASC')->get()
             ];
             return view('kategori.list_kategori')->with($data);
         } else {

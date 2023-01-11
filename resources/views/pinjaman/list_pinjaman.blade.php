@@ -193,11 +193,11 @@
                                                                         '',
                                                                 ) }}"
                                                                     class="btn btn-success btn-rounded waves-effect waves-light w-md"><i
-                                                                        class="bx bx-cloud-download me-1"></i>Export</a>
+                                                                        class="bx bx-cloud-download me-1"></i>Unduh</a>
                                                             @else
                                                                 <a href="{{ route('pinjaman.export_pinjaman_buku') }}"
                                                                     class="btn btn-success btn-rounded waves-effect waves-light w-md"><i
-                                                                        class="bx bx-cloud-download me-1"></i>Export</a>
+                                                                        class="bx bx-cloud-download me-1"></i>Unduh</a>
                                                             @endif
                                                         </div>
                                                     </div>

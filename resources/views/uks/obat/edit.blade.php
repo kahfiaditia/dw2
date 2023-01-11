@@ -39,6 +39,26 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Kategori
+                                                <code>*</code></label>
+                                            <select class="form-control select select2" name="kategori" required>
+                                                <option value="">--Pilih Kategori--</option>
+                                                @foreach ($kategori as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ $item->id == $data->id_kategori ? 'selected' : '' }}>
+                                                        {{ $item->kategori }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('kategori', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Jenis Obat
                                                 <code>*</code></label>
                                             <select class="form-control select select2" name="jenis" required>
@@ -58,7 +78,8 @@
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-sm-12">
-                                        <a href="{{ route('obat.index') }}" class="btn btn-secondary waves-effect">Batal</a>
+                                        <a href="{{ route('obat.index') }}"
+                                            class="btn btn-secondary waves-effect">Batal</a>
                                         <button class="btn btn-primary" type="submit" style="float: right"
                                             id="submit">Simpan</button>
                                     </div>

@@ -16,6 +16,7 @@ use App\Http\Controllers\InvPinjamanController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\KategoriUksController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\KomparasiController;
@@ -323,6 +324,7 @@ Route::group(
     ],
     function () {
         Route::resource('/obat', ObatController::class);
+        Route::get('export_obat', [ObatController::class, 'export_obat'])->name('obat.export_obat');
         Route::resource('/stok_obat', StokObatController::class);
         Route::get('/stok_list', [StokObatController::class, 'stok_list'])->name('stok_obat.stok_list');
         Route::post('/store_edit', [StokObatController::class, 'store_edit'])->name('stok_obat.store_edit');
@@ -340,6 +342,7 @@ Route::group(
         Route::get('/hasil_komparasi', [KomparasiController::class, 'hasil_komparasi'])->name('komparasi.hasil_komparasi');
         Route::get('/hasil_komparasi_list', [KomparasiController::class, 'hasil_komparasi_list'])->name('komparasi.hasil_komparasi_list');
         Route::get('/show/{id}', [KomparasiController::class, 'show'])->name('komparasi.show');
+        Route::get('export_komparasi', [KomparasiController::class, 'export_komparasi'])->name('komparasi.export_komparasi');
 
         Route::resource('/perawatan', PerawatanController::class);
         Route::post('/update_obat', [PerawatanController::class, 'update_obat'])->name('perawatan.update_obat');
@@ -349,6 +352,9 @@ Route::group(
         Route::get('/kembali_keluar/{id}', [PerawatanController::class, 'kembali_keluar'])->name('perawatan.kembali_keluar');
         Route::post('/uksProses/{id}', [PerawatanController::class, 'uksProses'])->name('perawatan.uksProses');
         Route::post('/edit_perawatan', [PerawatanController::class, 'update'])->name('perawatan.edit_perawatan');
+
+        Route::resource('/uks_kategori', KategoriUksController::class);
+        Route::post('/get_obat_id', [StokObatController::class, 'get_obat_id'])->name('stok_obat.get_obat_id');
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

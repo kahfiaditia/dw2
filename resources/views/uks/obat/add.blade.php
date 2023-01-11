@@ -36,6 +36,24 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="validationCustom02" class="form-label">Kategori
+                                                <code>*</code></label>
+                                            <select class="form-control select select2" name="kategori" required>
+                                                <option value="">--Pilih Kategori--</option>
+                                                @foreach ($kategori as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->kategori }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Data wajib diisi.
+                                            </div>
+                                            {!! $errors->first('kategori', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Jenis Obat
                                                 <code>*</code></label>
                                             <select class="form-control select select2" name="jenis" required>

@@ -614,6 +614,6 @@ class InvoiceController extends Controller
             'search_manual' => $request->search_manual,
             'like' => $request->like,
         ];
-        return Excel::download(new InvoiceExport($data), 'Invoice.xlsx');
+        return Excel::download(new InvoiceExport($data), 'Invoice_' . date('YmdH') . '.xlsx');
     }
 }

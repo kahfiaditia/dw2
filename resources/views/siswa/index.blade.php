@@ -24,13 +24,13 @@
                                 @if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator')
                                     <a href="{{ route('siswa.csv_download') }}"
                                         class="float-end btn btn-warning btn-rounded waves-effect waves-light mb-2 me-2"><i
-                                            class="bx bx-cloud-download me-1"></i>Download
+                                            class="bx bx-cloud-download me-1"></i>Unduh
                                         File
                                         Import</a>
                                     <a href="#"
                                         class="float-end btn btn-primary btn-rounded waves-effect waves-light mb-2 me-2"
                                         id="button_trigger"data-toggle="modal" data-target="#csvModal"><i
-                                            class="bx bx-import me-1"></i>Import CSV</a>
+                                            class="bx bx-import me-1"></i>Unggah CSV</a>
                                 @endif
                             </ol>
                         </div>
@@ -157,11 +157,11 @@
                                                                 ?>
                                                                 <a href="{{ route('siswa.export_siswa', 'nis=' . $nis . '&nisn=' . $nisn . '&nik=' . $nik . '&nama=' . $nama . '&email=' . $email . '&kelas=' . $kelas . '&search=' . $search . '&like=' . $like . '') }}"
                                                                     class="btn btn-success btn-rounded waves-effect waves-light w-md"><i
-                                                                        class="bx bx-cloud-download me-1"></i>Export</a>
+                                                                        class="bx bx-cloud-download me-1"></i>Unduh</a>
                                                             @else
                                                                 <a href="{{ route('siswa.export_siswa') }}"
                                                                     class="btn btn-success btn-rounded waves-effect waves-light w-md"><i
-                                                                        class="bx bx-cloud-download me-1"></i>Export</a>
+                                                                        class="bx bx-cloud-download me-1"></i>Unduh</a>
                                                             @endif
                                                         </div>
                                                     </div>

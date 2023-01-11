@@ -150,11 +150,11 @@
                                                                 ?>
                                                                 <a href="{{ route('employee.export_employee', 'nama=' . $nama . '&email=' . $email . '&nik=' . $nik . '&npwp=' . $npwp . '&kontak=' . $kontak . '&jabatan=' . $jabatan . '&stat=' . $stat . '&search=' . $search . '&like=' . $like . '') }}"
                                                                     class="btn btn-success btn-rounded waves-effect waves-light w-md"><i
-                                                                        class="bx bx-cloud-download me-1"></i>Export</a>
+                                                                        class="bx bx-cloud-download me-1"></i>Unduh</a>
                                                             @else
                                                                 <a href="{{ route('employee.export_employee') }}"
                                                                     class="btn btn-success btn-rounded waves-effect waves-light w-md"><i
-                                                                        class="bx bx-cloud-download me-1"></i>Export</a>
+                                                                        class="bx bx-cloud-download me-1"></i>Unduh</a>
                                                             @endif
                                                         </div>
                                                     </div>

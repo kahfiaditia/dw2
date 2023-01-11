@@ -1412,7 +1412,7 @@ class EmployeeController extends Controller
             'jabatan' => $request->jabatan,
             'stat' => $request->stat,
         ];
-        return Excel::download(new EmployeeExport($data), 'karyawan.xlsx');
+        return Excel::download(new EmployeeExport($data), 'karyawan_' . date('YmdH') . '.xlsx');
     }
 
     public function dropdown_karyawan(Request $request)

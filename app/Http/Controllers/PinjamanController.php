@@ -932,7 +932,7 @@ class PinjamanController extends Controller
             'search_manual' => $request->search_manual,
             'like' => $request->like,
         ];
-        return Excel::download(new PinjamanBuku($data), 'pinjaman_buku.xlsx');
+        return Excel::download(new PinjamanBuku($data), 'pinjaman_buku_' . date('YmdH') . '.xlsx');
     }
 
     public function search_loan()

@@ -667,6 +667,6 @@ class BukuController extends Controller
             'search_manual' => $request->search_manual,
             'like' => $request->like,
         ];
-        return Excel::download(new BukuExport($data), 'buku.xlsx');
+        return Excel::download(new BukuExport($data), 'buku_' . date('YmdH') . '.xlsx');
     }
 }

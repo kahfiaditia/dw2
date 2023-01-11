@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ObatExport;
 use App\Helper\AlertHelper;
-use App\Models\JenisObatModel;
 use App\Models\KategoriModel;
-use App\Models\ObatModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 
-class ObatController extends Controller
+class KategoriUksController extends Controller
 {
     protected $title = 'dharmawidya';
     protected $menu = 'uks';
-    protected $submenu = 'obat';
+    protected $submenu = 'kategori';
 
     /**
      * Display a listing of the resource.
@@ -28,15 +24,15 @@ class ObatController extends Controller
     public function index()
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('92', $session_menu)) {
+        if (in_array('111', $session_menu)) {
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
                 'submenu' => $this->submenu,
-                'label' => 'data obat',
-                'obat' => ObatModel::all()->sortBy('obat'),
+                'label' => 'data ' . $this->submenu,
+                'data' => KategoriModel::all(),
             ];
-            return view('uks.obat.index')->with($data);
+            return view('uks.kategori.index')->with($data);
         } else {
             return view('not_found');
         }
@@ -50,16 +46,14 @@ class ObatController extends Controller
     public function create()
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('93', $session_menu)) {
+        if (in_array('112', $session_menu)) {
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
                 'submenu' => $this->submenu,
                 'label' => 'tambah ' . $this->submenu,
-                'jenis_obat' => JenisObatModel::all(),
-                'kategori' => KategoriModel::all(),
             ];
-            return view('uks.obat.add')->with($data);
+            return view('uks.kategori.add')->with($data);
         } else {
             return view('not_found');
         }
@@ -74,24 +68,20 @@ class ObatController extends Controller
     public function store(Request $request)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('93', $session_menu)) {
+        if (in_array('112', $session_menu)) {
             $request->validate([
-                'obat' => 'required|unique:uks_obat,obat,NULL,id,deleted_at,NULL|max:64',
-                'jenis' => 'required|max:64',
-                'kategori' => 'required',
+                'kategori' => 'required|unique:uks_kategori,kategori,NULL,id,deleted_at,NULL|max:64',
             ]);
             DB::beginTransaction();
             try {
-                $rak = new ObatModel();
-                $rak->obat = $request['obat'];
-                $rak->id_kategori = $request['kategori'];
-                $rak->id_jenis_obat = $request['jenis'];
-                $rak->user_created = Auth::user()->id;
-                $rak->save();
+                $kategori = new KategoriModel();
+                $kategori->kategori = strtoupper($request['kategori']);
+                $kategori->user_created = Auth::user()->id;
+                $kategori->save();
 
                 DB::commit();
                 AlertHelper::addAlert(true);
-                return redirect('uks/obat');
+                return redirect('uks/uks_kategori');
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;
@@ -123,18 +113,16 @@ class ObatController extends Controller
     public function edit($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('94', $session_menu)) {
+        if (in_array('113', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
                 'submenu' => $this->submenu,
                 'label' => 'ubah ' . $this->submenu,
-                'jenis_obat' => JenisObatModel::all(),
-                'kategori' => KategoriModel::all(),
-                'data' => ObatModel::findorfail($id_decrypted)
+                'data' => KategoriModel::findorfail($id_decrypted)
             ];
-            return view('uks.obat.edit')->with($data);
+            return view('uks.kategori.edit')->with($data);
         } else {
             return view('not_found');
         }
@@ -150,28 +138,25 @@ class ObatController extends Controller
     public function update(Request $request, $id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('94', $session_menu)) {
+        if (in_array('113', $session_menu)) {
             $id = Crypt::decryptString($id);
             $request->validate([
-                'obat' => "required|max:64|unique:uks_obat,obat,$id,id,deleted_at,NULL",
-                'jenis' => 'required|max:64',
-                'kategori' => 'required',
+                'kategori' => "required|max:64|unique:uks_kategori,kategori,$id,id,deleted_at,NULL",
             ]);
             DB::beginTransaction();
             try {
-                $rak = ObatModel::findOrFail($id);
-                $rak->obat = $request['obat'];
-                $rak->id_kategori = $request['kategori'];
-                $rak->id_jenis_obat = $request['jenis'];
-                $rak->user_updated = Auth::user()->id;
-                $rak->save();
+                $update = KategoriModel::findOrFail($id);
+                $update->kategori = strtoupper($request['kategori']);
+                $update->user_updated = Auth::user()->id;
+                $update->save();
 
                 DB::commit();
                 AlertHelper::updateAlert(true);
-                return redirect('uks/obat');
+                return redirect('uks/uks_kategori');
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;
+                AlertHelper::updateAlert(false);
                 return back();
             }
         } else {
@@ -188,14 +173,14 @@ class ObatController extends Controller
     public function destroy($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('95', $session_menu)) {
+        if (in_array('114', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
-                $rak = ObatModel::findorfail($id_decrypted);
-                $rak->user_deleted = Auth::user()->id;
-                $rak->deleted_at = Carbon::now();
-                $rak->save();
+                $delete = KategoriModel::findorfail($id_decrypted);
+                $delete->user_deleted = Auth::user()->id;
+                $delete->deleted_at = Carbon::now();
+                $delete->save();
 
                 DB::commit();
                 AlertHelper::deleteAlert(true);
@@ -208,10 +193,5 @@ class ObatController extends Controller
         } else {
             return view('not_found');
         }
-    }
-
-    public function export_obat(Request $request)
-    {
-        return Excel::download(new ObatExport(), 'Obat_' . date('YmdH') . '.xlsx');
     }
 }

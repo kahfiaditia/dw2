@@ -21,6 +21,15 @@
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
+                                <div class="row page-title-right">
+                                    <div class="col-md-2">
+                                        <a href="{{ route('komparasi.export_komparasi', 'kode=' . $data[0]->kode_komparasi) }}"
+                                            type="button"
+                                            class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
+                                            <i class="bx bx-cloud-download"></i> Unduh
+                                        </a>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="mb-3">
@@ -54,11 +63,12 @@
                                                 <tr>
                                                     <th class="text-center" style="width: 5%">#</th>
                                                     <th class="text-center" style="width: 20%">Kode Opname</th>
-                                                    <th class="text-center" style="width: 30%">Obat</th>
+                                                    <th class="text-center" style="width: 10%">Kategori</th>
+                                                    <th class="text-center" style="width: 20%">Obat</th>
                                                     <th class="text-center" style="width: 10%">Jumlah Opname</th>
                                                     <th class="text-center" style="width: 10%">Jumlah Sistem</th>
                                                     <th class="text-center" style="width: 10%">Adjust Stok</th>
-                                                    <th class="text-center" style="width: 15%">Type Adjust</th>
+                                                    <th class="text-center" style="width: 15%">Keterangan Adjust</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -66,6 +76,7 @@
                                                     <tr>
                                                         <td class="text-center">{{ $loop->iteration }}</td>
                                                         <td class="text-center">{{ $list->kode_opname }}</td>
+                                                        <td class="text-center">{{ $list->obat->kategori->kategori }}</td>
                                                         <td>
                                                             {{ $list->obat->obat . ' - ' . $list->obat->jenis->jenis_obat }}
                                                         </td>

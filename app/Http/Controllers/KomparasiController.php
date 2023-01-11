@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KomparasiExport;
 use App\Models\KomparasiModel;
 use App\Models\ObatModel;
 use App\Models\OpnameStokModel;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class KomparasiController extends Controller
@@ -304,5 +306,13 @@ class KomparasiController extends Controller
         } else {
             return view('not_found');
         }
+    }
+
+    public function export_komparasi(Request $request)
+    {
+        $data = [
+            'kode' => $request->kode,
+        ];
+        return Excel::download(new KomparasiExport($data), 'Komparasi_' . date('YmdH') . '.xlsx');
     }
 }

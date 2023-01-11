@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
+use App\Models\KategoriModel;
 use App\Models\ObatModel;
 use App\Models\StokObatModel;
 use Carbon\Carbon;
@@ -77,7 +78,8 @@ class StokObatController extends Controller
                 'menu' => $this->menu,
                 'submenu' => $this->submenu,
                 'label' => 'tambah ' . $this->submenu,
-                'obat' => ObatModel::all(),
+                // 'obat' => ObatModel::all(),
+                'kategori' => KategoriModel::all(),
             ];
             return view('uks.stok.add')->with($data);
         } else {
@@ -342,6 +344,27 @@ class StokObatController extends Controller
             return response()->json([
                 'code' => 404,
                 'message' => 'Gagal Tambah Stok',
+            ]);
+        }
+    }
+
+    public function get_obat_id(Request $request)
+    {
+        $obat = DB::table('uks_obat')
+            ->select('*')
+            ->where('stok', $request->id_kategori)
+            ->whereNull('uks_obat.deleted_at')
+            ->get();
+
+        if (count($obat) > 0) {
+            return response()->json([
+                'code' => 200,
+                'data' => $obat,
+            ]);
+        } else {
+            return response()->json([
+                'code' => 400,
+                'data' => null,
             ]);
         }
     }
