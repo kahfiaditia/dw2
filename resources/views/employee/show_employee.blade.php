@@ -91,7 +91,7 @@
                                                 </p>
                                             </div>
                                             <div class="col-sm-6 col-6">
-                                                @if ($item->nik)
+                                                @if ($item->niks)
                                                     {!! DNS1D::getBarcodeHTML($item->niks, 'C128') !!}
                                                     {{ $item->niks }}
                                                 @endif
