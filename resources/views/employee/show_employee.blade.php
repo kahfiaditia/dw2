@@ -91,8 +91,10 @@
                                                 </p>
                                             </div>
                                             <div class="col-sm-6 col-6">
-                                                {!! DNS1D::getBarcodeHTML($item->niks, 'C128') !!}
-                                                {{ $item->niks }}
+                                                @if ($item->nik)
+                                                    {!! DNS1D::getBarcodeHTML($item->niks, 'C128') !!}
+                                                    {{ $item->niks }}
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="row task-dates">

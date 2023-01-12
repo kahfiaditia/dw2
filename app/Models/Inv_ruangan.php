@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Inv_Ruangan extends Model
+class Inv_ruangan extends Model
 {
     use SoftDeletes;
     use HasFactory;
