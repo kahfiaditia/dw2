@@ -24,14 +24,19 @@ class PerawatanController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'data perawatan',
-            'perawatan' => PerawatanModel::groupBy('kode_perawatan')->orderBy('kode_perawatan', 'desc')->get(),
-        ];
-        return view('uks/perawatan.index')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('100', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'data perawatan',
+                'perawatan' => PerawatanModel::groupBy('kode_perawatan')->orderBy('kode_perawatan', 'desc')->get(),
+            ];
+            return view('uks/perawatan.index')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -41,13 +46,18 @@ class PerawatanController extends Controller
      */
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'Tambah Perawatan',
-        ];
-        return view('uks/perawatan.add')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('101', $session_menu)) {
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'Tambah Perawatan',
+            ];
+            return view('uks/perawatan.add')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -145,16 +155,21 @@ class PerawatanController extends Controller
      */
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => $this->submenu,
-            'label' => 'Edit Perawatan',
-            'stok_obat' => StokObatModel::all(),
-            'perawatan' => PerawatanModel::where('kode_perawatan', $id_decrypted)->get(),
-        ];
-        return view('uks.perawatan.edit')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('102', $session_menu)) {
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => $this->submenu,
+                'label' => 'Edit Perawatan',
+                'stok_obat' => StokObatModel::all(),
+                'perawatan' => PerawatanModel::where('kode_perawatan', $id_decrypted)->get(),
+            ];
+            return view('uks.perawatan.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -277,7 +292,7 @@ class PerawatanController extends Controller
     public function kembali_keluar(Request $request, $id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('100', $session_menu)) {
+        if (in_array('102', $session_menu)) {
             $id = Crypt::decryptString($id);
             $obat_keluar = DB::table('uks_perawatan')
                 ->select('obat', 'qty', 'uks_stok_obat.id', 'tgl_ed', DB::raw('SUM(qty) AS total'))

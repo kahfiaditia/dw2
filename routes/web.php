@@ -20,6 +20,7 @@ use App\Http\Controllers\KategoriUksController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\KomparasiController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NeedsController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\OpnameObatController;
@@ -36,6 +37,7 @@ use App\Http\Controllers\RekamMedisController;
 use App\Http\Controllers\RekapPerpusController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StokObatController;
+use App\Http\Controllers\SubMenuController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -310,6 +312,10 @@ Route::group(
         Route::get('/pengembalian/{id}', [InvPinjamanController::class, 'pengembalian'])->name('inv_pinjaman.pengembalian');
         Route::post('/kembaliBarang', [InvPinjamanController::class, 'kembaliBarang'])->name('inv_pinjaman.kembaliBarang');
         Route::post('/kembaliProses/{id}', [InvPinjamanController::class, 'kembaliProses'])->name('inv_pinjaman.kembaliProses');
+
+        // menu
+        Route::resource('/menu', MenuController::class);
+        Route::resource('/submenu', SubMenuController::class);
     }
 );
 

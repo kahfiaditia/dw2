@@ -15,7 +15,7 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('93', $session_menu))
+                                @if (in_array('101', $session_menu))
                                     <a href="{{ route('perawatan.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="mdi mdi-plus me-1"></i> Tambah Perawatan

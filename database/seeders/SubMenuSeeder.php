@@ -110,9 +110,9 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Maintenance', 'route_submenu' => 'setting.index', 'type_menu' => 'view', 'menu_id' => '13', 'display_submenu' => '1', 'order_submenu' => '1',
             ], [
-                'submenu' => 'Menu', 'route_submenu' => null, 'type_menu' => 'view', 'menu_id' => '13', 'display_submenu' => '1', 'order_submenu' => '2',
+                'submenu' => 'Menu', 'route_submenu' => 'menu.index', 'type_menu' => 'view', 'menu_id' => '13', 'display_submenu' => '1', 'order_submenu' => '2',
             ], [
-                'submenu' => 'Sub Menu', 'route_submenu' => null, 'type_menu' => 'view', 'menu_id' => '13', 'display_submenu' => '1', 'order_submenu' => '3',
+                'submenu' => 'Sub Menu', 'route_submenu' => 'submenu.index', 'type_menu' => 'view', 'menu_id' => '13', 'display_submenu' => '1', 'order_submenu' => '3',
             ], [
                 'submenu' => 'Setting Diskon', 'route_submenu' => 'diskon.index', 'type_menu' => 'view', 'menu_id' => '14', 'display_submenu' => '1', 'order_submenu' => '7',
             ], [
