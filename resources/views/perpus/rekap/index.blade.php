@@ -15,12 +15,6 @@
                         </div>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                @if (in_array('75', $session_menu))
-                                    <a href="{{ route('pinjaman.create') }}" type="button"
-                                        class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="mdi mdi-plus me-1"></i> Tambah Pinjaman
-                                    </a>
-                                @endif
                             </ol>
                         </div>
                     </div>
@@ -44,8 +38,8 @@
                                         </button>
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse <?php
-                                    if (empty($_GET['like']) and (isset($_GET['kode']) or isset($_GET['peminjam']) or isset($_GET['kelas']) or isset($_GET['tgl_start']) or isset($_GET['tgl_end']) or isset($_GET['jml_start']) or isset($_GET['jml_end']) or isset($_GET['type']))) {
-                                        if ($_GET['kode'] != null or $_GET['peminjam'] != null or $_GET['kelas'] != null or $_GET['tgl_start'] != null or $_GET['tgl_end'] != null or $_GET['jml_start'] != null or $_GET['jml_end'] != null or $_GET['type'] != null) {
+                                    if (empty($_GET['like']) and (isset($_GET['kode']) or isset($_GET['nama']) or isset($_GET['jml']) or isset($_GET['tgl_start_pinjam']) or isset($_GET['tgl_end_pinjam']) or isset($_GET['tgl_start_kembali']) or isset($_GET['tgl_end_kembali']))) {
+                                        if ($_GET['kode'] != null or $_GET['nama'] != null or $_GET['jml'] != null or $_GET['tgl_start_pinjam'] != null or $_GET['tgl_end_pinjam'] != null or $_GET['tgl_start_kembali'] != null or $_GET['tgl_end_kembali'] != null) {
                                             echo 'show';
                                         }
                                     }
@@ -67,14 +61,19 @@
                                                                         class="form-control" placeholder="Kode">
                                                                 </div>
                                                                 <div class="col-sm-2 mb-2">
-                                                                    <input type="text" name="peminjam" id="peminjam"
-                                                                        value="{{ isset($_GET['peminjam']) ? $_GET['peminjam'] : null }}"
-                                                                        class="form-control" placeholder="Peminjam">
+                                                                    <input type="text" name="nama" id="nama"
+                                                                        value="{{ isset($_GET['nama']) ? $_GET['nama'] : null }}"
+                                                                        class="form-control" placeholder="Nama">
                                                                 </div>
                                                                 <div class="col-sm-2 mb-2">
-                                                                    <input type="text" name="kelas" id="kelas"
-                                                                        value="{{ isset($_GET['kelas']) ? $_GET['kelas'] : null }}"
-                                                                        class="form-control" placeholder="Kelas">
+                                                                    <input type="text" name="buku" id="buku"
+                                                                        value="{{ isset($_GET['buku']) ? $_GET['buku'] : null }}"
+                                                                        class="form-control" placeholder="Buku">
+                                                                </div>
+                                                                <div class="col-sm-2 mb-2">
+                                                                    <input type="text" name="jml" id="jml"
+                                                                        value="{{ isset($_GET['jml']) ? $_GET['jml'] : null }}"
+                                                                        class="form-control" placeholder="Jumlah">
                                                                 </div>
                                                                 <div class="col-sm-4 mb-2">
                                                                     <div class="input-daterange input-group"
@@ -82,39 +81,28 @@
                                                                         data-date-autoclose="true" data-provide="datepicker"
                                                                         data-date-container='#datepicker6'>
                                                                         <input type="text" class="form-control"
-                                                                            name="tgl_start" id="tgl_start"
-                                                                            value="{{ isset($_GET['tgl_start']) ? $_GET['tgl_start'] : null }}"
-                                                                            placeholder="Tanggal " />
+                                                                            name="tgl_start_pinjam" id="tgl_start_pinjam"
+                                                                            value="{{ isset($_GET['tgl_start_pinjam']) ? $_GET['tgl_start_pinjam'] : null }}"
+                                                                            placeholder="Tanggal Pinjam" />
                                                                         <input type="text" class="form-control"
-                                                                            name="tgl_end" id="tgl_end"
-                                                                            value="{{ isset($_GET['tgl_end']) ? $_GET['tgl_end'] : null }}"
-                                                                            placeholder="Pinjam" />
+                                                                            name="tgl_end_pinjam" id="tgl_end_pinjam"
+                                                                            value="{{ isset($_GET['tgl_end_pinjam']) ? $_GET['tgl_end_pinjam'] : null }}"
+                                                                            placeholder="Tanggal Pinjam" />
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-2 mb-2">
-                                                                    <select class="form-control select select2 type"
-                                                                        style="width: 100%" name="type" id="type">
-                                                                        <option value="">--Pilih Type--</option>
-                                                                        <option value="Detail"
-                                                                            {{ (isset($_GET['type']) and $_GET['type'] == 'Detail') ? 'selected' : null }}>
-                                                                            Detail</option>
-                                                                        <option value="Summary"
-                                                                            {{ (isset($_GET['type']) and $_GET['type'] == 'Summary') ? 'selected' : null }}>
-                                                                            Summary</option>
-                                                                    </select>
-                                                                </div>
                                                                 <div class="col-sm-4 mb-2">
-                                                                    <div class="input-daterange input-group">
-                                                                        <input type="text" name="jml_start"
-                                                                            id="jml_start"
-                                                                            value="{{ isset($_GET['jml_start']) ? $_GET['jml_start'] : null }}"
-                                                                            class="form-control number-only rangeJml"
-                                                                            placeholder="Jumlah">
-                                                                        <input type="text" name="jml_end" id="jml_end"
-                                                                            onkeyup="rangeJml()"
-                                                                            value="{{ isset($_GET['jml_end']) ? $_GET['jml_end'] : null }}"
-                                                                            class="form-control number-only rangeJml"
-                                                                            placeholder="Jumlah">
+                                                                    <div class="input-daterange input-group"
+                                                                        id="datepicker6" data-date-format="yyyy-mm-dd"
+                                                                        data-date-autoclose="true" data-provide="datepicker"
+                                                                        data-date-container='#datepicker6'>
+                                                                        <input type="text" class="form-control"
+                                                                            name="tgl_start_kembali" id="tgl_start_kembali"
+                                                                            value="{{ isset($_GET['tgl_start_kembali']) ? $_GET['tgl_start_kembali'] : null }}"
+                                                                            placeholder="Tanggal Kembali" />
+                                                                        <input type="text" class="form-control"
+                                                                            name="tgl_end_kembali" id="tgl_end_kembali"
+                                                                            value="{{ isset($_GET['tgl_end_kembali']) ? $_GET['tgl_end_kembali'] : null }}"
+                                                                            placeholder="Tanggal Kembali" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -145,22 +133,18 @@
                                                         <div class="col-sm-10 mb-2">
                                                             <button type="submit"
                                                                 class="btn btn-primary w-md">Cari</button>
-                                                            <a href="{{ route('pinjaman.index') }}"
+                                                            <a href="{{ route('rekap_perpus.index') }}"
                                                                 class="btn btn-secondary w-md">Batal</a>
                                                             @if (isset($_GET['kode']) or isset($_GET['like']))
                                                                 <?php
                                                                 $kode = $_GET['kode'];
-                                                                $peminjam = $_GET['peminjam'];
-                                                                $kelas = $_GET['kelas'];
-                                                                $tgl_start = $_GET['tgl_start'];
-                                                                $tgl_end = $_GET['tgl_end'];
-                                                                $jml_start = $_GET['jml_start'];
-                                                                $jml_end = $_GET['jml_end'];
-                                                                if (isset($_GET['type'])) {
-                                                                    $type = $_GET['type'];
-                                                                } else {
-                                                                    $type = null;
-                                                                }
+                                                                $nama = $_GET['nama'];
+                                                                $buku = $_GET['buku'];
+                                                                $jml = $_GET['jml'];
+                                                                $tgl_start_pinjam = $_GET['tgl_start_pinjam'];
+                                                                $tgl_end_pinjam = $_GET['tgl_end_pinjam'];
+                                                                $tgl_start_kembali = $_GET['tgl_start_kembali'];
+                                                                $tgl_end_kembali = $_GET['tgl_end_kembali'];
                                                                 $search_manual = $_GET['search_manual'];
                                                                 if (isset($_GET['like'])) {
                                                                     $like = $_GET['like'];
@@ -169,23 +153,23 @@
                                                                 }
                                                                 ?>
                                                                 <a href="{{ route(
-                                                                    'pinjaman.export_pinjaman_buku',
+                                                                    'rekap_perpus.export_rekap_perpus',
                                                                     'kode=' .
                                                                         $kode .
-                                                                        '&peminjam=' .
-                                                                        $peminjam .
-                                                                        '&kelas=' .
-                                                                        $kelas .
-                                                                        '&tgl_start=' .
-                                                                        $tgl_start .
-                                                                        '&tgl_end=' .
-                                                                        $tgl_end .
-                                                                        '&jml_start=' .
-                                                                        $jml_start .
-                                                                        '&jml_end=' .
-                                                                        $jml_end .
-                                                                        '&type=' .
-                                                                        $type .
+                                                                        '&nama=' .
+                                                                        $nama .
+                                                                        '&buku=' .
+                                                                        $buku .
+                                                                        '&jml=' .
+                                                                        $jml .
+                                                                        '&tgl_start_pinjam=' .
+                                                                        $tgl_start_pinjam .
+                                                                        '&tgl_end_pinjam=' .
+                                                                        $tgl_end_pinjam .
+                                                                        '&tgl_start_kembali=' .
+                                                                        $tgl_start_kembali .
+                                                                        '&tgl_end_kembali=' .
+                                                                        $tgl_end_kembali .
                                                                         '&search_manual=' .
                                                                         $search_manual .
                                                                         '&like=' .
@@ -195,7 +179,7 @@
                                                                     class="btn btn-success btn-rounded waves-effect waves-light w-md"><i
                                                                         class="bx bx-cloud-download me-1"></i>Unduh</a>
                                                             @else
-                                                                <a href="{{ route('pinjaman.export_pinjaman_buku') }}"
+                                                                <a href="{{ route('rekap_perpus.export_rekap_perpus') }}"
                                                                     class="btn btn-success btn-rounded waves-effect waves-light w-md"><i
                                                                         class="bx bx-cloud-download me-1"></i>Unduh</a>
                                                             @endif
@@ -214,20 +198,12 @@
                                         <th>No</th>
                                         <th>Kode Transaksi</th>
                                         <th>Peminjam</th>
-                                        @if (empty($_GET['like']) and isset($_GET['type']))
-                                            @if ($_GET['type'] == 'Summary')
-                                                <th>Kelas</th>
-                                            @else
-                                                <th>Buku</th>
-                                            @endif
-                                        @else
-                                            <th>Kelas</th>
-                                        @endif
+                                        <th>Nama</th>
                                         <th>Tanggal Pinjam</th>
                                         <th>Estimasi Kembali</th>
                                         <th>Tanggal Kembali</th>
+                                        <th>Buku</th>
                                         <th>Jumlah</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -241,18 +217,18 @@
     </div>
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
-    <script>
+    <script type="text/javascript">
         function toggleCheckbox() {
             like = document.getElementById("like").checked;
             if (like == true) {
                 document.getElementById("kode").value = null;
-                document.getElementById("peminjam").value = null;
-                document.getElementById("kelas").value = null;
+                document.getElementById("siswa").value = null;
+                document.getElementById("gejala").value = null;
+                document.getElementById("kategori").value = null;
+                document.getElementById("obat").value = null;
+                document.getElementById("qty").value = null;
                 document.getElementById("tgl_start").value = null;
                 document.getElementById("tgl_end").value = null;
-                document.getElementById("jml_start").value = null;
-                document.getElementById("jml_end").value = null;
-                $('#type').val("").trigger('change')
                 document.getElementById("id_where").style.display = 'none';
                 document.getElementById("id_like").style.display = 'block';
             } else {
@@ -263,48 +239,17 @@
             }
         }
 
-        function rangeJml() {
-            let jml_start = document.getElementById("jml_start").value;
-            let jml_end = document.getElementById("jml_end").value;
-            if (jml_end < jml_start && jml_end != '') {
-                Swal.fire(
-                    'Gagal',
-                    'Jumlah awal tidak boleh lebih besar dari jumlah akhir',
-                    'error'
-                ).then(function() {
-                    document.getElementById("jml_end").value = '';
-                })
-            }
-        }
-
         $(document).ready(function() {
-            $(".type").change(function() {
-                let type = $(this).val();
-                if (type == 'Detail') {
-                    document.getElementById("kelas").placeholder = "Buku";
-                } else {
-                    document.getElementById("kelas").placeholder = "Kelas";
-                }
-            });
-
-            var select_type = document.getElementById('type');
-            var hasil_type = select_type.options[select_type.selectedIndex].value;
-            if (hasil_type == 'Detail') {
-                document.getElementById("kelas").placeholder = "Buku";
-            } else {
-                document.getElementById("kelas").placeholder = "Kelas";
-            }
-
             like = document.getElementById("like").checked;
             if (like == true) {
                 document.getElementById("kode").value = null;
-                document.getElementById("peminjam").value = null;
-                document.getElementById("kelas").value = null;
+                document.getElementById("siswa").value = null;
+                document.getElementById("gejala").value = null;
+                document.getElementById("kategori").value = null;
+                document.getElementById("obat").value = null;
+                document.getElementById("qty").value = null;
                 document.getElementById("tgl_start").value = null;
                 document.getElementById("tgl_end").value = null;
-                document.getElementById("jml_start").value = null;
-                document.getElementById("jml_end").value = null;
-                $('#type').val("").trigger('change')
                 document.getElementById("id_where").style.display = 'none';
                 document.getElementById("id_like").style.display = 'block';
             } else {
@@ -318,36 +263,41 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                searchDelay: 1000,
+                searching: false,
                 ajax: {
-                    url: "{{ route('pinjaman.pinjaman_ajax') }}",
+                    url: "{{ route('rekap_perpus.rekap_perpus_list') }}",
                     data: function(d) {
                         d.kode = (document.getElementById("kode").value.length != 0) ? document
                             .getElementById(
                                 "kode").value : null;
-                        d.peminjam = (document.getElementById("peminjam").value.length != 0) ? document
+                        d.nama = (document.getElementById("nama").value.length != 0) ? document
                             .getElementById(
-                                "peminjam").value : null;
-                        d.kelas = (document.getElementById("kelas").value.length != 0) ? document
+                                "nama").value : null;
+                        d.buku = (document.getElementById("buku").value.length != 0) ? document
                             .getElementById(
-                                "kelas").value : null;
-                        d.tgl_start = (document.getElementById("tgl_start").value.length != 0) ?
+                                "buku").value : null;
+                        d.jml = (document.getElementById("jml").value.length != 0) ?
                             document
                             .getElementById(
-                                "tgl_start").value : null;
-                        d.tgl_end = (document.getElementById("tgl_end").value.length != 0) ? document
+                                "jml").value : null;
+                        d.tgl_start_pinjam = (document.getElementById("tgl_start_pinjam").value
+                                .length != 0) ? document
                             .getElementById(
-                                "tgl_end").value : null;
-                        d.jml_start = (document.getElementById("jml_start").value.length != 0) ?
+                                "tgl_start_pinjam").value : null;
+                        d.tgl_end_pinjam = (document.getElementById("tgl_end_pinjam").value.length !=
+                                0) ?
                             document
                             .getElementById(
-                                "jml_start").value : null;
-                        d.jml_end = (document.getElementById("jml_end").value.length != 0) ? document
+                                "tgl_end_pinjam").value : null;
+                        d.tgl_start_kembali = (document.getElementById("tgl_start_kembali").value
+                                .length != 0) ?
+                            document
                             .getElementById(
-                                "jml_end").value : null;
-                        d.type = (document.getElementById("type").value.length != 0) ? document
+                                "tgl_start_kembali").value : null;
+                        d.tgl_end_kembali = (document.getElementById("tgl_end_kembali").value.length !=
+                                0) ? document
                             .getElementById(
-                                "type").value : null;
+                                "tgl_end_kembali").value : null;
                         d.like = (document.getElementById("like").value.length != 0) ? document
                             .getElementById(
                                 "like").value : null;
@@ -375,8 +325,8 @@
                         name: 'peminjam'
                     },
                     {
-                        data: 'kelas',
-                        name: 'kelas'
+                        data: 'nama',
+                        name: 'nama'
                     },
                     {
                         data: 'tgl_pinjam',
@@ -387,18 +337,16 @@
                         name: 'tgl_perkiraan_kembali'
                     },
                     {
-                        data: 'all_date_return',
-                        name: 'all_date_return'
+                        data: 'tgl_kembali',
+                        name: 'tgl_kembali'
+                    },
+                    {
+                        data: 'buku',
+                        name: 'buku'
                     },
                     {
                         data: 'jml',
                         name: 'jml'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
                     },
                 ]
             });

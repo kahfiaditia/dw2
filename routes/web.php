@@ -32,6 +32,8 @@ use App\Http\Controllers\PerawatanController;
 use App\Http\Controllers\PrimessionController;
 use App\Http\Controllers\PriodikSiswaController;
 use App\Http\Controllers\RakController;
+use App\Http\Controllers\RekamMedisController;
+use App\Http\Controllers\RekapPerpusController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StokObatController;
 use Illuminate\Support\Facades\Route;
@@ -272,6 +274,9 @@ Route::group(
         Route::post('/print_barcode', [BukuController::class, 'print_barcode'])->name('buku.print_barcode');
         Route::post('/dropdown', [BukuController::class, 'dropdown'])->name('buku.dropdown');
         Route::get('export_buku', [BukuController::class, 'export_buku'])->name('buku.export_buku');
+        Route::resource('/rekap_perpus', RekapPerpusController::class);
+        Route::get('/rekap_perpus_list', [RekapPerpusController::class, 'rekap_perpus_list'])->name('rekap_perpus.rekap_perpus_list');
+        Route::get('export_rekap_perpus', [RekapPerpusController::class, 'export_rekap_perpus'])->name('rekap_perpus.export_rekap_perpus');
 
         // pinjaman
         Route::resource('/pinjaman', PinjamanController::class);
@@ -355,6 +360,10 @@ Route::group(
 
         Route::resource('/uks_kategori', KategoriUksController::class);
         Route::post('/get_obat_id', [StokObatController::class, 'get_obat_id'])->name('stok_obat.get_obat_id');
+
+        Route::resource('/rekam_medis', RekamMedisController::class);
+        Route::get('/rekam_medis_list', [RekamMedisController::class, 'rekam_medis_list'])->name('rekam_medis.rekam_medis_list');
+        Route::get('export_rekam_medis', [RekamMedisController::class, 'export_rekam_medis'])->name('rekam_medis.export_rekam_medis');
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

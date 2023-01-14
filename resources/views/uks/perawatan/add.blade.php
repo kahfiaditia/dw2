@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('container')
 
-    <body>
+    <body onload="myLoad()">
         <div class="page-content">
             <div class="container-fluid">
                 <div class="row">
@@ -23,6 +23,61 @@
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-body">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button fw-medium collapsed" type="button"
+                                                    id="accordion-button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseOne" aria-expanded="true"
+                                                    aria-controls="collapseOne">
+                                                    <i class="bx bx-search-alt font-size-18"></i>
+                                                    <b>Barcode</b>
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse show"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body barcodeScanner">
+                                                    <div class="row text-muted">
+                                                        <div class="col-md-4"></div>
+                                                        <div class="col-md-4 text-center">
+                                                            <label class="form-label">Metode Scan</label>
+                                                            <div class="mb-3">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input radio" type="radio"
+                                                                        name="toggle" id="inlineRadio1" value="Barcode">
+                                                                    <label class="form-check-label"
+                                                                        for="inlineRadio1">Barcode</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input radio" type="radio"
+                                                                        name="toggle" id="inlineRadio2"
+                                                                        value="Scan Kamera">
+                                                                    <label class="form-check-label" for="inlineRadio2">Scan
+                                                                        Kamera</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row text-muted div_barcode">
+                                                        <div class="col-md-4"></div>
+                                                        <div class="col-md-4">
+                                                            <input type="text" name="scanner_barcode" autofocus
+                                                                class="form-control scanner_barcode" id="scanner_barcode"
+                                                                placeholder="Barcode">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row text-muted div_scan_camera">
+                                                        <div class="col-md-4"></div>
+                                                        <div class="col-md-4">
+                                                            <div id="qr-reader"></div>
+                                                            <div id="qr-reader-results"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
                                     <div class="row">
                                         <div class="col-md-3 jenjang_siswa">
                                             <div class="mb-3">
@@ -71,7 +126,7 @@
                                                 <label>Jam Masuk <code>*</code></label>
                                                 <div class="input-group" id="timepicker-input-group2">
                                                     <input id="timepicker2" type="text" class="form-control"
-                                                        data-provide="timepicker">
+                                                        value="{{ date('H:i') }}" data-provide="timepicker">
                                                     <span class="input-group-text"><i
                                                             class="mdi mdi-clock-outline"></i></span>
                                                     <div class="invalid-feedback">
@@ -196,7 +251,123 @@
             </div>
         </div>
     </body>
+    <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/alert.js') }}"></script>
+    <script src="{{ asset('assets/scanner/html5-qrcode.min.js') }}"></script>
     <script>
+        var resultContainer = document.getElementById('qr-reader-results');
+        var lastResult, countResults = 0;
+
+        function onScanSuccess(decodedText, decodedResult) {
+            if (decodedText !== lastResult) {
+                ++countResults;
+                lastResult = decodedText;
+                // Handle on success condition with the decoded message.
+                barcode = decodedText;
+
+                // get value database 
+                getValueScanBarcodeCamera(barcode, 'Siswa')
+            }
+        }
+
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader", {
+                fps: 10,
+                qrbox: 250
+            });
+        html5QrcodeScanner.render(onScanSuccess);
+
+        function myLoad() {
+            // area scanner dan barcode
+            $('.div_scan_camera').hide();
+            $('.div_barcode').hide();
+
+            // load karyawan
+            // var select_peminjam = document.getElementById('peminjam');
+            // var peminjam = select_peminjam.options[select_peminjam.selectedIndex].value;
+            // if (peminjam == 'Siswa') {
+            //     $('.peminjam_siswa').show();
+            //     $('.peminjam_guru').hide();
+            //     document.getElementById("karyawan").required = false
+            //     document.getElementById("jenjang").required = true
+            //     document.getElementById("siswa").required = true
+            // } else if (peminjam == 'Guru' || peminjam == 'Karyawan') {
+            //     $('.peminjam_guru').show();
+            //     $('.peminjam_siswa').hide();
+            //     document.getElementById("karyawan").required = true
+            //     document.getElementById("jenjang").required = false
+            //     document.getElementById("siswa").required = false
+            // } else {
+            //     $('.peminjam_guru').hide();
+            //     $('.peminjam_siswa').hide();
+            // }
+
+            // set barcodeScanner hide
+            // $('.barcodeScanner').hide();
+            // collapseOne = document.getElementById("collapseOne");
+            collapseOne.classList.remove("show");
+
+            // // cek localStorageBarcode jika on
+            // var localUksDharma = JSON.parse(localStorage.getItem("localUksDharma"));
+            // if (localUksDharma.barcode.status == 'on') {
+            //     $('.barcodeScanner').show();
+            //     element = document.getElementById("accordion-button");
+            //     element.classList.remove("collapsed");
+            //     collapseOne = document.getElementById("collapseOne");
+            //     collapseOne.classList.add("show");
+            // }
+
+            // if (localPerpusDharmaBarcode.barcode.metode == 'Barcode') {
+            //     $('.div_barcode').show();
+            //     document.getElementById("inlineRadio1").checked = true;
+            // }
+
+            // if (localPerpusDharmaBarcode.barcode.metode == 'Scan Kamera') {
+            //     $('.div_scan_camera').show();
+            //     document.getElementById("inlineRadio2").checked = true;
+            // }
+        }
+
+        function getValueScanBarcodeCamera(barcode, peminjam) {
+            $.ajax({
+                type: "POST",
+                url: '{{ route('pinjaman.scanBarcode') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    barcode,
+                    peminjam
+                },
+                success: response => {
+                    // initialize header
+                    if (response.type == 'Siswa') {
+                        siswa = response.id;
+                        jenjang = response.jenjang;
+                        var dataPerpus = {
+                            "header": {
+                                "jenjang": jenjang,
+                                "siswa": siswa,
+                            }
+                        };
+                        localStorage.setItem('localUksDharma', JSON.stringify(dataPerpus));
+                        location.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Data tidak terdaftar!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            willClose: () => {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        }
+
         function tableObat() {
             var id_siswa = document.getElementById('siswa').value;
             var tgl = document.getElementById('tgl').value;
@@ -265,6 +436,23 @@
         })
 
         $(document).ready(function() {
+            $('.radio').click(function() {
+                let metode_scan = $(this).val();
+                if (metode_scan == 'Barcode') {
+                    $('.div_scan_camera').hide();
+                    $('.div_barcode').show();
+                } else {
+                    $('.div_scan_camera').show();
+                    $('.div_barcode').hide();
+                }
+            });
+
+            $(".scanner_barcode").change(function() {
+                let barcode = $(this).val();
+                // get value database 
+                getValueScanBarcodeCamera(barcode, 'Siswa')
+            });
+
             $("#save").on('click', function() {
                 let dataperawatan = []
 
@@ -304,6 +492,15 @@
                     },
                     success: (response) => {
                         if (response.code === 200) {
+                            // set local null
+                            var dataUks = {
+                                "header": {
+                                    "jenjang": '',
+                                    "siswa": '',
+                                }
+                            };
+                            localStorage.setItem('localUksDharma', JSON.stringify(dataUks));
+
                             Swal.fire(
                                 'Success',
                                 `${response.message}`,
@@ -326,10 +523,20 @@
             });
 
             $("#batal").on('click', function() {
+                // set local null
+                var dataUks = {
+                    "header": {
+                        "jenjang": '',
+                        "siswa": '',
+                    }
+                };
+                localStorage.setItem('localUksDharma', JSON.stringify(dataUks));
+
                 var APP_URL = {!! json_encode(url('/')) !!}
                 window.location = APP_URL + '/uks/perawatan'
             })
 
+            var dataUks = JSON.parse(localStorage.getItem("localUksDharma"));
             $.ajax({
                 type: "POST",
                 url: '{{ route('invoice.get_jenjang') }}',
@@ -354,15 +561,55 @@
                             type = '';
                         }
 
-                        $('.classes').append(
-                            `<option value="${item.id}" >${item.level+' '+classes+' '+jurusan+' '+type}</option>`
-                        )
+                        if (dataUks.header.jenjang == item.id) {
+                            $('.classes').append(
+                                `<option value="${item.id}" selected>${item.level+' '+classes+' '+jurusan+' '+type}</option>`
+                            )
+                        } else {
+                            $('.classes').append(
+                                `<option value="${item.id}" >${item.level+' '+classes+' '+jurusan+' '+type}</option>`
+                            )
+                        }
                     })
                 },
                 error: (err) => {
                     console.log(err);
                 },
             });
+
+            if (dataUks.header.siswa) {
+                getSiswa(dataUks.header.siswa);
+            }
+
+            function getSiswa(siswa) {
+                let class_jenjang = dataUks.header.jenjang;
+                $(".siswa option").remove();
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('invoice.get_siswa') }}',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        class_jenjang
+                    },
+                    success: response => {
+                        $('.siswa').append(`<option value="">-- Pilih Siswa --</option>`)
+                        $.each(response.data, function(i, item) {
+                            if (siswa == item.id) {
+                                $('.siswa').append(
+                                    `<option value="${item.id}" selected>${item.nama_lengkap}</option>`
+                                )
+                            } else {
+                                $('.siswa').append(
+                                    `<option value="${item.id}">${item.nama_lengkap}</option>`
+                                )
+                            }
+                        })
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            }
 
             $(".classes").change(function() {
                 let class_jenjang = $(this).val();
@@ -418,7 +665,7 @@
                         class_obat
                     },
                     success: response => {
-                        $('.exp').append(`<option value="">-- Pilih Expired --</option>`)
+                        $('.exp').append(`<option value="">-- Pilih Kadaluarsa --</option>`)
                         $.each(response.data, function(i, item) {
                             $('.exp').append(
                                 `<option value="${item.id}" data-id="${item.tgl_ed}" data-value="${item.jml}">${item.tgl_ed}</option>`

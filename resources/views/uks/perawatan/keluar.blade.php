@@ -91,7 +91,8 @@
                                                 <label>Jam Keluar <code>*</code></label>
                                                 <div class="input-group" id="timepicker-input-group2">
                                                     <input id="timepicker2" name="keluar" type="text"
-                                                        class="form-control" data-provide="timepicker">
+                                                        value="{{ date('H:i') }}" class="form-control"
+                                                        data-provide="timepicker">
                                                     <span class="input-group-text"><i
                                                             class="mdi mdi-clock-outline"></i></span>
                                                     <div class="invalid-feedback">

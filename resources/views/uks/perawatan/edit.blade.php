@@ -58,7 +58,7 @@
                                             <label>Jam Masuk <code>*</code></label>
                                             <div class="input-group" id="timepicker-input-group2">
                                                 <input id="timepicker2" type="text" class="form-control"
-                                                    data-provide="timepicker">
+                                                    value="{{ $perawatan[0]->masuk }}" data-provide="timepicker">
                                                 <span class="input-group-text"><i class="mdi mdi-clock-outline"></i></span>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.

@@ -126,7 +126,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label>Tanggal Perkiraan Kembali <code>*</code></label>
+                                                <label>Estimasi Kembali <code>*</code></label>
                                                 <div class="input-group" id="datepicker2">
                                                     <input type="text" class="form-control tgl_pinjam"
                                                         placeholder="yyyy-mm-dd" name="tgl_pinjam" id="tgl_pinjam"

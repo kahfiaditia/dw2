@@ -408,7 +408,7 @@ class SiswaController extends Controller
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('21', $session_menu)) {
             if ($request->barcode == null) {
-                AlertHelper::alertDinamis(false, 'Barcode wajib diisi');
+                AlertHelper::alertDinamis(false, 'Barcode wajib diisi atau hubungi Admin');
                 return back();
             }
 

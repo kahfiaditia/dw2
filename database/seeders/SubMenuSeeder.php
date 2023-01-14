@@ -130,7 +130,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Siswa Prestasi', 'route_submenu' => 'prestasi.index', 'type_menu' => 'delete', 'menu_id' => '14', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Rubah Pembayaran Siswa', 'route_submenu' => 'siswa.index', 'type_menu' => 'edit', 'menu_id' => '6', 'display_submenu' => '0', 'order_submenu' => null,
+                'submenu' => 'Rubah Pembayaran Siswa', 'route_submenu' => 'siswa.index', 'type_menu' => 'edit', 'menu_id' => '6', 'display_submenu' => '0', 'order_submenu' => 2,
             ], [
                 'submenu' => 'Chat', 'route_submenu' => 'chat.index', 'type_menu' => 'view', 'menu_id' => '15', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
@@ -247,6 +247,12 @@ class SubMenuSeeder extends Seeder
                 'submenu' => 'Kategori', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Kategori', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Rekam Medis', 'route_submenu' => 'rekam_medis.index', 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => 7,
+            ], [
+                'submenu' => 'Rekap Perpus', 'route_submenu' => 'rekap_perpus.index', 'type_menu' => 'view', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => 7,
+            ], [
+                'submenu' => 'Barcode Siswa', 'route_submenu' => 'rekap_perpus.index', 'type_menu' => 'edit', 'menu_id' => '6', 'display_submenu' => '1', 'order_submenu' => 3,
             ],
         ];
         DB::table('submenu')->insert($sub_menus);

@@ -51,7 +51,7 @@
                                             <td>{{ $nama->siswa->nama_lengkap }}</td>
                                             <td>{{ $nama->siswa->classes_student->school_level->level .
                                                 ' ' .
-                                                $nama->siswa->classes_student->school_class->classes .
+                                                ($nama->siswa->classes_student->school_class ? $nama->siswa->classes_student->school_class->classes : '') .
                                                 ' ' .
                                                 $nama->siswa->classes_student->jurusan .
                                                 ' ' .

@@ -19,16 +19,6 @@ class PerawatanModel extends Model
         return $this->belongsTo(Siswa::class, 'id_siswa')->withTrashed();
     }
 
-    // public function kelas()
-    // {
-    //     return $this->belongsTo(School_class::class, 'id_siswa');
-    // }
-
-    // public function kelas_level()
-    // {
-    //     return $this->belongsTo(School_level::class, 'id_siswa');
-    // }
-
     public function uks_obat()
     {
         return $this->belongsTo(ObatModel::class, 'id_obat');

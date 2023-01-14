@@ -84,9 +84,9 @@
                                     <tr>
                                         <th class="text-center" width="2%">No</th>
                                         <th class="text-center" width="18%">Kode Transaksi</th>
-                                        <th width="45%">Tgl Pinjam</th>
-                                        <th width="18%">Tgl Perkiraan Kembali</th>
-                                        <th class="text-center" width="12%">Tgl Kembali</th>
+                                        <th width="45%">Tanggal Pinjam</th>
+                                        <th width="18%">Estimasi Kembali</th>
+                                        <th class="text-center" width="12%">Tanggal Kembali</th>
                                         <th width="5%">Aksi</th>
                                     </tr>
                                 </thead>

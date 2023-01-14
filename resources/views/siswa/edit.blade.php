@@ -534,8 +534,11 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
+                                                <?php
+                                                $session_menu = explode(',', Auth::user()->akses_submenu);
+                                                ?>
                                                 <div class="col-md-6"
-                                                    {{ Auth::user()->roles === 'Admin' || Auth::user()->roles === 'Administrator' ? '' : 'hidden' }}>
+                                                    {{ in_array('117', $session_menu) ? '' : 'hidden' }}>
                                                     <div class="mb-3">
                                                         <label for="">Barcode</label>
                                                         <input type="text" class="form-control" name="barcode"
