@@ -33,6 +33,7 @@
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
+                                            {!! $errors->first('username', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -71,6 +72,7 @@
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
+                                            {!! $errors->first('roles', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                 </div>
@@ -84,6 +86,7 @@
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>
+                                            {!! $errors->first('email', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
