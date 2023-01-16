@@ -21,7 +21,7 @@
                                         <i class="mdi mdi-plus me-1"></i> Tambah Siswa
                                     </a>
                                 @endif
-                                @if (Auth::user()->roles == 'Admin' or Auth::user()->roles == 'Administrator')
+                                @if (Auth::user()->roles == 'Administrator')
                                     <a href="{{ route('siswa.csv_download') }}"
                                         class="float-end btn btn-warning btn-rounded waves-effect waves-light mb-2 me-2"><i
                                             class="bx bx-cloud-download me-1"></i>Unduh
