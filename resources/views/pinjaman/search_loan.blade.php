@@ -78,7 +78,6 @@
             </div>
         </div>
     </div>
-    </div>
     <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
     <script src="{{ asset('assets/scanner/html5-qrcode.min.js') }}"></script>

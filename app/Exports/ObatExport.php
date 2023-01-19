@@ -5,12 +5,15 @@ namespace App\Exports;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class ObatExport implements WithColumnFormatting, FromQuery, WithHeadings, WithMapping
+class ObatExport implements WithColumnFormatting, FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithEvents
 {
     use Exportable;
 
@@ -64,6 +67,18 @@ class ObatExport implements WithColumnFormatting, FromQuery, WithHeadings, WithM
     {
         return [
             'D' => NumberFormat::FORMAT_NUMBER,
+        ];
+    }
+
+    public function registerEvents(): array
+    {
+        $cellHeader      = 'A1:D1';
+        return [
+            AfterSheet::class    => function (AfterSheet $event) use ($cellHeader) {
+                $event->sheet->getDelegate()->getStyle($cellHeader)
+                    ->getFont()
+                    ->setBold(true);
+            },
         ];
     }
 }

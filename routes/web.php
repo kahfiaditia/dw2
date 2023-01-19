@@ -279,6 +279,9 @@ Route::group(
         Route::resource('/rekap_perpus', RekapPerpusController::class);
         Route::get('/rekap_perpus_list', [RekapPerpusController::class, 'rekap_perpus_list'])->name('rekap_perpus.rekap_perpus_list');
         Route::get('export_rekap_perpus', [RekapPerpusController::class, 'export_rekap_perpus'])->name('rekap_perpus.export_rekap_perpus');
+        Route::get('/rekap_perpus_siswa', [RekapPerpusController::class, 'rekap_perpus_siswa'])->name('rekap_perpus.rekap_perpus_siswa');
+        Route::post('/getBarcodePerpus', [RekapPerpusController::class, 'getBarcodePerpus'])->name('rekap_perpus.getBarcodePerpus');
+        Route::get('export_rekap_perpus_siswa', [RekapPerpusController::class, 'export_rekap_perpus_siswa'])->name('rekap_perpus.export_rekap_perpus_siswa');
 
         // pinjaman
         Route::resource('/pinjaman', PinjamanController::class);
@@ -370,6 +373,9 @@ Route::group(
         Route::resource('/rekam_medis', RekamMedisController::class);
         Route::get('/rekam_medis_list', [RekamMedisController::class, 'rekam_medis_list'])->name('rekam_medis.rekam_medis_list');
         Route::get('export_rekam_medis', [RekamMedisController::class, 'export_rekam_medis'])->name('rekam_medis.export_rekam_medis');
+        Route::get('/rekap_medis_siswa', [RekamMedisController::class, 'rekap_medis_siswa'])->name('rekap_medis.rekap_medis_siswa');
+        Route::post('/getBarcodeUks', [RekamMedisController::class, 'getBarcodeUks'])->name('rekap_medis.getBarcodeUks');
+        Route::get('export_rekam_medis_siswa', [RekamMedisController::class, 'export_rekam_medis_siswa'])->name('rekam_medis.export_rekam_medis_siswa');
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

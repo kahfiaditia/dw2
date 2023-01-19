@@ -21,13 +21,15 @@
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="row page-title-right">
-                                    <div class="col-md-2">
-                                        <a href="{{ route('komparasi.export_komparasi', 'kode=' . $data[0]->kode_komparasi) }}"
-                                            type="button"
-                                            class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                            <i class="bx bx-cloud-download"></i> Unduh
-                                        </a>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="mb-3" style="float: right">
+                                            <a href="{{ route('komparasi.export_komparasi', 'kode=' . $data[0]->kode_komparasi) }}"
+                                                type="button"
+                                                class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
+                                                <i class="bx bx-cloud-download"></i> Unduh
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -40,19 +42,19 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="mb-3">
-                                            <label for="">User Input</label>
-                                            <input type="text" class="form-control" value="{{ $data[0]->user->name }}"
-                                                disabled>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="mb-3">
                                             <label>Tanggal Input</label>
                                             <div class="input-group" id="datepicker2">
                                                 <input type="text" class="form-control" disabled
                                                     value="{{ $data[0]->created_at }}">
                                                 <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="">User Input</label>
+                                            <input type="text" class="form-control" value="{{ $data[0]->user->name }}"
+                                                disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -62,11 +64,11 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center" style="width: 5%">#</th>
-                                                    <th class="text-center" style="width: 20%">Kode Opname</th>
+                                                    <th class="text-center" style="width: 10%">Kode Opname</th>
                                                     <th class="text-center" style="width: 10%">Kategori</th>
-                                                    <th class="text-center" style="width: 20%">Obat</th>
-                                                    <th class="text-center" style="width: 10%">Jumlah Opname</th>
-                                                    <th class="text-center" style="width: 10%">Jumlah Sistem</th>
+                                                    <th class="text-center" style="width: 15%">Obat</th>
+                                                    <th class="text-center" style="width: 12%">Jumlah Opname</th>
+                                                    <th class="text-center" style="width: 12%">Jumlah Sistem</th>
                                                     <th class="text-center" style="width: 10%">Adjust Stok</th>
                                                     <th class="text-center" style="width: 15%">Keterangan Adjust</th>
                                                 </tr>

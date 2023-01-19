@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RekapPerpusExport;
+use App\Exports\RekapPerpusSiswaExport;
+use App\Models\Employee;
+use App\Models\Pinjaman;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -134,6 +139,105 @@ class RekapPerpusController extends Controller
             'like' => $request->like,
         ];
         return Excel::download(new RekapPerpusExport($data), 'rekap_perpus' . date('YmdH') . '.xlsx');
+    }
+
+    public function rekap_perpus_siswa(Request $request)
+    {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('116', $session_menu)) {
+            if ($request->peminjam == 'Siswa') {
+                $siswa = Siswa::where('barcode', Crypt::decryptString($request->kode))->first();
+                $barcode = $siswa->barcode;
+                $nama = $siswa->nama_lengkap;
+                $nis = $siswa->nis;
+                if ($siswa->classes_student->school_class) {
+                    $class = ' ' . $siswa->classes_student->school_class->classes . ' ';
+                } else {
+                    $class = ' ';
+                }
+                $kelas = $siswa->classes_student->school_level->level . $class . $siswa->classes_student->jurusan . '.' . $siswa->classes_student->type;
+                $perpus = Pinjaman::where('siswa_id', $siswa->id)->get();
+            } elseif ($request->peminjam == 'Karyawan' or $request->peminjam == 'Guru') {
+                $karyawan = Employee::where('niks', Crypt::decryptString($request->kode))->first();
+                $barcode = $karyawan->niks;
+                $nama = $karyawan->nama_lengkap;
+                $nis = $karyawan->niks;
+                $kelas = null;
+                $perpus = Pinjaman::where('karyawan_id', $karyawan->id)->get();
+            } else {
+                $barcode = null;
+                $nama = null;
+                $nis = null;
+                $kelas = null;
+                $perpus = null;
+            }
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'rekam ' . $this->submenu,
+                'label' => 'rekam ' . $this->submenu,
+                'peminjam' => $request->peminjam,
+                'barcode' => $barcode,
+                'nama' => $nama,
+                'nis' => $nis,
+                'kelas' => $kelas,
+                'perpus' => $perpus,
+            ];
+            return view('perpus.rekap.rekap_perpus_siswa')->with($data);
+        } else {
+            return view('not_found');
+        }
+    }
+
+    public function getBarcodePerpus(Request $request)
+    {
+        $val = 0;
+        if ($request->value_peminjam == 'Siswa') {
+            $data = Siswa::where('barcode', $request->scanner_barcode)->first();
+            if ($data) {
+                $id = $data->id;
+                $class_id = $data->class_id;
+                $type = $request->value_peminjam;
+                $barcode = $data->barcode;
+                $code = 200;
+                $val = $val + 1;
+            }
+        }
+        if ($request->value_peminjam == 'Guru' or $request->value_peminjam == 'Karyawan') {
+            $data = Employee::where('niks', $request->scanner_barcode)->first();
+            if ($data) {
+                $id = $data->id;
+                $class_id = null;
+                $type = $request->value_peminjam;
+                $barcode = $data->niks;
+                $code = 200;
+                $val = $val + 1;
+            }
+        }
+        if ($val == 0) {
+            $id = null;
+            $class_id = null;
+            $type = null;
+            $barcode = null;
+            $code = 400;
+        }
+        return response()->json([
+            'code' => $code,
+            'id' => $id,
+            'jenjang' => $class_id,
+            'barcode' => Crypt::encryptString($barcode),
+            'type' => $type,
+            'val' => $val,
+        ]);
+    }
+
+    public function export_rekap_perpus_siswa(Request $request)
+    {
+        $data = [
+            'kode' => $request->kode,
+            'peminjam' => $request->peminjam,
+        ];
+        return Excel::download(new RekapPerpusSiswaExport($data), 'rekap_perpus_siswa_' . date('YmdH') . '.xlsx');
     }
 
     /**

@@ -6,11 +6,14 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class PinjamanBuku implements WithColumnFormatting, FromQuery, WithHeadings, WithMapping
+class PinjamanBuku implements WithColumnFormatting, FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithEvents
 {
     use Exportable;
 
@@ -113,9 +116,9 @@ class PinjamanBuku implements WithColumnFormatting, FromQuery, WithHeadings, Wit
                 'Kode Transaksi',
                 'Peminjam',
                 'Buku',
-                'Tgl Pinjam',
-                'Tgl Perkiraan Kembali',
-                'Tgl kembali',
+                'Tanggal Pinjam',
+                'Tanggal Estimasi Kembali',
+                'Tgl Kembali',
                 'Jumlah',
             ];
         } else {
@@ -123,9 +126,9 @@ class PinjamanBuku implements WithColumnFormatting, FromQuery, WithHeadings, Wit
                 'Kode Transaksi',
                 'Peminjam',
                 'Kelas',
-                'Tgl Pinjam',
-                'Tgl Perkiraan Kembali',
-                'Tgl kembali',
+                'Tanggal Pinjam',
+                'Tanggal Estimasi Kembali',
+                'Tanggal Kembali',
                 'Jumlah',
             ];
         }
@@ -160,6 +163,18 @@ class PinjamanBuku implements WithColumnFormatting, FromQuery, WithHeadings, Wit
             'A' => NumberFormat::FORMAT_TEXT,
             'B' => NumberFormat::FORMAT_TEXT,
             'C' => NumberFormat::FORMAT_TEXT,
+        ];
+    }
+
+    public function registerEvents(): array
+    {
+        $cellHeader      = 'A1:G1';
+        return [
+            AfterSheet::class    => function (AfterSheet $event) use ($cellHeader) {
+                $event->sheet->getDelegate()->getStyle($cellHeader)
+                    ->getFont()
+                    ->setBold(true);
+            },
         ];
     }
 }

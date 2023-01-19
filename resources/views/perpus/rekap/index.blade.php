@@ -24,6 +24,22 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#home1" role="tab">
+                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                        <span class="d-none d-sm-block">Rekap Perpus</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('rekap_perpus.rekap_perpus_siswa') }}"
+                                        role="tab">
+                                        <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                        <span class="d-none d-sm-block">Rekap Perpus Per-Siswa</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <br>
                             <div class="accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
@@ -93,10 +109,12 @@
                                                                 <div class="col-sm-4 mb-2">
                                                                     <div class="input-daterange input-group"
                                                                         id="datepicker6" data-date-format="yyyy-mm-dd"
-                                                                        data-date-autoclose="true" data-provide="datepicker"
+                                                                        data-date-autoclose="true"
+                                                                        data-provide="datepicker"
                                                                         data-date-container='#datepicker6'>
                                                                         <input type="text" class="form-control"
-                                                                            name="tgl_start_kembali" id="tgl_start_kembali"
+                                                                            name="tgl_start_kembali"
+                                                                            id="tgl_start_kembali"
                                                                             value="{{ isset($_GET['tgl_start_kembali']) ? $_GET['tgl_start_kembali'] : null }}"
                                                                             placeholder="Tanggal Kembali" />
                                                                         <input type="text" class="form-control"

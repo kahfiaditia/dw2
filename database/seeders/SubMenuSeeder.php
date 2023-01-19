@@ -248,7 +248,7 @@ class SubMenuSeeder extends Seeder
             ], [
                 'submenu' => 'Kategori', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
-                'submenu' => 'Rekam Medis', 'route_submenu' => 'rekam_medis.index', 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => 7,
+                'submenu' => 'Rekap Medis', 'route_submenu' => 'rekam_medis.index', 'type_menu' => 'view', 'menu_id' => '18', 'display_submenu' => '1', 'order_submenu' => 7,
             ], [
                 'submenu' => 'Rekap Perpus', 'route_submenu' => 'rekap_perpus.index', 'type_menu' => 'view', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => 7,
             ], [

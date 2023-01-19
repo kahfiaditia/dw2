@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RekamMedisExport;
+use App\Exports\RekamMedisSiswaExport;
+use App\Models\PerawatanModel;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -126,6 +130,83 @@ class RekamMedisController extends Controller
             'like' => $request->like,
         ];
         return Excel::download(new RekamMedisExport($data), 'rekam_medis_' . date('YmdH') . '.xlsx');
+    }
+
+    public function rekap_medis_siswa(Request $request)
+    {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('115', $session_menu)) {
+            if ($request->peminjam == 'Siswa') {
+                $siswa = Siswa::where('barcode', Crypt::decryptString($request->kode))->first();
+                $barcode = $siswa->barcode;
+                $nama = $siswa->nama_lengkap;
+                $nis = $siswa->nis;
+                if ($siswa->classes_student->school_class) {
+                    $class = ' ' . $siswa->classes_student->school_class->classes . ' ';
+                } else {
+                    $class = ' ';
+                }
+                $kelas = $siswa->classes_student->school_level->level . $class . $siswa->classes_student->jurusan . '.' . $siswa->classes_student->type;
+                $perawatan = PerawatanModel::where('id_siswa', $siswa->id)->get();
+            } else {
+                $barcode = null;
+                $nama = null;
+                $nis = null;
+                $kelas = null;
+                $perawatan = null;
+            }
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'rekam ' . $this->submenu,
+                'label' => 'rekam ' . $this->submenu,
+                'peminjam' => $request->peminjam,
+                'barcode' => $barcode,
+                'nama' => $nama,
+                'nis' => $nis,
+                'kelas' => $kelas,
+                'perawatan' => $perawatan,
+            ];
+            return view('uks.rekam_medis.rekap_medis_siswa')->with($data);
+        } else {
+            return view('not_found');
+        }
+    }
+
+    public function getBarcodeUks(Request $request)
+    {
+        $val = 0;
+        if ($request->value_peminjam == 'Siswa') {
+            $data = Siswa::where('barcode', $request->scanner_barcode)->first();
+            if ($data) {
+                $id = $data->id;
+                $type = $request->value_peminjam;
+                $barcode = $data->barcode;
+                $code = 200;
+                $val = $val + 1;
+            }
+        }
+        if ($val == 0) {
+            $id = null;
+            $type = null;
+            $barcode = null;
+            $code = 400;
+        }
+        return response()->json([
+            'code' => $code,
+            'id' => $id,
+            'barcode' => Crypt::encryptString($barcode),
+            'type' => $type,
+        ]);
+    }
+
+    public function export_rekam_medis_siswa(Request $request)
+    {
+        $data = [
+            'kode' => $request->kode,
+            'peminjam' => $request->peminjam,
+        ];
+        return Excel::download(new RekamMedisSiswaExport($data), 'rekam_medis_siswa_' . date('YmdH') . '.xlsx');
     }
 
     /**
