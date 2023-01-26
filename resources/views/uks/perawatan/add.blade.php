@@ -282,50 +282,15 @@
             $('.div_scan_camera').hide();
             $('.div_barcode').hide();
 
-            // load karyawan
-            // var select_peminjam = document.getElementById('peminjam');
-            // var peminjam = select_peminjam.options[select_peminjam.selectedIndex].value;
-            // if (peminjam == 'Siswa') {
-            //     $('.peminjam_siswa').show();
-            //     $('.peminjam_guru').hide();
-            //     document.getElementById("karyawan").required = false
-            //     document.getElementById("jenjang").required = true
-            //     document.getElementById("siswa").required = true
-            // } else if (peminjam == 'Guru' || peminjam == 'Karyawan') {
-            //     $('.peminjam_guru').show();
-            //     $('.peminjam_siswa').hide();
-            //     document.getElementById("karyawan").required = true
-            //     document.getElementById("jenjang").required = false
-            //     document.getElementById("siswa").required = false
-            // } else {
-            //     $('.peminjam_guru').hide();
-            //     $('.peminjam_siswa').hide();
-            // }
-
-            // set barcodeScanner hide
-            // $('.barcodeScanner').hide();
-            // collapseOne = document.getElementById("collapseOne");
             collapseOne.classList.remove("show");
-
-            // // cek localStorageBarcode jika on
-            // var localUksDharma = JSON.parse(localStorage.getItem("localUksDharma"));
-            // if (localUksDharma.barcode.status == 'on') {
-            //     $('.barcodeScanner').show();
-            //     element = document.getElementById("accordion-button");
-            //     element.classList.remove("collapsed");
-            //     collapseOne = document.getElementById("collapseOne");
-            //     collapseOne.classList.add("show");
-            // }
-
-            // if (localPerpusDharmaBarcode.barcode.metode == 'Barcode') {
-            //     $('.div_barcode').show();
-            //     document.getElementById("inlineRadio1").checked = true;
-            // }
-
-            // if (localPerpusDharmaBarcode.barcode.metode == 'Scan Kamera') {
-            //     $('.div_scan_camera').show();
-            //     document.getElementById("inlineRadio2").checked = true;
-            // }
+            // set local null
+            var dataUks = {
+                "header": {
+                    "jenjang": '',
+                    "siswa": '',
+                }
+            };
+            localStorage.setItem('localUksDharma', JSON.stringify(dataUks));
         }
 
         function getValueScanBarcodeCamera(barcode, peminjam) {
