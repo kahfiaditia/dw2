@@ -156,6 +156,7 @@
                                                                 $pengarang = $_GET['pengarang'];
                                                                 $penerbit = $_GET['penerbit'];
                                                                 $kategori = $_GET['kategori'];
+                                                                $rak = $_GET['rak'];
                                                                 $jml_start = $_GET['jml_start'];
                                                                 $jml_end = $_GET['jml_end'];
                                                                 $stock_start = $_GET['stock_start'];
@@ -179,6 +180,8 @@
                                                                         $penerbit .
                                                                         '&kategori=' .
                                                                         $kategori .
+                                                                        '&rak=' .
+                                                                        $rak .
                                                                         '&jml_start=' .
                                                                         $jml_start .
                                                                         '&jml_end=' .

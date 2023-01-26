@@ -47,7 +47,7 @@ class BukuExport implements WithColumnFormatting, FromQuery, WithHeadings, WithM
                     ->orWhere('pengarang', 'like', '%' . $search . '%')
                     ->orWhere('nama_penerbit', 'like', '%' . $search . '%')
                     ->orWhere('kategori', 'like', '%' . $search . '%')
-                    ->orWhere('rak', 'like', '%' . $search . '%')
+                    ->orwhereRaw("concat_ws('-',rak,tingkatan) like '%$search%'")
                     ->orWhere('jml_buku', 'like', '%' . $search . '%')
                     ->orWhere('stock_master', 'like', '%' . $search . '%');
             });
@@ -79,7 +79,7 @@ class BukuExport implements WithColumnFormatting, FromQuery, WithHeadings, WithM
                 $buku->where('kategori', '=', $kategori);
             }
             if ($rak != null) {
-                $buku->where('rak', '=', $rak);
+                $buku->whereRaw("concat_ws('-',rak,tingkatan) like '%$rak%'");
             }
             if ($jml_end != null) {
                 $buku->whereRaw('jml_buku BETWEEN ' . $jml_start . ' AND ' . $jml_end . '');

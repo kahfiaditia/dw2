@@ -60,32 +60,35 @@ class BukuController extends Controller
             ->Join('perpus_penerbit', 'perpus_penerbit.id', 'perpus_buku.penerbit_id')
             ->leftJoin('perpus_rak', 'perpus_rak.id', 'perpus_buku.rak_id')
             ->whereNull('perpus_buku.deleted_at')
-            ->orderBy('perpus_buku.id', 'DESC');
+            ->orderBy('kategori', 'ASC')
+            ->orderBy('perpus_buku.kode_buku', 'ASC');
 
         if ($request->get('search_manual') != null) {
             $search = $request->get('search_manual');
-            $buku->where(function ($where) use ($search) {
+            $search_rak = str_replace(' ', '', $search);
+            $buku->where(function ($where) use ($search, $search_rak) {
                 $where
                     ->orWhere('kode_buku', 'like', '%' . $search . '%')
                     ->orWhere('judul', 'like', '%' . $search . '%')
                     ->orWhere('pengarang', 'like', '%' . $search . '%')
                     ->orWhere('nama_penerbit', 'like', '%' . $search . '%')
                     ->orWhere('kategori', 'like', '%' . $search . '%')
-                    ->orWhere('rak', 'like', '%' . $search . '%')
+                    ->orwhereRaw("concat_ws('-',rak,tingkatan) like '%$search_rak%'")
                     ->orWhere('jml_buku', 'like', '%' . $search . '%')
                     ->orWhere('stock_master', 'like', '%' . $search . '%');
             });
 
             $search = $request->get('search');
+            $search_rak = str_replace(' ', '', $search);
             if ($search != null) {
-                $buku->where(function ($where) use ($search) {
+                $buku->where(function ($where) use ($search, $search_rak) {
                     $where
                         ->orWhere('kode_buku', 'like', '%' . $search . '%')
                         ->orWhere('judul', 'like', '%' . $search . '%')
                         ->orWhere('pengarang', 'like', '%' . $search . '%')
                         ->orWhere('nama_penerbit', 'like', '%' . $search . '%')
                         ->orWhere('kategori', 'like', '%' . $search . '%')
-                        ->orWhere('rak', 'like', '%' . $search . '%')
+                        ->orwhereRaw("concat_ws('-',rak,tingkatan) like '%$search_rak%'")
                         ->orWhere('jml_buku', 'like', '%' . $search . '%')
                         ->orWhere('stock_master', 'like', '%' . $search . '%');
                 });
@@ -117,7 +120,8 @@ class BukuController extends Controller
             }
             if ($request->get('rak') != null) {
                 $rak = $request->get('rak');
-                $buku->where('rak', '=', $rak);
+                $rak = str_replace(' ', '', $rak);
+                $buku->whereRaw("concat_ws('-',rak,tingkatan) like '%$rak%'");
             }
             if ($request->get('jml_end') != null) {
                 $jml_start = $request->get('jml_start');
@@ -140,7 +144,7 @@ class BukuController extends Controller
                         ->orWhere('pengarang', 'like', '%' . $search . '%')
                         ->orWhere('nama_penerbit', 'like', '%' . $search . '%')
                         ->orWhere('kategori', 'like', '%' . $search . '%')
-                        ->orWhere('rak', 'like', '%' . $search . '%')
+                        ->orwhereRaw("concat_ws('-',rak,tingkatan) like '%$replaced%'")
                         ->orWhere('jml_buku', 'like', '%' . $search . '%')
                         ->orWhere('stock_master', 'like', '%' . $search . '%');
                 });
@@ -180,7 +184,7 @@ class BukuController extends Controller
             })
             ->addColumn('rak', function ($model) {
                 if ($model->rak) {
-                    $rak = $model->rak . ' - ' . $model->tingkatan;
+                    $rak = $model->rak . '-' . $model->tingkatan;
                 } else {
                     $rak = null;
                 }
@@ -237,44 +241,23 @@ class BukuController extends Controller
                 'foto' => 'mimes:png,jpeg,jpg|max:2048',
             ]);
 
-            // $barcode = Buku::limit(1)->orderBy('id', 'desc')->get();
-            // if (count($barcode) > 0) {
-            //     $thn = substr($barcode[0]->barcode, 0, 2);
-            //     if ($thn == Carbon::now()->format('y')) {
-            //         $date = $thn . Carbon::now()->format('md');
-            //         $nomor = (int) substr($barcode[0]->barcode, 6, 4) + 1;
-
-            //         $Nol = "";
-            //         $nilai = 4 - strlen($nomor);
-            //         for ($i = 1; $i <= $nilai; $i++) {
-            //             $Nol = $Nol . "0";
-            //         }
-            //         $barcode   = $date . $Nol .  $nomor;
-            //     } else {
-            //         $barcode   = Carbon::now()->format('ymd') . "0001";
-            //     }
-            // } else {
-            //     $barcode   = Carbon::now()->format('ymd') . "0001";
-            // }
-
             DB::beginTransaction();
             try {
                 $kode_buku = DB::table('perpus_buku')
                     ->select("kode_buku")
                     ->where('kode_buku', 'like', "%{$request->kode_kategori}%")
                     ->limit(1)->orderBy('id', 'desc')->get();
-
                 if (count($kode_buku) > 0) {
                     $bar = explode('-', $kode_buku[0]->kode_buku);
                     $nomor = (int)$bar[1] + 1;
                     $Nol = "";
-                    $nilai = 4 - strlen($nomor);
+                    $nilai = 3 - strlen($nomor);
                     for ($i = 1; $i <= $nilai; $i++) {
                         $Nol = $Nol . "0";
                     }
                     $kode_buku   = $request->kode_kategori . '-' . $Nol .  $nomor;
                 } else {
-                    $kode_buku = $request->kode_kategori . '-0001';
+                    $kode_buku = $request->kode_kategori . '-001';
                 }
 
                 $buku = new buku();
@@ -568,7 +551,8 @@ class BukuController extends Controller
             ->leftJoin('perpus_kategori_buku', 'perpus_kategori_buku.id', 'perpus_buku.kategori_id')
             ->leftJoin('perpus_rak', 'perpus_rak.id', 'perpus_buku.rak_id')
             ->whereNull('perpus_buku.deleted_at')
-            ->orderBy('kode_buku', 'DESC');
+            ->orderBy('kategori', 'ASC')
+            ->orderBy('perpus_buku.kode_buku', 'ASC');
 
         if ($request->get('kode') != null) {
             $kode = $request->get('kode');
@@ -597,11 +581,13 @@ class BukuController extends Controller
         }
         if ($request->get('rak') != null) {
             $rak = $request->get('rak');
-            $buku->Where('rak', 'like', '%' . $rak . '%');
+            $rak = str_replace(' ', '', $rak);
+            $buku->whereRaw("concat_ws('-',rak,tingkatan) like '%$rak%'");
         }
         if ($request->get('search') != null) {
             $search = $request->get('search');
-            $buku->where(function ($where) use ($search) {
+            $search_rak = str_replace(' ', '', $search);
+            $buku->where(function ($where) use ($search, $search_rak) {
                 $where
                     ->orWhere('kode_buku', 'like', '%' . $search . '%')
                     ->orWhere('judul', 'like', '%' . $search . '%')
@@ -609,7 +595,7 @@ class BukuController extends Controller
                     ->orWhere('nama_penerbit', 'like', '%' . $search . '%')
                     ->orWhere('kategori', 'like', '%' . $search . '%')
                     ->orWhere('jml_buku', 'like', '%' . $search . '%')
-                    ->orWhere('rak', 'like', '%' . $search . '%');
+                    ->orwhereRaw("concat_ws('-',rak,tingkatan) like '%$search_rak%'");
             });
         }
 
