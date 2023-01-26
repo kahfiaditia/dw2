@@ -501,6 +501,14 @@
                 window.location = APP_URL + '/uks/perawatan'
             })
 
+            // set local null
+            var dataUks = {
+                "header": {
+                    "jenjang": '',
+                    "siswa": '',
+                }
+            };
+            localStorage.setItem('localUksDharma', JSON.stringify(dataUks));
             var dataUks = JSON.parse(localStorage.getItem("localUksDharma"));
             $.ajax({
                 type: "POST",
