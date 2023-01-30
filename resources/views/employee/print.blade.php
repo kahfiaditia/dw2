@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{{ $item->nama_lengkap . ' - ' . $item->nis }}</title>
+    <title>{{ $item->nama_lengkap . ' - ' . $item->niks }}</title>
     <style>
         .page-break {
             page-break-after: always;
