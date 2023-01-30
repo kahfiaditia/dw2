@@ -118,6 +118,7 @@ Route::group(
         Route::post('/cek_ijazah', [EmployeeController::class, 'cek_ijazah'])->name('employee.cek_ijazah');
         Route::get('export_employee', [EmployeeController::class, 'export_employee'])->name('employee.export_employee');
         Route::post('/dropdown_karyawan', [EmployeeController::class, 'dropdown_karyawan'])->name('employee.dropdown_karyawan');
+        Route::get('print_karyawan/{id}', [EmployeeController::class, 'print_karyawan'])->name('employee.print_karyawan');
     }
 );
 
@@ -213,6 +214,7 @@ Route::group(
         Route::get('/edit_pembayaran/{id}', [SiswaController::class, 'edit_pembayaran'])->name('siswa.edit_pembayaran');
         Route::patch('/update_pembayaran/{id}', [SiswaController::class, 'update_pembayaran'])->name('siswa.update_pembayaran');
         Route::get('export_siswa', [SiswaController::class, 'export_siswa'])->name('siswa.export_siswa');
+        Route::get('/print_siswa/{id}', [SiswaController::class, 'print_siswa'])->name('siswa.print_siswa');
 
         // akun
         Route::resource('/akun', AkunController::class);

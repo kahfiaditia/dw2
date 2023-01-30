@@ -212,7 +212,7 @@
                                                     <li class="list-inline-item me-3">
                                                         @if ($guardian == null)
                                                             <a
-                                                                href="{{ route('siswa.add_parent_student', [\Crypt::encryptString($student->id), 'wali']) }}"><i
+                                                                href="{{ route('siswa.add_parent_student', [\Crypt::encryptString($student->id), 'Wali']) }}"><i
                                                                     class="btn-sm bg-primary rounded mdi mdi-plus text-white font-weight-bold font-size-20"></i></a>
                                                         @else
                                                             <form class="form_parents"
@@ -221,7 +221,7 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <a
-                                                                    href="{{ route('siswa.edit_parent', [\Crypt::encryptString($guardian->id), 'wali']) }}"><i
+                                                                    href="{{ route('siswa.edit_parent', [\Crypt::encryptString($guardian->id), 'Wali']) }}"><i
                                                                         class="btn-sm bg-info rounded mdi mdi-pencil text-white font-weight-bold font-size-20"></i></a>
                                                                 <a href="#"><i
                                                                         class="delete-confirm btn-sm bg-danger rounded mdi mdi-delete text-white font-weight-bold font-size-20"></i></a>

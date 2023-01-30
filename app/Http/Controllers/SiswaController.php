@@ -25,7 +25,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 use Illuminate\Support\Str;
+
 
 class SiswaController extends Controller
 {
@@ -302,7 +304,7 @@ class SiswaController extends Controller
             ])->first();
 
             $guardian = Parents::with('special_need')->where([
-                ['type', '=', 'Wal'],
+                ['type', '=', 'Wali'],
                 ['siswa_id', '=', $id]
             ])->first();
 
@@ -1333,5 +1335,19 @@ class SiswaController extends Controller
             'like' => $request->like,
         ];
         return Excel::download(new StudentExport($data), 'siswa_' . date('YmdH') . '.xlsx');
+    }
+
+    public function print_siswa($id)
+    {
+        $id = Crypt::decryptString($id);
+        $siswa = Siswa::findOrFail($id);
+        $data = [
+            'siswa' => $siswa,
+            'ortu' => Parents::with('special_need')->where([['siswa_id', '=', $siswa->id]])->get(),
+        ];
+        // return view('siswa.print')->with($data);
+
+        $pdf = PDF::loadView('siswa.print', $data)->setPaper('a4', 'landscape');
+        return $pdf->download($siswa->nama_lengkap . ' ' . date('YmdHis') . '.pdf');
     }
 }

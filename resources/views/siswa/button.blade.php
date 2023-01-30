@@ -4,12 +4,15 @@
     @method('DELETE')
     <div class="d-flex gap-3">
         @if (in_array('19', $session_menu))
+            <a href="{{ route('siswa.print_siswa', \Crypt::encryptString($model->id)) }}" target="_blank"
+                class="text-primary"><i class="mdi mdi-printer font-size-18"></i></a>
             <a href="{{ route('siswa.show', \Crypt::encryptString($model->id)) }}" class="text-info"><i
                     class="mdi mdi-eye font-size-18"></i></a>
         @endif
         @if (in_array('21', $session_menu))
             <a href="{{ route('siswa.edit', \Crypt::encryptString($model->id)) }}" class="text-success"
-                data-toggle="tooltip" data-placement="top" title="edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                data-toggle="tooltip" data-placement="top" title="edit"><i
+                    class="mdi mdi-pencil font-size-18"></i></a>
         @endif
         @if (in_array('22', $session_menu))
             <a href="#" class="text-danger delete-confirm" data-toggle="tooltip" data-placement="top"

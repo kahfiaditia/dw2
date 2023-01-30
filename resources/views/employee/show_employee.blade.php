@@ -136,7 +136,7 @@
                                             </div>
                                             <div class="col-sm-4 col-6">
                                                 <div class="mt-4">
-                                                    <h5 class="font-size-14">Kartu keluarga</h5>
+                                                    <h5 class="font-size-14">Kartu Keluarga</h5>
                                                     <p class="text-muted mb-0">{{ $item->kk }}</p>
                                                     @if ($item->dok_kk)
                                                         <a href="javascript:void(0)"

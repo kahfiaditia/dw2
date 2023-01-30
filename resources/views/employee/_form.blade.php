@@ -4,6 +4,8 @@
     @method('DELETE')
     <div class="d-flex gap-3">
         @if (in_array('3', $session_menu))
+            <a href="{{ route('employee.print_karyawan', \Crypt::encryptString($model->id)) }}" target="_blank"
+                class="text-primary"><i class="mdi mdi-printer font-size-18"></i></a>
             <a href="{{ route('employee.show', \Crypt::encryptString($model->id)) }}" class="text-info"><i
                     class="mdi mdi-eye font-size-18"></i></a>
         @endif

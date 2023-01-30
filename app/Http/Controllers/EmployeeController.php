@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
+use PDF;
 
 class EmployeeController extends Controller
 {
@@ -1421,5 +1422,28 @@ class EmployeeController extends Controller
             $employee = Employee::select('*')->where('jabatan', $request->value_peminjam)->where('aktif', '1')->wherenull('deleted_at')->get();
             return $employee;
         }
+    }
+
+    public function print_karyawan($id)
+    {
+        $id = Crypt::decryptString($id);
+        $karyawan = Employee::findOrFail($id);
+        $data = [
+            'item' => $karyawan,
+            'ijazah' => Ijazah::select('gelar_ijazah', 'type', 'karyawan_id')->where('karyawan_id', $karyawan->id)
+                ->orderByRaw("FIELD(gelar_ijazah, 'Kursus', 'Seminar', 'SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2','S3')")->groupby('gelar_ijazah')->get(),
+            'sk' => Sk_karyawan::where('karyawan_id', $karyawan->id)->get(),
+            'child' => Anak_karyawan::where('karyawan_id', $karyawan->id)->orderBy('anak_ke', 'asc')->get(),
+            'school' => Anak_karyawan_sekolah_dw::where('karyawan_id', $karyawan->id)
+                ->orderBy('jenjang')
+                ->orderByRaw("FIELD('KB', 'TK', 'SD', 'SMP', 'SMK')")
+                ->get(),
+            'riwayat' => Riwayat_karyawan::where('karyawan_id', $karyawan->id)->get(),
+            'kontak' => Kontak_darurat::where('karyawan_id', $karyawan->id)->get(),
+        ];
+        // return view('employee.print')->with($data);
+
+        $pdf = PDF::loadView('employee.print', $data);
+        return $pdf->download($karyawan->nama_lengkap . ' ' . date('YmdHis') . '.pdf');
     }
 }
