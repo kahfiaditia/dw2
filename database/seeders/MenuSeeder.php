@@ -76,7 +76,7 @@ class MenuSeeder extends Seeder
                 'menu' => 'Pembayaran',
                 'icon' => 'bx bx-wallet',
                 'sub_menu' => '0',
-                'order_menu' => '4',
+                'order_menu' => '5',
                 'display' => '1',
             ], [
                 'menu' => 'Setting Pembayaran',
@@ -112,19 +112,31 @@ class MenuSeeder extends Seeder
                 'menu' => 'Perpustakaan',
                 'icon' => 'bx bx-book',
                 'sub_menu' => '1',
-                'order_menu' => '5',
+                'order_menu' => '6',
                 'display' => '1',
             ], [
                 'menu' => 'Inventaris',
                 'icon' => 'bx bx-file',
                 'sub_menu' => '1',
-                'order_menu' => '7',
+                'order_menu' => '8',
                 'display' => '1',
             ], [
                 'menu' => 'UKS',
                 'icon' => 'bx bx-band-aid',
                 'sub_menu' => '1',
-                'order_menu' => '6',
+                'order_menu' => '7',
+                'display' => '1',
+            ], [
+                'menu' => 'Kehadiran',
+                'icon' => 'bx bx-fingerprint',
+                'sub_menu' => '1',
+                'order_menu' => '4',
+                'display' => '1',
+            ],  [
+                'menu' => 'Bursa',
+                'icon' => 'bx bxs-purchase-tag-alt',
+                'sub_menu' => '1',
+                'order_menu' => '8',
                 'display' => '1',
             ]
         ];

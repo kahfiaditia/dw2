@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Helper\AlertHelper;
-use App\Models\KategoriModel;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Helper\AlertHelper;
+use App\Models\BursaSatuan;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-class KategoriUksController extends Controller
+class BursaSatuanController extends Controller
 {
     protected $title = 'dharmawidya';
-    protected $menu = 'uks';
-    protected $submenu = 'kategori';
-
+    protected $menu = 'Bursa';
     /**
      * Display a listing of the resource.
      *
@@ -23,19 +21,14 @@ class KategoriUksController extends Controller
      */
     public function index()
     {
-        $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('111', $session_menu)) {
-            $data = [
-                'title' => $this->title,
-                'menu' => $this->menu,
-                'submenu' => $this->submenu,
-                'label' => 'data ' . $this->submenu,
-                'data' => KategoriModel::all(),
-            ];
-            return view('uks.kategori.index')->with($data);
-        } else {
-            return view('not_found');
-        }
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'Satuan',
+            'label' => 'data Satuan',
+            'satuan' => BursaSatuan::all()
+        ];
+        return view('bursa.bursa_satuan.data')->with($data);
     }
 
     /**
@@ -45,18 +38,13 @@ class KategoriUksController extends Controller
      */
     public function create()
     {
-        $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('112', $session_menu)) {
-            $data = [
-                'title' => $this->title,
-                'menu' => $this->menu,
-                'submenu' => $this->submenu,
-                'label' => 'tambah ' . $this->submenu,
-            ];
-            return view('uks.kategori.add')->with($data);
-        } else {
-            return view('not_found');
-        }
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'Satuan',
+            'label' => 'data Satuan',
+        ];
+        return view('bursa.bursa_satuan.tambah')->with($data);
     }
 
     /**
@@ -68,21 +56,25 @@ class KategoriUksController extends Controller
     public function store(Request $request)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('112', $session_menu)) {
+        if (in_array('59', $session_menu)) {
             $request->validate([
-                'kategori' => 'required|unique:uks_kategori,kategori,NULL,id,deleted_at,NULL|max:64',
+                'nama' => 'required',
+                'status' => 'required',
             ]);
 
             DB::beginTransaction();
+
             try {
-                $kategori = new KategoriModel();
-                $kategori->kategori = strtoupper($request['kategori']);
-                $kategori->user_created = Auth::user()->id;
-                $kategori->save();
+                $satuan = new BursaSatuan();
+                $satuan->nama = strtoupper($request['nama']);
+                $satuan->status = strtoupper($request['status']);
+                $satuan->user_created = Auth::user()->id;
+                $satuan->save();
+
 
                 DB::commit();
                 AlertHelper::addAlert(true);
-                return redirect('uks/uks_kategori');
+                return redirect('bursa/satuan');
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;
@@ -113,20 +105,17 @@ class KategoriUksController extends Controller
      */
     public function edit($id)
     {
-        $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('113', $session_menu)) {
-            $id_decrypted = Crypt::decryptString($id);
-            $data = [
-                'title' => $this->title,
-                'menu' => $this->menu,
-                'submenu' => $this->submenu,
-                'label' => 'ubah ' . $this->submenu,
-                'data' => KategoriModel::findorfail($id_decrypted)
-            ];
-            return view('uks.kategori.edit')->with($data);
-        } else {
-            return view('not_found');
-        }
+        $id_decrypted = Crypt::decryptString($id);
+        $data = [
+            'title' => $this->title,
+            'menu' => $this->menu,
+            'submenu' => 'Satuan',
+            'label' => 'data Satuan',
+            'satuan' => BursaSatuan::findORFail(
+                $id_decrypted
+            )
+        ];
+        return view('bursa.bursa_satuan.ubah')->with($data);
     }
 
     /**
@@ -139,25 +128,29 @@ class KategoriUksController extends Controller
     public function update(Request $request, $id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('113', $session_menu)) {
-            $id = Crypt::decryptString($id);
+        if (in_array('59', $session_menu)) {
             $request->validate([
-                'kategori' => "required|max:64|unique:uks_kategori,kategori,$id,id,deleted_at,NULL",
+                'nama' => 'required',
+                'status' => 'required',
             ]);
+
+            $id = Crypt::decryptString($id);
             DB::beginTransaction();
+
             try {
-                $update = KategoriModel::findOrFail($id);
-                $update->kategori = strtoupper($request['kategori']);
-                $update->user_updated = Auth::user()->id;
-                $update->save();
+                $satuan = BursaSatuan::findORfail($id);
+                $satuan->nama = strtoupper($request['nama']);
+                $satuan->status = strtoupper($request['status']);
+                $satuan->user_updated = Auth::user()->id;
+                $satuan->save();
 
                 DB::commit();
-                AlertHelper::updateAlert(true);
-                return redirect('uks/uks_kategori');
+                AlertHelper::addAlert(true);
+                return redirect('bursa/satuan');
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;
-                AlertHelper::updateAlert(false);
+                AlertHelper::addAlert(false);
                 return back();
             }
         } else {
@@ -178,7 +171,7 @@ class KategoriUksController extends Controller
             $id_decrypted = Crypt::decryptString($id);
             DB::beginTransaction();
             try {
-                $delete = KategoriModel::findorfail($id_decrypted);
+                $delete = BursaSatuan::findorfail($id_decrypted);
                 $delete->user_deleted = Auth::user()->id;
                 $delete->deleted_at = Carbon::now();
                 $delete->save();

@@ -253,7 +253,65 @@ class SubMenuSeeder extends Seeder
                 'submenu' => 'Rekap Perpus', 'route_submenu' => 'rekap_perpus.index', 'type_menu' => 'view', 'menu_id' => '16', 'display_submenu' => '1', 'order_submenu' => 7,
             ], [
                 'submenu' => 'Barcode Siswa', 'route_submenu' => 'rekap_perpus.index', 'type_menu' => 'edit', 'menu_id' => '6', 'display_submenu' => '1', 'order_submenu' => 3,
-            ],
+            ], [
+                'submenu' => 'Jam Pelajaran', 'route_submenu' => 'jam_pelajaran.index', 'type_menu' => 'view', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => 1,
+            ], [
+                'submenu' => 'Pelajaran', 'route_submenu' => 'pelajaran.index', 'type_menu' => 'view', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => 2,
+            ], [
+                'submenu' => 'Pelajaran', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Pelajaran', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Pelajaran', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Jadwal', 'route_submenu' => 'jadwal.index', 'type_menu' => 'view', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => 3,
+            ], [
+                'submenu' => 'Jadwal', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Jadwal', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Jadwal', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Absensi', 'route_submenu' => 'absensi.index', 'type_menu' => 'view', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => 4,
+            ], [
+                'submenu' => 'Absensi', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Absensi', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Absensi', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '19', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Supplier', 'route_submenu' => 'supplier.index', 'type_menu' => 'view', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => 5,
+            ], [
+                'submenu' => 'Supplier', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Supplier', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Supplier', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Satuan', 'route_submenu' => 'satuan.index', 'type_menu' => 'view', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => 6,
+            ], [
+                'submenu' => 'Satuan', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Satuan', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Satuan', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Bursa Kategori', 'route_submenu' => 'bursa_kategori.index', 'type_menu' => 'view', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => 6,
+            ], [
+                'submenu' => 'Bursa Kategori', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Bursa Kategori', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Bursa Kategori', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Bursa Produk', 'route_submenu' => 'bursa_produk.index', 'type_menu' => 'view', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => 6,
+            ], [
+                'submenu' => 'Bursa Produk', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Bursa Produk', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Bursa Produk', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ]
         ];
         DB::table('submenu')->insert($sub_menus);
     }

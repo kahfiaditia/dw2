@@ -5,6 +5,7 @@ use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\BursaKategoriController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\CronController;
 use App\Http\Controllers\DashboardController;
@@ -38,6 +39,9 @@ use App\Http\Controllers\RekapPerpusController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StokObatController;
 use App\Http\Controllers\SubMenuController;
+use App\Http\Controllers\BursaSupplierController;
+use App\Http\Controllers\BursaSatuanController;
+use App\Http\Controllers\BursaProdukController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -378,6 +382,20 @@ Route::group(
         Route::get('/rekap_medis_siswa', [RekamMedisController::class, 'rekap_medis_siswa'])->name('rekap_medis.rekap_medis_siswa');
         Route::post('/getBarcodeUks', [RekamMedisController::class, 'getBarcodeUks'])->name('rekap_medis.getBarcodeUks');
         Route::get('export_rekam_medis_siswa', [RekamMedisController::class, 'export_rekam_medis_siswa'])->name('rekam_medis.export_rekam_medis_siswa');
+    }
+
+);
+
+Route::group(
+    [
+        'prefix' => 'bursa',
+        'middleware' => 'auth',
+    ],
+    function () {
+        Route::resource('/supplier', BursaSupplierController::class);
+        Route::resource('/satuan', BursaSatuanController::class);
+        Route::resource('/bursa_kategori', BursaKategoriController::class);
+        Route::resource('/bursa_produk', BursaProdukController::class);
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');
