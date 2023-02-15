@@ -64,7 +64,6 @@ class BursaSupplierController extends Controller
                 'alamat' => 'required',
                 'nama_kontak' => 'required',
                 'nomor' => 'required',
-                'status' => 'required',
             ]);
 
             DB::beginTransaction();
@@ -74,7 +73,7 @@ class BursaSupplierController extends Controller
                 $supplier->alamat = strtoupper($request['alamat']);
                 $supplier->nama_kontak = strtoupper($request['nama_kontak']);
                 $supplier->tlp = $request->nomor;
-                $supplier->status = $request->status;
+                $supplier->status = 1;
                 $supplier->user_created = Auth::user()->id;
                 $supplier->save();
 

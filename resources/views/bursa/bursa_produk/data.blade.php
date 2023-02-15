@@ -31,12 +31,12 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-2">
+                                {{-- <div class="col-md-2">
                                     <a href="" type="button"
                                         class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
                                         <i class="bx bx-cloud-download"></i> Unduh
                                     </a>
-                                </div>
+                                </div> --}}
                             </div>
                             <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
@@ -47,7 +47,6 @@
                                         <th>Deskripsi</th>
                                         <th>Harga Jual</th>
                                         <th>Harga Beli</th>
-                                        <th>Kadaluarsa</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -60,7 +59,6 @@
                                             <td>{{ $item->deskripsi }}</td>
                                             <td>{{ $item->harga_jual }}</td>
                                             <td>{{ $item->harga_beli }}</td>
-                                            <td>{{ $item->kadaluarsa }}</td>
                                             <td>
                                                 <form class="delete-form"
                                                     action="{{ route('bursa_produk.destroy', Crypt::encryptString($item->id)) }}"

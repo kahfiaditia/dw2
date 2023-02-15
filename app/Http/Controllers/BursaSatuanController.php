@@ -59,7 +59,6 @@ class BursaSatuanController extends Controller
         if (in_array('59', $session_menu)) {
             $request->validate([
                 'nama' => 'required',
-                'status' => 'required',
             ]);
 
             DB::beginTransaction();
@@ -67,7 +66,7 @@ class BursaSatuanController extends Controller
             try {
                 $satuan = new BursaSatuan();
                 $satuan->nama = strtoupper($request['nama']);
-                $satuan->status = strtoupper($request['status']);
+                $satuan->status = 1;
                 $satuan->user_created = Auth::user()->id;
                 $satuan->save();
 

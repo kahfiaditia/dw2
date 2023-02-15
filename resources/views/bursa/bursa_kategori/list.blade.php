@@ -31,12 +31,6 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-2">
-                                    <a href="" type="button"
-                                        class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="bx bx-cloud-download"></i> Unduh
-                                    </a>
-                                </div>
                             </div>
                             <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>

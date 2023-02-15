@@ -72,11 +72,11 @@ class BursaProdukController extends Controller
                     $produk = new BursaProduk();
 
                     $produk->nama =  $request->databarang[$i]['hasilnama'];
-                    $produk->id_satuan = $request->databarang[$i]['hasilsatuan'];
-                    $produk->id_kategori =  $request->databarang[$i]['hasilkategori'];
                     $produk->barcode =  $request->databarang[$i]['hasilbarcode'];
                     $produk->deskripsi =  $request->databarang[$i]['hasildesc'];
-                    $produk->stok_minimal =  $request->databarang[$i]['hasilstok_minimal'];
+                    $produk->id_satuan = $request->databarang[$i]['satuan'];
+                    $produk->id_kategori =  $request->databarang[$i]['kategori'];
+                    $produk->stok_minimal =  10;
                     $produk->stok =  0;
                     $produk->harga_beli =  0;
                     $produk->harga_jual = 0;
@@ -126,14 +126,18 @@ class BursaProdukController extends Controller
     public function edit($id)
     {
         $id_decrypted = Crypt::decryptString($id);
+        $kategori = BursaKategori::all();
+        $satuan = BursaSatuan::all();
         $data = [
             'title' => $this->title,
             'menu' => $this->menu,
             'submenu' => 'Produk',
             'label' => 'ubah Produk',
+            'satuan' => $satuan,
+            'kategori' => $kategori,
             'produk' => BursaProduk::findORFail($id_decrypted)
         ];
-        return view('bursa.bursa_produk.ubah')->with($data);
+        return view('bursa.bursa_produk.edit')->with($data);
     }
 
     /**
@@ -145,14 +149,16 @@ class BursaProdukController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        // echo $request->nama;
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('60', $session_menu)) {
             $request->validate([
                 'nama' => 'required',
-                'alamat' => 'required',
-                'nama_kontak' => 'required',
-                'tlp' => 'required',
-                'status' => 'required',
+                'id_kategori' => 'required',
+                'id_satuan' => 'required',
+                // 'harga_beli' => 'required|numeric',
+                // 'harga_jual' => 'required|numeric|gt:harga_beli',
             ]);
 
             $id = Crypt::decryptString($id);
@@ -162,16 +168,22 @@ class BursaProdukController extends Controller
                 BursaProduk::where('id', $id)
                     ->update([
                         'nama' => strtoupper($request['nama']),
-                        'alamat' => strtoupper($request['alamat']),
-                        'nama_kontak' => strtoupper($request['nama_kontak']),
-                        'tlp' => $request->tlp,
-                        'status' => $request->status,
+                        'id_satuan' => $request['id_satuan'],
+                        'id_kategori' => $request['id_kategori'],
+                        'barcode' => $request['barcode'],
+                        'deskripsi' => strtoupper($request['desc']),
+                        'stok_minimal' => $request['stok_minimal'],
+                        'stok' => $request['stok'],
+                        'harga_beli' => $request['harga_beli'],
+                        'harga_jual' => $request['harga_jual'],
+                        'status' => $request['status1'],
+                        'kadaluarsa' => Carbon::now(),
                         'user_updated' => Auth::user()->id,
                     ]);
 
                 DB::commit();
                 AlertHelper::addAlert(true);
-                return redirect('bursa/supplier');
+                return redirect('bursa/bursa_produk');
             } catch (\Throwable $err) {
                 DB::rollback();
                 throw $err;

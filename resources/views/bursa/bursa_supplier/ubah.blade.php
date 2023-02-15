@@ -41,9 +41,7 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Alamat Supplier
                                                 <code>*</code></label>
-                                            <input type="text" class="form-control" id="alamat" name="alamat"
-                                                style="text-transform:uppercase" value="{{ $supplier->alamat }}" autofocus
-                                                required placeholder="Alamat">
+                                            <textarea name="alamat" class="form-control">{{ old('alamat', $supplier->alamat) }}</textarea>
                                             <div class="invalid-feedback">
                                                 Data wajib diisi.
                                             </div>

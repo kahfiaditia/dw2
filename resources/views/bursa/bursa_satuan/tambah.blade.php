@@ -22,7 +22,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Nama Satuan
                                                 <code>*</code></label>
@@ -33,20 +33,6 @@
                                                 Data wajib diisi.
                                             </div>
                                             {!! $errors->first('nama', '<div class="invalid-validasi">:message</div>') !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="validationCustom02" class="form-label">Status
-                                                <code>*</code></label>
-                                            <select class="form-control select select2" name="status" required>
-                                                <option value="">-- Pilih Status --</option>
-                                                <option value="1"> Aktif </option>
-                                                <option value="2"> Non Aktif </option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                Data wajib diisi.
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
