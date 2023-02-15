@@ -21,14 +21,20 @@ class BursaKategoriController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Kategori',
-            'label' => 'data Kategori',
-            'kategori' => BursaKategori::all()
-        ];
-        return view('bursa.bursa_kategori.list')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('139', $session_menu)) {
+
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Kategori',
+                'label' => 'data Kategori',
+                'kategori' => BursaKategori::all()
+            ];
+            return view('bursa.bursa_kategori.list')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -38,13 +44,19 @@ class BursaKategoriController extends Controller
      */
     public function create()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Kategori',
-            'label' => 'data Kategori',
-        ];
-        return view('bursa.bursa_kategori.add')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('140', $session_menu)) {
+
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Kategori',
+                'label' => 'data Kategori',
+            ];
+            return view('bursa.bursa_kategori.add')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -56,7 +68,7 @@ class BursaKategoriController extends Controller
     public function store(Request $request)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('59', $session_menu)) {
+        if (in_array('140', $session_menu)) {
             $request->validate([
                 'nama' => 'required',
             ]);
@@ -104,17 +116,23 @@ class BursaKategoriController extends Controller
      */
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Kategori',
-            'label' => 'data Kategori',
-            'kategori' => BursaKategori::findORFail(
-                $id_decrypted
-            )
-        ];
-        return view('bursa.bursa_kategori.edit')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('141', $session_menu)) {
+
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Kategori',
+                'label' => 'data Kategori',
+                'kategori' => BursaKategori::findORFail(
+                    $id_decrypted
+                )
+            ];
+            return view('bursa.bursa_kategori.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -127,7 +145,7 @@ class BursaKategoriController extends Controller
     public function update(Request $request, $id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('59', $session_menu)) {
+        if (in_array('141', $session_menu)) {
             $request->validate([
                 'nama' => 'required',
                 'status' => 'required',
@@ -166,7 +184,7 @@ class BursaKategoriController extends Controller
     public function destroy($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('114', $session_menu)) {
+        if (in_array('142', $session_menu)) {
             $id_decrypted = Crypt::decryptString($id);
             DB::beginTransaction();
             try {

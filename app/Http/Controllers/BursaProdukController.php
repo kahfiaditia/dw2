@@ -23,14 +23,20 @@ class BursaProdukController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Produk',
-            'label' => 'data Produk',
-            'produk' => BursaProduk::all()
-        ];
-        return view('bursa.bursa_produk.data')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('143', $session_menu)) {
+
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Produk',
+                'label' => 'data Produk',
+                'produk' => BursaProduk::all()
+            ];
+            return view('bursa.bursa_produk.data')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -40,18 +46,24 @@ class BursaProdukController extends Controller
      */
     public function create()
     {
-        $satuan = BursaSatuan::all();
-        $kategori = BursaKategori::all();
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('144', $session_menu)) {
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Produk',
-            'label' => 'tambah Produk',
-            'satuan' => $satuan,
-            'kategori' => $kategori
-        ];
-        return view('bursa.bursa_produk.add')->with($data);
+            $satuan = BursaSatuan::all();
+            $kategori = BursaKategori::all();
+
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Produk',
+                'label' => 'tambah Produk',
+                'satuan' => $satuan,
+                'kategori' => $kategori
+            ];
+            return view('bursa.bursa_produk.add')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -63,7 +75,7 @@ class BursaProdukController extends Controller
     public function store(Request $request)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('59', $session_menu)) {
+        if (in_array('144', $session_menu)) {
 
             DB::beginTransaction();
             try {
@@ -125,19 +137,25 @@ class BursaProdukController extends Controller
      */
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $kategori = BursaKategori::all();
-        $satuan = BursaSatuan::all();
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Produk',
-            'label' => 'ubah Produk',
-            'satuan' => $satuan,
-            'kategori' => $kategori,
-            'produk' => BursaProduk::findORFail($id_decrypted)
-        ];
-        return view('bursa.bursa_produk.edit')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('145', $session_menu)) {
+
+            $id_decrypted = Crypt::decryptString($id);
+            $kategori = BursaKategori::all();
+            $satuan = BursaSatuan::all();
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Produk',
+                'label' => 'ubah Produk',
+                'satuan' => $satuan,
+                'kategori' => $kategori,
+                'produk' => BursaProduk::findORFail($id_decrypted)
+            ];
+            return view('bursa.bursa_produk.edit')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -152,7 +170,7 @@ class BursaProdukController extends Controller
 
         // echo $request->nama;
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('60', $session_menu)) {
+        if (in_array('145', $session_menu)) {
             $request->validate([
                 'nama' => 'required',
                 'id_kategori' => 'required',
@@ -204,7 +222,7 @@ class BursaProdukController extends Controller
     public function destroy($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('51', $session_menu)) {
+        if (in_array('146', $session_menu)) {
             DB::beginTransaction();
             try {
                 $delete = BursaProduk::findOrFail(Crypt::decryptString($id));

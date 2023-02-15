@@ -21,14 +21,20 @@ class BursaSupplierController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Supplier',
-            'label' => 'data Supplier',
-            'supplier' => BursaSupplier::all()
-        ];
-        return view('bursa.bursa_supplier.data')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('131', $session_menu)) {
+
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Supplier',
+                'label' => 'data Supplier',
+                'supplier' => BursaSupplier::all()
+            ];
+            return view('bursa.bursa_supplier.data')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -38,15 +44,20 @@ class BursaSupplierController extends Controller
      */
     public function create()
     {
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('132', $session_menu)) {
 
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Supplier',
-            'label' => 'tambah Supplier',
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Supplier',
+                'label' => 'tambah Supplier',
 
-        ];
-        return view('bursa.bursa_supplier.tambah')->with($data);
+            ];
+            return view('bursa.bursa_supplier.tambah')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -58,7 +69,7 @@ class BursaSupplierController extends Controller
     public function store(Request $request)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('59', $session_menu)) {
+        if (in_array('132', $session_menu)) {
             $request->validate([
                 'supplier' => 'required',
                 'alamat' => 'required',
@@ -110,15 +121,21 @@ class BursaSupplierController extends Controller
      */
     public function edit($id)
     {
-        $id_decrypted = Crypt::decryptString($id);
-        $data = [
-            'title' => $this->title,
-            'menu' => $this->menu,
-            'submenu' => 'Supplier',
-            'label' => 'ubah Supplier',
-            'supplier' => BursaSupplier::findORFail($id_decrypted)
-        ];
-        return view('bursa.bursa_supplier.ubah')->with($data);
+        $session_menu = explode(',', Auth::user()->akses_submenu);
+        if (in_array('133', $session_menu)) {
+
+            $id_decrypted = Crypt::decryptString($id);
+            $data = [
+                'title' => $this->title,
+                'menu' => $this->menu,
+                'submenu' => 'Supplier',
+                'label' => 'ubah Supplier',
+                'supplier' => BursaSupplier::findORFail($id_decrypted)
+            ];
+            return view('bursa.bursa_supplier.ubah')->with($data);
+        } else {
+            return view('not_found');
+        }
     }
 
     /**
@@ -131,7 +148,7 @@ class BursaSupplierController extends Controller
     public function update(Request $request, $id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('60', $session_menu)) {
+        if (in_array('133', $session_menu)) {
             $request->validate([
                 'nama' => 'required',
                 'alamat' => 'required',
@@ -177,7 +194,7 @@ class BursaSupplierController extends Controller
     public function destroy($id)
     {
         $session_menu = explode(',', Auth::user()->akses_submenu);
-        if (in_array('51', $session_menu)) {
+        if (in_array('134', $session_menu)) {
             DB::beginTransaction();
             try {
                 $delete = BursaSupplier::findOrFail(Crypt::decryptString($id));
