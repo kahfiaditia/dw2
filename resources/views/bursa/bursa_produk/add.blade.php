@@ -154,7 +154,7 @@
             document.getElementById('nama').value = '';
             document.getElementById('barcode').value = '';
             document.getElementById('desc').value = '';
-            // ruang_value = $('#ruang option:selected').data('id');
+
 
             if (satuan == '' || kategori == '' || nama == '') {
                 Swal.fire({

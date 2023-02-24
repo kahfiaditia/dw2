@@ -284,13 +284,14 @@
 
             collapseOne.classList.remove("show");
             // set local null
-            var dataUks = {
-                "header": {
-                    "jenjang": '',
-                    "siswa": '',
-                }
-            };
-            localStorage.setItem('localUksDharma', JSON.stringify(dataUks));
+
+            // var dataUks = {
+            //     "header": {
+            //         "jenjang": '',
+            //         "siswa": '',
+            //     }
+            // };
+            // localStorage.setItem('localUksDharma', JSON.stringify(dataUks));
         }
 
         function getValueScanBarcodeCamera(barcode, peminjam) {
@@ -458,6 +459,7 @@
                     success: (response) => {
                         if (response.code === 200) {
                             // set local null
+
                             var dataUks = {
                                 "header": {
                                     "jenjang": '',
@@ -502,13 +504,14 @@
             })
 
             // set local null
-            var dataUks = {
-                "header": {
-                    "jenjang": '',
-                    "siswa": '',
-                }
-            };
-            localStorage.setItem('localUksDharma', JSON.stringify(dataUks));
+
+            // var dataUks = {
+            //     "header": {
+            //         "jenjang": '',
+            //         "siswa": '',
+            //     }
+            // };
+            // localStorage.setItem('localUksDharma', JSON.stringify(dataUks));
             var dataUks = JSON.parse(localStorage.getItem("localUksDharma"));
             $.ajax({
                 type: "POST",

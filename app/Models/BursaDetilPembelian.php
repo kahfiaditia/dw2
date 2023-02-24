@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BursaProduk extends Model
+class BursaDetilPembelian extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'bursa_produks';
+    protected $table = 'bursa_detil_pembelian';
     protected $guarded = [];
 
-    public function detilproduk()
+    public function produk()
     {
-        return $this->belongsTo(BursaDetilPembelian::class, 'id');
+        return $this->belongsTo(BursaProduk::class, 'id_produk');
     }
 }

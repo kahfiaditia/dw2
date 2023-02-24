@@ -21,7 +21,9 @@ class LoginController extends Controller
     public function index()
     {
         $setting = Setting::first();
+
         if ($setting == null) {
+
             $data = [
                 'title' => $this->title,
                 'submenu' => 'Maintenance',

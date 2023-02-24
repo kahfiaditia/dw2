@@ -42,19 +42,14 @@
                                         <div class="mb-3">
                                             <label for="validationCustom02" class="form-label">Status
                                                 <code>*</code></label>
-                                            <select class="form-control select select2" name="status" required>
-                                                <option value="">
-                                                    -- Pilih Status --</option>
-                                                <option value="1" {{ $kategori->status == 1 ? 'selected' : '' }}> Aktif
-                                                </option>
-                                                <option value="2" {{ $kategori->status == 2 ? 'selected' : '' }}> Tidak
-                                                    Aktif
-                                                </option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                Data wajib diisi.
+                                            <div>
+                                                <input type="checkbox" id="switch1" switch="none" name="status1"
+                                                    {{ $kategori->status == 1 ? 'checked' : '' }} />
+                                                <label for="switch1" data-on-label="Aktif" data-off-label="Tidak"></label>
+                                                <div class="invalid-feedback">
+                                                    Data wajib diisi.
+                                                </div>
                                             </div>
-                                            {!! $errors->first('status', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                 </div>

@@ -148,7 +148,6 @@ class BursaKategoriController extends Controller
         if (in_array('141', $session_menu)) {
             $request->validate([
                 'nama' => 'required',
-                'status' => 'required',
             ]);
 
             $id = Crypt::decryptString($id);
@@ -157,7 +156,7 @@ class BursaKategoriController extends Controller
             try {
                 $kategori = BursaKategori::findORfail($id);
                 $kategori->nama = strtoupper($request['nama']);
-                $kategori->status = strtoupper($request['status']);
+                $kategori->status = isset($request['status1']) ? 1 : 0;
                 $kategori->user_updated = Auth::user()->id;
                 $kategori->save();
 

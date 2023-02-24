@@ -16,9 +16,9 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 @if (in_array('93', $session_menu))
-                                    <a href="{{ route('bursa_produk.create') }}" type="button"
+                                    <a href="{{ route('bursa_pembelian.create') }}" type="button"
                                         class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="mdi mdi-plus me-1"></i> Tambah Produk
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Pembelian
                                     </a>
                                 @endif
                             </ol>
@@ -31,47 +31,47 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                {{-- <div class="col-md-2">
-                                    <a href="" type="button"
-                                        class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                        <i class="bx bx-cloud-download"></i> Unduh
-                                    </a>
-                                </div> --}}
                             </div>
                             <table id="datatable" class="table table-striped dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Barcode</th>
-                                        <th>Produk</th>
-                                        <th>Deskripsi</th>
-                                        <th>Stok</th>
-                                        <th>Harga Jual</th>
-                                        <th>Harga Beli</th>
-                                        <th>Status</th>
+                                        <th>Kode Transaksi</th>
+                                        <th>No DO</th>
+                                        <th>Supplier</th>
+                                        <th>Jumlah Produk</th>
+                                        <th>Ongkir</th>
+                                        <th>Nilai Pembelian</th>
+                                        <th>Pembayaran</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($produk as $item)
+                                    @foreach ($kategori as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->barcode }}</td>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->deskripsi }}</td>
-                                            <td>{{ $item->stok }}</td>
-                                            <td>{{ $item->harga_jual }}</td>
-                                            <td>{{ $item->harga_beli }}</td>
-                                            <td>{{ $item->status == 1 ? 'Aktif' : 'Tidak' }}</td>
+                                            <td>{{ $item->kode_transaksi }}</td>
+                                            <td>{{ $item->nomor_do }}</td>
+                                            <td>{{ $item->supplier->nama }}</td>
+                                            <td>{{ $item->total_produk }}</td>
+                                            <td>{{ $item->ongkir }}</td>
+                                            <td>Rp. {{ number_format($item->total_nilai, 0, ',', '.') }}</td>
+                                            <td>{{ $item->status_pembayaran == 1 ? 'Lunas' : 'Belum Lunas' }}</td>
                                             <td>
                                                 <form class="delete-form"
-                                                    action="{{ route('bursa_produk.destroy', Crypt::encryptString($item->id)) }}"
+                                                    action="{{ route('bursa_pembelian.destroy', Crypt::encryptString($item->id)) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <div class="d-flex gap-3">
                                                         @if (in_array('94', $session_menu))
-                                                            <a href="{{ route('bursa_produk.edit', Crypt::encryptString($item->id)) }}"
+                                                            <a href="{{ route('bursa_pembelian.show', Crypt::encryptString($item->id)) }}"
+                                                                class="text-info" title="View">
+                                                                <i class="mdi mdi-eye font-size-18"></i>
+                                                            </a>
+                                                        @endif
+                                                        @if (in_array('94', $session_menu))
+                                                            <a href="{{ route('bursa_pembelian.edit', Crypt::encryptString($item->id)) }}"
                                                                 class="text-success"><i
                                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                                         @endif

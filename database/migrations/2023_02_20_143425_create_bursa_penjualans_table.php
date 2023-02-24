@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBursaProduksTable extends Migration
+class CreateBursaPenjualansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,18 @@ class CreateBursaProduksTable extends Migration
      */
     public function up()
     {
-        Schema::create('bursa_produks', function (Blueprint $table) {
+        Schema::create('bursa_penjualans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_satuan');
-            $table->foreign('id_satuan')->references('id')->on('bursa_satuans');
-            $table->unsignedBigInteger('id_kategori');
-            $table->foreign('id_kategori')->references('id')->on('bursa_kategoris');
-            $table->string('barcode', 15)->nullable();
-            $table->string('nama', 40);
-            $table->string('deskripsi', 64)->nullable();
-            $table->double('stok_minimal')->nullable();
-            $table->double('stok')->nullable();
-            $table->double('harga_beli')->nullable();
-            $table->double('harga_jual')->nullable();
-            $table->integer('status');
+            $table->string('kode_penjualan', 64);
+            $table->double('total')->nullable();
+            $table->double('total_modal')->nullable();
+            $table->double('total_margin')->nullable();
+            $table->double('total_produk')->nullable();
+            $table->string('keterangan', 40)->nullable();
+            $table->integer('status_pembayaran')->nullable();
+            $table->integer('jenis_pembayaran')->nullable();
+            $table->unsignedBigInteger('id_siswa')->nullable();
+            $table->foreign('id_siswa')->references('id')->on('siswa');
             $table->unsignedBigInteger('user_created')->nullable();
             $table->foreign('user_created')->references('id')->on('users');
             $table->unsignedBigInteger('user_updated')->nullable();
@@ -45,6 +43,6 @@ class CreateBursaProduksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bursa_produks');
+        Schema::dropIfExists('bursa_penjualans');
     }
 }

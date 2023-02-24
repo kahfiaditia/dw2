@@ -154,7 +154,6 @@ class BursaSupplierController extends Controller
                 'alamat' => 'required',
                 'nama_kontak' => 'required',
                 'tlp' => 'required',
-                'status' => 'required',
             ]);
 
             $id = Crypt::decryptString($id);
@@ -167,7 +166,7 @@ class BursaSupplierController extends Controller
                         'alamat' => strtoupper($request['alamat']),
                         'nama_kontak' => strtoupper($request['nama_kontak']),
                         'tlp' => $request->tlp,
-                        'status' => $request->status,
+                        'status' => isset($request['status1']) ? 1 : 0,
                         'user_updated' => Auth::user()->id,
                     ]);
 

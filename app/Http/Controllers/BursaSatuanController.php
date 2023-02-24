@@ -78,7 +78,7 @@ class BursaSatuanController extends Controller
             try {
                 $satuan = new BursaSatuan();
                 $satuan->nama = strtoupper($request['nama']);
-                $satuan->status = 1;
+                $satuan->status =  1;
                 $satuan->user_created = Auth::user()->id;
                 $satuan->save();
 
@@ -148,7 +148,6 @@ class BursaSatuanController extends Controller
         if (in_array('137', $session_menu)) {
             $request->validate([
                 'nama' => 'required',
-                'status' => 'required',
             ]);
 
             $id = Crypt::decryptString($id);
@@ -157,7 +156,7 @@ class BursaSatuanController extends Controller
             try {
                 $satuan = BursaSatuan::findORfail($id);
                 $satuan->nama = strtoupper($request['nama']);
-                $satuan->status = strtoupper($request['status']);
+                $satuan->status =  isset($request['status1']) ? 1 : 0;
                 $satuan->user_updated = Auth::user()->id;
                 $satuan->save();
 

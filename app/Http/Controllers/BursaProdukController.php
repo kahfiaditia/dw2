@@ -167,7 +167,7 @@ class BursaProdukController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        // dd($request);
         // echo $request->nama;
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('145', $session_menu)) {
@@ -175,8 +175,6 @@ class BursaProdukController extends Controller
                 'nama' => 'required',
                 'id_kategori' => 'required',
                 'id_satuan' => 'required',
-                // 'harga_beli' => 'required|numeric',
-                // 'harga_jual' => 'required|numeric|gt:harga_beli',
             ]);
 
             $id = Crypt::decryptString($id);
@@ -191,11 +189,7 @@ class BursaProdukController extends Controller
                         'barcode' => $request['barcode'],
                         'deskripsi' => strtoupper($request['desc']),
                         'stok_minimal' => $request['stok_minimal'],
-                        'stok' => $request['stok'],
-                        'harga_beli' => $request['harga_beli'],
-                        'harga_jual' => $request['harga_jual'],
-                        'status' => $request['status1'],
-                        'kadaluarsa' => Carbon::now(),
+                        'status' => isset($request['status1']) ? 1 : 0,
                         'user_updated' => Auth::user()->id,
                     ]);
 
