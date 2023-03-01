@@ -82,40 +82,71 @@ class BursaPenjualanController extends Controller
             DB::beginTransaction();
             try {
 
-                $registration_number = BursaPenjualan::pluck('kode_penjualan')->last();
-                $no_date = Carbon::now()->format('ymd');
-                if (!$registration_number) {
-                    $no_stok = "INV/PJ/" . $no_date . sprintf('%04d', 1);
-                } else {
-                    $last_number = (int)substr($registration_number, 9);
-                    $moon = (int)substr($registration_number, 5, 2);
-                    $moon_now = Carbon::now()->format('m');
-                    if ($moon != $moon_now) {
-                        $no_stok = "INV/PJ/" . $no_date . sprintf('%04d', 1);
+                $registration_number = BursaPenjualan::limit(1)->groupBy('kode_penjualan')->orderBy('id', 'desc')->get();
+                if (count($registration_number) > 0) {
+                    $thn = substr($registration_number[0]->kode_penjualan, 0, 2);
+                    if ($thn == Carbon::now()->format('y')) {
+                        $date = $thn . Carbon::now()->format('md');
+                        $nomor = (int) substr($registration_number[0]->kode_penjualan, 6, 4) + 1;
+
+                        $Nol = "";
+                        $nilai = 4 - strlen($nomor);
+                        for ($i = 1; $i <= $nilai; $i++) {
+                            $Nol = $Nol . "0";
+                        }
+                        $kode_penjualan   = $date . $Nol .  $nomor;
                     } else {
-                        $no_stok = "INV/PJ/" . $no_date . sprintf('%04d', $last_number + 1);
+                        $kode_penjualan   = Carbon::now()->format('ymd') . "0001";
                     }
+                } else {
+                    $kode_penjualan   = Carbon::now()->format('ymd') . "0001";
                 }
 
+
                 $penjualan = new BursaPenjualan();
-                $penjualan->kode_penjualan =  $no_stok;
+                $penjualan->kode_penjualan =  $kode_penjualan;
                 $penjualan->status_pembayaran =  1;
                 $penjualan->jenis_pembayaran =  $request->payment1;
                 $penjualan->id_siswa = $request->siswa;
                 $penjualan->user_created = Auth::user()->id;
                 $penjualan->save();
 
-                for ($i = 0; $i < count($request->datapenjualan); $i++) {
+                $produk_grouping = array();
+
+                foreach ($request->datapenjualan as $item) {
+                    $idProduk = $item['produk'];
+                    $qty = $item['qty'];
+                    $total = $item['total'];
+                    $margin = $item['margin'];
+                    $total_modal = $item['total_modal'];
+
+                    if (!isset($produk_grouping[$idProduk])) {
+                        $produk_grouping[$idProduk] = array(
+                            'produk' => $idProduk,
+                            'qty' => $qty,
+                            'total' => $total,
+                            'margin' => $margin,
+                            'total_modal' => $total_modal
+                        );
+                    } else {
+                        $produk_grouping[$idProduk]['qty'] += $qty;
+                        $produk_grouping[$idProduk]['total'] += $total;
+                        $produk_grouping[$idProduk]['margin'] += $margin;
+                        $produk_grouping[$idProduk]['total_modal'] += $total_modal;
+                    }
+                }
+
+                // Simpan hasil penjualan yang sudah dikelompokkan
+                foreach ($produk_grouping as $item) {
                     $detilpenjualan = new BursaDetilPenjualan();
-                    $detilpenjualan->id_penjualan =  $penjualan->id;
-                    $detilpenjualan->id_produk =  $request->datapenjualan[$i]['produk'];
-                    $detilpenjualan->kuantiti =  $request->datapenjualan[$i]['qty'];
-                    $detilpenjualan->harga_jual = $request->datapenjualan[$i]['nilai_jual'];
-                    $detilpenjualan->sub_total =  $request->datapenjualan[$i]['total'];
-                    $detilpenjualan->harga_modal = $request->datapenjualan[$i]['modal'];
-                    $detilpenjualan->sub_modal = $request->datapenjualan[$i]['total_modal'];
-                    // $detilpenjualan->margin_produk = $request->datapenjualan[$i]['nilai_jual'];
-                    $detilpenjualan->sub_margin = $request->datapenjualan[$i]['margin'];
+                    $detilpenjualan->id_penjualan = $penjualan->id;
+                    $detilpenjualan->id_produk = $item['produk'];
+                    $detilpenjualan->kuantiti = $item['qty'];
+                    $detilpenjualan->harga_jual = $request->datapenjualan[0]['nilai_jual'];
+                    $detilpenjualan->sub_total = $item['total'];
+                    $detilpenjualan->harga_modal = $request->datapenjualan[0]['modal'];
+                    $detilpenjualan->sub_modal = $item['total_modal'];
+                    $detilpenjualan->sub_margin = $item['margin'];
                     $detilpenjualan->user_created = Auth::user()->id;
                     $detilpenjualan->save();
 
@@ -125,10 +156,12 @@ class BursaPenjualanController extends Controller
                         'user_updated' => Auth::user()->id
                     ]);
 
-                    $total_produk = BursaDetilPenjualan::where('id_penjualan', $penjualan->id)->count();
-                    $penjualan_1 = BursaPenjualan::where('id',  $penjualan->id)->update([
-                        'total_produk' => $total_produk
-                    ]);
+                    $data = BursaDetilPenjualan::select('id_produk')
+                        ->where('id_penjualan', $penjualan->id)
+                        ->groupBy('id_produk')
+                        ->get();
+                    $jumlah_total = $data->count();
+                    $update_total_produk = BursaPenjualan::where('id',  $penjualan->id)->update(['total_produk' => $jumlah_total]);
 
                     $penjualan_update = BursaPenjualan::findOrFail($penjualan->id);
                     $penjualan_update->total = BursaDetilPenjualan::where('id_penjualan', $penjualan->id)->sum('sub_total');
@@ -351,6 +384,8 @@ class BursaPenjualanController extends Controller
     public function scanBarcode(Request $request)
     {
         $val = 0;
+        $harga_beli = null;
+        $harga_jual = null;
         if ($request->peminjam == 'Siswa') {
             $data = Siswa::where('barcode', $request->barcode)->first();
             if ($data) {
@@ -362,20 +397,24 @@ class BursaPenjualanController extends Controller
             }
         }
         if ($request->peminjam == '') {
-            $data = BursaPenjualan::where('barcode', $request->barcode)->first();
+            $data = BursaProduk::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
-                $class_id = $data->kategori->kode_kategori . '-' . $data->judul;
-                $type = 'buku';
+                $class_id = $data->nama;
+                $harga_beli = $data->harga_beli;
+                $harga_jual = $data->harga_jual;
+                $type = 'produk';
                 $code = 200;
                 $val = $val + 1;
             }
-        } elseif ($request->peminjam != '' and $val == 0) {
-            $data = BursaPenjualan::where('barcode', $request->barcode)->first();
+        } else if ($request->peminjam != '' and $val == 0) {
+            $data = BursaProduk::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
-                $class_id = $data->kategori->kode_kategori . '-' . $data->judul;
-                $type = 'buku';
+                $class_id = $data->nama;
+                $harga_beli = $data->harga_beli;
+                $harga_jual = $data->harga_jual;
+                $type = 'produk';
                 $code = 200;
                 $val = $val + 1;
             }
@@ -383,6 +422,8 @@ class BursaPenjualanController extends Controller
         if ($val == 0) {
             $id = null;
             $class_id = null;
+            $harga_beli = null;
+            $harga_jual = null;
             $type = null;
             $code = 400;
         }
@@ -390,6 +431,8 @@ class BursaPenjualanController extends Controller
             'code' => $code,
             'id' => $id,
             'jenjang' => $class_id,
+            'harga_beli' => $harga_beli,
+            'harga_jual' => $harga_jual,
             'type' => $type,
             'val' => $val,
         ]);

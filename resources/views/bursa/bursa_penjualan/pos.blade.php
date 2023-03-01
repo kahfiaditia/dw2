@@ -214,14 +214,19 @@
                                             <hr>
                                             <div class="col-md-12 table-responsive">
                                                 <table class="table table-responsive table-bordered table-striped"
+                                                    id="grandTotal">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th class="text-right" style="float: right"><span
+                                                                    id="val">Total</span></th>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-12 table-responsive">
+                                                <table class="table table-responsive table-bordered table-striped"
                                                     id="tambahBarang">
-                                                    <thead>
-                                                        <th class="text-center" style="font-size:20px">Total
-                                                        </th>
-                                                        <th class="text-center" colspan="4" style="font-size:30px">Rp
-                                                            0
-                                                        </th>
-                                                    </thead>
                                                     <tbody>
                                                         <tr>
                                                             <th class="text-center" style="width: 10%">Produk</th>
@@ -250,7 +255,7 @@
                                         <div class="row mt-3">
                                             <div class="col-sm-12">
                                                 <div>
-                                                    <a class="btn btn-primary" type="submit" id="batal"
+                                                    <a class="btn btn-danger" type="submit" id="batal"
                                                         style="float: left">Reset</a>
                                                     <a class="btn btn-primary" type="submit" style="float: right"
                                                         id="save">Checkout</a>
@@ -269,6 +274,14 @@
             </div>
         </div>
     </body>
+    <style>
+        /* Mengatur ukuran font pada elemen dengan ID "val" menjadi 20px dan memposisikannya ke kanan */
+        #val {
+            font-size: 20px;
+            text-align: right;
+            display: table-cell;
+        }
+    </style>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
@@ -343,23 +356,72 @@
                     if (response.type == 'Siswa') {
                         siswa = response.id;
                         jenjang = response.jenjang;
+
                         var dataPerpus = {
                             "header": {
                                 "jenjang": jenjang,
                                 "siswa": siswa,
+
                             }
                         };
-                        localStorage.setItem('localPenjualanDharma', JSON.stringify(dataPerpus));
+                        localStorage.setItem('localPenjualanPelanggan', JSON.stringify(dataPerpus));
                         location.reload();
+                    } else if (response.type == 'produk') {
+                        // console.log(response)
+                        id = response.id;
+                        produk_value = response.jenjang;
+                        qty = 1;
+                        nilai_jual = response.harga_jual;
+                        modal = response.harga_beli;
+                        total = nilai_jual * qty;
+                        margin = nilai_jual - modal;
+                        sub_modal = (total - margin) / qty;
+
+                        $("#tambahBarang tr:last").after(`
+                            <tr>
+                                <td class="text-center">${produk_value}</td>
+                                <td class="text-center">${qty}</td>
+                                <td class="text-center">${nilai_jual}</td>
+                                <td class="text-center">${total}</td>
+                                <td class="text-left" hidden>${id}</td>
+                                <td class="text-left" hidden>${modal}</td>
+                                <td class="text-left" hidden>${sub_modal}</td>//
+                                <td class="text-left" hidden>${margin}</td>//
+                                <td class="text-left" hidden>${payment1}</td>//
+                                <td class="text-left" hidden>${siswa}</td>//
+                                <td>
+                                    <a class="btn btn-danger btn-sm delete-record center" data-id="delete">Delete</a>    
+                                </td>
+                            </tr>                         
+                        `)
+
+                        updateSubTotal(); // Initial call
+
+                        function updateSubTotal() {
+                            var table = document.getElementById("tambahBarang");
+                            let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+                                return total + parseFloat(row.cells[3].innerHTML);
+                            }, 0);
+                            document.getElementById("val").innerHTML = "Total = Rp " + subTotal.toLocaleString(
+                                "id-ID") + ",00";
+                            console.log(val);
+                        }
+
+                        function onClickRemove(deleteButton) {
+                            let row = deleteButton.parentElement.parentElement;
+                            row.parentNode.removeChild(row);
+                            updateSubTotal(); // Call after delete
+                        }
+
                     } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Data tidak terdaftar!',
                             showConfirmButton: false,
                             timer: 1500,
-                            willClose: () => {
-                                location.reload();
-                            }
+                            // willClose: () => {
+                            //     location.reload();
+                            // }
                         })
                     }
                 },
@@ -367,6 +429,14 @@
                     console.log(err);
                 },
             });
+        }
+
+        var dataPenjualanItems = JSON.parse(localStorage.getItem("localPenjualanProduk"));
+        if (dataPenjualanItems == null) {
+            var dataPenjualanItems = {
+                "items": []
+            };
+            localStorage.setItem('localPenjualanProduk', JSON.stringify(dataPenjualanItems));
         }
 
         function tambahBarang() {
@@ -383,16 +453,6 @@
             var payment1 = document.getElementById('payment1').value;
             var siswa = document.getElementById('siswa').value;
 
-            console.log(produk_value)
-            console.log(stok)
-            console.log(nilai_jual)
-            console.log(total)
-            console.log(modal)
-            console.log(qty)
-            console.log(total_modal)
-            console.log(margin)
-
-
             document.getElementById('produk').value = '';
             document.getElementById('stok').value = '';
             document.getElementById('nilai_jual').value = '';
@@ -402,16 +462,6 @@
             document.getElementById('nilai_per_pcs').value = '';
             document.getElementById('total_modal').value = '';
             document.getElementById('margin').value = '';
-
-
-            // var totalFormatted = new Intl.NumberFormat('id-ID', {
-            //     style: 'currency',
-            //     currency: 'IDR'
-            // }).format($ {
-            //     total
-            // });
-
-            // console.log(totalFormatted);
 
             if (produk == '' || nilai_jual == '' || qty == '' || total == '') {
                 Swal.fire({
@@ -433,11 +483,32 @@
                             <td class="text-left" hidden>${margin}</td>
                             <td class="text-left" hidden>${payment1}</td>
                             <td class="text-left" hidden>${siswa}</td>
+                           
                             <td>
                                 <a class="btn btn-danger btn-sm delete-record center" data-id="delete">Delete</a>    
                             </td>
-                        </tr>
+                        </tr> 
                     `)
+
+                updateSubTotal(); // Initial call
+
+                function updateSubTotal() {
+                    var table = document.getElementById("tambahBarang");
+                    let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+                        return total + parseFloat(row.cells[3].innerHTML);
+                    }, 0);
+                    document.getElementById("val").innerHTML = "Total = Rp " + subTotal.toLocaleString("id-ID") + ",00";
+                    console.log(val);
+                }
+
+                function onClickRemove(deleteButton) {
+                    let row = deleteButton.parentElement.parentElement;
+                    row.parentNode.removeChild(row);
+                    updateSubTotal(); // Call after delete
+                }
+
+
+                // Tambahkan baris grand total ke tabel
             }
         }
 
@@ -458,7 +529,6 @@
                 // get value database 
                 getValueScanBarcodeCamera(barcode, 'Siswa')
             });
-
 
             //fungsi hapus
             $("#tambahBarang").on('click', '.delete-record', function() {
@@ -518,7 +588,7 @@
                                     "siswa": '',
                                 }
                             };
-                            localStorage.setItem('localPenjualanDharma', JSON.stringify(
+                            localStorage.setItem('localPenjualanPelanggan', JSON.stringify(
                                 dataPenjualan));
 
                             Swal.fire(
@@ -550,13 +620,13 @@
                         "siswa": '',
                     }
                 };
-                localStorage.setItem('localPenjualanDharma', JSON.stringify(dataPenjualan));
+                localStorage.setItem('localPenjualanPelanggan', JSON.stringify(dataPenjualan));
 
                 var APP_URL = {!! json_encode(url('/')) !!}
                 window.location = APP_URL + '/bursa/bursa_penjualan'
             })
 
-            var dataPenjualan = JSON.parse(localStorage.getItem("localPenjualanDharma"));
+            var dataPenjualan = JSON.parse(localStorage.getItem("localPenjualanPelanggan"));
 
 
             $.ajax({
@@ -572,11 +642,13 @@
                         } else {
                             jurusan = '';
                         }
+
                         if (item.classes) {
                             classes = item.classes;
                         } else {
                             classes = '';
                         }
+
                         if (item.type) {
                             type = item.type;
                         } else {
@@ -584,6 +656,7 @@
                         }
 
                         if (dataPenjualan.header.jenjang == item.id) {
+                            console.log(response)
                             $('.classes').append(
                                 `<option value="${item.id}" selected>${item.level+' '+classes+' '+jurusan+' '+type}</option>`
                             )
@@ -656,6 +729,10 @@
                     },
                 });
             });
+
+            // $(".siswa").change(function() {
+            //     setLocalStorage('header');
+            // });
         })
 
         $(document).ready(function() {
@@ -665,6 +742,7 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                 },
+
                 success: response => {
                     $.each(response.data, function(i, item) {
                         $('.produk').append(
@@ -697,28 +775,28 @@
                 },
             });
 
-            $(".produk").change(function() {
-                let class_produk = $(this).val();
-                $(".kadaluarsa option").remove();
-                document.getElementById("stok").value = '';
-                $.ajax({
-                    type: "POST",
-                    url: '{{ route('bursa_penjualan.get_kadaluarsa') }}',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        class_produk
-                    },
-                    success: response => {
-                        console.log(response)
-                        $(".kadaluarsa").change(function() {
-                            var stok = $('option:selected', this).attr(
-                                'data-value');
-                            document.getElementById("total_kuantiti").value = stok;
-                        });
+            // $(".produk").change(function() {
+            //     let class_produk = $(this).val();
+            //     $(".kadaluarsa option").remove();
+            //     document.getElementById("stok").value = '';
+            //     $.ajax({
+            //         type: "POST",
+            //         url: '{{ route('bursa_penjualan.get_kadaluarsa') }}',
+            //         data: {
+            //             "_token": "{{ csrf_token() }}",
+            //             class_produk
+            //         },
+            //         success: response => {
+            //             console.log(response)
+            //             $(".kadaluarsa").change(function() {
+            //                 var stok = $('option:selected', this).attr(
+            //                     'data-value');
+            //                 document.getElementById("total_kuantiti").value = stok;
+            //             });
 
-                    },
-                });
-            });
+            //         },
+            //     });
+            // });
         })
     </script>
 @endsection
