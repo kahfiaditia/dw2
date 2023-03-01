@@ -20,6 +20,7 @@ class CreateBursaPenjualansTable extends Migration
             $table->double('total_modal')->nullable();
             $table->double('total_margin')->nullable();
             $table->double('total_produk')->nullable();
+            $table->double('total_kuantiti')->nullable();
             $table->string('keterangan', 40)->nullable();
             $table->integer('status_pembayaran')->nullable();
             $table->integer('jenis_pembayaran')->nullable();

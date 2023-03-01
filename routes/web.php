@@ -6,6 +6,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\BursaKategoriController;
+use App\Http\Controllers\BursaLaporanController;
 use App\Http\Controllers\BursaPembelianController;
 use App\Http\Controllers\BursaPenjualanController;
 use App\Http\Controllers\ClassesController;
@@ -403,6 +404,7 @@ Route::group(
         Route::post('/get_produk', [BursaPenjualanController::class, 'get_produk'])->name('bursa_penjualan.get_produk');
         Route::post('/get_kadaluarsa', [BursaPenjualanController::class, 'get_kadaluarsa'])->name('bursa_penjualan.get_kadaluarsa');
         Route::post('/scanBarcode', [BursaPenjualanController::class, 'scanBarcode'])->name('bursa_penjualan.scanBarcode');
+        Route::resource('/laporan_penjualan', BursaLaporanController::class);
     }
 );
 // Route::any('/{any}', [ChatController::class, 'index'])->where('any', '.*');

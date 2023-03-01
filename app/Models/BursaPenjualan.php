@@ -16,4 +16,9 @@ class BursaPenjualan extends Model
     {
         return $this->belongsTo(BursaSatuan::class, 'id_satuan');
     }
+
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'id_siswa');
+    }
 }

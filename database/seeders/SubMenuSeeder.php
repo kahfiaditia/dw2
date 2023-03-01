@@ -327,6 +327,14 @@ class SubMenuSeeder extends Seeder
                 'submenu' => 'Bursa Penjualan', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
             ], [
                 'submenu' => 'Bursa Penjualan', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Laporan Penjualan', 'route_submenu' => 'laporan_penjualan.index', 'type_menu' => 'view', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => 6,
+            ], [
+                'submenu' => 'Laporan Penjualan', 'route_submenu' => null, 'type_menu' => 'insert', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Laporan Penjualan', 'route_submenu' => null, 'type_menu' => 'edit', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
+            ], [
+                'submenu' => 'Laporan Penjualan', 'route_submenu' => null, 'type_menu' => 'delete', 'menu_id' => '20', 'display_submenu' => '1', 'order_submenu' => null,
             ]
         ];
         DB::table('submenu')->insert($sub_menus);

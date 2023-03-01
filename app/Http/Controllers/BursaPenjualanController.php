@@ -113,6 +113,7 @@ class BursaPenjualanController extends Controller
 
                 $produk_grouping = array();
 
+
                 foreach ($request->datapenjualan as $item) {
                     $idProduk = $item['produk'];
                     $qty = $item['qty'];
@@ -150,9 +151,9 @@ class BursaPenjualanController extends Controller
                     $detilpenjualan->user_created = Auth::user()->id;
                     $detilpenjualan->save();
 
-                    $produk = BursaProduk::findorfail($request->datapenjualan[$i]['produk']);
-                    BursaProduk::where('id', $request->datapenjualan[$i]['produk'])->update([
-                        'stok' => $produk->stok - $request->datapenjualan[$i]['qty'],
+                    $produk = BursaProduk::findorfail($item['produk']);
+                    BursaProduk::where('id', $item['produk'])->update([
+                        'stok' => $produk->stok - $item['qty'],
                         'user_updated' => Auth::user()->id
                     ]);
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBursaDetilPenjualanTable extends Migration
+class CreateBursaLaporansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateBursaDetilPenjualanTable extends Migration
      */
     public function up()
     {
-        Schema::create('bursa_detil_penjualan', function (Blueprint $table) {
+        Schema::create('bursa_laporans', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateBursaDetilPenjualanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bursa_detil_penjualan');
+        Schema::dropIfExists('bursa_laporans');
     }
 }
