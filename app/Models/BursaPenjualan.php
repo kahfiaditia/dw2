@@ -21,4 +21,9 @@ class BursaPenjualan extends Model
     {
         return $this->belongsTo(Siswa::class, 'id_siswa');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_created');
+    }
 }

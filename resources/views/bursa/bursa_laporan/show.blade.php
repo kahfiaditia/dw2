@@ -28,7 +28,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="invoice-title">
-                                    <h4 class="float-end font-size-16">Order# {{ $penjualan->kode_penjualan }}</h4>
+                                    <h4 class="float-end font-size-16">Kode Penjualan# {{ $penjualan->kode_penjualan }}</h4>
 
                                     <div class="mb-4">
                                         <img src="{{ asset('assets/images/logo/sid.png') }}" alt="logo"
@@ -36,32 +36,33 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="col-sm-6">
-                                    <address>
-                                        <strong>Tanggal Penjualan : </strong> {{ $penjualan->created_at }}<br>
-                                    </address>
-                                </div>
                                 <table class="table table-nowrap mt-6">
                                     <thead>
                                         <tr>
                                             <th>Pembeli</th>
-                                            <th>Total Transaksi</th>
-                                            <th>Total Modal</th>
-                                            <th>Total Margin</th>
-                                            <th>Jenis Produk</th>
-                                            <th>Total Jumlah</th>
-                                            <th>Keterangan</th>
+                                            <th>Tanggal Penjualan</th>
+                                            <th>Kasir</th>
+                                            <th>Pembayaran</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ $penjualan->siswa->nama_lengkap }}</td>
-                                            <td>{{ number_format($penjualan->total, 0, ',', '.') }}</td>
-                                            <td>{{ number_format($penjualan->total_modal, 0, ',', '.') }}</td>
-                                            <td>{{ number_format($penjualan->total_margin, 0, ',', '.') }}</td>
-                                            <td>{{ $penjualan->total_produk }}</td>
-                                            <td>{{ $penjualan->keterangan }}</td>
-                                            <td>{{ $penjualan->keterangan }}</td>
+                                            <td>
+                                                @if ($penjualan->id_siswa == null)
+                                                    Tidak Ada Nama
+                                                @else
+                                                    {{ $penjualan->siswa->nama_lengkap }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $penjualan->created_at }}</td>
+                                            <td>{{ $penjualan->user->name }}</td>
+                                            <td>
+                                                @if ($penjualan->jenis_pembayaran == null)
+                                                    Tunai / Cash
+                                                @else
+                                                    {{ $penjualan->jenis_pembayaran == 1 ? 'Tunai / Cash' : 'Non Tunai' }}
+                                                @endif
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -76,9 +77,9 @@
                                                 <th>No.</th>
                                                 <th>Produk</th>
                                                 <th>Jumlah</th>
-                                                <th>Harga Jual</th>
-                                                <th>Sub Total Transaksi</th>
                                                 <th>Harga Modal</th>
+                                                <th>Harga Jual</th>
+                                                <th>Sub Total</th>
                                                 <th>Total Modal</th>
                                                 <th>Total Margin</th>
                                             </tr>
@@ -89,15 +90,23 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $item->produk->nama }}</td>
                                                     <td>{{ $item->kuantiti }}</td>
+                                                    <td>{{ number_format($item->harga_modal, 0, ',', '.') }}</td>
                                                     <td>{{ number_format($item->harga_jual, 0, ',', '.') }}</td>
                                                     <td>{{ number_format($item->sub_total, 0, ',', '.') }}</td>
-                                                    <td>{{ number_format($item->harga_modal, 0, ',', '.') }}</td>
                                                     <td>{{ number_format($item->sub_modal, 0, ',', '.') }}</td>
                                                     <td>{{ number_format($item->sub_margin, 0, ',', '.') }}</td>
                                                 </tr>
                                             @endforeach
-
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="2">Grand Total</th>
+                                                <th colspan="3">{{ $penjualan->total_kuantiti }}</th>
+                                                <th colspan="1">{{ number_format($penjualan->total, 0, ',', '.') }}</th>
+                                                <th>{{ number_format($penjualan->total_modal, 0, ',', '.') }}</th>
+                                                <th>{{ number_format($penjualan->total_margin, 0, ',', '.') }}</th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
 

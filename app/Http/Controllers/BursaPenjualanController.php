@@ -75,6 +75,7 @@ class BursaPenjualanController extends Controller
      */
     public function store(Request $request)
     {
+        // var_dump($request->datapenjualan);
 
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('144', $session_menu)) {
@@ -106,14 +107,14 @@ class BursaPenjualanController extends Controller
                 $penjualan = new BursaPenjualan();
                 $penjualan->kode_penjualan =  $kode_penjualan;
                 $penjualan->status_pembayaran =  1;
-                $penjualan->jenis_pembayaran =  $request->payment1;
-                $penjualan->id_siswa = $request->siswa;
+                $penjualan->jenis_pembayaran =  $request->datapenjualan[0]['jenis_pembayaran'];
+                $penjualan->id_siswa = $request->datapenjualan[0]['siswa'];
+                $penjualan->keterangan =  $request->datapenjualan[0]['keterangan1'];
                 $penjualan->user_created = Auth::user()->id;
                 $penjualan->save();
 
+
                 $produk_grouping = array();
-
-
                 foreach ($request->datapenjualan as $item) {
                     $idProduk = $item['produk'];
                     $qty = $item['qty'];
@@ -168,6 +169,7 @@ class BursaPenjualanController extends Controller
                     $penjualan_update->total = BursaDetilPenjualan::where('id_penjualan', $penjualan->id)->sum('sub_total');
                     $penjualan_update->total_margin = BursaDetilPenjualan::where('id_penjualan', $penjualan->id)->sum('sub_margin');
                     $penjualan_update->total_modal = BursaDetilPenjualan::where('id_penjualan', $penjualan->id)->sum('sub_modal');
+                    $penjualan_update->total_kuantiti = BursaDetilPenjualan::where('id_penjualan', $penjualan->id)->sum('kuantiti');
                     $penjualan_update->save();
                 }
 
@@ -340,26 +342,26 @@ class BursaPenjualanController extends Controller
         }
     }
 
-    public function get_kadaluarsa(Request $request)
-    {
-        $kadalauarsa = DB::table('bursa_detil_pembelian')
-            ->select('bursa_detil_pembelian.*')
-            ->join('bursa_produks', 'bursa_produks.id', '=', 'bursa_detil_pembelian.id_produk')
-            ->where('bursa_produks.id', '=', $request->class_produk)
-            ->whereNull('bursa_detil_pembelian.deleted_at')
-            ->get();
-        if (count($kadalauarsa) > 0) {
-            return response()->json([
-                'code' => 200,
-                'data' => $kadalauarsa,
-            ]);
-        } else {
-            return response()->json([
-                'code' => 400,
-                'data' => null,
-            ]);
-        }
-    }
+    // public function get_kadaluarsa(Request $request)
+    // {
+    //     $kadalauarsa = DB::table('bursa_detil_pembelian')
+    //         ->select('bursa_detil_pembelian.*')
+    //         ->join('bursa_produks', 'bursa_produks.id', '=', 'bursa_detil_pembelian.id_produk')
+    //         ->where('bursa_produks.id', '=', $request->class_produk)
+    //         ->whereNull('bursa_detil_pembelian.deleted_at')
+    //         ->get();
+    //     if (count($kadalauarsa) > 0) {
+    //         return response()->json([
+    //             'code' => 200,
+    //             'data' => $kadalauarsa,
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'code' => 400,
+    //             'data' => null,
+    //         ]);
+    //     }
+    // }
 
     public function get_stok(Request $request)
     {
@@ -437,5 +439,26 @@ class BursaPenjualanController extends Controller
             'type' => $type,
             'val' => $val,
         ]);
+    }
+
+    public function get_siswa(Request $request)
+    {
+        $siswa = DB::table('siswa')
+            ->select('siswa.id', 'siswa.nama_lengkap')
+            ->join('classes', 'classes.id', '=', 'siswa.class_id')
+            ->where('classes.id', '=', $request->class_jenjang)
+            ->whereNull('siswa.deleted_at')
+            ->get();
+        if (count($siswa) > 0) {
+            return response()->json([
+                'code' => 200,
+                'data' => $siswa,
+            ]);
+        } else {
+            return response()->json([
+                'code' => 400,
+                'data' => null,
+            ]);
+        }
     }
 }

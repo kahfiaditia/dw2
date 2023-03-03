@@ -116,7 +116,6 @@
                                                         name="nilai_jual" readonly>
                                                 </div>
                                             </div>
-
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label for="formrow-inputZip" class="form-label">Jumlah</label>
@@ -124,7 +123,6 @@
                                                         onkeyup="hitungTotalHargaProduk()" id="qty" name="qty">
                                                 </div>
                                             </div>
-
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label for="formrow-inputZip" class="form-label">Total</label>
@@ -132,7 +130,6 @@
                                                         name="total1" readonly>
                                                 </div>
                                             </div>
-
                                             <div class="col-lg-3 invisible">
                                                 <div class="mb-3">
                                                     <label for="formrow-inputZip" class="form-label">Modal</label>
@@ -142,8 +139,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row invisible">
-                                            <div class="col-lg-3">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <a type="submit" id="button" class="btn btn-info w-md"
+                                                    onclick="tambahBarang()">Tambah
+                                                    Produk</a>
+                                            </div>
+                                            <div class="col-lg-3 invisible">
                                                 <div class="mb-3">
                                                     <label for="formrow-inputState" class="form-label">Total
                                                         Modal</label>
@@ -152,7 +154,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 invisible">
                                                 <div class="mb-3">
                                                     <label for="formrow-inputZip" class="form-label">Total
                                                         Margin</label>
@@ -162,7 +164,7 @@
                                             </div>
 
                                         </div>
-                                        <div>
+                                        <div class="invisible">
                                             <a type="submit" id="button" class="btn btn-info w-md"
                                                 onclick="tambahBarang()">Tambah
                                                 Produk</a>
@@ -179,17 +181,16 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title mb-1">Daftar Belanja</h4>
-
                                     <form>
                                         <div class="row">
                                             <div class="row mt-4">
                                                 <div class="col-lg-6 jenjang_siswa">
                                                     <div class="mb-3">
                                                         <label for="formrow-firstname-input" class="form-label">
-                                                            Jenjang</label>
+                                                            Pembeli</label>
                                                         <select class="form-control select select2 classes" name="jenjang"
                                                             id="jenjang" required>
-                                                            <option value="" required>--Pilih Jenjang--</option>
+                                                            <option value="" required>--Pilih Pembeli--</option>
                                                         </select>
                                                         <div class="invalid-feedback">
                                                             Data wajib diisi.
@@ -243,12 +244,20 @@
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <label for="formrow-firstname-input" class="form-label">
-                                                        Pembayaran</label>
-                                                    <select id="payment1" name="payment1"
-                                                        class="form-control select select2 payment1" required>
+                                                        Jenis Pembayaran</label>
+                                                    <select id="jenis_pembayaran" name="jenis_pembayaran"
+                                                        class="form-control select select2 jenis_pembayaran" required>
                                                         <option value="1" selected> Cash / Tunai</option>
                                                         <option value="2"> Transfer</option>
                                                     </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label for="formrow-firstname-input" class="form-label">
+                                                        Catatan</label>
+                                                    <textarea type="text" class="form-control" name="keterangan1" id="keterangan1" placeholder="Keterangan"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -274,14 +283,7 @@
             </div>
         </div>
     </body>
-    <style>
-        /* Mengatur ukuran font pada elemen dengan ID "val" menjadi 20px dan memposisikannya ke kanan */
-        #val {
-            font-size: 20px;
-            text-align: right;
-            display: table-cell;
-        }
-    </style>
+
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
@@ -321,7 +323,6 @@
             const harga_produk = document.getElementById('nilai_jual').value;
             const harga_modal = document.getElementById('nilai_per_pcs').value;
             const kuantiti = document.getElementById('qty').value;
-
             const hargaTotalInput = document.getElementById('total1');
             const hargaTotalModal = document.getElementById('total_modal');
             const nilaiTotalMargin = document.getElementById('margin');
@@ -361,13 +362,12 @@
                             "header": {
                                 "jenjang": jenjang,
                                 "siswa": siswa,
-
                             }
                         };
                         localStorage.setItem('localPenjualanPelanggan', JSON.stringify(dataPerpus));
                         location.reload();
                     } else if (response.type == 'produk') {
-                        // console.log(response)
+                        console.log(response)
                         id = response.id;
                         produk_value = response.jenjang;
                         qty = 1;
@@ -377,6 +377,10 @@
                         margin = nilai_jual - modal;
                         sub_modal = (total - margin) / qty;
 
+                        var jenis_pembayaran = document.getElementById('jenis_pembayaran').value;
+                        var siswa = document.getElementById('siswa').value;
+                        var keterangan1 = document.getElementById('keterangan1').value;
+
                         $("#tambahBarang tr:last").after(`
                             <tr>
                                 <td class="text-center">${produk_value}</td>
@@ -385,34 +389,43 @@
                                 <td class="text-center">${total}</td>
                                 <td class="text-left" hidden>${id}</td>
                                 <td class="text-left" hidden>${modal}</td>
-                                <td class="text-left" hidden>${sub_modal}</td>//
-                                <td class="text-left" hidden>${margin}</td>//
-                                <td class="text-left" hidden>${payment1}</td>//
-                                <td class="text-left" hidden>${siswa}</td>//
+                                <td class="text-left" hidden>${sub_modal}</td>
+                                <td class="text-left" hidden>${margin}</td>
+                                <td class="text-left" hidden>${jenis_pembayaran}</td>
+                                <td class="text-left" hidden>${siswa}</td>
+                                <td class="text-left" hidden>${keterangan1}</td>
                                 <td>
-                                    <a class="btn btn-danger btn-sm delete-record center" data-id="delete">Delete</a>    
+                                    <a class="btn btn-danger btn-sm delete-record center" onClick="onClickRemove" data-id="delete">Delete</a>    
                                 </td>
                             </tr>                         
                         `)
+                        // Menghapus baris tabel yang sesuai dengan tombol "Delete"
+                        // Memanggil fungsi updateSubTotal() untuk mengurangi subtotal
+                        $(document).on("click", ".delete-record", function() {
 
-                        updateSubTotal(); // Initial call
+                            $(this).closest("tr").remove();
+
+
+                            updateSubTotal();
+                        });
+                        // Menghapus baris tabel yang sesuai dengan tombol "Delete"
+
+
+
+                        // Fungsi untuk mengupdate subtotal
+                        updateSubTotal();
 
                         function updateSubTotal() {
                             var table = document.getElementById("tambahBarang");
                             let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
-                                return total + parseFloat(row.cells[3].innerHTML);
+                                return total + parseFloat(row.cells[3].innerHTML.replace(/[^\d\,]/g,
+                                    ''));
                             }, 0);
                             document.getElementById("val").innerHTML = "Total = Rp " + subTotal.toLocaleString(
                                 "id-ID") + ",00";
                             console.log(val);
                         }
-
-                        function onClickRemove(deleteButton) {
-                            let row = deleteButton.parentElement.parentElement;
-                            row.parentNode.removeChild(row);
-                            updateSubTotal(); // Call after delete
-                        }
-
+                        // Fungsi untuk mengupdate subtotal
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -439,6 +452,7 @@
             localStorage.setItem('localPenjualanProduk', JSON.stringify(dataPenjualanItems));
         }
 
+
         function tambahBarang() {
             var produk = document.getElementById('produk').value;
             var stok = document.getElementById('stok').value;
@@ -446,22 +460,26 @@
             var total = document.getElementById('total1').value;
             var modal = document.getElementById('nilai_per_pcs').value;
             var qty = document.getElementById('qty').value;
-
             var total_modal = document.getElementById('total_modal').value;
             var margin = document.getElementById('margin').value;
             produk_value = $('#produk option:selected').data('id');
-            var payment1 = document.getElementById('payment1').value;
+            var jenis_pembayaran = document.getElementById('jenis_pembayaran').value;
             var siswa = document.getElementById('siswa').value;
+            var keterangan1 = document.getElementById('keterangan1').value;
 
-            document.getElementById('produk').value = '';
+            $('#produk').val("").trigger('change')
+
+            document.getElementById('barcode1').value = '';
             document.getElementById('stok').value = '';
             document.getElementById('nilai_jual').value = '';
             document.getElementById('qty').value = '';
             document.getElementById('total1').value = '';
-            document.getElementById('payment1').value = '';
+            document.getElementById('jenis_pembayaran').value = '';
             document.getElementById('nilai_per_pcs').value = '';
             document.getElementById('total_modal').value = '';
             document.getElementById('margin').value = '';
+            document.getElementById('keterangan1').value = '';
+
 
             if (produk == '' || nilai_jual == '' || qty == '' || total == '') {
                 Swal.fire({
@@ -481,35 +499,37 @@
                             <td class="text-left" hidden>${modal}</td>
                             <td class="text-left" hidden>${total_modal}</td>
                             <td class="text-left" hidden>${margin}</td>
-                            <td class="text-left" hidden>${payment1}</td>
+                            <td class="text-left" hidden>${jenis_pembayaran}</td>
                             <td class="text-left" hidden>${siswa}</td>
-                           
+                            <td class="text-left" hidden>${keterangan1}</td>
                             <td>
                                 <a class="btn btn-danger btn-sm delete-record center" data-id="delete">Delete</a>    
                             </td>
                         </tr> 
                     `)
 
-                updateSubTotal(); // Initial call
+                $(document).on("click", ".delete-record", function() {
+                    // Menghapus baris tabel yang sesuai dengan tombol "Delete"
+                    $(this).closest("tr").remove();
 
+                    // Memanggil fungsi updateSubTotal() untuk mengurangi subtotal
+                    updateSubTotal();
+                });
+
+                // Fungsi untuk mengupdate subtotal
+                updateSubTotal(); // nominal total dari barcode
                 function updateSubTotal() {
                     var table = document.getElementById("tambahBarang");
                     let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
-                        return total + parseFloat(row.cells[3].innerHTML);
+                        return total + parseFloat(row.cells[3].innerHTML.replace(/[^\d\,]/g,
+                            ''));
                     }, 0);
-                    document.getElementById("val").innerHTML = "Total = Rp " + subTotal.toLocaleString("id-ID") + ",00";
+                    document.getElementById("val").innerHTML = "Total = Rp " + subTotal.toLocaleString(
+                        "id-ID") + ",00";
                     console.log(val);
                 }
-
-                function onClickRemove(deleteButton) {
-                    let row = deleteButton.parentElement.parentElement;
-                    row.parentNode.removeChild(row);
-                    updateSubTotal(); // Call after delete
-                }
-
-
-                // Tambahkan baris grand total ke tabel
             }
+
         }
 
         $(document).ready(function() {
@@ -548,8 +568,9 @@
                         modal = tableData.eq(5).text(),
                         total_modal = tableData.eq(6).text(),
                         margin = tableData.eq(7).text(),
-                        payment1 = tableData.eq(8).text(),
-                        siswa = tableData.eq(9).text()
+                        jenis_pembayaran = tableData.eq(8).text(),
+                        siswa = tableData.eq(9).text(),
+                        keterangan1 = tableData.eq(10).text()
 
                     //ini filter data null
                     if (produk != '') {
@@ -562,8 +583,9 @@
                             modal,
                             total_modal,
                             margin,
-                            payment1,
+                            jenis_pembayaran,
                             siswa,
+                            keterangan1,
                         });
                     }
                 })
@@ -588,8 +610,9 @@
                                     "siswa": '',
                                 }
                             };
-                            localStorage.setItem('localPenjualanPelanggan', JSON.stringify(
-                                dataPenjualan));
+                            localStorage.setItem('localPenjualanPelanggan', JSON
+                                .stringify(
+                                    dataPenjualan));
 
                             Swal.fire(
                                 'Success',
@@ -597,7 +620,8 @@
                                 'success'
                             ).then(() => {
                                 var APP_URL = {!! json_encode(url('/')) !!}
-                                window.location = APP_URL + '/bursa/bursa_penjualan'
+                                window.location = APP_URL +
+                                    '/bursa/bursa_penjualan'
                             })
                         } else {
                             Swal.fire({
@@ -681,7 +705,7 @@
                 $(".siswa option").remove();
                 $.ajax({
                     type: "POST",
-                    url: '{{ route('invoice.get_siswa') }}',
+                    url: '{{ route('bursa_penjualan.get_siswa') }}',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         class_jenjang
@@ -711,13 +735,14 @@
                 $(".siswa option").remove();
                 $.ajax({
                     type: "POST",
-                    url: '{{ route('invoice.get_siswa') }}',
+                    url: '{{ route('bursa_penjualan.get_siswa') }}',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         class_jenjang
                     },
                     success: response => {
-                        $('.siswa').append(`<option value="">-- Pilih Siswa --</option>`)
+                        $('.siswa').append(
+                            `<option value="">-- Pilih Siswa --</option>`)
                         $.each(response.data, function(i, item) {
                             $('.siswa').append(
                                 `<option value="${item.id}" data-id="${item.nama_lengkap}">${item.nama_lengkap}</option>`
@@ -729,10 +754,6 @@
                     },
                 });
             });
-
-            // $(".siswa").change(function() {
-            //     setLocalStorage('header');
-            // });
         })
 
         $(document).ready(function() {
@@ -774,29 +795,6 @@
                     console.log(err);
                 },
             });
-
-            // $(".produk").change(function() {
-            //     let class_produk = $(this).val();
-            //     $(".kadaluarsa option").remove();
-            //     document.getElementById("stok").value = '';
-            //     $.ajax({
-            //         type: "POST",
-            //         url: '{{ route('bursa_penjualan.get_kadaluarsa') }}',
-            //         data: {
-            //             "_token": "{{ csrf_token() }}",
-            //             class_produk
-            //         },
-            //         success: response => {
-            //             console.log(response)
-            //             $(".kadaluarsa").change(function() {
-            //                 var stok = $('option:selected', this).attr(
-            //                     'data-value');
-            //                 document.getElementById("total_kuantiti").value = stok;
-            //             });
-
-            //         },
-            //     });
-            // });
         })
     </script>
 @endsection

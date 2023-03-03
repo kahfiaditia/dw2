@@ -401,6 +401,7 @@ Route::group(
         Route::resource('/bursa_produk', BursaProdukController::class);
         Route::resource('/bursa_pembelian', BursaPembelianController::class);
         Route::resource('/bursa_penjualan', BursaPenjualanController::class);
+        Route::post('/get_siswa', [BursaPenjualanController::class, 'get_siswa'])->name('bursa_penjualan.get_siswa');
         Route::post('/get_produk', [BursaPenjualanController::class, 'get_produk'])->name('bursa_penjualan.get_produk');
         Route::post('/get_kadaluarsa', [BursaPenjualanController::class, 'get_kadaluarsa'])->name('bursa_penjualan.get_kadaluarsa');
         Route::post('/scanBarcode', [BursaPenjualanController::class, 'scanBarcode'])->name('bursa_penjualan.scanBarcode');

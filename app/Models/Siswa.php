@@ -79,5 +79,10 @@ class Siswa extends Model
     {
         return $this->belongsTo(Payment::class, 'kegiatan_id');
     }
+
+    public function siswa()
+    {
+        return $this->hasMany(BursaPenjualan::class, 'id_siswa');
+    }
     // pembayaran
 }

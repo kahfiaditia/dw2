@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\BursaLaporan;
 use App\Models\BursaPenjualan;
+use App\Models\Siswa;
 use Illuminate\Support\Facades\Crypt;
 
 class BursaLaporanController extends Controller
@@ -23,12 +24,14 @@ class BursaLaporanController extends Controller
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('139', $session_menu)) {
 
+            $posts = BursaPenjualan::with('siswa')->get();
+
             $data = [
                 'title' => $this->title,
                 'menu' => $this->menu,
                 'submenu' => 'Laporan Penjualan',
                 'label' => 'Laporan Penjualan',
-                'laporan' => BursaPenjualan::all(),
+                'laporan' => $posts
             ];
             return view('bursa.bursa_laporan.transaksi')->with($data);
         } else {
@@ -72,7 +75,7 @@ class BursaLaporanController extends Controller
                 'title' => $this->title,
                 'menu' => $this->menu,
                 'submenu' => 'Laporan Penjualan',
-                'label' => 'Detil Penjualan',
+                'label' => 'Laporan Detil Penjualan',
                 'penjualan' => BursaPenjualan::findOrFail($id),
                 'detil' => BursaDetilPenjualan::where('id_penjualan', $id)->get()
             ];
