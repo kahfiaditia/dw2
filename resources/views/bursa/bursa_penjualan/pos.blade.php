@@ -220,7 +220,6 @@
                                                         <tr>
                                                             <th class="text-right" style="float: right"><span
                                                                     id="val">Total</span></th>
-
                                                         </tr>
                                                     </tbody>
                                                 </table>
