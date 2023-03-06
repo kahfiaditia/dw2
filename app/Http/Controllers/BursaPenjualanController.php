@@ -6,6 +6,7 @@ use App\Helper\AlertHelper;
 use App\Models\BursaDetilPenjualan;
 use App\Models\BursaPenjualan;
 use App\Models\BursaProduk;
+use App\Models\Employee;
 use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -82,7 +83,6 @@ class BursaPenjualanController extends Controller
 
             DB::beginTransaction();
             try {
-
                 $registration_number = BursaPenjualan::limit(1)->groupBy('kode_penjualan')->orderBy('id', 'desc')->get();
                 if (count($registration_number) > 0) {
                     $thn = substr($registration_number[0]->kode_penjualan, 0, 2);
@@ -342,27 +342,6 @@ class BursaPenjualanController extends Controller
         }
     }
 
-    // public function get_kadaluarsa(Request $request)
-    // {
-    //     $kadalauarsa = DB::table('bursa_detil_pembelian')
-    //         ->select('bursa_detil_pembelian.*')
-    //         ->join('bursa_produks', 'bursa_produks.id', '=', 'bursa_detil_pembelian.id_produk')
-    //         ->where('bursa_produks.id', '=', $request->class_produk)
-    //         ->whereNull('bursa_detil_pembelian.deleted_at')
-    //         ->get();
-    //     if (count($kadalauarsa) > 0) {
-    //         return response()->json([
-    //             'code' => 200,
-    //             'data' => $kadalauarsa,
-    //         ]);
-    //     } else {
-    //         return response()->json([
-    //             'code' => 400,
-    //             'data' => null,
-    //         ]);
-    //     }
-    // }
-
     public function get_stok(Request $request)
     {
         $kadalauarsa = DB::table('bursa_detil_pembelian')
@@ -389,17 +368,27 @@ class BursaPenjualanController extends Controller
         $val = 0;
         $harga_beli = null;
         $harga_jual = null;
-        if ($request->peminjam == 'Siswa') {
+        if ($request->pembeli == 'Siswa') {
             $data = Siswa::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
                 $class_id = $data->class_id;
-                $type = $request->peminjam;
+                $type = $request->pembeli;
                 $code = 200;
                 $val = $val + 1;
             }
         }
-        if ($request->peminjam == '') {
+        if ($request->pembeli == 'Guru' or $request->pembeli == 'Karyawan') {
+            $data = Employee::where('niks', $request->barcode)->first();
+            if ($data) {
+                $id = $data->id;
+                $class_id = null;
+                $type = $request->pembeli;
+                $code = 200;
+                $val = $val + 1;
+            }
+        }
+        if ($request->pembeli == '') {
             $data = BursaProduk::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
@@ -410,7 +399,7 @@ class BursaPenjualanController extends Controller
                 $code = 200;
                 $val = $val + 1;
             }
-        } else if ($request->peminjam != '' and $val == 0) {
+        } else if ($request->pembeli != '' and $val == 0) {
             $data = BursaProduk::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;

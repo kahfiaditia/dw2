@@ -342,14 +342,14 @@
 
         }
 
-        function getValueScanBarcodeCamera(barcode, peminjam) {
+        function getValueScanBarcodeCamera(barcode, pembeli) {
             $.ajax({
                 type: "POST",
                 url: '{{ route('bursa_penjualan.scanBarcode') }}',
                 data: {
                     "_token": "{{ csrf_token() }}",
                     barcode,
-                    peminjam
+                    pembeli
                 },
                 success: response => {
                     // initialize header
