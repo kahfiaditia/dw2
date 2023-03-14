@@ -247,18 +247,18 @@
             var peminjam = select_peminjam.options[select_peminjam.selectedIndex].value;
             if (peminjam == 'Siswa') {
                 $('.peminjam_siswa').show();
-                $('.peminjam_guru').hide();
+                $('.peminjam_karyawan').hide();
                 document.getElementById("karyawan").required = false
                 document.getElementById("jenjang").required = true
                 document.getElementById("siswa").required = true
-            } else if (peminjam == 'Guru' || peminjam == 'Karyawan') {
-                $('.peminjam_guru').show();
+            } else if (peminjam == 'Karyawan') {
+                $('.peminjam_karyawan').show();
                 $('.peminjam_siswa').hide();
                 document.getElementById("karyawan").required = true
                 document.getElementById("jenjang").required = false
                 document.getElementById("siswa").required = false
             } else {
-                $('.peminjam_guru').hide();
+                $('.peminjam_karyawan').hide();
                 $('.peminjam_siswa').hide();
             }
 

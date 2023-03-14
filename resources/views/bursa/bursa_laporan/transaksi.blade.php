@@ -32,8 +32,6 @@
                                         <th>Total Modal</th>
                                         <th>Total Margin</th>
                                         <th>Produk</th>
-                                        <th>Total Kuantiti</th>
-                                        <th>Tanggal</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -46,8 +44,7 @@
                                             <td>{{ number_format($item->total, 0, ',', '.') }}</td>
                                             <td>{{ number_format($item->total_modal, 0, ',', '.') }}</td>
                                             <td>{{ number_format($item->total_margin, 0, ',', '.') }}</td>
-                                            <td>{{ $item->total_produk }}</td>
-                                            <td>{{ $item->total_kuantiti }}</td>
+
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 <form class="delete-form"

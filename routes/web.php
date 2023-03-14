@@ -401,10 +401,13 @@ Route::group(
         Route::resource('/bursa_produk', BursaProdukController::class);
         Route::resource('/bursa_pembelian', BursaPembelianController::class);
         Route::resource('/bursa_penjualan', BursaPenjualanController::class);
+        Route::post('/get_jenjang', [BursaPenjualanController::class, 'get_jenjang'])->name('bursa_penjualan.get_jenjang');
         Route::post('/get_siswa', [BursaPenjualanController::class, 'get_siswa'])->name('bursa_penjualan.get_siswa');
+        Route::get('get_jabatan', [BursaPenjualanController::class, 'get_jabatan'])->name('bursa_penjualan.get_jabatan');
+        Route::post('get_karyawan', [BursaPenjualanController::class, 'get_karyawan'])->name('bursa_penjualan.get_karyawan');
         Route::post('/get_produk', [BursaPenjualanController::class, 'get_produk'])->name('bursa_penjualan.get_produk');
         Route::post('/get_kadaluarsa', [BursaPenjualanController::class, 'get_kadaluarsa'])->name('bursa_penjualan.get_kadaluarsa');
-        Route::post('/scanBarcode', [BursaPenjualanController::class, 'scanBarcode'])->name('bursa_penjualan.scanBarcode');
+        Route::post('/scanBarcode1', [BursaPenjualanController::class, 'scanBarcode1'])->name('bursa_penjualan.scanBarcode1');
         Route::resource('/laporan_penjualan', BursaLaporanController::class);
     }
 );

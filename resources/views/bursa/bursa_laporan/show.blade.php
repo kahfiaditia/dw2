@@ -48,10 +48,11 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                @if ($penjualan->id_siswa == null)
-                                                    Tidak Ada Nama
-                                                @else
+                                                @if ($penjualan->siswa != null)
                                                     {{ $penjualan->siswa->nama_lengkap }}
+                                                @endif
+                                                @if ($penjualan->karyawan != null)
+                                                    {{ $penjualan->karyawan->nama_lengkap }}
                                                 @endif
                                             </td>
                                             <td>{{ $penjualan->created_at }}</td>

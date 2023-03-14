@@ -103,16 +103,15 @@ class BursaPenjualanController extends Controller
                     $kode_penjualan   = Carbon::now()->format('ymd') . "0001";
                 }
 
-
                 $penjualan = new BursaPenjualan();
                 $penjualan->kode_penjualan =  $kode_penjualan;
                 $penjualan->status_pembayaran =  1;
                 $penjualan->jenis_pembayaran =  $request->datapenjualan[0]['jenis_pembayaran'];
                 $penjualan->id_siswa = $request->datapenjualan[0]['siswa'];
+                $penjualan->id_karyawan = $request->datapenjualan[0]['karyawan'];
                 $penjualan->keterangan =  $request->datapenjualan[0]['keterangan1'];
                 $penjualan->user_created = Auth::user()->id;
                 $penjualan->save();
-
 
                 $produk_grouping = array();
                 foreach ($request->datapenjualan as $item) {
@@ -363,25 +362,33 @@ class BursaPenjualanController extends Controller
         }
     }
 
-    public function scanBarcode(Request $request)
+    public function scanBarcode1(Request $request)
     {
-        $val = 0;
         $harga_beli = null;
         $harga_jual = null;
+        $harga_jual = null;
+        $jabatan = null;
+        $nama_produk = null;
+        $nama_lengkap = null;
+        $class_id = null;
+        $val = 0;
         if ($request->pembeli == 'Siswa') {
             $data = Siswa::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
+                $nama_lengkap = $data->nama_lengkap;
                 $class_id = $data->class_id;
                 $type = $request->pembeli;
                 $code = 200;
                 $val = $val + 1;
             }
         }
-        if ($request->pembeli == 'Guru' or $request->pembeli == 'Karyawan') {
+        if ($request->pembeli == 'Karyawan') {
             $data = Employee::where('niks', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
+                $nama_lengkap = $data->nama_lengkap;
+                $jabatan = $data->jabatan;
                 $class_id = null;
                 $type = $request->pembeli;
                 $code = 200;
@@ -392,18 +399,19 @@ class BursaPenjualanController extends Controller
             $data = BursaProduk::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
-                $class_id = $data->nama;
+                $nama_produk = $data->nama;
                 $harga_beli = $data->harga_beli;
                 $harga_jual = $data->harga_jual;
                 $type = 'produk';
                 $code = 200;
                 $val = $val + 1;
             }
-        } else if ($request->pembeli != '' and $val == 0) {
+        } elseif ($request->pembeli != '' and $val == 0) {
             $data = BursaProduk::where('barcode', $request->barcode)->first();
             if ($data) {
                 $id = $data->id;
-                $class_id = $data->nama;
+                $class_id = $data->produk;
+                $nama_produk = $data->nama;
                 $harga_beli = $data->harga_beli;
                 $harga_jual = $data->harga_jual;
                 $type = 'produk';
@@ -413,7 +421,9 @@ class BursaPenjualanController extends Controller
         }
         if ($val == 0) {
             $id = null;
+            $nama_lengkap = null;
             $class_id = null;
+            $harga_beli = null;
             $harga_beli = null;
             $harga_jual = null;
             $type = null;
@@ -422,12 +432,108 @@ class BursaPenjualanController extends Controller
         return response()->json([
             'code' => $code,
             'id' => $id,
+            'nama_produk' => $nama_produk,
+            'nama_lengkap' => $nama_lengkap,
             'jenjang' => $class_id,
+            'jabatan' => $jabatan,
             'harga_beli' => $harga_beli,
             'harga_jual' => $harga_jual,
             'type' => $type,
             'val' => $val,
         ]);
+        // dd($request->pembeli);
+        // $val = 0;
+        // $harga_beli = null;
+        // $harga_jual = null;
+        // $harga_jual = null;
+        // $jabatan = null;
+        // $nama_produk = null;
+        // $class_id = null;
+        // if ($request->pembeli == 'Siswa') {
+        //     $data = Siswa::where('barcode', $request->barcode)->first();
+        //     if ($data) {
+        //         $id = $data->id;
+        //         $class_id = $data->class_id;
+        //         $type = $request->pembeli;
+        //         $code = 200;
+        //         $val = $val + 1;
+        //     }
+        // }
+        // if ($request->pembeli == 'Karyawan') {
+        //     $data = Employee::where('niks', $request->barcode)->first();
+        //     if ($data) {
+        //         $id = $data->id;
+        //         $class_id = null;
+        //         $type = $request->pembeli;
+        //         $code = 200;
+        //         $val = $val + 1;
+        //     }
+        // }
+        // if ($request->pembeli == '') {
+        //     $data = BursaProduk::where('barcode', $request->barcode)->first();
+
+        //     if ($data) {
+        //         $id = $data->id;
+        //         $nama_produk = $data->nama;
+        //         $harga_beli = $data->harga_beli;
+        //         $harga_jual = $data->harga_jual;
+        //         $type = 'produk';
+        //         $code = 200;
+        //         $val = $val + 1;
+        //     }
+        // } else if ($request->pembeli != '' and $val == 0) {
+        //     $data = BursaProduk::where('barcode', $request->barcode)->first();
+        //     if ($data) {
+        //         $id = $data->id;
+        //         $nama_produk = $data->nama;
+        //         $harga_beli = $data->harga_beli;
+        //         $harga_jual = $data->harga_jual;
+        //         $type = 'produk';
+        //         $code = 200;
+        //         $val = $val + 1;
+        //     }
+        // }
+        // if ($val == 0) {
+        //     $id = null;
+        //     $class_id = null;
+        //     $harga_beli = null;
+        //     $harga_beli = null;
+        //     $harga_jual = null;
+        //     $type = null;
+        //     $code = 400;
+        // }
+
+        // return response()->json([
+        //     'code' => $code,
+        //     'id' => $id,
+        //     'nama_produk' => $nama_produk,
+        //     'jenjang' => $class_id,
+        //     'jabatan' => $jabatan,
+        //     'harga_beli' => $harga_beli,
+        //     'harga_jual' => $harga_jual,
+        //     'type' => $type,
+        //     'val' => $val,
+        // ]);
+    }
+
+    public function get_jenjang(Request $request)
+    {
+        $kelas = DB::table('classes')
+            ->select('classes.id', 'level', 'school_class.classes', 'jurusan', 'type')
+            ->leftjoin('school_class', 'school_class.id', '=', 'classes.class_id')
+            ->leftjoin('school_level', 'school_level.id', '=', 'classes.id_school_level')
+            ->get();
+        if (count($kelas) > 0) {
+            return response()->json([
+                'code' => 200,
+                'data' => $kelas,
+            ]);
+        } else {
+            return response()->json([
+                'code' => 400,
+                'data' => null,
+            ]);
+        }
     }
 
     public function get_siswa(Request $request)
@@ -449,5 +555,21 @@ class BursaPenjualanController extends Controller
                 'data' => null,
             ]);
         }
+    }
+
+    public function get_jabatan()
+    {
+        $jabatan = DB::table('karyawan')
+            ->select('jabatan')
+            ->distinct()
+            ->get();
+
+        return response()->json($jabatan);
+    }
+
+    public function get_karyawan(Request $request)
+    {
+        $karyawan = Employee::where('jabatan', $request->jabatan)->get();
+        return response()->json($karyawan);
     }
 }

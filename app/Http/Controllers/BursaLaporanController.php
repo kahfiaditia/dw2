@@ -24,7 +24,7 @@ class BursaLaporanController extends Controller
         $session_menu = explode(',', Auth::user()->akses_submenu);
         if (in_array('139', $session_menu)) {
 
-            $posts = BursaPenjualan::with('siswa')->get();
+            $posts = BursaPenjualan::orderBy('kode_penjualan', 'desc')->get();
 
             $data = [
                 'title' => $this->title,
