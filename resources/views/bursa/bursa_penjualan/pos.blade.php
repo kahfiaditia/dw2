@@ -439,25 +439,6 @@
             });
         }
 
-        function formatRupiah(angka, prefix) {
-
-            if (angka != undefined && angka != null) {
-                var number_string = angka.toString().replace(/[^,\d]/g, ''),
-                    split = number_string.split(','),
-                    sisa = split[0].length % 3,
-                    rupiah = split[0].substr(0, sisa),
-                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-                if (ribuan) {
-                    separator = sisa ? '.' : '';
-                    rupiah += separator + ribuan.join('.');
-                }
-
-                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-            }
-        }
-
         function hitungTotalHargaProduk() {
             const harga_produk = document.getElementById('nilai_jual').value.replace(/[^\d]/g, '');
             const harga_modal = document.getElementById('nilai_per_pcs').value.replace(/[^\d]/g, '');
@@ -471,9 +452,6 @@
                 const HargaProduk = parseInt(harga_produk) * kuantiti;
                 hargaTotalInput.value = HargaProduk;
 
-                // console.log(total1);
-                // const HargaProdukFormatted = formatRupiah(HargaProduk, 'Rp ');
-                // document.getElementById('totall2').value = HargaProdukFormatted;
 
                 var total_rupiah = new Intl.NumberFormat('id-ID', {
                     style: 'currency',
@@ -634,13 +612,13 @@
                         var total_rupiah = new Intl.NumberFormat('id-ID', {
                             style: 'currency',
                             currency: 'IDR'
-                        }).format(total); // konversi nilai total ke format rupiah
+                        }).format(total);
                         // tampilkan nilai total dalam format rupiah
 
                         var nilai_jual_rupiah = new Intl.NumberFormat('id-ID', {
                             style: 'currency',
                             currency: 'IDR'
-                        }).format(nilai_jual); // konversi nilai_jual ke format rupiah
+                        }).format(nilai_jual);
                         // tampilkan nilai_jual dalam format rupiah
 
                         $("#tambahBarang tr:last").after(`
@@ -697,9 +675,6 @@
                             title: 'Data tidak terdaftar!',
                             showConfirmButton: false,
                             timer: 1500,
-                            // willClose: () => {
-                            //     location.reload();
-                            // }
                         })
                     }
                 },
@@ -737,12 +712,6 @@
                     $(".produk").change(function() {
                         var nilai_jual = $('option:selected', this).attr('data-value1');
                         document.getElementById("nilai_jual").value = nilai_jual;
-
-                        // var total_rupiah = new Intl.NumberFormat('id-ID', {
-                        //     style: 'currency',
-                        //     currency: 'IDR'
-                        // }).format(total); // konversi nilai total ke format rupiah
-                        // console.log(nilai_jual); // tampilkan nilai total dalam format rupiah
 
                         var nilai_jual_rupiah = new Intl.NumberFormat('id-ID', {
                             style: 'currency',
