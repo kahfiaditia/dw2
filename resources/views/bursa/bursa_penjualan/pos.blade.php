@@ -61,9 +61,9 @@
                                                     <div class="row text-muted div_barcode">
                                                         <div class="col-md-4"></div>
                                                         <div class="col-md-4">
-                                                            <input type="text" name="scanner_barcode" autofocus
+                                                            <input type="text" name="scanner_barcode"
                                                                 class="form-control scanner_barcode" id="scanner_barcode"
-                                                                placeholder="Barcode">
+                                                                placeholder="Barcode" autofocus>
                                                         </div>
                                                     </div>
                                                     <div class="row text-muted div_scan_camera">
@@ -161,76 +161,92 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label for="formrow-firstname-input" class="form-label">Barcode
-                                                    </label>
-                                                    <input type="text" class="form-control" id="barcode1"
-                                                        name="barcode1" placeholder="Barcode" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label for="formrow-firstname-input" class="form-label">Stok
-                                                        produk</label>
+                                            <div class="col-lg-2">
+                                                <div class="mb-2">
+                                                    <label for="formrow-firstname-input" class="form-label">Stok</label>
                                                     <input type="text" class="form-control" id="stok"
                                                         name="stok" placeholder="Stok" readonly>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label for="formrow-inputState" class="form-label">Harga Jual</label>
-                                                    <input type="text" class="form-control"
-                                                        onkeyup="hitungTotalHargaProduk()" id="nilai_jual"
-                                                        name="nilai_jual" readonly>
+                                            <div class="col-lg-4">
+                                                <div class="mb-4">
+                                                    <label for="formrow-inputState" class="form-label">Harga</label>
+                                                    <input type="text" class="form-control" id="nilai_jual1"
+                                                        name="nilai_jual1" readonly>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                                <div class="mb-2">
                                                     <label for="formrow-inputZip" class="form-label">Jumlah</label>
                                                     <input type="text" min="1" class="form-control"
                                                         onkeyup="hitungTotalHargaProduk()" id="qty" name="qty">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label for="formrow-inputZip" class="form-label">Total</label>
-                                                    <input type="text" class="form-control" id="total1"
-                                                        name="total1" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 invisible">
-                                                <div class="mb-3">
-                                                    <label for="formrow-inputZip" class="form-label">Modal</label>
-                                                    <input type="text" class="form-control"
-                                                        onkeyup="hitungTotalHargaProduk()" id="nilai_per_pcs"
-                                                        name="nilai_per_pcs" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-lg-4">
-                                                <a type="submit" id="button" class="btn btn-info w-md"
-                                                    onclick="tambahBarang()">Tambah
-                                                    Produk</a>
-                                            </div>
-                                            <div class="col-lg-3 invisible">
-                                                <div class="mb-3">
-                                                    <label for="formrow-inputState" class="form-label">Total
-                                                        Modal</label>
-                                                    <input type="text" class="form-control" id="total_modal"
-                                                        name="total_modal" readonly>
+                                                <div class="mb-4">
+                                                    <label for="formrow-inputZip" class="form-label">Total</label>
+                                                    <input type="text" class="form-control" id="total12"
+                                                        name="total12" placeholder="Total Harga" readonly>
                                                 </div>
                                             </div>
-
-                                            <div class="col-lg-3 invisible">
-                                                <div class="mb-3">
-                                                    <label for="formrow-inputZip" class="form-label">Total
-                                                        Margin</label>
-                                                    <input type="number" class="form-control" id="margin"
-                                                        name="margin" disabled>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <a type="submit" id="button" class="btn btn-info w-md"
+                                                        onclick="tambahBarang()">Tambah
+                                                        Produk</a>
+                                                </div>
+                                            </div>
+                                            <div class="row invisible">
+                                                <div class="col-lg-4">
+                                                    <div class="mb-4">
+                                                        <label for="formrow-inputState" class="form-label">Harga jual
+                                                            Asli</label>
+                                                        <input type="text" class="form-control"
+                                                            onkeyup="hitungTotalHargaProduk()" id="nilai_jual"
+                                                            name="nilai_jual" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="mb-4">
+                                                        <label for="formrow-inputZip" class="form-label">Total
+                                                            Asli</label>
+                                                        <input type="text" class="form-control" id="total1"
+                                                            name="total1" placeholder="Total Harga" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3">
+                                                        <label for="formrow-inputState" class="form-label">Total
+                                                            Modal</label>
+                                                        <input type="text" class="form-control" id="total_modal"
+                                                            name="total_modal" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3">
+                                                        <label for="formrow-inputZip" class="form-label">Modal</label>
+                                                        <input type="text" class="form-control"
+                                                            onkeyup="hitungTotalHargaProduk()" id="nilai_per_pcs"
+                                                            name="nilai_per_pcs" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3">
+                                                        <label for="formrow-firstname-input" class="form-label">Barcode
+                                                        </label>
+                                                        <input type="text" class="form-control" id="barcode1"
+                                                            name="barcode1" placeholder="Barcode" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3">
+                                                        <label for="formrow-inputZip" class="form-label">Total
+                                                            Margin</label>
+                                                        <input type="number" class="form-control" id="margin"
+                                                            name="margin" disabled>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -377,7 +393,6 @@
                     var jabatan = $("#jabatan").parent().parent();
                     var karyawan = $("#karyawan").parent().parent();
 
-
                     // Sembunyikan kolom jenjang dan siswa atau karyawan awalnya
                     jenjang.hide();
                     siswa.hide();
@@ -424,24 +439,55 @@
             });
         }
 
+        function formatRupiah(angka, prefix) {
+
+            if (angka != undefined && angka != null) {
+                var number_string = angka.toString().replace(/[^,\d]/g, ''),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                if (ribuan) {
+                    separator = sisa ? '.' : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+            }
+        }
+
         function hitungTotalHargaProduk() {
-            const harga_produk = document.getElementById('nilai_jual').value;
-            const harga_modal = document.getElementById('nilai_per_pcs').value;
-            const kuantiti = document.getElementById('qty').value;
+            const harga_produk = document.getElementById('nilai_jual').value.replace(/[^\d]/g, '');
+            const harga_modal = document.getElementById('nilai_per_pcs').value.replace(/[^\d]/g, '');
+            const kuantiti = document.getElementById('qty').value.replace(/[^\d]/g, '');
+
             const hargaTotalInput = document.getElementById('total1');
             const hargaTotalModal = document.getElementById('total_modal');
             const nilaiTotalMargin = document.getElementById('margin');
 
             if (harga_produk && kuantiti) {
-                const HargaProduk = harga_produk * kuantiti;
+                const HargaProduk = parseInt(harga_produk) * kuantiti;
                 hargaTotalInput.value = HargaProduk;
 
+                // console.log(total1);
+                // const HargaProdukFormatted = formatRupiah(HargaProduk, 'Rp ');
+                // document.getElementById('totall2').value = HargaProdukFormatted;
+
+                var total_rupiah = new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR'
+                }).format(HargaProduk);
+                document.getElementById('total12').value = total_rupiah;
+
                 if (harga_modal) {
-                    const HargaModal = harga_modal * kuantiti;
+                    const HargaModal = parseInt(harga_modal) * kuantiti;
                     hargaTotalModal.value = HargaModal;
 
                     const margin = HargaProduk - HargaModal;
                     nilaiTotalMargin.value = margin;
+
                 }
             }
         }
@@ -589,21 +635,20 @@
                             style: 'currency',
                             currency: 'IDR'
                         }).format(total); // konversi nilai total ke format rupiah
-                        console.log(total_rupiah); // tampilkan nilai total dalam format rupiah
+                        // tampilkan nilai total dalam format rupiah
 
                         var nilai_jual_rupiah = new Intl.NumberFormat('id-ID', {
                             style: 'currency',
                             currency: 'IDR'
                         }).format(nilai_jual); // konversi nilai_jual ke format rupiah
-                        console.log(nilai_jual_rupiah); // tampilkan nilai_jual dalam format rupiah
-
+                        // tampilkan nilai_jual dalam format rupiah
 
                         $("#tambahBarang tr:last").after(`
                         <tr>
                             <td class="text-center">${produk_value}</td>
                             <td class="text-center">${qty}</td>
-                            <td class="text-center">${total_rupiah}</td>
                             <td class="text-center">${nilai_jual_rupiah}</td>
+                            <td class="text-center">${total_rupiah}</td>
                             <td class="text-left" hidden>${nilai_jual}</td>
                             <td class="text-left" hidden>${total}</td>
                             <td class="text-left" hidden>${id}</td>
@@ -664,11 +709,68 @@
             });
         }
 
+        $(document).ready(function() {
+            $.ajax({
+                type: "POST",
+                url: '{{ route('bursa_penjualan.get_produk') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+
+                success: response => {
+                    $.each(response.data, function(i, item) {
+                        $('.produk').append(
+                            `<option value="${item.id}" data-id="${item.nama}" data-value="${item.stok}" data-value1="${item.harga_jual}" data-value2="${item.harga_beli}" data-value3="${item.barcode}">${item.nama}</option>`
+                        )
+                    })
+
+                    $(".produk").change(function() {
+                        var barcode1 = $('option:selected', this).attr('data-value3');
+                        document.getElementById("barcode1").value = barcode1;
+                    });
+
+                    $(".produk").change(function() {
+                        var stok = $('option:selected', this).attr('data-value');
+                        document.getElementById("stok").value = stok;
+                    });
+
+                    $(".produk").change(function() {
+                        var nilai_jual = $('option:selected', this).attr('data-value1');
+                        document.getElementById("nilai_jual").value = nilai_jual;
+
+                        // var total_rupiah = new Intl.NumberFormat('id-ID', {
+                        //     style: 'currency',
+                        //     currency: 'IDR'
+                        // }).format(total); // konversi nilai total ke format rupiah
+                        // console.log(nilai_jual); // tampilkan nilai total dalam format rupiah
+
+                        var nilai_jual_rupiah = new Intl.NumberFormat('id-ID', {
+                            style: 'currency',
+                            currency: 'IDR'
+                        }).format(nilai_jual);
+
+
+                        document.getElementById("nilai_jual1").value = nilai_jual_rupiah;
+                    });
+
+                    $(".produk").change(function() {
+                        var nilai_beli = $('option:selected', this).attr('data-value2');
+                        document.getElementById("nilai_per_pcs").value = nilai_beli;
+                    });
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        })
+
         function tambahBarang() {
             var produk = document.getElementById('produk').value;
             var stok = document.getElementById('stok').value;
             var nilai_jual = document.getElementById('nilai_jual').value;
             var total = document.getElementById('total1').value;
+            var total_rupiah = document.getElementById('total12').value;
+            var nilai_jual_rupiah = document.getElementById('nilai_jual1').value;
             var modal = document.getElementById('nilai_per_pcs').value;
             var qty = document.getElementById('qty').value;
             var total_modal = document.getElementById('total_modal').value;
@@ -678,29 +780,16 @@
             var siswa = document.getElementById('siswa').value;
             var karyawan = document.getElementById('karyawan').value;
             var keterangan1 = document.getElementById('keterangan1').value;
-            console.log(nilai_jual);
+
             $('#produk').val("").trigger('change')
-
-            var total2 = total.replace(/[^\d,]/g, ''); // hapus semua karakter selain angka dan koma pada variabel total
-            var total_rupiah = new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR'
-            }).format(total2); // konversi nilai total ke format rupiah
-            console.log(total_rupiah); // tampilkan nilai total dalam format rupiah
-
-            var nilai_jual1 = nilai_jual.replace(/[^\d,]/g,
-                ''); // hapus semua karakter selain angka dan koma pada variabel nilai_jual
-            var nilai_jual_rupiah = new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR'
-            }).format(nilai_jual1); // konversi nilai_jual ke format rupiah
-            console.log(nilai_jual_rupiah); // tampilkan nilai_jual dalam format rupiah
 
             document.getElementById('barcode1').value = '';
             document.getElementById('stok').value = '';
             document.getElementById('nilai_jual').value = '';
+            document.getElementById('nilai_jual1').value = '';
             document.getElementById('qty').value = '';
             document.getElementById('total1').value = '';
+            document.getElementById('total12').value = '';
             document.getElementById('jenis_pembayaran').value = '';
             document.getElementById('nilai_per_pcs').value = '';
             document.getElementById('total_modal').value = '';
@@ -756,10 +845,9 @@
                     document.getElementById("val").innerHTML = "Total = Rp " + subTotal.toLocaleString(
                         "id-ID") + ",00";
                     document.getElementById("val").style.fontSize = "20px";
-                    console.log(val);
+
                 }
             }
-
         }
 
         $(document).ready(function() {
@@ -890,9 +978,6 @@
                 window.location = APP_URL + '/bursa/bursa_penjualan'
             })
 
-            // var dataPenjualan = JSON.parse(localStorage.getItem("localPenjualanPelanggan"));
-            // var dataPembeli = JSON.parse(localStorage.getItem("localPerpusDharma"));
-
             $.ajax({
                 type: "POST",
                 url: '{{ route('bursa_penjualan.get_jenjang') }}',
@@ -969,148 +1054,9 @@
                     },
                 });
             });
-
-            // $.ajax({
-            //     type: "POST",
-            //     url: '{{ route('bursa_penjualan.get_jenjang') }}',
-            //     data: {
-            //         "_token": "{{ csrf_token() }}",
-            //     },
-            //     success: response => {
-            //         $.each(response.data, function(i, item) {
-            //             if (item.jurusan) {
-            //                 jurusan = item.jurusan;
-            //             } else {
-            //                 jurusan = '';
-            //             }
-            //             if (item.classes) {
-            //                 classes = item.classes;
-            //             } else {
-            //                 classes = '';
-            //             }
-            //             if (item.type) {
-            //                 type = item.type;
-            //             } else {
-            //                 type = '';
-            //             }
-
-            //             if (dataPembeli.header.jenjang == item.id) {
-            //                 $('.classes').append(
-            //                     `<option value="${item.id}" selected>${item.level+' '+classes+' '+jurusan+' '+type}</option>`
-            //                 )
-            //             } else {
-            //                 $('.classes').append(
-            //                     `<option value="${item.id}" >${item.level+' '+classes+' '+jurusan+' '+type}</option>`
-            //                 )
-            //             }
-            //         })
-            //     },
-            //     error: (err) => {
-            //         console.log(err);
-            //     },
-            // });
-
-            // if (dataPenjualan.header.siswa) {
-            //     getSiswa(dataPenjualan.header.siswa);
-            // }
-
-            // function getSiswa(siswa) {
-            //     let class_jenjang = dataPenjualan.header.jenjang;
-            //     $(".siswa option").remove();
-            //     $.ajax({
-            //         type: "POST",
-            //         url: '{{ route('bursa_penjualan.get_siswa') }}',
-            //         data: {
-            //             "_token": "{{ csrf_token() }}",
-            //             class_jenjang
-            //         },
-            //         success: response => {
-            //             $('.siswa').append(`<option value="">-- Pilih Siswa --</option>`)
-            //             $.each(response.data, function(i, item) {
-            //                 if (siswa == item.id) {
-            //                     $('.siswa').append(
-            //                         `<option value="${item.id}" selected>${item.nama_lengkap}</option>`
-            //                     )
-            //                 } else {
-            //                     $('.siswa').append(
-            //                         `<option value="${item.id}">${item.nama_lengkap}</option>`
-            //                     )
-            //                 }
-            //             })
-            //         },
-            //         error: (err) => {
-            //             console.log(err);
-            //         },
-            //     });
-            // }
-
-            // $(".classes").change(function() {
-            //     let class_jenjang = $(this).val();
-            //     $(".siswa option").remove();
-            //     $.ajax({
-            //         type: "POST",
-            //         url: '{{ route('bursa_penjualan.get_siswa') }}',
-            //         data: {
-            //             "_token": "{{ csrf_token() }}",
-            //             class_jenjang
-            //         },
-            //         success: response => {
-            //             $('.siswa').append(
-            //                 `<option value="">-- Pilih Siswa --</option>`)
-            //             $.each(response.data, function(i, item) {
-            //                 $('.siswa').append(
-            //                     `<option value="${item.id}" data-id="${item.nama_lengkap}">${item.nama_lengkap}</option>`
-            //                 )
-            //             })
-            //         },
-            //         error: (err) => {
-            //             console.log(err);
-            //         },
-            //     });
-            // });
-
         })
 
-        $(document).ready(function() {
-            $.ajax({
-                type: "POST",
-                url: '{{ route('bursa_penjualan.get_produk') }}',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                },
 
-                success: response => {
-                    $.each(response.data, function(i, item) {
-                        $('.produk').append(
-                            `<option value="${item.id}" data-id="${item.nama}" data-value="${item.stok}" data-value1="${item.harga_jual}" data-value2="${item.harga_beli}" data-value3="${item.barcode}">${item.nama}</option>`
-                        )
-                    })
-
-                    $(".produk").change(function() {
-                        var barcode1 = $('option:selected', this).attr('data-value3');
-                        document.getElementById("barcode1").value = barcode1;
-                    });
-
-                    $(".produk").change(function() {
-                        var stok = $('option:selected', this).attr('data-value');
-                        document.getElementById("stok").value = stok;
-                    });
-
-                    $(".produk").change(function() {
-                        var nilai_jual = $('option:selected', this).attr('data-value1');
-                        document.getElementById("nilai_jual").value = nilai_jual;
-                    });
-
-                    $(".produk").change(function() {
-                        var nilai_beli = $('option:selected', this).attr('data-value2');
-                        document.getElementById("nilai_per_pcs").value = nilai_beli;
-                    });
-                },
-                error: (err) => {
-                    console.log(err);
-                },
-            });
-        })
 
         $(document).ready(function() {
             // Mengambil elemen-elemen pada halaman
@@ -1163,8 +1109,6 @@
             // console.log(pembeli);
         });
 
-        // var dataPembeli = JSON.parse(localStorage.getItem("localPerpusDharma"));
-
         $(document).ready(function() {
 
             //Mengambil data jabatan dari database dan menampilkannya di dropdown jabatan
@@ -1209,60 +1153,6 @@
                     }
                 });
             });
-
-            //Mengambil data jabatan dari database dan menampilkannya di dropdown jabatan
-            // $.ajax({
-            //     url: "{{ route('bursa_penjualan.get_jabatan') }}",
-            //     type: "GET",
-            //     dataType: "json",
-            //     success: function(data) {
-            //         var jabatan = $('#jabatan');
-            //         jabatan.empty();
-            //         jabatan.append('<option value="">Pilih</option>');
-
-            //         if (dataPembeli.header.jabatan == jabatan.id) {
-            //             $.each(data, function(key, value) {
-            //                 jabatan.append('<option value="' + value.jabatan + '">' +
-            //                     value
-            //                     .jabatan + '</option>');
-            //             });
-            //         } else {
-            //             $.each(data, function(key, value) {
-            //                 jabatan.append('<option value="' + value.jabatan + '">' +
-            //                     value
-            //                     .jabatan + '</option>');
-            //             });
-            //         }
-            //     }
-
-            // });
-
-            // var select_pembeli = document.getElementById('pembeli');
-            // var value_pembeli = select_pembeli.options[select_pembeli.selectedIndex].value;
-            // // Ketika dropdown jabatan diubah, mengambil data karyawan dari database dan menampilkannya di dropdown karyawan
-            // $('#jabatan').change(function() {
-            //     var jabatan = $(this).val();
-            //     var karyawan = $('#karyawan');
-            //     karyawan.empty();
-            //     karyawan.append('<option value="">--Pilih--</option>');
-            //     $.ajax({
-            //         url: "{{ route('bursa_penjualan.get_karyawan') }}",
-            //         type: "POST",
-            //         data: {
-            //             _token: "{{ csrf_token() }}",
-            //             jabatan: jabatan
-            //         },
-            //         dataType: "json",
-            //         success: function(data) {
-            //             $.each(data, function(key, value) {
-            //                 karyawan.append('<option value="' + value.id +
-            //                     '">' +
-            //                     value
-            //                     .nama_lengkap + '</option>');
-            //             });
-            //         }
-            //     });
-            // });
         });
     </script>
 @endsection
