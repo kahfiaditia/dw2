@@ -79,7 +79,7 @@
                                     </div>
 
                                     <div class="row mt-4">
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3">
                                             <div class="mb-3">
                                                 <label class="form-label">
                                                     Pembeli</label>
@@ -107,7 +107,7 @@
                                                 {!! $errors->first('jenjang', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-5 pembeli_siswa">
+                                        <div class="col-md-6 pembeli_siswa">
                                             <div class="mb-3">
                                                 <label class="form-label">Siswa <code>*</code></label>
                                                 <select class="form-control select select2 siswa" name="siswa"
@@ -120,7 +120,7 @@
                                                 {!! $errors->first('siswa', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 pembeli_karyawan">
+                                        <div class="col-lg-3 pembeli_karyawan">
                                             <div class="mb-3">
                                                 <label for="formrow-firstname-input" class="form-label">
                                                     Jabatan</label>
@@ -134,7 +134,7 @@
                                                 {!! $errors->first('jabatan', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
                                         </div>
-                                        <div class="col-md-4 pembeli_karyawan">
+                                        <div class="col-md-6 pembeli_karyawan">
                                             <div class="mb-3">
                                                 <label class="form-label">Karyawan <code>*</code></label>
                                                 <select class="form-control select select2 karyawan" name="karyawan"
