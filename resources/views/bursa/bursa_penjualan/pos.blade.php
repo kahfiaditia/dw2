@@ -803,7 +803,8 @@
                 });
 
                 // Fungsi untuk mengupdate subtotal
-                updateSubTotal(); // nominal total dari barcode
+                updateSubTotal();
+
                 function updateSubTotal() {
                     var table = document.getElementById("tambahBarang");
                     let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
@@ -833,6 +834,7 @@
             $(".scanner_barcode").change(function() {
                 let barcode = $(this).val();
                 pembeli = document.getElementById("pembeli").value;
+                document.getElementById('scanner_barcode').value = '';
                 // get value database 
                 getValueScanBarcodeCamera(barcode, pembeli)
             });
