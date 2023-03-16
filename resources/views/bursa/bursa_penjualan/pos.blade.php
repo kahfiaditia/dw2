@@ -671,9 +671,9 @@
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Data tidak terdaftar!',
+                            title: 'Data tidak terdaftar atau barang Stok Habis!',
                             showConfirmButton: false,
-                            timer: 1500,
+                            timer: 3000,
                         })
                     }
                 },

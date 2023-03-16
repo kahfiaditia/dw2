@@ -397,7 +397,7 @@ class BursaPenjualanController extends Controller
         }
         if ($request->pembeli == '') {
             $data = BursaProduk::where('barcode', $request->barcode)->first();
-            if ($data) {
+            if ($data && $data->stok > 0) {
                 $id = $data->id;
                 $nama_produk = $data->nama;
                 $harga_beli = $data->harga_beli;
@@ -408,7 +408,7 @@ class BursaPenjualanController extends Controller
             }
         } elseif ($request->pembeli != '' and $val == 0) {
             $data = BursaProduk::where('barcode', $request->barcode)->first();
-            if ($data) {
+            if ($data && $data->stok > 0) {
                 $id = $data->id;
                 $class_id = $data->produk;
                 $nama_produk = $data->nama;
