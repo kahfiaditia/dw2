@@ -26,10 +26,10 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label>Tanggal Permintaan <code>*</code></label>
+                                                <label>Permintaan <code>*</code></label>
                                                 <div class="input-group" id="datepicker2">
                                                     <input type="text" class="form-control tgl_permintaan"
-                                                        placeholder="yyyy-mm-dd" name="tgl_permintaan" id="tgl_permintaan"
+                                                        placeholder="Tgl" name="tgl_permintaan" id="tgl_permintaan"
                                                         value="" data-date-format="yyyy-mm-dd"
                                                         data-date-container='#datepicker2' data-provide="datepicker"
                                                         required data-date-autoclose="true">
@@ -43,10 +43,10 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label>Tanggal Kedatangan <code>*</code></label>
+                                                <label>Kedatangan <code>*</code></label>
                                                 <div class="input-group" id="datepicker2">
                                                     <input type="text" class="form-control tgl_permintaan"
-                                                        placeholder="yyyy-mm-dd" name="tgl_kedatangan" id="tgl_kedatangan"
+                                                        placeholder="Tgl" name="tgl_kedatangan" id="tgl_kedatangan"
                                                         value="" max="{{ date('Y-m-d') }}"
                                                         data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
                                                         data-provide="datepicker" required data-date-autoclose="true">
@@ -63,7 +63,7 @@
                                                 <label>Nomor DO/SJ</label>
                                                 <input type="text" class="form-control"
                                                     oninput="this.value = this.value.toUpperCase()" id="nomor_do"
-                                                    name="nomor_do" placeholder="Nomor Surat Jalan" required>
+                                                    name="nomor_do" placeholder="Nomor" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -75,7 +75,7 @@
                                                 <label class="form-label">Supplier <code>*</code></label>
                                                 <select class="form-control select select2 supplier" name="supplier"
                                                     id="supplier" required>
-                                                    <option value="">--PILIH SUPPLIER--</option>
+                                                    <option value="">-- PILIH --</option>
                                                     @foreach ($supplier as $supplier)
                                                         <option value="{{ $supplier->id }}" data-id="{{ $supplier->nama }}">
                                                             {{ $supplier->nama }}</option>
@@ -94,7 +94,7 @@
                                                 <label>Ongkir</label>
                                                 <input type="number" class="form-control"
                                                     oninput="this.value = this.value.toUpperCase()" id="ongkir"
-                                                    name="ongkir" placeholder="Ongkos Kirim" required>
+                                                    name="ongkir" placeholder="Rp" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -106,7 +106,7 @@
                                                 <label>Potongan</label>
                                                 <input type="number" class="form-control"
                                                     oninput="this.value = this.value.toUpperCase()" id="potongan"
-                                                    name="potongan" placeholder="Potongan/Diskon" required>
+                                                    name="potongan" placeholder="Rp" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -118,7 +118,7 @@
                                                 <label>Total Pembelian</label>
                                                 <input type="number" class="form-control"
                                                     oninput="this.value = this.value.toUpperCase()" id="total_nilai"
-                                                    name="total_nilai" placeholder="Total Nilai PO" required>
+                                                    name="total_nilai" placeholder="Rp" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -127,10 +127,10 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label class="form-label">Status Pembayaran <code>*</code></label>
+                                                <label class="form-label">Pembayaran <code>*</code></label>
                                                 <select class="form-control select select2 supplier"
                                                     name="status_pembayaran" id="status_pembayaran" required>
-                                                    <option value="">--PILIH STATUS--</option>
+                                                    <option value="">-- PILIH --</option>
                                                     <option value="1"> LUNAS </option>
                                                     <option value="2"> BELUM LUNAS </option>
                                                 </select>
@@ -148,7 +148,7 @@
                                                 <label class="form-label">Produk <code>*</code></label>
                                                 <select class="form-control select select2 produk" name="produk"
                                                     id="produk" required>
-                                                    <option value="">-- PILIH PRODUK --</option>
+                                                    <option value="">-- PILIH --</option>
                                                     @foreach ($produk as $produk)
                                                         <option value="{{ $produk->id }}" data-id="{{ $produk->nama }}">
                                                             {{ $produk->nama }}</option>
@@ -162,11 +162,11 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-2">
-                                                <label>Tanggal Kadaluarsa <code>*</code></label>
+                                                <label>Kadaluarsa <code>*</code></label>
                                                 <div class="input-group" id="datepicker2">
                                                     <input type="text" class="form-control tgl_kadaluarsa"
-                                                        placeholder="yyyy-mm-dd" name="tgl_kadaluarsa"
-                                                        id="tgl_kadaluarsa" value="" data-date-format="yyyy-mm-dd"
+                                                        placeholder="Tgl" name="tgl_kadaluarsa" id="tgl_kadaluarsa"
+                                                        value="" data-date-format="yyyy-mm-dd"
                                                         data-date-container='#datepicker2' data-provide="datepicker"
                                                         required data-date-autoclose="true">
                                                     <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -179,10 +179,10 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-2">
-                                                <label for="harga_total_produk">Harga Produk<code>*</code></label>
+                                                <label for="harga_total_produk">Harga <code>*</code></label>
                                                 <input type="text" class="form-control" onkeyup="hitungHargaPerUnit()"
                                                     oninput="this.value=this.value.toUpperCase()" id="harga_total_produk"
-                                                    name="harga_total_produk" placeholder="Harga Total Produk" required>
+                                                    name="harga_total_produk" placeholder="Rp" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -191,10 +191,10 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-2">
-                                                <label for="total_kuantiti">Kuantiti Produk<code>*</code></label>
+                                                <label for="total_kuantiti">Kuantiti <code>*</code></label>
                                                 <input type="text" class="form-control" onkeyup="hitungHargaPerUnit()"
                                                     oninput="this.value = this.value.toUpperCase()" id="total_kuantiti"
-                                                    name="total_kuantiti" placeholder="Kuantiti" required />
+                                                    name="total_kuantiti" placeholder="Jumlah" required />
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -203,10 +203,10 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-2">
-                                                <label for="harga_per_pcs">Nilai Per PCS</label>
+                                                <label for="harga_per_pcs">Harga Satuan</label>
                                                 <input type="text" class="form-control"
                                                     oninput="this.value = this.value.toUpperCase()" id="harga_per_pcs"
-                                                    name="harga_per_pcs" placeholder="Harga Satuan" required disabled>
+                                                    name="harga_per_pcs" placeholder="Rp" required disabled>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -215,10 +215,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-2">
-                                                <label>Nilai Jual<code>*</code></label>
+                                                <label>Harga Jual <code>*</code></label>
                                                 <input type="number" class="form-control" min="0" step="1000"
-                                                    id="nilai_jual" name="nilai_jual" placeholder="Nilai Jual Per PCS"
-                                                    required>
+                                                    id="nilai_jual" name="nilai_jual" placeholder="Rp" required>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
                                                 </div>
@@ -244,9 +243,9 @@
                                                     <tr>
                                                         <th class="text-center" style="width: 10%">Produk</th>
                                                         <th class="text-center" style="width: 10%">Kadaluarsa</th>
-                                                        <th class="text-center" style="width: 10%">Total Harga Produk</th>
-                                                        <th class="text-center" style="width: 10%">Kuantiti Produk</th>
-                                                        <th class="text-center" style="width: 10%">Harga Modal</th>
+                                                        <th class="text-center" style="width: 10%">Harga</th>
+                                                        <th class="text-center" style="width: 10%">Kuantiti</th>
+                                                        <th class="text-center" style="width: 10%">Harga Satuan</th>
                                                         <th class="text-center" style="width: 10%">Harga Jual</th>
                                                         <th class="text-center" style="width: 10%">Aksi</th>
                                                     </tr>

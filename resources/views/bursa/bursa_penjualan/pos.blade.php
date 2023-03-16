@@ -161,22 +161,22 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-2">
-                                                <div class="mb-2">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
                                                     <label for="formrow-firstname-input" class="form-label">Stok</label>
                                                     <input type="text" class="form-control" id="stok"
                                                         name="stok" placeholder="Stok" readonly>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
-                                                <div class="mb-4">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
                                                     <label for="formrow-inputState" class="form-label">Harga</label>
                                                     <input type="text" class="form-control" id="nilai_jual1"
                                                         name="nilai_jual1" readonly>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-lg-2">
                                                 <div class="mb-2">
                                                     <label for="formrow-inputZip" class="form-label">Jumlah</label>
