@@ -85,7 +85,7 @@
                                                     Pembeli</label>
                                                 <select class="form-control select select2 pembeli" name="pembeli"
                                                     id="pembeli" required>
-                                                    <option value="" required> Pilih </option>
+                                                    <option value="" required>-- Pilih --</option>
                                                 </select>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
@@ -139,7 +139,7 @@
                                                 <label class="form-label">Karyawan <code>*</code></label>
                                                 <select class="form-control select select2 karyawan" name="karyawan"
                                                     id="karyawan" required>
-                                                    <option value="" required>--Pilih--</option>
+                                                    <option value="" required>-- Pilih --</option>
                                                 </select>
                                                 <div class="invalid-feedback">
                                                     Data wajib diisi.
@@ -153,11 +153,10 @@
                                         <div class="row mt-3">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label for="formrow-firstname-input" class="form-label">Pilih
-                                                        produk</label>
+                                                    <label for="formrow-firstname-input" class="form-label">Produk</label>
                                                     <select id="produk" class="form-control select select2 produk"
                                                         name="produk" id="produk" required>
-                                                        <option value="" selected>-- Pilih Produk --</option>
+                                                        <option value="" selected>-- Pilih --</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -165,7 +164,7 @@
                                                 <div class="mb-3">
                                                     <label for="formrow-firstname-input" class="form-label">Stok</label>
                                                     <input type="text" class="form-control" id="stok"
-                                                        name="stok" placeholder="Stok" readonly>
+                                                        name="stok" placeholder="Jumlah" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -174,7 +173,7 @@
                                                 <div class="mb-3">
                                                     <label for="formrow-inputState" class="form-label">Harga</label>
                                                     <input type="text" class="form-control" id="nilai_jual1"
-                                                        name="nilai_jual1" readonly>
+                                                        placeholder="Rp" name="nilai_jual1" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-lg-2">
@@ -188,7 +187,7 @@
                                                 <div class="mb-4">
                                                     <label for="formrow-inputZip" class="form-label">Total</label>
                                                     <input type="text" class="form-control" id="total12"
-                                                        name="total12" placeholder="Total Harga" readonly>
+                                                        name="total12" placeholder="Rp" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -267,7 +266,7 @@
                         <div class="col-xl-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mb-1">Daftar Belanja</h4>
+                                    <h4 class="card-title mb-1">Transaksi</h4>
                                     <form>
                                         <div class="row">
 
@@ -980,7 +979,7 @@
                         class_jenjang
                     },
                     success: response => {
-                        $('.siswa').append(`<option value="">-- Pilih Siswa --</option>`)
+                        $('.siswa').append(`<option value="">-- Pilih --</option>`)
                         $.each(response.data, function(i, item) {
                             if (siswa == item.id) {
                                 $('.siswa').append(
@@ -1011,7 +1010,7 @@
                     },
                     success: response => {
                         $('.siswa').append(
-                            `<option value="">-- Pilih Siswa --</option>`)
+                            `<option value="">-- Pilih --</option>`)
                         $.each(response.data, function(i, item) {
                             $('.siswa').append(
                                 `<option value="${item.id}" data-id="${item.nama_lengkap}">${item.nama_lengkap}</option>`
