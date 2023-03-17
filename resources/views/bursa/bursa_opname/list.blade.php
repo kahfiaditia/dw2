@@ -13,6 +13,16 @@
                                 <li class="breadcrumb-item">{{ ucwords($submenu) }}</li>
                             </ol>
                         </div>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                @if (in_array('160', $session_menu))
+                                    <a href="{{ route('bursa_opname.create') }}" type="button"
+                                        class="float-end btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
+                                        <i class="mdi mdi-plus me-1"></i> Tambah Opname
+                                    </a>
+                                @endif
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -26,21 +36,20 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode Penjualan</th>
-                                        {{-- <th>Pembeli</th> --}}
-                                        <th>Total Transaksi</th>
-                                        <th>Total Modal</th>
-                                        <th>Total Margin</th>
-                                        <th>Produk</th>
+                                        <th>Kode</th>
+                                        <th>Tanggal</th>
+                                        <th>Jumlah Produk</th>
+                                        <th>Jumlah</th>
+                                        <th>Status</th>
+                                        <th>User</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($laporan as $item)
+                                    {{-- @foreach ($laporan as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->kode_penjualan }}</td>
-                                            {{-- <td>{{ $item->id_siswa }}</td> --}}
                                             <td>Rp {{ number_format($item->total, 0, ',', '.') }}</td>
                                             <td>Rp {{ number_format($item->total_modal, 0, ',', '.') }}</td>
                                             <td>Rp {{ number_format($item->total_margin, 0, ',', '.') }}</td>
@@ -61,7 +70,7 @@
                                                 </form>
                                             </td>
                                             </?php>
-                                    @endforeach
+                                    @endforeach --}}
                                 </tbody>
                             </table>
                         </div>

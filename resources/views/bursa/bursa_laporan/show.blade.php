@@ -91,11 +91,11 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $item->produk->nama }}</td>
                                                     <td>{{ $item->kuantiti }}</td>
-                                                    <td>{{ number_format($item->harga_modal, 0, ',', '.') }}</td>
-                                                    <td>{{ number_format($item->harga_jual, 0, ',', '.') }}</td>
-                                                    <td>{{ number_format($item->sub_total, 0, ',', '.') }}</td>
-                                                    <td>{{ number_format($item->sub_modal, 0, ',', '.') }}</td>
-                                                    <td>{{ number_format($item->sub_margin, 0, ',', '.') }}</td>
+                                                    <td>@ Rp {{ number_format($item->harga_modal, 0, ',', '.') }}</td>
+                                                    <td>@ Rp {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
+                                                    <td>Rp {{ number_format($item->sub_total, 0, ',', '.') }}</td>
+                                                    <td>Rp {{ number_format($item->sub_modal, 0, ',', '.') }}</td>
+                                                    <td>Rp {{ number_format($item->sub_margin, 0, ',', '.') }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -103,9 +103,10 @@
                                             <tr>
                                                 <th colspan="2">Grand Total</th>
                                                 <th colspan="3">{{ $penjualan->total_kuantiti }}</th>
-                                                <th colspan="1">{{ number_format($penjualan->total, 0, ',', '.') }}</th>
-                                                <th>{{ number_format($penjualan->total_modal, 0, ',', '.') }}</th>
-                                                <th>{{ number_format($penjualan->total_margin, 0, ',', '.') }}</th>
+                                                <th colspan="1">Rp {{ number_format($penjualan->total, 0, ',', '.') }}
+                                                </th>
+                                                <th>Rp {{ number_format($penjualan->total_modal, 0, ',', '.') }}</th>
+                                                <th>Rp {{ number_format($penjualan->total_margin, 0, ',', '.') }}</th>
                                             </tr>
                                         </tfoot>
                                     </table>
